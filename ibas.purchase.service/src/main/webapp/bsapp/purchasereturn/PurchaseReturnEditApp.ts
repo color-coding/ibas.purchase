@@ -35,6 +35,9 @@ export class PurchaseReturnEditApp extends ibas.BOEditApplication<IPurchaseRetur
         this.view.createDataEvent = this.createData;
         this.view.addPurchaseReturnItemEvent = this.addPurchaseReturnItem;
         this.view.removePurchaseReturnItemEvent = this.removePurchaseReturnItem;
+        this.view.choosePurchaseReturnItemMaterialEvent = this.choosePurchaseReturnItemMaterial;
+        this.view.choosePurchaseReturnItemWarehouseEvent = this.choosePurchaseReturnItemWarehouse;
+        this.view.choosePurchaseReturnSupplierEvent = this.choosePurchaseReturnSupplier;
     }
     /** 视图显示后 */
     protected viewShowed(): void {
@@ -168,6 +171,15 @@ export class PurchaseReturnEditApp extends ibas.BOEditApplication<IPurchaseRetur
             createData();
         }
     }
+    protected choosePurchaseReturnSupplier(): void{
+
+    }
+    protected choosePurchaseReturnItemWarehouse(): void{
+
+    }
+    protected choosePurchaseReturnItemMaterial(): void{
+        
+    }
     /** 添加采购退货-行事件 */
     addPurchaseReturnItem(): void {
         this.editData.purchaseReturnItems.create();
@@ -212,6 +224,12 @@ export interface IPurchaseReturnEditView extends ibas.IBOEditView {
     addPurchaseReturnItemEvent: Function;
     /** 删除采购退货-行事件 */
     removePurchaseReturnItemEvent: Function;
+     /** 选择供应商信息 */
+     choosePurchaseReturnSupplierEvent: Function;
+     /** 选择物料主数据 */
+     choosePurchaseReturnItemMaterialEvent: Function;
+     /** 选择采购退货-行 仓库 */
+     choosePurchaseReturnItemWarehouseEvent: Function;
     /** 显示数据 */
     showPurchaseReturnItems(datas: bo.PurchaseReturnItem[]): void;
 }

@@ -35,6 +35,9 @@ export class PurchaseDeliveryEditApp extends ibas.BOEditApplication<IPurchaseDel
         this.view.createDataEvent = this.createData;
         this.view.addPurchaseDeliveryItemEvent = this.addPurchaseDeliveryItem;
         this.view.removePurchaseDeliveryItemEvent = this.removePurchaseDeliveryItem;
+        this.view.choosePurchaseDeliverySupplierEvent = this.choosePurchaseDeliverySupplier;
+        this.view.choosePurchaseDeliveryItemMaterialEvent = this.choosePurchaseDeliveryItemMaterial;
+        this.view.choosePurchaseDeliveryItemWarehouseEvent = this.choosePurchaseDeliveryItemWarehouse;
     }
     /** 视图显示后 */
     protected viewShowed(): void {
@@ -168,6 +171,18 @@ export class PurchaseDeliveryEditApp extends ibas.BOEditApplication<IPurchaseDel
             createData();
         }
     }
+    /** 选择供应商信息 */
+    protected choosePurchaseDeliverySupplier(): void{
+        
+    }
+    /** 选择物料主数据 */
+    protected choosePurchaseDeliveryItemMaterial(): void{
+
+    }
+    /** 采购交货-行 选择仓库主数据 */
+    protected choosePurchaseDeliveryItemWarehouse(): void{
+        
+    }
     /** 添加采购交货-行事件 */
     addPurchaseDeliveryItem(): void {
         this.editData.purchaseDeliveryItems.create();
@@ -212,6 +227,12 @@ export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
     addPurchaseDeliveryItemEvent: Function;
     /** 删除采购交货-行事件 */
     removePurchaseDeliveryItemEvent: Function;
+    /** 选择供应商信息 */
+    choosePurchaseDeliverySupplierEvent: Function;
+    /** 选择物料主数据 */
+    choosePurchaseDeliveryItemMaterialEvent: Function;
+    /** 选择采购交货-行 仓库 */
+    choosePurchaseDeliveryItemWarehouseEvent: Function;
     /** 显示数据 */
     showPurchaseDeliveryItems(datas: bo.PurchaseDeliveryItem[]): void;
 }

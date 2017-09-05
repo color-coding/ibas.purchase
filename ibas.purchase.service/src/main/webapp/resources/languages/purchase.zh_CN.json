@@ -16,5 +16,13 @@
   "purchase_app_purchasereturn_choose": "采购退货选择",
   "purchase_app_purchasereturn_view": "采购退货查看",
   "purchase_app_purchasereturn_edit": "采购退货编辑",
+  "purchase_base_information": "基本信息",
+  "purchase_date_information": "日期信息",
+  "purchase_supplier_information": "供应商信息",
+  "purchase_finance_information": "财务信息",
+  "purchase_docstatus_information": "状态信息",
+  "purchase_sys_information": "系统信息",
+  "purchase_remark_information": "备注信息",
+  "purchase_refrence_information": "参考信息",
   "purchase_closing_delimiter": "----结束----"
 }

@@ -37,6 +37,13 @@ export class PurchaseReturnViewApp extends ibas.BOViewService<IPurchaseReturnVie
     /** 视图显示后 */
     protected viewShowed(): void {
         // 视图加载完成
+        if (ibas.objects.isNull(this.viewData)) {
+            // 创建编辑对象实例
+            this.viewData = new bo.PurchaseReturn();
+            this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_data_created_new"));
+        }
+        this.view.showPurchaseReturn(this.viewData);
+        this.view.showPurchaseReturnItems(this.viewData.purchaseReturnItems.filterDeleted());
     }
     /** 编辑数据，参数：目标数据 */
     protected editData(): void {
@@ -88,7 +95,8 @@ export class PurchaseReturnViewApp extends ibas.BOViewService<IPurchaseReturnVie
 }
 /** 视图-采购退货 */
 export interface IPurchaseReturnViewView extends ibas.IBOViewView {
-
+    showPurchaseReturn(data: bo.PurchaseReturn): void;
+    showPurchaseReturnItems(data: bo.PurchaseReturnItem[]): void;
 }
 /** 采购退货连接服务映射 */
 export class PurchaseReturnLinkServiceMapping extends ibas.BOLinkServiceMapping {

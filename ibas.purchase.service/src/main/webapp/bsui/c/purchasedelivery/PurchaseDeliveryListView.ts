@@ -33,6 +33,92 @@ export class PurchaseDeliveryListView extends ibas.BOListView implements IPurcha
             visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Interactive,
             rows: "{/rows}",
             columns: [
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_docentry"),
+                    template: new sap.m.Link("",{
+                        wrapping: false,
+                        press(event: any): void {
+                            ibas.servicesManager.runLinkService({
+                                boCode: bo.PurchaseDelivery.BUSINESS_OBJECT_CODE,
+                                linkValue: event.getSource().getText()
+                            });
+                        }
+                    }).bindProperty("text",{
+                        path: "docEntry",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_status"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "status",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_suppliername"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "supplierName",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_contactperson"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "contactPerson",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_documenttotal"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "documentTotal",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_paidtotal"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "paidTotal",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_discount"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "discount",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_discounttotal"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "discountTotal",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_taxrate"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "taxRate",
+                    })
+                }),
+                new sap.ui.table.Column("",{
+                    label: ibas.i18n.prop("bo_purchasedelivery_taxtotal"),
+                    template: new sap.m.Text("",{
+                        wrapping: false
+                    }).bindProperty("text",{
+                        path: "taxTotal",
+                    })
+                }),
             ]
         });
         this.form.addContent(this.table);

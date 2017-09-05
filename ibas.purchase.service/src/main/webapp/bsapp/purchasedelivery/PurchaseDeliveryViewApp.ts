@@ -37,6 +37,13 @@ export class PurchaseDeliveryViewApp extends ibas.BOViewService<IPurchaseDeliver
     /** 视图显示后 */
     protected viewShowed(): void {
         // 视图加载完成
+        if (ibas.objects.isNull(this.viewData)) {
+            // 创建编辑对象实例
+            this.viewData = new bo.PurchaseDelivery();
+            this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_data_created_new"));
+        }
+        this.view.showPurchaseDelivery(this.viewData);
+        this.view.showPurchaseDeliveryItems(this.viewData.purchaseDeliveryItems.filterDeleted());
     }
     /** 编辑数据，参数：目标数据 */
     protected editData(): void {
@@ -88,7 +95,8 @@ export class PurchaseDeliveryViewApp extends ibas.BOViewService<IPurchaseDeliver
 }
 /** 视图-采购交货 */
 export interface IPurchaseDeliveryViewView extends ibas.IBOViewView {
-
+    showPurchaseDelivery(data: bo.PurchaseDelivery): void;
+    showPurchaseDeliveryItems(data: bo.PurchaseDeliveryItem[]): void;
 }
 /** 采购交货连接服务映射 */
 export class PurchaseDeliveryLinkServiceMapping extends ibas.BOLinkServiceMapping {

@@ -37,6 +37,13 @@ export class PurchaseOrderViewApp extends ibas.BOViewService<IPurchaseOrderViewV
     /** 视图显示后 */
     protected viewShowed(): void {
         // 视图加载完成
+        if (ibas.objects.isNull(this.viewData)) {
+            // 创建编辑对象实例
+            this.viewData = new bo.PurchaseOrder();
+            this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_data_created_new"));
+        }
+        this.view.showPurchaseOrder(this.viewData);
+        this.view.showPurchaseOrderItems(this.viewData.purchaseOrderItems.filterDeleted());
     }
     /** 编辑数据，参数：目标数据 */
     protected editData(): void {
@@ -88,7 +95,8 @@ export class PurchaseOrderViewApp extends ibas.BOViewService<IPurchaseOrderViewV
 }
 /** 视图-采购订单 */
 export interface IPurchaseOrderViewView extends ibas.IBOViewView {
-
+    showPurchaseOrder(data: bo.PurchaseOrder): void;
+    showPurchaseOrderItems(data: bo.PurchaseOrderItem[]): void;
 }
 /** 采购订单连接服务映射 */
 export class PurchaseOrderLinkServiceMapping extends ibas.BOLinkServiceMapping {
