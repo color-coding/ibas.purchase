@@ -32,7 +32,7 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_supplier_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_supplier_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_suppliercode") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
@@ -53,40 +53,33 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
                     path: "/contactPerson"
                 }),
 
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_date_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_date_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_postingdate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/postingDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documentdate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/documentDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_deliverydate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/deliveryDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
 
-
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_finance_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documenttotal") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
@@ -113,35 +106,35 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
                     path: "/discountTotal"
                 }),
 
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_docstatus_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_status")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_docstatus_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_status") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/status",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emBOStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emBOStatus, data);
                     }
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_documentstatus")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documentstatus") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/documentStatus",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emDocumentStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emDocumentStatus, data);
                     }
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_approvalstatus")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_approvalstatus") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/approvalStatus",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emDocumentStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emDocumentStatus, data);
                     }
                 }),
-                
+
             ]
         });
-        this.bottomForm = new sap.ui.layout.form.SimpleForm("",{
+        this.bottomForm = new sap.ui.layout.form.SimpleForm("", {
             editable: true,
             layout: sap.ui.layout.form.SimpleFormLayout.ResponsiveGridLayout,
             singleContainerFullSize: false,
@@ -154,21 +147,21 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_reference1")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/reference1"
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_refrence_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_reference1") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/reference1"
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_reference2")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/reference2"
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_reference2") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/reference2"
                 }),
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_remark_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_remarks")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/remarks"
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_remark_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_remarks") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/remarks"
                 }),
-                
+
             ]
         });
         this.tablePurchaseOrderItem = new sap.ui.table.Table("", {
@@ -266,61 +259,61 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
                 }),
             ]
         });
-        this.mainLayout = new sap.ui.layout.VerticalLayout("",{
+        this.mainLayout = new sap.ui.layout.VerticalLayout("", {
             content: [
                 this.topForm,
                 this.tablePurchaseOrderItem,
                 this.bottomForm
             ]
         }),
-        this.page = new sap.m.Page("", {
-            showHeader: false,
-            subHeader: new sap.m.Bar("", {
-                contentLeft: [
-                    new sap.m.Button("", {
-                        text: ibas.i18n.prop("sys_shell_data_edit"),
-                        type: sap.m.ButtonType.Transparent,
-                        icon: "sap-icon://edit",
-                        press: function (): void {
-                            that.fireViewEvents(that.editDataEvent);
-                        }
-                    })
-                ],
-                contentRight: [
-                    new sap.m.Button("", {
-                        type: sap.m.ButtonType.Transparent,
-                        icon: "sap-icon://action",
-                        press: function (event: any): void {
-                            that.fireViewEvents(that.callServicesEvent, {
-                                displayServices(services: ibas.IServiceAgent[]): void {
-                                    if (ibas.objects.isNull(services) || services.length === 0) {
-                                        return;
+            this.page = new sap.m.Page("", {
+                showHeader: false,
+                subHeader: new sap.m.Bar("", {
+                    contentLeft: [
+                        new sap.m.Button("", {
+                            text: ibas.i18n.prop("sys_shell_data_edit"),
+                            type: sap.m.ButtonType.Transparent,
+                            icon: "sap-icon://edit",
+                            press: function (): void {
+                                that.fireViewEvents(that.editDataEvent);
+                            }
+                        })
+                    ],
+                    contentRight: [
+                        new sap.m.Button("", {
+                            type: sap.m.ButtonType.Transparent,
+                            icon: "sap-icon://action",
+                            press: function (event: any): void {
+                                that.fireViewEvents(that.callServicesEvent, {
+                                    displayServices(services: ibas.IServiceAgent[]): void {
+                                        if (ibas.objects.isNull(services) || services.length === 0) {
+                                            return;
+                                        }
+                                        let popover: sap.m.Popover = new sap.m.Popover("", {
+                                            showHeader: false,
+                                            placement: sap.m.PlacementType.Bottom,
+                                        });
+                                        for (let service of services) {
+                                            popover.addContent(new sap.m.Button({
+                                                text: ibas.i18n.prop(service.name),
+                                                type: sap.m.ButtonType.Transparent,
+                                                icon: service.icon,
+                                                press: function (): void {
+                                                    service.run();
+                                                    popover.close();
+                                                }
+                                            }));
+                                        }
+                                        (<any>popover).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+                                        popover.openBy(event.getSource(), true);
                                     }
-                                    let popover: sap.m.Popover = new sap.m.Popover("", {
-                                        showHeader: false,
-                                        placement: sap.m.PlacementType.Bottom,
-                                    });
-                                    for (let service of services) {
-                                        popover.addContent(new sap.m.Button({
-                                            text: ibas.i18n.prop(service.name),
-                                            type: sap.m.ButtonType.Transparent,
-                                            icon: service.icon,
-                                            press: function (): void {
-                                                service.run();
-                                                popover.close();
-                                            }
-                                        }));
-                                    }
-                                    (<any>popover).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
-                                    popover.openBy(event.getSource(), true);
-                                }
-                            });
-                        }
-                    })
-                ]
-            }),
-            content: [this.mainLayout]
-        });
+                                });
+                            }
+                        })
+                    ]
+                }),
+                content: [this.mainLayout]
+            });
         this.id = this.page.getId();
         return this.page;
     }
@@ -336,6 +329,6 @@ export class PurchaseOrderViewView extends ibas.BOViewView implements IPurchaseO
     }
     /** 显示数据 */
     showPurchaseOrderItems(datas: bo.PurchaseOrderItem[]): void {
-        this.tablePurchaseOrderItem.setModel(new sap.ui.model.json.JSONModel({rows: datas}));
+        this.tablePurchaseOrderItem.setModel(new sap.ui.model.json.JSONModel({ rows: datas }));
     }
 }

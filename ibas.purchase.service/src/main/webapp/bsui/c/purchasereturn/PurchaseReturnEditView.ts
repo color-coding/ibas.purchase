@@ -15,7 +15,6 @@ import { IPurchaseReturnEditView } from "../../../bsapp/purchasereturn/index";
  * 编辑视图-采购退货
  */
 export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchaseReturnEditView {
-    
     /** 删除数据事件 */
     deleteDataEvent: Function;
     /** 新建数据事件，参数1：是否克隆 */
@@ -30,7 +29,6 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
     choosePurchaseReturnItemMaterialEvent: Function;
     /** 选择仓库 */
     choosePurchaseReturnItemWarehouseEvent: Function;
-    
 
     /** 绘制视图 */
     darw(): any {
@@ -76,51 +74,34 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_date_information")}),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_postingdate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/postingDate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_documentdate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/documentDate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_deliverydate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/deliveryDate"
                 }),
-
-
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_documenttotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/documentTotal"
+                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
+                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_reference1")}),
+                new sap.m.Input("",{}).bindProperty("value",{
+                    path:"/reference1"
                 }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxrate") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/taxRate"
+                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_reference2")}),
+                new sap.m.Input("",{}).bindProperty("value",{
+                    path:"/reference2"
                 }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxtotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/taxTotal"
-                }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discount") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/discount"
-                }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discounttotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/discountTotal"
-                }),
-
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_docstatus_information")}),
                 new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_status")}),
                 new sap.m.SegmentedButton("", {
@@ -155,21 +136,37 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_reference1")}),
-                new sap.m.Input("",{}).bindProperty("value",{
-                    path:"/reference1"
-                }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_reference2")}),
-                new sap.m.Input("",{}).bindProperty("value",{
-                    path:"/reference2"
-                }),
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_remark_information")}),
                 new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasereturn_remarks")}),
                 new sap.m.TextArea("",{}).bindProperty("value",{
                     path:"/remarks"
                 }),
-                
+                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_documenttotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/documentTotal"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxrate") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/taxRate"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxtotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/taxTotal"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discount") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/discount"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discounttotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/discountTotal"
+                }),
             ]
         }),
         this.tablePurchaseReturnItem = new sap.ui.table.Table("", {
@@ -197,7 +194,7 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                 ]
             }),
             enableSelectAll: false,
-            visibleRowCount: ibas.config.get(utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 10),
+            visibleRowCount: ibas.config.get(utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 5),
             rows: "{/rows}",
             columns: [
                 new sap.ui.table.Column("", {
@@ -240,6 +237,24 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                     })
                 }),
                 new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchasereturnitem_price"),
+                    template: new sap.m.Input("", {
+                        width: "100%",
+                        type: sap.m.InputType.Number
+                    }).bindProperty("value", {
+                        path: "price"
+                    })
+                }),
+                new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchasereturnitem_taxrate"),
+                    template: new sap.m.Input("", {
+                        width: "100%",
+                        type: sap.m.InputType.Number
+                    }).bindProperty("value", {
+                        path: "taxRate"
+                    })
+                }),
+                new sap.ui.table.Column("", {
                     label: ibas.i18n.prop("bo_purchasereturnitem_distributionrule1"),
                     template: new sap.m.Input("", {
                         width: "100%",
@@ -264,29 +279,11 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                     })
                 }),
                 new sap.ui.table.Column("", {
-                    label: ibas.i18n.prop("bo_purchasereturnitem_price"),
-                    template: new sap.m.Input("", {
-                        width: "100%",
-                        type: sap.m.InputType.Number
-                    }).bindProperty("value", {
-                        path: "price"
-                    })
-                }),
-                new sap.ui.table.Column("", {
                     label: ibas.i18n.prop("bo_purchasereturnitem_uom"),
                     template: new sap.m.Input("", {
                         width: "100%",
                     }).bindProperty("value", {
                         path: "uom"
-                    })
-                }),
-                new sap.ui.table.Column("", {
-                    label: ibas.i18n.prop("bo_purchasereturnitem_taxrate"),
-                    template: new sap.m.Input("", {
-                        width: "100%",
-                        type: sap.m.InputType.Number
-                    }).bindProperty("value", {
-                        path: "taxRate"
                     })
                 }),
                 new sap.ui.table.Column("", {
@@ -315,7 +312,7 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                 this.tablePurchaseReturnItem,
                 this.bottomForm
             ]
-        })
+        });
         this.page = new sap.m.Page("", {
             showHeader: false,
             subHeader: new sap.m.Toolbar("", {
@@ -403,8 +400,6 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
             utils.changeFormEditable(this.mainLayout, false);
         }
     }
-    
-
     /** 显示数据 */
     showPurchaseReturn(data: bo.PurchaseReturn): void {
         this.mainLayout.setModel(new sap.ui.model.json.JSONModel(data));

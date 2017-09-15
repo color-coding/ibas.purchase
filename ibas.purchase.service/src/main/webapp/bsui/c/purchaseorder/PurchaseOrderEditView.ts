@@ -15,7 +15,6 @@ import { IPurchaseOrderEditView } from "../../../bsapp/purchaseorder/index";
  * 编辑视图-采购订单
  */
 export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseOrderEditView {
-   
     /** 删除数据事件 */
     deleteDataEvent: Function;
     /** 新建数据事件，参数1：是否克隆 */
@@ -30,7 +29,6 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
     choosePurchaseOrderItemMaterialEvent: Function;
     /** 选择仓库 */
     choosePurchaseOrderItemWarehouseEvent: Function;
-    
     /** 绘制视图 */
     darw(): any {
         let that: this = this;
@@ -75,51 +73,34 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_date_information")}),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_postingdate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/postingDate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documentdate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/documentDate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_deliverydate") }),
                 new sap.m.DatePicker("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("dateValue", {
                     path: "/deliveryDate"
                 }),
-
-
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documenttotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/documentTotal"
+                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
+                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_reference1")}),
+                new sap.m.Input("",{}).bindProperty("value",{
+                    path:"/reference1"
                 }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxrate") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/taxRate"
+                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_reference2")}),
+                new sap.m.Input("",{}).bindProperty("value",{
+                    path:"/reference2"
                 }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxtotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/taxTotal"
-                }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discount") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/discount"
-                }),
-                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discounttotal") }),
-                new sap.m.Input("", {
-                }).bindProperty("value", {
-                    path: "/discountTotal"
-                }),
-
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_docstatus_information")}),
                 new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_status")}),
                 new sap.m.SegmentedButton("", {
@@ -155,21 +136,37 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_reference1")}),
-                new sap.m.Input("",{}).bindProperty("value",{
-                    path:"/reference1"
-                }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_reference2")}),
-                new sap.m.Input("",{}).bindProperty("value",{
-                    path:"/reference2"
-                }),
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_remark_information")}),
                 new sap.m.Label("",{text: ibas.i18n.prop("bo_purchaseorder_remarks")}),
                 new sap.m.TextArea("",{}).bindProperty("value",{
                     path:"/remarks"
                 }),
-                
+                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documenttotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/documentTotal"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxrate") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/taxRate"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxtotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/taxTotal"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discount") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/discount"
+                }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discounttotal") }),
+                new sap.m.Input("", {
+                }).bindProperty("value", {
+                    path: "/discountTotal"
+                }),
             ]
         }),
         this.tablePurchaseOrderItem = new sap.ui.table.Table("", {
@@ -240,6 +237,24 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
                     })
                 }),
                 new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchaseorderitem_price"),
+                    template: new sap.m.Input("", {
+                        width: "100%",
+                        type: sap.m.InputType.Number
+                    }).bindProperty("value", {
+                        path: "price"
+                    })
+                }),
+                new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchaseorderitem_taxrate"),
+                    template: new sap.m.Input("", {
+                        width: "100%",
+                        type: sap.m.InputType.Number
+                    }).bindProperty("value", {
+                        path: "taxRate"
+                    })
+                }),
+                new sap.ui.table.Column("", {
                     label: ibas.i18n.prop("bo_purchaseorderitem_distributionrule1"),
                     template: new sap.m.Input("", {
                         width: "100%",
@@ -264,29 +279,11 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
                     })
                 }),
                 new sap.ui.table.Column("", {
-                    label: ibas.i18n.prop("bo_purchaseorderitem_price"),
-                    template: new sap.m.Input("", {
-                        width: "100%",
-                        type: sap.m.InputType.Number
-                    }).bindProperty("value", {
-                        path: "price"
-                    })
-                }),
-                new sap.ui.table.Column("", {
                     label: ibas.i18n.prop("bo_purchaseorderitem_uom"),
                     template: new sap.m.Input("", {
                         width: "100%",
                     }).bindProperty("value", {
                         path: "uom"
-                    })
-                }),
-                new sap.ui.table.Column("", {
-                    label: ibas.i18n.prop("bo_purchaseorderitem_taxrate"),
-                    template: new sap.m.Input("", {
-                        width: "100%",
-                        type: sap.m.InputType.Number
-                    }).bindProperty("value", {
-                        path: "taxRate"
                     })
                 }),
                 new sap.ui.table.Column("", {

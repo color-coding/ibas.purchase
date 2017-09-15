@@ -171,14 +171,14 @@ export class PurchaseOrderEditApp extends ibas.BOEditApplication<IPurchaseOrderE
             createData();
         }
     }
-    protected choosePurchaseOrderSupplier(): void{
-        
+    protected choosePurchaseOrderSupplier(): void {
+        //
     }
-    protected choosePurchaseOrderItemWarehouse(): void{
-
+    protected choosePurchaseOrderItemWarehouse(): void {
+        //
     }
-    protected choosePurchaseOrderItemMaterial(): void{
-        
+    protected choosePurchaseOrderItemMaterial(): void {
+        //
     }
     /** 添加采购订单-行事件 */
     addPurchaseOrderItem(): void {
@@ -224,12 +224,12 @@ export interface IPurchaseOrderEditView extends ibas.IBOEditView {
     addPurchaseOrderItemEvent: Function;
     /** 删除采购订单-行事件 */
     removePurchaseOrderItemEvent: Function;
-     /** 选择供应商信息 */
-     choosePurchaseOrderSupplierEvent: Function;
-     /** 选择物料主数据 */
-     choosePurchaseOrderItemMaterialEvent: Function;
-     /** 选择采购订单-行 仓库 */
-     choosePurchaseOrderItemWarehouseEvent: Function;
+    /** 选择供应商信息 */
+    choosePurchaseOrderSupplierEvent: Function;
+    /** 选择物料主数据 */
+    choosePurchaseOrderItemMaterialEvent: Function;
+    /** 选择采购订单-行 仓库 */
+    choosePurchaseOrderItemWarehouseEvent: Function;
     /** 显示数据 */
     showPurchaseOrderItems(datas: bo.PurchaseOrderItem[]): void;
 }

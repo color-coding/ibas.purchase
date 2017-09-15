@@ -32,7 +32,7 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_supplier_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_supplier_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_suppliercode") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
@@ -53,40 +53,32 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
                     path: "/contactPerson"
                 }),
 
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_date_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_date_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_postingdate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/postingDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documentdate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/documentDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_deliverydate") }),
                 new sap.m.Text("", {
-                    valueFormat: "yyyy-MM-dd",
+                    valueFormat: ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
+                    displayFormat:ibas.config.get(ibas.CONFIG_ITEM_FORMAT_DATE),
                 }).bindProperty("text", {
                     path: "/deliveryDate",
-                    type: 'sap.ui.model.type.Date',
-                    formatOptions: {
-                        style: 'medium'
-                    }
+                    type: "sap.ui.model.type.Date",
                 }),
-
-
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_finance_information") }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documenttotal") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
@@ -113,35 +105,35 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
                     path: "/discountTotal"
                 }),
 
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_docstatus_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_status")}),
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_docstatus_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_status") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/status",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emBOStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emBOStatus, data);
                     }
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_documentstatus")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documentstatus") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/documentStatus",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emDocumentStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emDocumentStatus, data);
                     }
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_approvalstatus")}),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_approvalstatus") }),
                 new sap.m.Text("", {
                 }).bindProperty("text", {
                     path: "/approvalStatus",
-                    formatter(data: any): any{
-                        return ibas.enums.describe(ibas.emDocumentStatus,data);
+                    formatter(data: any): any {
+                        return ibas.enums.describe(ibas.emDocumentStatus, data);
                     }
                 }),
-                
+
             ]
         });
-        this.bottomForm = new sap.ui.layout.form.SimpleForm("",{
+        this.bottomForm = new sap.ui.layout.form.SimpleForm("", {
             editable: true,
             layout: sap.ui.layout.form.SimpleFormLayout.ResponsiveGridLayout,
             singleContainerFullSize: false,
@@ -154,21 +146,21 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
             columnsM: 1,
             columnsS: 1,
             content: [
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_refrence_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_reference1")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/reference1"
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_refrence_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_reference1") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/reference1"
                 }),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_reference2")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/reference2"
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_reference2") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/reference2"
                 }),
-                new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_remark_information")}),
-                new sap.m.Label("",{text: ibas.i18n.prop("bo_purchasedelivery_remarks")}),
-                new sap.m.Text("",{}).bindProperty("text",{
-                    path:"/remarks"
+                new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_remark_information") }),
+                new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_remarks") }),
+                new sap.m.Text("", {}).bindProperty("text", {
+                    path: "/remarks"
                 }),
-                
+
             ]
         });
         this.tablePurchaseReturnItem = new sap.ui.table.Table("", {
@@ -266,7 +258,7 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
                 }),
             ]
         });
-        this.mainLayout = new sap.ui.layout.VerticalLayout("",{
+        this.mainLayout = new sap.ui.layout.VerticalLayout("", {
             content: [
                 this.topForm,
                 this.tablePurchaseReturnItem,
@@ -336,6 +328,6 @@ export class PurchaseReturnViewView extends ibas.BOViewView implements IPurchase
     }
     /** 显示数据 */
     showPurchaseReturnItems(datas: bo.PurchaseReturnItem[]): void {
-        this.tablePurchaseReturnItem.setModel(new sap.ui.model.json.JSONModel({rows: datas}));
+        this.tablePurchaseReturnItem.setModel(new sap.ui.model.json.JSONModel({ rows: datas }));
     }
 }
