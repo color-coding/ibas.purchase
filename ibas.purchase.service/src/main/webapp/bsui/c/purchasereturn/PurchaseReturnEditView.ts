@@ -304,6 +304,16 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                         path: "lineTotal"
                     })
                 }),
+                new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchasereturnitem_linestatus"),
+                    template: new sap.m.Select("", {
+                        width: "100%",
+                        items: utils.createComboBoxItems(ibas.emDocumentStatus),
+                    }).bindProperty("selectedKey", {
+                        path: "lineStatus",
+                        type: "sap.ui.model.type.Integer",
+                    })
+                }),
             ]
         });
         this.mainLayout = new sap.ui.layout.VerticalLayout("",{

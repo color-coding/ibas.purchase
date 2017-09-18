@@ -304,6 +304,16 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
                         path: "lineTotal"
                     })
                 }),
+                new sap.ui.table.Column("", {
+                    label: ibas.i18n.prop("bo_purchaseorderitem_linestatus"),
+                    template: new sap.m.Select("", {
+                        width: "100%",
+                        items: utils.createComboBoxItems(ibas.emDocumentStatus),
+                    }).bindProperty("selectedKey", {
+                        path: "lineStatus",
+                        type: "sap.ui.model.type.Integer",
+                    })
+                }),
             ]
         });
         this.topForm.addContent(this.tablePurchaseOrderItem);
