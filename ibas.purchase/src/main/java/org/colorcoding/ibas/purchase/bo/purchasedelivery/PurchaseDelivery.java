@@ -19,15 +19,14 @@ import org.colorcoding.ibas.bobas.mapping.BOCode;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.MyConsts;
 
 /**
  * 获取-采购交货
  * 
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
-@XmlRootElement(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
+@XmlRootElement(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BOCode(PurchaseDelivery.BUSINESS_OBJECT_CODE)
 public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implements IPurchaseDelivery {
 

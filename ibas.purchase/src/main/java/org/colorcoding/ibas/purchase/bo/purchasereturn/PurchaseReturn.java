@@ -19,15 +19,14 @@ import org.colorcoding.ibas.bobas.mapping.BOCode;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.MyConsts;
 
 /**
  * 获取-采购退货
  * 
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
-@XmlRootElement(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
+@XmlRootElement(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BOCode(PurchaseReturn.BUSINESS_OBJECT_CODE)
 public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IPurchaseReturn {
 

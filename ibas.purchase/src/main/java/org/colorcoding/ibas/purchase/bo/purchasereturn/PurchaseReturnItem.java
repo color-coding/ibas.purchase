@@ -16,14 +16,13 @@ import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.materials.data.emItemType;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.MyConsts;
 
 /**
  * 获取-采购退货-行
  * 
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = PurchaseReturnItem.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = PurchaseReturnItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> implements IPurchaseReturnItem {
 
 	/**
