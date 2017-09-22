@@ -20,6 +20,8 @@ import {
     BOSimple,
     BOSimpleLine,
     config,
+    strings,
+    objects,
 } from "ibas/index";
 import {
     emItemType
@@ -564,6 +566,50 @@ export class PurchaseOrderItems extends BusinessObjects<PurchaseOrderItem, Purch
         this.add(item);
         return item;
     }
+    /** 监听父项属性改变 */
+    protected onParentPropertyChanged(name: string): void {
+        super.onParentPropertyChanged(name);
+        /** 父项中单据状态改变，影响行中状态 */
+        if (strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_DOCUMENTSTATUS_NAME)) {
+            for (let purchaseOrderItem of this.filterDeleted()) {
+                purchaseOrderItem.lineStatus = this.parent.documentStatus;
+            }
+        }
+    }
+    /** 监听子项属性改变 */
+    protected onChildPropertyChanged(item: PurchaseOrderItem, name: string): void {
+        super.onChildPropertyChanged(item, name);
+        if (strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME)) {
+            let total: number = 0;
+            let discount: number = 0;
+            for (let purchaseOrderItem of this.filterDeleted()) {
+                if (objects.isNull(purchaseOrderItem.lineTotal)) {
+                    purchaseOrderItem.lineTotal = 0;
+                }
+                total = Number(total) +  Number(purchaseOrderItem.lineTotal);
+                discount = Number(discount) +
+                Number(purchaseOrderItem.price * purchaseOrderItem.quantity - purchaseOrderItem.lineTotal);
+            }
+            this.parent.documentTotal = total;
+            this.parent.discountTotal = discount;
+            this.parent.discount = discount / total;
+        }
+        if(strings.equalsIgnoreCase(name,PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME)) {
+            let taxTotal: number = 0;
+            for(let purchaseOrderItem of this.filterDeleted()) {
+                if (objects.isNull(purchaseOrderItem.taxTotal)) {
+                    purchaseOrderItem.lineTotal = 0;
+                }
+                taxTotal = Number(taxTotal) + Number(purchaseOrderItem.taxTotal);
+            }
+            this.parent.taxTotal = taxTotal;
+            this.parent.taxRate = taxTotal / (this.parent.documentTotal + this.parent.discountTotal);
+        }
+        // 折扣总计为NaN时显示为0
+        if (isNaN(this.parent.discountTotal)) {
+            this.parent.discountTotal = 0;
+        }
+    }
 }
 
 /** 采购订单-行 */
@@ -572,6 +618,24 @@ export class PurchaseOrderItem extends BODocumentLine<PurchaseOrderItem> impleme
     /** 构造函数 */
     constructor() {
         super();
+    }
+    protected onPropertyChanged(name: string): void {
+        super.onPropertyChanged(name);
+        if (strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_QUANTITY_NAME) ||
+            strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_PRICE_NAME) ||
+            strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_DISCOUNT_NAME)) {
+            this.lineTotal = this.quantity * this.price;
+        }
+        if(strings.equalsIgnoreCase(name,PurchaseOrderItem.PROPERTY_TAXRATE_NAME) ||
+            strings.equalsIgnoreCase(name,PurchaseOrderItem.PROPERTY_PRICE_NAME) ||
+            strings.equalsIgnoreCase(name,PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME) ||
+            strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_QUANTITY_NAME)) {
+                this.taxTotal = this.quantity * this.price * this.taxRate;
+         }
+        // 行总计为NaN时显示为0
+        if (isNaN(this.lineTotal)) {
+            this.lineTotal = 0;
+        }
     }
     /** 映射的属性名称-编码 */
     static PROPERTY_DOCENTRY_NAME: string = "DocEntry";
@@ -1171,6 +1235,7 @@ export class PurchaseOrderItem extends BODocumentLine<PurchaseOrderItem> impleme
 
     /** 初始化数据 */
     protected init(): void {
+        this.objectCode = config.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE);
     }
 }
 
