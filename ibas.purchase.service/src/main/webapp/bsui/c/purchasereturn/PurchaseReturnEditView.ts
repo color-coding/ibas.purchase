@@ -144,26 +144,31 @@ export class PurchaseReturnEditView extends ibas.BOEditView implements IPurchase
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_documenttotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/documentTotal"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxrate") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/taxRate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_taxtotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/taxTotal"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discount") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/discount"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_discounttotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/discountTotal"
                 }),

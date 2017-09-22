@@ -144,26 +144,31 @@ export class PurchaseOrderEditView extends ibas.BOEditView implements IPurchaseO
                 new sap.ui.core.Title("",{text: ibas.i18n.prop("purchase_finance_information")}),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documenttotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/documentTotal"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxrate") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/taxRate"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_taxtotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/taxTotal"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discount") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/discount"
                 }),
                 new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_discounttotal") }),
                 new sap.m.Input("", {
+                    editable: false,
                 }).bindProperty("value", {
                     path: "/discountTotal"
                 }),
