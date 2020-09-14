@@ -426,6 +426,15 @@ namespace purchase {
                 condition.alias = bo.PurchaseOrder.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 已清数量大于0
+                let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCriteria.propertyPath = bo.PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME;
+                cCriteria.onlyHasChilds = true;
+                cCriteria.noChilds = false;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDQUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.value = "0";
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseOrder>({
