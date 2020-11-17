@@ -385,7 +385,7 @@ namespace purchase {
                 }
                 let preDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.preDiscount));
                 let afterDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.afterDiscount));
-                if (preDiscount === 0) {
+                if (preDiscount <= 0) {
                     // 折前价格为0，则使用折后价格
                     context.outputValues.set(this.preDiscount, afterDiscount);
                 } else if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)) {

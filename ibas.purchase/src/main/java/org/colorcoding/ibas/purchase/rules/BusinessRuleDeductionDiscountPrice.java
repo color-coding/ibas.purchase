@@ -86,7 +86,7 @@ public class BusinessRuleDeductionDiscountPrice extends BusinessRuleCommon {
 		if (afterDiscount == null) {
 			afterDiscount = Decimal.ZERO;
 		}
-		if (Decimal.isZero(preDiscount)) {
+		if (Decimal.ZERO.compareTo(preDiscount) >= 0) {
 			context.getOutputValues().put(this.getPreDiscount(), afterDiscount);
 			context.getOutputValues().put(this.getDiscount(), Decimal.ONE);
 		} else if (this.getDiscount().getName().equalsIgnoreCase(context.getTrigger())) {
