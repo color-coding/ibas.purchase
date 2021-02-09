@@ -395,6 +395,8 @@ declare namespace businesspartner {
             bank: string;
             /** 银行账户 */
             bankAccount: string;
+            /** 发票抬头 */
+            invoiceTitle: string;
             /** 发票地址 */
             invoiceAddress: string;
             /** 发票电话 */
@@ -503,6 +505,8 @@ declare namespace businesspartner {
             bank: string;
             /** 银行账户 */
             bankAccount: string;
+            /** 发票抬头 */
+            invoiceTitle: string;
             /** 发票地址 */
             invoiceAddress: string;
             /** 发票电话 */
@@ -1567,6 +1571,12 @@ declare namespace businesspartner {
             get bankAccount(): string;
             /** 设置-银行账户 */
             set bankAccount(value: string);
+            /** 映射的属性名称-发票抬头 */
+            static PROPERTY_INVOICETITLE_NAME: string;
+            /** 获取-发票抬头 */
+            get invoiceTitle(): string;
+            /** 设置-发票抬头 */
+            set invoiceTitle(value: string);
             /** 映射的属性名称-发票地址 */
             static PROPERTY_INVOICEADDRESS_NAME: string;
             /** 获取-发票地址 */
@@ -1869,6 +1879,12 @@ declare namespace businesspartner {
             get bankAccount(): string;
             /** 设置-银行账户 */
             set bankAccount(value: string);
+            /** 映射的属性名称-发票抬头 */
+            static PROPERTY_INVOICETITLE_NAME: string;
+            /** 获取-发票抬头 */
+            get invoiceTitle(): string;
+            /** 设置-发票抬头 */
+            set invoiceTitle(value: string);
             /** 映射的属性名称-发票地址 */
             static PROPERTY_INVOICEADDRESS_NAME: string;
             /** 获取-发票地址 */

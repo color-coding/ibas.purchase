@@ -691,6 +691,7 @@ namespace purchase {
                         }
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
+                        myItem.quantity = openQty;
                         // 复制批次
                         for (let batch of item.materialBatches) {
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();

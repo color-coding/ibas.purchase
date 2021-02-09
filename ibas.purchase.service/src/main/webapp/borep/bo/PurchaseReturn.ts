@@ -692,6 +692,7 @@ namespace purchase {
                         }
                         let myItem: PurchaseReturnItem = this.purchaseReturnItems.create();
                         bo.baseDocumentItem(myItem, item);
+                        myItem.quantity = item.closedQuantity;
                         // 复制批次
                         for (let batch of item.materialBatches) {
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();

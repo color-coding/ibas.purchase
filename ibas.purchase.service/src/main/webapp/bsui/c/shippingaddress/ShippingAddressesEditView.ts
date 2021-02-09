@@ -148,7 +148,7 @@ namespace purchase {
                             }),
                         ]
                     });
-                    return new sap.extension.m.Dialog("", {
+                    return new sap.m.Dialog("", {
                         title: this.title,
                         type: sap.m.DialogType.Standard,
                         state: sap.ui.core.ValueState.None,
@@ -173,7 +173,7 @@ namespace purchase {
                                 }
                             }),
                         ]
-                    });
+                    }).addStyleClass("sapUiNoContentPadding");
                 }
                 private formTop: sap.ui.layout.form.SimpleForm;
                 private buttonAddress: sap.m.MenuButton;

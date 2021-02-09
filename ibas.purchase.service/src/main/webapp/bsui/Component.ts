@@ -133,7 +133,7 @@ namespace purchase {
                     oRm.addStyle("width", "100%");
                     oRm.addStyle("height", "100%");
                     oRm.addStyle("border", "0");
-                    oRm.addStyle("background-color", sap.ui.core.theming.Parameters.get("sapUiGlobalBackgroundColor"));
+                    oRm.addStyle("background-color", "transparent");
                     oRm.writeStyles();
                     oRm.write(">");
                     oRm.renderControl(<sap.ui.core.Control>oControl.getAggregation("_select", undefined));
