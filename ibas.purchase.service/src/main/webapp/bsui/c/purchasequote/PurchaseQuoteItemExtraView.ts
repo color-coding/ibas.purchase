@@ -80,7 +80,7 @@ namespace purchase {
                                             return;
                                         }
                                         let fileData: FormData = new FormData();
-                                        fileData.append("file", files[0]);
+                                        fileData.append("file", files[0], encodeURI(files[0].name));
                                         that.fireViewEvents(that.addPurchaseQuoteItemExtraEvent, fileData);
                                     },
                                 }),

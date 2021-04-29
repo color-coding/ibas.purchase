@@ -183,7 +183,9 @@ namespace purchase {
                 }
             }
             private choosePurchaseReturnSupplier(): void {
-                let items: bo.PurchaseReturnItem[] = this.editData.purchaseReturnItems.where(c => !ibas.strings.isEmpty(c.baseDocumentType));
+                let items: bo.PurchaseReturnItem[] = this.editData.purchaseReturnItems.where(c =>
+                    !ibas.strings.isEmpty(c.baseDocumentType) && c.isDeleted !== true
+                );
                 if (items.length > 0) {
                     this.messages({
                         type: ibas.emMessageType.WARNING,
@@ -213,7 +215,9 @@ namespace purchase {
                         that.editData.priceList = selected.priceList;
                         that.editData.contactPerson = selected.contactPerson;
                         that.editData.documentCurrency = selected.currency;
-                        that.view.defaultWarehouse = selected.warehouse;
+                        if (!ibas.strings.isEmpty(selected.warehouse)) {
+                            that.view.defaultWarehouse = selected.warehouse;
+                        }
                     }
                 });
             }

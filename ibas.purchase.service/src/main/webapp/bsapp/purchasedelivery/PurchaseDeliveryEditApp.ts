@@ -223,7 +223,9 @@ namespace purchase {
             }
             /** 选择供应商信息 */
             private choosePurchaseDeliverySupplier(): void {
-                let items: bo.PurchaseDeliveryItem[] = this.editData.purchaseDeliveryItems.where(c => !ibas.strings.isEmpty(c.baseDocumentType));
+                let items: bo.PurchaseDeliveryItem[] = this.editData.purchaseDeliveryItems.where(c =>
+                    !ibas.strings.isEmpty(c.baseDocumentType) && c.isDeleted !== true
+                );
                 if (items.length > 0) {
                     this.messages({
                         type: ibas.emMessageType.WARNING,
@@ -253,8 +255,12 @@ namespace purchase {
                         that.editData.priceList = selected.priceList;
                         that.editData.contactPerson = selected.contactPerson;
                         that.editData.documentCurrency = selected.currency;
-                        that.view.defaultWarehouse = selected.warehouse;
-                        that.view.defaultTaxGroup = selected.taxGroup;
+                        if (!ibas.strings.isEmpty(selected.warehouse)) {
+                            that.view.defaultWarehouse = selected.warehouse;
+                        }
+                        if (!ibas.strings.isEmpty(selected.taxGroup)) {
+                            that.view.defaultTaxGroup = selected.taxGroup;
+                        }
                     }
                 });
             }

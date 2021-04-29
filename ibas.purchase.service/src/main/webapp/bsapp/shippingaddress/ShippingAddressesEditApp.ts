@@ -55,7 +55,7 @@ namespace purchase {
             /** 删除数据 */
             protected deleteData(data: bo.ShippingAddress): void {
                 // 检查目标数据
-                if (ibas.objects.isNull(data)) {
+                if (!(data instanceof bo.ShippingAddress)) {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
                         ibas.i18n.prop("shell_data_delete")
                     ));
