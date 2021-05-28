@@ -98,6 +98,7 @@ namespace purchase {
         export class ConsolePhone extends Console {
             /** 初始化 */
             protected registers(): void {
+                super.registers();
             }
         }
     }

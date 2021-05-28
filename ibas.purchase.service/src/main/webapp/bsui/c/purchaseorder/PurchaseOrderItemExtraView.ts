@@ -154,14 +154,12 @@ namespace purchase {
                         verticalScrolling: true,
                         subHeader: new sap.m.Toolbar("", {
                             content: [
-                                new sap.m.ToolbarSpacer("", { width: "5px" }),
                                 new sap.m.Label("", {
                                     text: ibas.i18n.prop("purchase_summary"),
-                                }),
+                                }).addStyleClass("sapUiSmallMarginBegin"),
                                 this.input = new sap.m.Input("", {
                                     editable: false,
-                                }),
-                                new sap.m.ToolbarSpacer("", { width: "5px" }),
+                                }).addStyleClass("sapUiSmallMarginBegin"),
                             ]
                         }),
                         content: [
