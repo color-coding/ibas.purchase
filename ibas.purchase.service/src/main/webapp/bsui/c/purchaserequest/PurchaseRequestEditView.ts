@@ -309,7 +309,7 @@ namespace purchase {
                                     text: accounting.bo.Project.PROPERTY_NAME_NAME,
                                 },
                                 criteria: [
-                                    new ibas.Condition(accounting.bo.Project.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                    new ibas.Condition(accounting.bo.Project.PROPERTY_DELETED_NAME, ibas.emConditionOperation.NOT_EQUAL, ibas.emYesNo.YES.toString())
                                 ]
                             }).bindProperty("bindingValue", {
                                 path: "project",
