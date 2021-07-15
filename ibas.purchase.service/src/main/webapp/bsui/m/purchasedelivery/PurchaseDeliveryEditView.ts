@@ -649,7 +649,7 @@ namespace purchase {
                                                         },
                                                         criteria: [
                                                             new ibas.Condition(
-                                                                accounting.bo.Project.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                                                accounting.bo.Project.PROPERTY_DELETED_NAME, ibas.emConditionOperation.NOT_EQUAL, ibas.emYesNo.YES.toString())
                                                         ]
                                                     }).bindProperty("bindingValue", {
                                                         path: "project",
@@ -700,13 +700,7 @@ namespace purchase {
                 editPurchaseDeliveryItem(data: bo.PurchaseDeliveryItem): void {
                     let that: this = this;
                     let editForm: sap.m.Dialog = new sap.m.Dialog("", {
-                        title: {
-                            path: "lineId",
-                            type: new sap.extension.data.Numeric(),
-                            formatter(data: string): string {
-                                return ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), data);
-                            }
-                        },
+                        title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), data.lineId),
                         type: sap.m.DialogType.Standard,
                         state: sap.ui.core.ValueState.None,
                         stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
@@ -740,8 +734,8 @@ namespace purchase {
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_itemcode") }),
                                     new sap.extension.m.Input("", {
                                         showValueHelp: true,
-                                        valueHelpRequest: function (): void {
-                                            let model: any = editForm.getModel();
+                                        valueHelpRequest: function (this: sap.extension.m.Input): void {
+                                            let model: any = this.getModel();
                                             if (model instanceof sap.extension.model.JSONModel) {
                                                 let data: any = model.getData();
                                                 if (data) {
@@ -771,8 +765,8 @@ namespace purchase {
                                             key: materials.bo.Warehouse.PROPERTY_CODE_NAME,
                                             text: materials.bo.Warehouse.PROPERTY_NAME_NAME
                                         },
-                                        valueHelpRequest: function (): void {
-                                            let model: any = editForm.getModel();
+                                        valueHelpRequest: function (this: sap.extension.m.Input): void {
+                                            let model: any = this.getModel();
                                             if (model instanceof sap.extension.model.JSONModel) {
                                                 let data: any = model.getData();
                                                 if (data) {
@@ -858,22 +852,20 @@ namespace purchase {
                                 icon: "sap-icon://arrow-left",
                                 type: sap.m.ButtonType.Transparent,
                                 press: function (): void {
-                                    let model: any = editForm.getModel();
-                                    if (model instanceof sap.extension.model.JSONModel) {
-                                        let data: any = model.getData();
-                                        if (data) {
-                                            let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
-                                            if (datas instanceof Array && datas.length > 0) {
-                                                let index: number = datas.indexOf(data);
-                                                index = index <= 0 ? datas.length - 1 : index - 1;
-                                                editForm.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            } else {
-                                                that.application.viewShower.messages({
-                                                    title: that.title,
-                                                    type: ibas.emMessageType.WARNING,
-                                                    message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                                });
-                                            }
+                                    let form: any = editForm.getContent()[0];
+                                    if (form instanceof sap.extension.layout.SimpleForm) {
+                                        let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
+                                        if (datas instanceof Array && datas.length > 0) {
+                                            let index: number = datas.indexOf(form.getModel().getData());
+                                            index = index <= 0 ? datas.length - 1 : index - 1;
+                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
+                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
+                                        } else {
+                                            that.application.viewShower.messages({
+                                                title: that.title,
+                                                type: ibas.emMessageType.WARNING,
+                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+                                            });
                                         }
                                     }
                                 }
@@ -882,22 +874,20 @@ namespace purchase {
                                 icon: "sap-icon://arrow-right",
                                 type: sap.m.ButtonType.Transparent,
                                 press: function (): void {
-                                    let model: any = editForm.getModel();
-                                    if (model instanceof sap.extension.model.JSONModel) {
-                                        let data: any = model.getData();
-                                        if (data) {
-                                            let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
-                                            if (datas instanceof Array && datas.length > 0) {
-                                                let index: number = datas.indexOf(data);
-                                                index = index >= datas.length - 1 ? 0 : index + 1;
-                                                editForm.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            } else {
-                                                that.application.viewShower.messages({
-                                                    title: that.title,
-                                                    type: ibas.emMessageType.WARNING,
-                                                    message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                                });
-                                            }
+                                    let form: any = editForm.getContent()[0];
+                                    if (form instanceof sap.extension.layout.SimpleForm) {
+                                        let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
+                                        if (datas instanceof Array && datas.length > 0) {
+                                            let index: number = datas.indexOf(form.getModel().getData());
+                                            index = index >= datas.length - 1 ? 0 : index + 1;
+                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
+                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
+                                        } else {
+                                            that.application.viewShower.messages({
+                                                title: that.title,
+                                                type: ibas.emMessageType.WARNING,
+                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+                                            });
                                         }
                                     }
                                 }
@@ -911,7 +901,7 @@ namespace purchase {
                             }),
                         ]
                     }).addStyleClass("sapUiNoContentPadding");
-                    editForm.bindObject("/").setModel(new sap.extension.model.JSONModel(data));
+                    editForm.getContent()[0].setModel(new sap.extension.model.JSONModel(data));
                     editForm.open();
                 }
             }
