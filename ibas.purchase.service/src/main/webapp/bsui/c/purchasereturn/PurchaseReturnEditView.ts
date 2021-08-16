@@ -147,7 +147,7 @@ namespace purchase {
                                 type: new sap.extension.data.DocumentStatus()
                             }),
                             new sap.extension.m.TipsCheckBox("", {
-                                text: ibas.i18n.prop("bo_payment_canceled"),
+                                text: ibas.i18n.prop("bo_purchasereturn_canceled"),
                                 tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
                             }).bindProperty("bindingValue", {
                                 path: "canceled",
@@ -251,7 +251,44 @@ namespace purchase {
                                             text: ibas.i18n.prop("bo_warehouse")
                                         }),
                                         this.selectWarehouse = new component.WarehouseSelect("", {
-                                            width: "auto"
+                                            width: "auto",
+                                            change(this: sap.m.Select, event: sap.ui.base.Event): void {
+                                                let sItem: any = this.getSelectedItem();
+                                                if (sItem instanceof sap.ui.core.Item && !ibas.strings.isEmpty(sItem.getKey())) {
+                                                    let model: any = that.tablePurchaseReturnItem.getModel();
+                                                    if (model instanceof sap.extension.model.JSONModel) {
+                                                        let data: any[] = model.getData("rows");
+                                                        if (data instanceof Array) {
+                                                            let items: ibas.IList<bo.PurchaseReturnItem> = new ibas.ArrayList<bo.PurchaseReturnItem>();
+                                                            for (let item of data) {
+                                                                if (item instanceof bo.PurchaseReturnItem) {
+                                                                    if (item.warehouse !== sItem.getKey()) {
+                                                                        items.add(item);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (items.length > 0) {
+                                                                that.application.viewShower.messages({
+                                                                    title: that.title,
+                                                                    type: ibas.emMessageType.QUESTION,
+                                                                    message: ibas.i18n.prop("purchase_change_item_warehouse_continue", sItem.getText()),
+                                                                    actions: [
+                                                                        ibas.emMessageAction.YES,
+                                                                        ibas.emMessageAction.NO,
+                                                                    ],
+                                                                    onCompleted: (reslut) => {
+                                                                        if (reslut === ibas.emMessageAction.YES) {
+                                                                            for (let item of items) {
+                                                                                item.warehouse = sItem.getKey();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         })
                                     ]
                                 }),
@@ -539,6 +576,19 @@ namespace purchase {
                                                 press: function (): void {
                                                     // 复制当前对象
                                                     that.fireViewEvents(that.createDataEvent, true);
+                                                }
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("shell_data_read"),
+                                                icon: "sap-icon://excel-attachment",
+                                                press: function (): void {
+                                                    // 读取当前对象
+                                                    ibas.files.open((files) => {
+                                                        that.fireViewEvents(that.createDataEvent, files[0]);
+                                                    }, {
+                                                        accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                                        multiple: false
+                                                    });
                                                 }
                                             }),
                                         ],

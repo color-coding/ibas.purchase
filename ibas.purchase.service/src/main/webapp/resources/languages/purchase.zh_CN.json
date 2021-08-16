@@ -47,5 +47,7 @@
   "purchase_copy_data_continue": "复制{0}，是否继续？",
   "purchase_unrecognized_extra_information": "不能识别的信息[{0}]",
   "purchase_remove_base_items_continue": "此操作会移出基于的行项目，是否继续？",
+  "purchase_change_item_warehouse_continue": "是否更改单据行的仓库为[{0}]？",
+  "purchase_change_item_price_continue": "价格清单已更新，是否更改单据行的价格？",
   "purchase_closing_delimiter": "----结束----"
 }

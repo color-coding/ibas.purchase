@@ -164,11 +164,34 @@ namespace purchase {
                     }
                 });
             }
-            /** 新建数据，参数1：是否克隆 */
-            private createData(clone: boolean): void {
+            /** 新建数据，参数1：是否克隆 or 导入文件 */
+            protected createData(clone: boolean | Blob): void {
                 let that: this = this;
                 let createData: Function = function (): void {
-                    if (clone) {
+                    if (clone instanceof Blob) {
+                        let formData: FormData = new FormData();
+                        formData.append("file", clone);
+                        let boRepository: importexport.bo.BORepositoryImportExport = new importexport.bo.BORepositoryImportExport();
+                        boRepository.parse<bo.PurchaseQuote>({
+                            converter: new bo.DataConverter(),
+                            fileData: formData,
+                            onCompleted: (opRslt) => {
+                                try {
+                                    if (opRslt.resultCode !== 0) {
+                                        throw new Error(opRslt.message);
+                                    }
+                                    if (opRslt.resultObjects.length === 0) {
+                                        throw new Error(ibas.i18n.prop("sys_unrecognized_data"));
+                                    }
+                                    that.editData = opRslt.resultObjects.firstOrDefault();
+                                    that.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_read_new"));
+                                    that.viewShowed();
+                                } catch (error) {
+                                    that.messages(error);
+                                }
+                            }
+                        });
+                    } else if (typeof clone === "boolean" && clone === true) {
                         // 克隆对象
                         that.editData = that.editData.clone();
                         that.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_cloned_new"));
@@ -210,6 +233,7 @@ namespace purchase {
                         that.editData.contactPerson = selected.contactPerson;
                         that.editData.documentCurrency = selected.currency;
                         that.view.defaultTaxGroup = selected.taxGroup;
+                        that.changePurchaseQuoteItemPrice(that.editData.priceList);
                     }
                 });
             }
@@ -224,8 +248,74 @@ namespace purchase {
                         let selected: materials.bo.IMaterialPriceList = selecteds.firstOrDefault();
                         that.editData.priceList = selected.objectKey;
                         that.editData.documentCurrency = selected.currency;
+                        that.changePurchaseQuoteItemPrice(that.editData.priceList);
                     }
                 });
+            }
+            /** 更改行价格 */
+            private changePurchaseQuoteItemPrice(priceList: number | ibas.Criteria): void {
+                if (typeof priceList === "number" && priceList > 0) {
+                    let criteria: ibas.Criteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_PRICELIST;
+                    condition.value = priceList.toString();
+                    for (let item of this.editData.purchaseQuoteItems) {
+                        condition = criteria.conditions.create();
+                        condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_ITEMCODE;
+                        condition.value = item.itemCode;
+                        if (criteria.conditions.length > 2) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length < 2) {
+                        return;
+                    }
+                    if (criteria.conditions.length > 2) {
+                        criteria.conditions[2].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                    if (config.get(config.CONFIG_ITEM_FORCE_UPDATE_PRICE_FOR_PRICE_LIST_CHANGED, true) === true) {
+                        // 强制刷新价格
+                        this.changePurchaseQuoteItemPrice(criteria);
+                    } else {
+                        this.messages({
+                            type: ibas.emMessageType.QUESTION,
+                            message: ibas.i18n.prop("purchase_change_item_price_continue"),
+                            actions: [
+                                ibas.emMessageAction.YES,
+                                ibas.emMessageAction.NO,
+                            ],
+                            onCompleted: (result) => {
+                                if (result === ibas.emMessageAction.YES) {
+                                    this.changePurchaseQuoteItemPrice(criteria);
+                                }
+                            }
+                        });
+                    }
+                } else if (priceList instanceof ibas.Criteria) {
+                    this.busy(true);
+                    let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                    boRepository.fetchMaterialPrice({
+                        criteria: priceList,
+                        onCompleted: (opRslt) => {
+                            for (let item of opRslt.resultObjects) {
+                                this.editData.purchaseQuoteItems.forEach((value) => {
+                                    if (item.itemCode === value.itemCode) {
+                                        // 设置价格，注意折前
+                                        value.isLoading = true;
+                                        value.unitPrice = 0;
+                                        value.discount = 1;
+                                        value.price = 0;
+                                        value.isLoading = false;
+                                        value.price = item.price;
+                                        value.currency = item.currency;
+                                    }
+                                });
+                            }
+                            this.busy(false);
+                        }
+                    });
+                }
             }
             private choosePurchaseQuoteItemWarehouse(caller: bo.PurchaseQuoteItem): void {
                 let that: this = this;

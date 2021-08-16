@@ -370,7 +370,7 @@ namespace purchase {
                                 ]
                             }),
                             new sap.uxap.ObjectPageSection("", {
-                                title: ibas.i18n.prop("sales_title_others"),
+                                title: ibas.i18n.prop("purchase_title_others"),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [

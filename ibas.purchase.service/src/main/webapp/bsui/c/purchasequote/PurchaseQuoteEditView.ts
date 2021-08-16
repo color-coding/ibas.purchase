@@ -138,7 +138,7 @@ namespace purchase {
                                 type: new sap.extension.data.DocumentStatus()
                             }),
                             new sap.extension.m.TipsCheckBox("", {
-                                text: ibas.i18n.prop("bo_payment_canceled"),
+                                text: ibas.i18n.prop("bo_purchasequote_canceled"),
                                 tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
                             }).bindProperty("bindingValue", {
                                 path: "canceled",
@@ -210,7 +210,7 @@ namespace purchase {
                                         }),
                                         new sap.m.ToolbarSeparator(""),
                                         new sap.m.Button("", {
-                                            text: ibas.i18n.prop("sales_extra_information"),
+                                            text: ibas.i18n.prop("purchase_extra_information"),
                                             type: sap.m.ButtonType.Transparent,
                                             icon: "sap-icon://sap-box",
                                             press: function (): void {
@@ -469,6 +469,19 @@ namespace purchase {
                                                 press: function (): void {
                                                     // 复制当前对象
                                                     that.fireViewEvents(that.createDataEvent, true);
+                                                }
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("shell_data_read"),
+                                                icon: "sap-icon://excel-attachment",
+                                                press: function (): void {
+                                                    // 读取当前对象
+                                                    ibas.files.open((files) => {
+                                                        that.fireViewEvents(that.createDataEvent, files[0]);
+                                                    }, {
+                                                        accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                                        multiple: false
+                                                    });
                                                 }
                                             }),
                                         ],
