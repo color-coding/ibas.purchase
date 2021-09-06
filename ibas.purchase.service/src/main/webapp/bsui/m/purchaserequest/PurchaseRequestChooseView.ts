@@ -23,7 +23,10 @@ namespace purchase {
                         mode: sap.m.ListMode.None,
                         items: {
                             path: "/rows",
-                            template: new sap.m.ObjectListItem("", {
+                            template: new sap.extension.m.DataObjectListItem("", {
+                                dataInfo: {
+                                    code: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
+                                },
                                 title: "# {docEntry}",
                                 number: {
                                     path: "documentTotal",

@@ -115,6 +115,14 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "canceled",
                                 type: new sap.extension.data.YesNo()
+                            }).bindProperty("editable", {
+                                path: "approvalStatus",
+                                type: new sap.extension.data.ApprovalStatus(),
+                                formatter(data: ibas.emApprovalStatus): boolean {
+                                    if (data === ibas.emApprovalStatus.PROCESSING) {
+                                        return false;
+                                    } return true;
+                                }
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documentdate") }),
                             new sap.extension.m.DatePicker("", {
@@ -252,17 +260,27 @@ namespace purchase {
                                         }),
                                     }),
                                     new sap.extension.table.DataColumn("", {
-                                        label: ibas.i18n.prop("bo_purchaserequestitem_tax"),
-                                        template: new component.TaxGroupSelect("", {
+                                        label: ibas.i18n.prop("bo_purchaserequestitem_supplier"),
+                                        template: new sap.extension.m.SelectionInput("", {
+                                            showValueHelp: true,
+                                            repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                            dataInfo: {
+                                                type: businesspartner.bo.Supplier,
+                                                key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
+                                                text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME,
+                                            },
+                                            criteria: [
+                                                new ibas.Condition(
+                                                    businesspartner.bo.Supplier.PROPERTY_DELETED_NAME, ibas.emConditionOperation.NOT_EQUAL, ibas.emYesNo.YES.toString()
+                                                )
+                                            ]
                                         }).bindProperty("bindingValue", {
-                                            path: "tax",
+                                            path: "supplier",
                                             type: new sap.extension.data.Alphanumeric({
-                                                maxLength: 8
+                                                maxLength: 20
                                             })
-                                        }).bindProperty("rate", {
-                                            path: "taxRate",
-                                            type: new sap.extension.data.Rate()
                                         }),
+                                        width: "16rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_reference1"),

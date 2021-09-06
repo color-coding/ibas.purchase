@@ -241,6 +241,8 @@ namespace purchase {
                         if (!ibas.strings.isEmpty(selected.warehouse)) {
                             that.view.defaultWarehouse = selected.warehouse;
                         }
+                        // 供应商改变，清除旧地址
+                        that.editData.shippingAddresss.clear();
                         that.changePurchaseReturnItemPrice(that.editData.priceList);
                     }
                 });

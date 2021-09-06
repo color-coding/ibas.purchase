@@ -470,6 +470,12 @@ declare namespace accounting {
             name: string;
             /** 激活 */
             activated: ibas.emYesNo;
+            /** 虚拟的 */
+            phantom: ibas.emYesNo;
+            /** 父项 */
+            parents: string;
+            /** 排序码 */
+            sorts: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
             /** 删除的 */
@@ -506,6 +512,8 @@ declare namespace accounting {
             updateActionId: string;
             /** 备注 */
             remarks: string;
+            /** 开票内容 */
+            invoiceContent: string;
         }
     }
 }
@@ -556,6 +564,8 @@ declare namespace accounting {
             status: emCostStatus;
             /** 取消 */
             canceled: ibas.emYesNo;
+            /** 预算可结转 */
+            transferable: ibas.emYesNo;
             /** 起始日期 */
             startDate: Date;
             /** 结束日期 */
@@ -1663,6 +1673,24 @@ declare namespace accounting {
             get activated(): ibas.emYesNo;
             /** 设置-激活 */
             set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-虚拟的 */
+            static PROPERTY_PHANTOM_NAME: string;
+            /** 获取-虚拟的 */
+            get phantom(): ibas.emYesNo;
+            /** 设置-虚拟的 */
+            set phantom(value: ibas.emYesNo);
+            /** 映射的属性名称-父项 */
+            static PROPERTY_PARENTS_NAME: string;
+            /** 获取-父项 */
+            get parents(): string;
+            /** 设置-父项 */
+            set parents(value: string);
+            /** 映射的属性名称-排序码 */
+            static PROPERTY_SORTS_NAME: string;
+            /** 获取-排序码 */
+            get sorts(): string;
+            /** 设置-排序码 */
+            set sorts(value: string);
             /** 映射的属性名称-已引用 */
             static PROPERTY_REFERENCED_NAME: string;
             /** 获取-已引用 */
@@ -1771,6 +1799,12 @@ declare namespace accounting {
             get remarks(): string;
             /** 设置-备注 */
             set remarks(value: string);
+            /** 映射的属性名称-开票内容 */
+            static PROPERTY_INVOICECONTENT_NAME: string;
+            /** 获取-开票内容 */
+            get invoiceContent(): string;
+            /** 设置-开票内容 */
+            set invoiceContent(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -1899,6 +1933,12 @@ declare namespace accounting {
             get canceled(): ibas.emYesNo;
             /** 设置-取消 */
             set canceled(value: ibas.emYesNo);
+            /** 映射的属性名称-预算可结转 */
+            static PROPERTY_TRANSFERABLE_NAME: string;
+            /** 获取-预算可结转 */
+            get transferable(): ibas.emYesNo;
+            /** 设置-预算可结转 */
+            set transferable(value: ibas.emYesNo);
             /** 映射的属性名称-起始日期 */
             static PROPERTY_STARTDATE_NAME: string;
             /** 获取-起始日期 */
@@ -1959,6 +1999,8 @@ declare namespace accounting {
             get costStructureNodes(): CostStructureNodes;
             /** 设置-费用结构-节点集合 */
             set costStructureNodes(value: CostStructureNodes);
+            /** 可用金额 = 预算金额 - 已发生金额 - 锁定金额 */
+            available(): number;
             /** 初始化数据 */
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];
@@ -2179,6 +2221,8 @@ declare namespace accounting {
             get incurredNodeTotal(): number;
             /** 设置-节点合计-占用 */
             set incurredNodeTotal(value: number);
+            /** 可用金额 = 预算金额 - 已发生金额 - 锁定金额 */
+            available(): number;
             protected registerRules(): ibas.IBusinessRule[];
             /** 重置 */
             reset(): void;
@@ -2453,6 +2497,27 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveCostStructure(saver: ibas.ISaveCaller<bo.CostStructure>): void;
+            /**
+             * 结算 费用结构
+             * @param closer 结算者
+             */
+            closeCostStructure(closer: ICostStructureCloser): void;
+        }
+        /**
+         * 费用结束者
+         */
+        interface ICostStructureCloser extends ibas.IMethodCaller<CostStructure> {
+            /** 费用结构 */
+            structure: number;
+            /** 费用节点 */
+            node?: number;
+            /** 动作 */
+            action?: emCostStatus;
+            /**
+             * 调用完成
+             * @param opRslt 结果
+             */
+            onCompleted(opRslt: ibas.IOperationResult<CostStructure>): void;
         }
     }
 }
@@ -3268,6 +3333,7 @@ declare namespace accounting {
             private viewCostItemsBudget;
             private viewCostItemsLocked;
             private viewCostItemsIncurred;
+            private closeCostStructureNode;
         }
         /** 视图-费用结构 */
         interface ICostStructureListView extends ibas.IBOListView {
@@ -3277,6 +3343,8 @@ declare namespace accounting {
             editDataEvent: Function;
             /** 删除数据事件，参数：删除对象集合 */
             deleteDataEvent: Function;
+            /** 结算费用节点 */
+            closeCostStructureNodeEvent: Function;
             /** 显示数据 */
             showData(datas: bo.CostStructure[]): void;
             /** 显示费用结构 */
@@ -3425,6 +3493,7 @@ declare namespace accounting {
             protected deleteData(): void;
             /** 选择产品资源事件 */
             private chooseEntity;
+            private closeCostStructure;
             close(): void;
         }
         /** 视图-费用结构 */
@@ -3435,6 +3504,8 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 选择主体 */
             chooseEntityEvent: Function;
+            /** 结算费用 */
+            closeCostStructureEvent: Function;
         }
     }
 }

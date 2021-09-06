@@ -285,6 +285,8 @@ namespace purchase {
                         if (!ibas.strings.isEmpty(selected.taxGroup)) {
                             that.view.defaultTaxGroup = selected.taxGroup;
                         }
+                        // 供应商改变，清除旧地址
+                        that.editData.shippingAddresss.clear();
                         that.changePurchaseOrderItemPrice(that.editData.priceList);
                     }
                 });
@@ -641,6 +643,17 @@ namespace purchase {
                 condition.alias = bo.PurchaseQuote.PROPERTY_APPROVALSTATUS_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                // 此供应商或未指定供应商
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = this.editData.supplierCode;
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
                 // 调用选择服务

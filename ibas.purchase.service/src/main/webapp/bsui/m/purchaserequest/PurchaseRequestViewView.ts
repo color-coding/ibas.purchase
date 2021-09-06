@@ -31,18 +31,15 @@ namespace purchase {
                                 path: "cause",
                                 type: new sap.extension.data.Alphanumeric(),
                             },
+                            sideContentButton: new sap.m.Button("", {
+                                text: ibas.i18n.prop("shell_data_edit"),
+                                type: sap.m.ButtonType.Transparent,
+                                icon: "sap-icon://edit",
+                                press(): void {
+                                    that.fireViewEvents(that.editDataEvent);
+                                }
+                            }),
                             actions: [
-                                new sap.uxap.ObjectPageHeaderActionButton("", {
-                                    hideText: true,
-                                    importance: sap.uxap.Importance.High,
-                                    text: ibas.i18n.prop("shell_data_edit"),
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://edit",
-                                    visible: this.mode === ibas.emViewMode.VIEW ? false : true,
-                                    press(): void {
-                                        that.fireViewEvents(that.editDataEvent);
-                                    }
-                                }),
                                 new sap.uxap.ObjectPageHeaderActionButton("", {
                                     hideText: true,
                                     importance: sap.uxap.Importance.Medium,
@@ -281,7 +278,11 @@ namespace purchase {
                                                 }).addStyleClass("sapUiSmallMarginTop"),
                                                 items: {
                                                     path: "/rows",
-                                                    template: new sap.m.ObjectListItem("", {
+                                                    template: new sap.extension.m.DataObjectListItem("", {
+                                                        dataInfo: {
+                                                            code: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
+                                                            name: bo.PurchaseRequestItem.name
+                                                        },
                                                         title: "# {lineId}",
                                                         number: {
                                                             path: "lineStatus",
@@ -338,12 +339,14 @@ namespace purchase {
                                                                 }
                                                             }),
                                                             new sap.extension.m.ObjectAttribute("", {
+                                                                title: ibas.i18n.prop("bo_purchaserequestitem_reference1"),
                                                                 bindingValue: {
                                                                     path: "reference1",
                                                                     type: new sap.extension.data.Alphanumeric(),
                                                                 }
                                                             }),
                                                             new sap.extension.m.ObjectAttribute("", {
+                                                                title: ibas.i18n.prop("bo_purchaserequestitem_reference2"),
                                                                 bindingValue: {
                                                                     path: "reference2",
                                                                     type: new sap.extension.data.Alphanumeric(),
@@ -528,6 +531,20 @@ namespace purchase {
                                                 type: new sap.extension.data.Alphanumeric(),
                                             }
                                         ]
+                                    }),
+                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_supplier") }),
+                                    new sap.extension.m.RepositoryText("", {
+                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                        dataInfo: {
+                                            type: businesspartner.bo.Supplier,
+                                            key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
+                                            text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME,
+                                        },
+                                    }).bindProperty("bindingValue", {
+                                        path: "supplier",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 20
+                                        })
                                     }),
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_reference1") }),
                                     new sap.extension.m.Text("", {

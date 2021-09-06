@@ -25,6 +25,8 @@ declare namespace importexport {
         const BO_REPOSITORY_IMPORTEXPORT: string;
         /** 业务对象编码-数据导出模板 */
         const BO_CODE_EXPORTTEMPLATE: string;
+        /** 业务对象编码-数据表格对象 */
+        const BO_CODE_DATA_TABLE: string;
         enum emAreaType {
             /**
              * 页眉
@@ -194,6 +196,13 @@ declare namespace importexport {
             file?: string | Blob;
             /** 输出类型 */
             outType: "json" | "table" | "array" | "string" | "blob";
+            /**
+             * 返回的页签名称
+             * 默认仅第一个页签
+             * 空数组时，返回全部页签
+             * 指定页签的名称
+             */
+            sheets?: [];
         }
         /**
          * 文件解析服务代理
@@ -2241,6 +2250,7 @@ declare namespace importexport {
             /** 注册视图 */
             protected registerView(): void;
             private outType;
+            private sheets;
             /** 视图显示后 */
             protected viewShowed(): void;
             protected parsing(file: Blob): void;

@@ -112,7 +112,7 @@ namespace purchase {
                                 label: ibas.i18n.prop("bo_purchaserequest_ordertype"),
                                 template: new sap.extension.m.PropertyText("", {
                                     dataInfo: {
-                                        code: bo.PurchaseQuote.BUSINESS_OBJECT_CODE,
+                                        code: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
                                     },
                                     propertyName: "orderType",
                                 }).bindProperty("bindingValue", {
@@ -203,47 +203,67 @@ namespace purchase {
                                 new sap.m.Button("", {
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://action",
-                                    press: function (event: any): void {
-                                        ibas.servicesManager.showServices({
-                                            proxy: new ibas.BOServiceProxy({
-                                                data: that.table.getSelecteds(),
-                                                converter: new bo.DataConverter(),
-                                            }),
-                                            displayServices(services: ibas.IServiceAgent[]): void {
-                                                if (ibas.objects.isNull(services) || services.length === 0) {
-                                                    return;
-                                                }
-                                                let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
-                                                    placement: sap.m.PlacementType.Bottom,
-                                                    buttons: {
-                                                        path: "/",
-                                                        template: new sap.m.Button("", {
-                                                            type: sap.m.ButtonType.Transparent,
-                                                            text: {
-                                                                path: "name",
-                                                                type: new sap.extension.data.Alphanumeric(),
-                                                                formatter(data: string): string {
-                                                                    return data ? ibas.i18n.prop(data) : "";
-                                                                }
-                                                            },
-                                                            icon: {
-                                                                path: "icon",
-                                                                type: new sap.extension.data.Alphanumeric(),
-                                                                formatter(data: string): string {
-                                                                    return data ? data : "sap-icon://e-care";
-                                                                }
-                                                            },
-                                                            press(this: sap.m.Button): void {
-                                                                let service: ibas.IServiceAgent = this.getBindingContext().getObject();
-                                                                if (service) {
-                                                                    service.run();
-                                                                }
+                                    press: function (event: sap.ui.base.Event): void {
+                                        // 列表查的不完全，重新获取实例
+                                        let source: any = event.getSource();
+                                        let criteria: ibas.Criteria = new ibas.Criteria();
+                                        criteria.result = 0;
+                                        let condition: ibas.ICondition;
+                                        for (let item of that.table.getSelecteds<bo.PurchaseRequest>()) {
+                                            criteria.result++;
+                                            condition = criteria.conditions.create();
+                                            if (criteria.conditions.length > 1) {
+                                                condition.relationship = ibas.emConditionRelationship.OR;
+                                            }
+                                            condition.alias = bo.PurchaseRequest.PROPERTY_DOCENTRY_NAME;
+                                            condition.value = String(item.docEntry);
+                                        }
+                                        let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                                        boRepository.fetchPurchaseRequest({
+                                            criteria: criteria,
+                                            onCompleted: (opRslt) => {
+                                                ibas.servicesManager.showServices({
+                                                    proxy: new ibas.BOServiceProxy({
+                                                        data: opRslt.resultObjects,
+                                                        converter: new bo.DataConverter(),
+                                                    }),
+                                                    displayServices(services: ibas.IServiceAgent[]): void {
+                                                        if (ibas.objects.isNull(services) || services.length === 0) {
+                                                            return;
+                                                        }
+                                                        let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
+                                                            placement: sap.m.PlacementType.Bottom,
+                                                            buttons: {
+                                                                path: "/",
+                                                                template: new sap.m.Button("", {
+                                                                    type: sap.m.ButtonType.Transparent,
+                                                                    text: {
+                                                                        path: "name",
+                                                                        type: new sap.extension.data.Alphanumeric(),
+                                                                        formatter(data: string): string {
+                                                                            return data ? ibas.i18n.prop(data) : "";
+                                                                        }
+                                                                    },
+                                                                    icon: {
+                                                                        path: "icon",
+                                                                        type: new sap.extension.data.Alphanumeric(),
+                                                                        formatter(data: string): string {
+                                                                            return data ? data : "sap-icon://e-care";
+                                                                        }
+                                                                    },
+                                                                    press(this: sap.m.Button): void {
+                                                                        let service: ibas.IServiceAgent = this.getBindingContext().getObject();
+                                                                        if (service) {
+                                                                            service.run();
+                                                                        }
+                                                                    }
+                                                                })
                                                             }
-                                                        })
+                                                        });
+                                                        actionSheet.setModel(new sap.extension.model.JSONModel(services));
+                                                        actionSheet.openBy(source);
                                                     }
                                                 });
-                                                actionSheet.setModel(new sap.extension.model.JSONModel(services));
-                                                actionSheet.openBy(event.getSource());
                                             }
                                         });
                                     }

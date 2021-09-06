@@ -1958,6 +1958,8 @@ declare namespace materials {
             onOrdered: number;
             /** 提前期（天） */
             leadTime: number;
+            /** 首选供应商 */
+            preferredVendor: string;
             /** 库存单位 */
             inventoryUOM: string;
             /** 序号管理 */
@@ -6105,6 +6107,12 @@ declare namespace materials {
             get warehouse(): string;
             /** 设置-仓库 */
             set warehouse(value: string);
+            /** 映射的属性名称-首选供应商 */
+            static PROPERTY_PREFERREDVENDOR_NAME: string;
+            /** 获取-首选供应商 */
+            get preferredVendor(): string;
+            /** 设置-首选供应商 */
+            set preferredVendor(value: string);
             /** 映射的属性名称-库存单位 */
             static PROPERTY_INVENTORYUOM_NAME: string;
             /** 获取-库存单位 */
@@ -8009,8 +8017,8 @@ declare namespace materials {
             protected saveData(): void;
             /** 删除数据 */
             protected deleteData(): void;
-            /** 新建数据，参数1：是否克隆 */
-            protected createData(clone: boolean): void;
+            /** 新建数据，参数1：是否克隆 or 导入文件 */
+            protected createData(clone: boolean | Blob): void;
             /** 添加库存发货-行事件 */
             private addGoodsIssueLine;
             /** 删除库存发货-行事件 */
@@ -8253,8 +8261,8 @@ declare namespace materials {
             protected saveData(): void;
             /** 删除数据 */
             protected deleteData(): void;
-            /** 新建数据，参数1：是否克隆 */
-            protected createData(clone: boolean): void;
+            /** 新建数据，参数1：是否克隆 or 导入文件 */
+            protected createData(clone: boolean | Blob): void;
             /** 添加库存收货-行事件 */
             private addGoodsReceiptLine;
             /** 删除库存收货-行事件 */
@@ -8499,8 +8507,8 @@ declare namespace materials {
             protected saveData(): void;
             /** 删除数据 */
             protected deleteData(): void;
-            /** 新建数据，参数1：是否克隆 */
-            protected createData(clone: boolean): void;
+            /** 新建数据，参数1：是否克隆 or 导入文件 */
+            protected createData(clone: boolean | Blob): void;
             /** 添加库存转储-行事件 */
             private addInventoryTransferLine;
             /** 删除库存转储-行事件 */
@@ -10509,8 +10517,8 @@ declare namespace materials {
             protected closeData(): void;
             /** 删除数据 */
             protected deleteData(): void;
-            /** 新建数据，参数1：是否克隆 */
-            protected createData(clone: boolean): void;
+            /** 新建数据，参数1：是否克隆 or 导入文件 */
+            protected createData(clone: boolean | Blob): void;
             protected refreshMaterialInventory(): void;
             /** 添加库存盘点-行事件 */
             protected addInventoryCountingLine(): void;

@@ -1841,6 +1841,8 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 	public void reset() {
 		super.reset();
 		this.setPaidTotal(Decimal.ZERO);
+		this.setDocumentStatus(emDocumentStatus.RELEASED);
+		this.getPurchaseReturnItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
 
 	@Override

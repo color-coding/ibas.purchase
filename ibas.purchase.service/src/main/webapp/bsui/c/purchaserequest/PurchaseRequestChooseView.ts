@@ -107,7 +107,7 @@ namespace purchase {
                                 label: ibas.i18n.prop("bo_purchaserequest_ordertype"),
                                 template: new sap.extension.m.PropertyText("", {
                                     dataInfo: {
-                                        code: bo.PurchaseQuote.BUSINESS_OBJECT_CODE,
+                                        code: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
                                     },
                                     propertyName: "orderType",
                                 }).bindProperty("bindingValue", {

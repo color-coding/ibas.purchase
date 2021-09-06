@@ -517,6 +517,18 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 此供应商或未指定供应商
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = this.editData.supplierCode;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseRequest>({

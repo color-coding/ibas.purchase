@@ -1843,6 +1843,8 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder>
 	public void reset() {
 		super.reset();
 		this.setPaidTotal(Decimal.ZERO);
+		this.setDocumentStatus(emDocumentStatus.RELEASED);
+		this.getPurchaseOrderItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
 
 	private Integer floorList;

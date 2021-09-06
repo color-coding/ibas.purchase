@@ -1767,6 +1767,8 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote>
 	public void reset() {
 		super.reset();
 		this.setPaidTotal(Decimal.ZERO);
+		this.setDocumentStatus(emDocumentStatus.RELEASED);
+		this.getPurchaseQuoteItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
 
 	private Integer floorList;

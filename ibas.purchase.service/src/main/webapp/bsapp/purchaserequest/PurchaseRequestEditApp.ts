@@ -338,6 +338,7 @@ namespace purchase {
                                 created = true;
                             }
                             item.baseProduct(selected);
+                            item.supplier = selected.preferredVendor;
                             if (!ibas.strings.isEmpty(item.tax)) {
                                 accounting.taxrate.assign(item.tax, (rate) => {
                                     if (rate >= 0) {
@@ -370,7 +371,6 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(data, this.editData);
             }
-
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {

@@ -1840,6 +1840,8 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 	public void reset() {
 		super.reset();
 		this.setPaidTotal(Decimal.ZERO);
+		this.setDocumentStatus(emDocumentStatus.RELEASED);
+		this.getPurchaseDeliveryItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
 
 	@Override

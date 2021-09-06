@@ -77,17 +77,15 @@ namespace purchase {
                                 path: "cause",
                                 type: new sap.extension.data.Alphanumeric(),
                             },
+                            sideContentButton: new sap.m.Button("", {
+                                text: ibas.i18n.prop("shell_data_save"),
+                                type: sap.m.ButtonType.Transparent,
+                                icon: "sap-icon://save",
+                                press(): void {
+                                    that.fireViewEvents(that.saveDataEvent);
+                                }
+                            }),
                             actions: [
-                                new sap.uxap.ObjectPageHeaderActionButton("", {
-                                    text: ibas.i18n.prop("shell_data_save"),
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://save",
-                                    hideText: true,
-                                    importance: sap.uxap.Importance.High,
-                                    press: function (): void {
-                                        that.fireViewEvents(that.saveDataEvent);
-                                    }
-                                }),
                                 new sap.uxap.ObjectPageHeaderActionButton("", {
                                     text: ibas.i18n.prop("shell_data_clone"),
                                     type: sap.m.ButtonType.Transparent,
@@ -289,6 +287,14 @@ namespace purchase {
                                                     }).bindProperty("bindingValue", {
                                                         path: "canceled",
                                                         type: new sap.extension.data.YesNo()
+                                                    }).bindProperty("editable", {
+                                                        path: "approvalStatus",
+                                                        type: new sap.extension.data.ApprovalStatus(),
+                                                        formatter(data: ibas.emApprovalStatus): boolean {
+                                                            if (data === ibas.emApprovalStatus.PROCESSING) {
+                                                                return false;
+                                                            } return true;
+                                                        }
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documentdate") }),
                                                     new sap.extension.m.DatePicker("", {
@@ -361,7 +367,11 @@ namespace purchase {
                                                 }).addStyleClass("sapUiSmallMarginTop"),
                                                 items: {
                                                     path: "/rows",
-                                                    template: new sap.m.ObjectListItem("", {
+                                                    template: new sap.extension.m.DataObjectListItem("", {
+                                                        dataInfo: {
+                                                            code: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
+                                                            name: bo.PurchaseRequestItem.name
+                                                        },
                                                         title: "# {lineId}",
                                                         number: {
                                                             path: "lineStatus",
@@ -418,12 +428,14 @@ namespace purchase {
                                                                 }
                                                             }),
                                                             new sap.extension.m.ObjectAttribute("", {
+                                                                title: ibas.i18n.prop("bo_purchaserequestitem_reference1"),
                                                                 bindingValue: {
                                                                     path: "reference1",
                                                                     type: new sap.extension.data.Alphanumeric(),
                                                                 }
                                                             }),
                                                             new sap.extension.m.ObjectAttribute("", {
+                                                                title: ibas.i18n.prop("bo_purchaserequestitem_reference2"),
                                                                 bindingValue: {
                                                                     path: "reference2",
                                                                     type: new sap.extension.data.Alphanumeric(),
@@ -634,6 +646,26 @@ namespace purchase {
                                             maxLength: 8
                                         }),
                                     }),
+                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_supplier") }),
+                                    new sap.extension.m.SelectionInput("", {
+                                        showValueHelp: true,
+                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                        dataInfo: {
+                                            type: businesspartner.bo.Supplier,
+                                            key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
+                                            text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME,
+                                        },
+                                        criteria: [
+                                            new ibas.Condition(
+                                                businesspartner.bo.Supplier.PROPERTY_DELETED_NAME, ibas.emConditionOperation.NOT_EQUAL, ibas.emYesNo.YES.toString()
+                                            )
+                                        ]
+                                    }).bindProperty("bindingValue", {
+                                        path: "supplier",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 20
+                                        })
+                                    }),
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_reference1") }),
                                     new sap.extension.m.Input("", {
                                     }).bindProperty("bindingValue", {
@@ -655,6 +687,7 @@ namespace purchase {
                         ],
                         buttons: [
                             new sap.m.Button("", {
+                                width: "20%",
                                 icon: "sap-icon://arrow-left",
                                 type: sap.m.ButtonType.Transparent,
                                 press: function (): void {
@@ -677,6 +710,7 @@ namespace purchase {
                                 }
                             }),
                             new sap.m.Button("", {
+                                width: "20%",
                                 icon: "sap-icon://arrow-right",
                                 type: sap.m.ButtonType.Transparent,
                                 press: function (): void {
@@ -694,6 +728,27 @@ namespace purchase {
                                                 type: ibas.emMessageType.WARNING,
                                                 message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
                                             });
+                                        }
+                                    }
+                                }
+                            }),
+                            new sap.m.Button("", {
+                                width: "20%",
+                                text: ibas.i18n.prop("shell_data_remove"),
+                                type: sap.m.ButtonType.Transparent,
+                                press: function (): void {
+                                    let form: any = editForm.getContent()[0];
+                                    if (form instanceof sap.extension.layout.SimpleForm) {
+                                        let datas: any = that.listPurchaseRequestItem.getModel().getData("rows");
+                                        if (datas instanceof Array && datas.length > 0) {
+                                            that.fireViewEvents(that.removePurchaseRequestItemEvent, form.getModel().getData());
+                                            if (datas.length === 1) {
+                                                // 无数据，退出
+                                                (<any>editForm.getButtons()[3]).firePress({});
+                                            } else {
+                                                // 下一个
+                                                (<any>editForm.getButtons()[1]).firePress({});
+                                            }
                                         }
                                     }
                                 }

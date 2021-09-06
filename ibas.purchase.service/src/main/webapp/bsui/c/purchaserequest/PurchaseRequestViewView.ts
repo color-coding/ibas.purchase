@@ -21,27 +21,30 @@ namespace purchase {
                         },
                         columns: [
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_lineid"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_lineid"),
                                 width: "5rem",
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_itemdescription"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_itemdescription"),
                                 width: "20rem",
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_quantity"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_quantity"),
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_price"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_price"),
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_linetotal"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_linetotal"),
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_reference1"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_supplier"),
                             }),
                             new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_purchasequoteitem_reference2"),
+                                header: ibas.i18n.prop("bo_purchaserequestitem_reference1"),
+                            }),
+                            new sap.extension.m.Column("", {
+                                header: ibas.i18n.prop("bo_purchaserequestitem_reference2"),
                             }),
                         ],
                         items: {
@@ -91,6 +94,18 @@ namespace purchase {
                                         },
                                         unit: {
                                             path: "currency",
+                                            type: new sap.extension.data.Alphanumeric(),
+                                        }
+                                    }),
+                                    new sap.extension.m.RepositoryObjectAttribute("", {
+                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                        dataInfo: {
+                                            type: businesspartner.bo.Supplier,
+                                            key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
+                                            text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME,
+                                        },
+                                        bindingValue: {
+                                            path: "supplier",
                                             type: new sap.extension.data.Alphanumeric(),
                                         }
                                     }),
@@ -202,14 +217,14 @@ namespace purchase {
                             }),
                             actions: [
                                 new sap.extension.m.ObjectDocumentStatus("", {
-                                    title: ibas.i18n.prop("bo_purchasequote_documentstatus"),
+                                    title: ibas.i18n.prop("bo_purchaserequest_documentstatus"),
                                     text: {
                                         path: "documentStatus",
                                         type: new sap.extension.data.DocumentStatus(true),
                                     },
                                 }),
                                 new sap.extension.m.ObjectYesNoStatus("", {
-                                    title: ibas.i18n.prop("bo_purchasequote_canceled"),
+                                    title: ibas.i18n.prop("bo_purchaserequest_canceled"),
                                     negative: true,
                                     text: {
                                         path: "canceled",
@@ -233,7 +248,7 @@ namespace purchase {
                                 width: "30%",
                                 content: [
                                     new sap.extension.m.RepositoryObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_purchasequote_pricelist"),
+                                        title: ibas.i18n.prop("bo_purchaserequest_pricelist"),
                                         bindingValue: {
                                             path: "priceList",
                                             type: new sap.extension.data.Alphanumeric(),
@@ -246,7 +261,7 @@ namespace purchase {
                                         },
                                     }),
                                     new sap.extension.m.PropertyObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_purchasequote_ordertype"),
+                                        title: ibas.i18n.prop("bo_purchaserequest_ordertype"),
                                         bindingValue: {
                                             path: "orderType",
                                             type: new sap.extension.data.Alphanumeric(),
@@ -269,7 +284,7 @@ namespace purchase {
                                         }
                                     }),
                                     new sap.extension.m.ObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_purchasequote_documentdate"),
+                                        title: ibas.i18n.prop("bo_purchaserequest_documentdate"),
                                         bindingValue: {
                                             path: "documentDate",
                                             type: new sap.extension.data.Date(),
@@ -280,7 +295,7 @@ namespace purchase {
                         ],
                         sections: [
                             new sap.uxap.ObjectPageSection("", {
-                                title: ibas.i18n.prop("bo_purchasequote_purchasequoteitems"),
+                                title: ibas.i18n.prop("bo_purchaserequest_purchaserequestitems"),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [
@@ -297,21 +312,21 @@ namespace purchase {
                                             new sap.ui.layout.VerticalLayout("", {
                                                 content: [
                                                     new sap.extension.m.ObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_remarks"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_remarks"),
                                                         bindingValue: {
                                                             path: "remarks",
                                                             type: new sap.extension.data.Alphanumeric(),
                                                         }
                                                     }),
                                                     new sap.extension.m.ObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_reference1"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_reference1"),
                                                         bindingValue: {
                                                             path: "reference1",
                                                             type: new sap.extension.data.Alphanumeric(),
                                                         }
                                                     }),
                                                     new sap.extension.m.ObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_reference2"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_reference2"),
                                                         bindingValue: {
                                                             path: "reference2",
                                                             type: new sap.extension.data.Alphanumeric(),
@@ -322,21 +337,21 @@ namespace purchase {
                                             new sap.ui.layout.VerticalLayout("", {
                                                 content: [
                                                     new sap.extension.m.UserObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_dataowner"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_dataowner"),
                                                         bindingValue: {
                                                             path: "dataOwner",
                                                             type: new sap.extension.data.Alphanumeric(),
                                                         }
                                                     }),
                                                     new sap.extension.m.OrganizationObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_organization"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_organization"),
                                                         bindingValue: {
                                                             path: "organization",
                                                             type: new sap.extension.data.Alphanumeric(),
                                                         }
                                                     }),
                                                     new sap.extension.m.RepositoryObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchasequote_project"),
+                                                        title: ibas.i18n.prop("bo_purchaserequest_project"),
                                                         bindingValue: {
                                                             path: "project",
                                                             type: new sap.extension.data.Alphanumeric(),

@@ -467,6 +467,7 @@ namespace purchase {
             }
 
 
+
             /** 映射的属性名称-采购申请-行集合 */
             static PROPERTY_PURCHASEREQUESTITEMS_NAME: string = "PurchaseRequestItems";
             /** 获取-采购申请-行集合 */
@@ -529,6 +530,7 @@ namespace purchase {
             reset(): void {
                 super.reset();
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
+                this.purchaseRequestItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
             }
             /** 转换之前 */
             beforeConvert(): void { }

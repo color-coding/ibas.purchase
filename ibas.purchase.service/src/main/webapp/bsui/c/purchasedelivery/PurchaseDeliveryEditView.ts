@@ -149,6 +149,14 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "canceled",
                                 type: new sap.extension.data.YesNo()
+                            }).bindProperty("editable", {
+                                path: "approvalStatus",
+                                type: new sap.extension.data.ApprovalStatus(),
+                                formatter(data: ibas.emApprovalStatus): boolean {
+                                    if (data === ibas.emApprovalStatus.PROCESSING) {
+                                        return false;
+                                    } return true;
+                                }
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_documentdate") }),
                             new sap.extension.m.DatePicker("", {
