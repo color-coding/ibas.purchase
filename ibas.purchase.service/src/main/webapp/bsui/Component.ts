@@ -335,7 +335,6 @@ namespace purchase {
                             }
                         }
                     });
-                    this.loadItems();
                     return this;
                 },
                 /**

@@ -12,6 +12,7 @@
 /// <reference path="./purchasequote/index.ts" />
 /// <reference path="./purchaserequest/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
+/// <reference path="./others/index.ts" />
 namespace purchase {
     export namespace app {
         /** 属性-导航 */
@@ -57,6 +58,10 @@ namespace purchase {
                 this.register(new PurchaseRequestLinkServiceMapping());
                 this.register(new PurchaseRequestEditServiceMapping());
                 // 注册常驻应用
+                // 收付款服务
+                this.register(new PurchaseReturnReceiptServiceMapping());
+                this.register(new PurchaseDeliveryPaymentServiceMapping());
+                this.register(new PurchaseOrderPaymentServiceMapping());
 
             }
             /** 运行 */
