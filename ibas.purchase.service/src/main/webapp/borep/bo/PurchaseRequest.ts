@@ -487,6 +487,16 @@ namespace purchase {
                 this.documentCurrency = ibas.config.get(ibas.CONFIG_ITEM_DEFAULT_CURRENCY);
                 this.rounding = ibas.emYesNo.YES;
             }
+            /** 映射的属性名称-项目的行总计 */
+            static PROPERTY_ITEMSLINETOTAL_NAME: string = "ItemsLineTotal";
+            /** 获取-项目的行总计 */
+            get itemsLineTotal(): number {
+                return this.getProperty<number>(PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME);
+            }
+            /** 设置-项目的行总计 */
+            set itemsLineTotal(value: number) {
+                this.setProperty(PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, value);
+            }
             /** 映射的属性名称-项目的税总计 */
             static PROPERTY_ITEMSTAXTOTAL_NAME: string = "ItemsTaxTotal";
             /** 获取-项目的税总计 */
@@ -511,15 +521,18 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
-                    // 单据总计-行总计
+                    // 计算项目-行总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
-                    // 计算项目-税总计
+                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
+                    // 计算项目-行税总计
                     new ibas.BusinessRuleSumElements(
                         PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME),
-                    // 单据税总计 = 行税总计 + 运输税总计
+                    // 单据税总计 = 行税总计
                     new ibas.BusinessRuleSummation(
                         PurchaseRequest.PROPERTY_DOCUMENTTAXTOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME),
+                    // 单据总计 = 行总计 + 行税总计
+                    new ibas.BusinessRuleSummation(
+                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME),
                     // 小数舍入（单据总计）
                     new ibas.BusinessRuleRoundingOff(
                         PurchaseRequest.PROPERTY_DIFFAMOUNT_NAME, PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME,

@@ -620,38 +620,41 @@ namespace purchase {
                 let criteria: ibas.ICriteria = new ibas.Criteria();
                 let condition: ibas.ICondition = criteria.conditions.create();
                 // 未取消的
-                condition.alias = bo.PurchaseQuote.PROPERTY_CANCELED_NAME;
+                condition.alias = bo.PurchaseRequest.PROPERTY_CANCELED_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emYesNo.NO.toString();
                 // 未删除的
                 condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_DELETED_NAME;
+                condition.alias = bo.PurchaseRequest.PROPERTY_DELETED_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emYesNo.NO.toString();
                 // 仅下达的
                 condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_DOCUMENTSTATUS_NAME;
+                condition.alias = bo.PurchaseRequest.PROPERTY_DOCUMENTSTATUS_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emDocumentStatus.RELEASED.toString();
                 // 审批通过的或未进审批
                 condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_APPROVALSTATUS_NAME;
+                condition.alias = bo.PurchaseRequest.PROPERTY_APPROVALSTATUS_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emApprovalStatus.APPROVED.toString();
                 condition.bracketOpen = 1;
                 condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_APPROVALSTATUS_NAME;
+                condition.alias = bo.PurchaseRequest.PROPERTY_APPROVALSTATUS_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
                 // 此供应商或未指定供应商
-                condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCriteria.onlyHasChilds = true;
+                cCriteria.propertyPath = bo.PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_SUPPLIER_NAME;
                 condition.operation = ibas.emConditionOperation.IS_NULL;
                 condition.bracketOpen = 1;
-                condition = criteria.conditions.create();
-                condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_SUPPLIER_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
                 condition.relationship = ibas.emConditionRelationship.OR;

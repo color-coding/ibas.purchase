@@ -697,7 +697,7 @@ namespace purchase {
                         // 复制自定义字段
                         for (let uItem of item.userFields.forEach()) {
                             let myUItem: ibas.IUserField = myItem.userFields.get(uItem.name);
-                            if (ibas.objects.isNull(myItem)) {
+                            if (ibas.objects.isNull(myUItem)) {
                                 myUItem = myItem.userFields.register(uItem.name, uItem.valueType);
                             }
                             if (myUItem.valueType !== uItem.valueType) {

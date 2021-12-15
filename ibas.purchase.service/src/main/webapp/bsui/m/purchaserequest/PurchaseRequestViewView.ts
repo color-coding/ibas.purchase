@@ -94,31 +94,34 @@ namespace purchase {
                             ],
                         }).addStyleClass("sapUiNoContentPadding"),
                         headerContent: [
-                            new sap.extension.m.ObjectDocumentStatus("", {
-                                title: ibas.i18n.prop("bo_purchaserequest_documentstatus"),
-                                text: {
-                                    path: "documentStatus",
-                                    type: new sap.extension.data.DocumentStatus(true),
-                                },
-                            }),
-                            new sap.extension.m.ObjectYesNoStatus("", {
-                                title: ibas.i18n.prop("bo_purchaserequest_canceled"),
-                                negative: true,
-                                text: {
-                                    path: "canceled",
-                                    type: new sap.extension.data.YesNo(true),
+                            new sap.extension.m.ObjectApprovalStatus("", {
+                                title: ibas.i18n.prop("bo_purchaserequest_approvalstatus"),
+                                enumValue: {
+                                    path: "approvalStatus",
+                                    type: new sap.extension.data.ApprovalStatus(),
                                 },
                                 visible: {
-                                    path: "canceled",
-                                    formatter(data: ibas.emYesNo): boolean {
-                                        return data === ibas.emYesNo.YES ? true : false;
+                                    path: "approvalStatus",
+                                    formatter(data: ibas.emApprovalStatus): boolean {
+                                        return ibas.objects.isNull(data) || data === ibas.emApprovalStatus.UNAFFECTED ? false : true;
                                     }
                                 }
                             }),
+                            new sap.extension.m.ObjectDocumentCanceledStatus("", {
+                                title: ibas.i18n.prop("bo_purchaserequest_documentstatus"),
+                                canceledStatus: {
+                                    path: "canceled",
+                                    type: new sap.extension.data.YesNo(),
+                                },
+                                documentStatus: {
+                                    path: "documentStatus",
+                                    type: new sap.extension.data.DocumentStatus(),
+                                },
+                            }),
                             new sap.extension.m.ObjectAttribute("", {
-                                title: ibas.i18n.prop("bo_purchaserequest_requestdate"),
+                                title: ibas.i18n.prop("bo_purchaserequest_documentdate"),
                                 bindingValue: {
-                                    path: "requestDate",
+                                    path: "documentDate",
                                     type: new sap.extension.data.Date(),
                                 },
                             }),
@@ -148,12 +151,6 @@ namespace purchase {
                                                 editable: false,
                                                 width: "auto",
                                                 content: [
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_cause") }),
-                                                    new sap.extension.m.Text("", {
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "cause",
-                                                        type: new sap.extension.data.Alphanumeric()
-                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_requester") }),
                                                     new sap.extension.m.Text("", {
                                                     }).bindProperty("bindingValue", {
@@ -609,8 +606,12 @@ namespace purchase {
                             new sap.m.Button("", {
                                 text: ibas.i18n.prop("shell_exit"),
                                 type: sap.m.ButtonType.Transparent,
-                                press(): void {
-                                    editForm.close();
+                                press(this: sap.m.Button): void {
+                                    if (this.getParent() instanceof sap.m.Dialog) {
+                                        (<sap.m.Dialog>this.getParent()).close();
+                                    } else {
+                                        editForm.close();
+                                    }
                                 }
                             }),
                         ]
