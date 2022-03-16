@@ -198,8 +198,29 @@ namespace purchase {
                 }
             }
             /** 添加采购申请-行事件 */
-            protected addPurchaseRequestItem(): void {
-                this.choosePurchaseRequestItemMaterial(undefined);
+            private addPurchaseRequestItem(items: bo.PurchaseRequestItem[]): void {
+                if (items instanceof Array && items.length > 0) {
+                    let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                    builder.append(ibas.i18n.prop("shell_data_new_line"));
+                    builder.append(" [");
+                    for (let item of items) {
+                        let newItem: bo.PurchaseRequestItem = item.clone();
+                        newItem.lineId = undefined;
+                        newItem.visOrder = undefined;
+                        this.editData.purchaseRequestItems.add(newItem);
+                        if (builder.length > 2) {
+                            builder.append(", ");
+                        }
+                        builder.append(newItem.lineId);
+                    }
+                    builder.append("] ");
+                    if (builder.length > 3) {
+                        this.proceeding(ibas.emMessageType.WARNING, builder.toString());
+                        this.view.showPurchaseRequestItems(this.editData.purchaseRequestItems.filterDeleted());
+                    }
+                } else {
+                    this.choosePurchaseRequestItemMaterial(undefined);
+                }
             }
             /** 删除采购申请-行事件 */
             protected removePurchaseRequestItem(items: bo.PurchaseRequestItem[]): void {

@@ -206,6 +206,12 @@ namespace purchase {
                                                         }
                                                     }),
                                                     new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("shell_data_clone_line"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.addPurchaseDeliveryItemEvent, that.tablePurchaseDeliveryItem.getSelecteds());
+                                                        }
+                                                    }),
+                                                    new sap.m.MenuItem("", {
                                                         text: ibas.i18n.prop("bo_purchaseorder"),
                                                         press: function (): void {
                                                             that.fireViewEvents(that.choosePurchaseDeliveryPurchaseOrderEvent);

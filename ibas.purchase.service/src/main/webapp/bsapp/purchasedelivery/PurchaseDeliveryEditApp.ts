@@ -477,8 +477,31 @@ namespace purchase {
                 });
             }
             /** 添加采购收货-行事件 */
-            private addPurchaseDeliveryItem(): void {
-                this.choosePurchaseDeliveryItemMaterial(undefined);
+            private addPurchaseDeliveryItem(items: bo.PurchaseDeliveryItem[]): void {
+                if (items instanceof Array && items.length > 0) {
+                    let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                    builder.append(ibas.i18n.prop("shell_data_new_line"));
+                    builder.append(" [");
+                    for (let item of items) {
+                        let newItem: bo.PurchaseDeliveryItem = item.clone();
+                        newItem.lineId = undefined;
+                        newItem.visOrder = undefined;
+                        // 序列号清除
+                        newItem.materialSerials.clear();
+                        this.editData.purchaseDeliveryItems.add(newItem);
+                        if (builder.length > 2) {
+                            builder.append(", ");
+                        }
+                        builder.append(newItem.lineId);
+                    }
+                    builder.append("] ");
+                    if (builder.length > 3) {
+                        this.proceeding(ibas.emMessageType.WARNING, builder.toString());
+                        this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
+                    }
+                } else {
+                    this.choosePurchaseDeliveryItemMaterial(undefined);
+                }
             }
             /** 删除采购收货-行事件 */
             private removePurchaseDeliveryItem(items: bo.PurchaseDeliveryItem[]): void {

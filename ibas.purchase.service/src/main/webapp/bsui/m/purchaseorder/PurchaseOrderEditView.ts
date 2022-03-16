@@ -444,6 +444,13 @@ namespace purchase {
                                                                 }),
                                                                 new sap.m.SegmentedButtonItem("", {
                                                                     width: "3rem",
+                                                                    icon: "sap-icon://copy",
+                                                                    press(oEvent: any): void {
+                                                                        that.fireViewEvents(that.addPurchaseOrderItemEvent, that.listPurchaseOrderItem.getSelecteds());
+                                                                    }
+                                                                }),
+                                                                new sap.m.SegmentedButtonItem("", {
+                                                                    width: "3rem",
                                                                     icon: "sap-icon://delete",
                                                                     press(oEvent: any): void {
                                                                         that.fireViewEvents(that.removePurchaseOrderItemEvent, that.listPurchaseOrderItem.getSelecteds());
