@@ -311,7 +311,8 @@ namespace purchase {
                 }
                 let preTax: number = ibas.numbers.valueOf(context.inputValues.get(this.preTax));
                 let afterTax: number = ibas.numbers.valueOf(context.inputValues.get(this.afterTax));
-                if (ibas.strings.equalsIgnoreCase(this.preTax, context.trigger)) {
+                if (ibas.strings.equalsIgnoreCase(this.preTax, context.trigger)
+                    || ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)) {
                     if (taxRate === 0) {
                         context.outputValues.set(this.afterTax, preTax);
                     } else {
@@ -388,7 +389,8 @@ namespace purchase {
                 if (preDiscount <= 0) {
                     // 折前价格为0，则使用折后价格
                     context.outputValues.set(this.preDiscount, afterDiscount);
-                } else if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)) {
+                } else if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)
+                    || ibas.strings.equalsIgnoreCase(this.preDiscount, context.trigger)) {
                     // 折扣触发，算成交价
                     let result: number = preDiscount * discount;
                     if (this.decimalPlaces >= 0) {

@@ -1370,19 +1370,19 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
-                    // 计算折扣价格 = 折扣前价格 * 折扣
+                    // 计算税前价格 = 折扣前价格 * 折扣
                     new BusinessRuleDeductionDiscountPrice(
-                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME
+                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)
                     ),
+                    // 计算税后价格 = 税前价格 * （1 + 税率）
+                    new BusinessRuleDeductionTaxPrice(
+                        PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME
+                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)),
                     // 计算总计 = 数量 * 价格
                     new ibas.BusinessRuleMultiplication(
                         PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算税前价格 = 税后价格 * 税率
-                    new BusinessRuleDeductionTaxPrice(
-                        PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)),
                     // 计算税前总计 = 数量 * 税前价格
                     new ibas.BusinessRuleMultiplication(
                         PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME

@@ -86,7 +86,8 @@ public class BusinessRuleDeductionTaxPrice extends BusinessRuleCommon {
 		if (afterTax == null) {
 			afterTax = Decimal.ZERO;
 		}
-		if (this.getPreTax().getName().equalsIgnoreCase(context.getTrigger())) {
+		if (this.getPreTax().getName().equalsIgnoreCase(context.getTrigger())
+				|| this.getTaxRate().getName().equalsIgnoreCase(context.getTrigger())) {
 			// 仅税前价格变化，触发正向税计算
 			if (taxRate.equals(Decimal.ZERO)) {
 				// 税率为0，则

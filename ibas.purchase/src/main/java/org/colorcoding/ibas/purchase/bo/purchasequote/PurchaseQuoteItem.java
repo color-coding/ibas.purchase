@@ -2112,12 +2112,12 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem> impleme
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXPRICE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
-				// 推导 价格 = 折扣前价格 * 折扣
-				new BusinessRuleDeductionDiscountPrice(PROPERTY_DISCOUNT, PROPERTY_UNITPRICE, PROPERTY_PRICE),
+				// 计算税前价格 = 折扣前价格 * 折扣
+				new BusinessRuleDeductionDiscountPrice(PROPERTY_DISCOUNT, PROPERTY_UNITPRICE, PROPERTY_PRETAXPRICE),
+				// 计算税后价格 = 税前价格 * （1 + 税率）
+				new BusinessRuleDeductionTaxPrice(PROPERTY_TAXRATE, PROPERTY_PRETAXPRICE, PROPERTY_PRICE),
 				// 计算总计 = 数量 * 价格
 				new BusinessRuleMultiplication(PROPERTY_LINETOTAL, PROPERTY_QUANTITY, PROPERTY_PRICE),
-				// 计算税前价格 = 税后价格 * 税率
-				new BusinessRuleDeductionTaxPrice(PROPERTY_TAXRATE, PROPERTY_PRETAXPRICE, PROPERTY_PRICE),
 				// 计算税前总计 = 数量 * 税前价格
 				new BusinessRuleMultiplication(PROPERTY_PRETAXLINETOTAL, PROPERTY_QUANTITY, PROPERTY_PRETAXPRICE),
 				// 计算税总额 = 稅前总计 * 税率
