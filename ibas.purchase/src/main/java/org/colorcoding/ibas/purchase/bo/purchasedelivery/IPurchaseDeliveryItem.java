@@ -802,6 +802,20 @@ public interface IPurchaseDeliveryItem
 	void setUnitPrice(double value);
 
 	/**
+	 * 获取-折扣前行总计
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getUnitLineTotal();
+
+	/**
+	 * 设置-折扣前行总计
+	 * 
+	 * @param value 值
+	 */
+	void setUnitLineTotal(BigDecimal value);
+
+	/**
 	 * 获取-税定义
 	 * 
 	 * @return 值

@@ -1476,12 +1476,12 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest>
 				new BusinessRuleRequiredElements(PROPERTY_PURCHASEREQUESTITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_PURCHASEREQUESTITEMS,
 						PurchaseRequestItem.PROPERTY_LINESTATUS), // 使用集合元素状态
+				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_DOCUMENTTOTAL, PROPERTY_PURCHASEREQUESTITEMS,
-						PurchaseRequestItem.PROPERTY_LINETOTAL), // 计算项目-行总计
+						PurchaseRequestItem.PROPERTY_LINETOTAL),
 				// 小数舍入（单据总计）
 				new BusinessRuleRoundingOff(PROPERTY_DIFFAMOUNT, PROPERTY_DOCUMENTTOTAL, PROPERTY_ROUNDING),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
-
 		};
 	}
 

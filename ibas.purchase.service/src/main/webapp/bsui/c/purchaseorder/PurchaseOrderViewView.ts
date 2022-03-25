@@ -247,12 +247,18 @@ namespace purchase {
                             new sap.ui.layout.VerticalLayout("", {
                                 width: "30%",
                                 content: [
-                                    new sap.extension.m.ObjectStatus("", {
-                                        title: ibas.i18n.prop("bo_purchaseorder_consumer"),
-                                        text: {
-                                            path: "consumer",
+                                    new sap.extension.m.RepositoryObjectAttribute("", {
+                                        title: ibas.i18n.prop("bo_purchaseorder_contactperson"),
+                                        bindingValue: {
+                                            path: "contactPerson",
                                             type: new sap.extension.data.Alphanumeric(),
-                                        }
+                                        },
+                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                        dataInfo: {
+                                            type: businesspartner.bo.ContactPerson,
+                                            key: businesspartner.bo.ContactPerson.PROPERTY_OBJECTKEY_NAME,
+                                            text: businesspartner.bo.ContactPerson.PROPERTY_NAME_NAME
+                                        },
                                     }),
                                     new sap.extension.m.RepositoryObjectAttribute("", {
                                         title: ibas.i18n.prop("bo_purchaseorder_pricelist"),
@@ -310,18 +316,35 @@ namespace purchase {
                                 width: "30%",
                                 content: [
                                     new sap.extension.m.ObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_purchaseorder_discount"),
-                                        bindingValue: {
-                                            path: "discount",
-                                            type: new sap.extension.data.Percentage(),
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_purchaseorder_discounttotal"),
+                                        title: ibas.i18n.prop("bo_purchaseorder_documenttaxtotal"),
                                         bindingValue: {
                                             parts: [
                                                 {
-                                                    path: "discountTotal",
+                                                    path: "itemsTaxTotal",
+                                                    type: new sap.extension.data.Sum()
+                                                },
+                                                {
+                                                    path: "shippingsTaxTotal",
+                                                    type: new sap.extension.data.Sum()
+                                                },
+                                                {
+                                                    path: "documentCurrency",
+                                                    type: new sap.extension.data.Alphanumeric()
+                                                },
+                                            ],
+                                            formatter(lineTax: number, shippingTax: number, currency: string): string {
+                                                return ibas.strings.format("{0} {1}", sap.extension.data.formatValue(sap.extension.data.Sum,
+                                                    ibas.numbers.valueOf(lineTax) + ibas.numbers.valueOf(shippingTax)
+                                                    , "string"), currency);
+                                            },
+                                        }
+                                    }),
+                                    new sap.extension.m.ObjectAttribute("", {
+                                        title: ibas.i18n.prop("bo_purchaseorder_shippingsexpensetotal"),
+                                        bindingValue: {
+                                            parts: [
+                                                {
+                                                    path: "shippingsExpenseTotal",
                                                     type: new sap.extension.data.Sum(),
                                                 },
                                                 {
@@ -477,7 +500,7 @@ namespace purchase {
                                 }),
                                 new sap.extension.m.ObjectAttribute("", {
                                     title: ibas.i18n.prop("bo_shippingaddress_expense"),
-                                    bindingValue: ibas.strings.format("{0} {1}", new sap.extension.data.Sum().formatValue(value.expense, "string"), value.currency)
+                                    bindingValue: ibas.strings.format("{0} {1}", sap.extension.data.formatValue(sap.extension.data.Sum, value.expense, "string"), value.currency)
                                 }),
                             ]
                         }));

@@ -20,10 +20,11 @@ import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
-import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMultiplication;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionTaxPrice;
+import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionLineTotal;
+import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionTaxTotal;
 
 /**
  * 采购申请-行
@@ -1937,14 +1938,15 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXPRICE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
-				// 计算税后价格 = 税前价格 * （1 + 税率）
-				new BusinessRuleDeductionTaxPrice(PROPERTY_TAXRATE, PROPERTY_PRETAXPRICE, PROPERTY_PRICE),
-				// 计算总计 = 数量 * 价格
-				new BusinessRuleMultiplication(PROPERTY_LINETOTAL, PROPERTY_QUANTITY, PROPERTY_PRICE),
-				// 计算税前总计 = 数量 * 税前价格
-				new BusinessRuleMultiplication(PROPERTY_PRETAXLINETOTAL, PROPERTY_QUANTITY, PROPERTY_PRETAXPRICE),
+				// 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
+				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE,
+						PROPERTY_QUANTITY),
+				// 计算总计（含税） = 数量 * 价格（含税）
+				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY),
 				// 计算税总额 = 稅前总计 * 税率
-				new BusinessRuleMultiplication(PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_TAXRATE),
+				new BusinessRuleDeductionTaxTotal(PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_TAXRATE),
+				// 计算总计 = 税前总计 + 税总额
+				new BusinessRuleDeductionLineTotal(PROPERTY_LINETOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_TAXTOTAL),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0

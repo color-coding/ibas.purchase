@@ -518,32 +518,83 @@ namespace purchase {
                                                 editable: false,
                                                 width: "auto",
                                                 content: [
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_discounttotal") }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_documentlinetotal") }),
                                                     new sap.extension.m.Input("", {
                                                         editable: false,
                                                         type: sap.m.InputType.Number
                                                     }).bindProperty("bindingValue", {
-                                                        path: "discountTotal",
-                                                        type: new sap.extension.data.Sum()
+                                                        parts: [
+                                                            {
+                                                                path: "itemsLineTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                            {
+                                                                path: "itemsTaxTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                        ],
+                                                        formatter(lineTotal: number, taxTotal: number): number {
+                                                            return sap.extension.data.formatValue(sap.extension.data.Sum,
+                                                                ibas.numbers.valueOf(lineTotal) - ibas.numbers.valueOf(taxTotal)
+                                                                , "string");
+                                                        },
                                                     }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_documentlinediscount") }),
                                                     new sap.extension.m.Input("", {
-                                                        editable: false,
-                                                        type: sap.m.InputType.Text
+                                                        editable: true,
                                                     }).bindProperty("bindingValue", {
                                                         path: "discount",
                                                         type: new sap.extension.data.Percentage()
+                                                    }),
+                                                    new sap.extension.m.Input("", {
+                                                        editable: false,
+                                                        type: sap.m.InputType.Number
+                                                    }).bindProperty("bindingValue", {
+                                                        parts: [
+                                                            {
+                                                                path: "itemsLineTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                            {
+                                                                path: "itemsTaxTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                            {
+                                                                path: "discount",
+                                                                type: new sap.extension.data.Percentage()
+                                                            },
+                                                        ],
+                                                        formatter(lineTotal: number, taxTotal: number, discount: number): number {
+                                                            return sap.extension.data.formatValue(sap.extension.data.Sum,
+                                                                ibas.numbers.valueOf(discount) === 1 ? 0 :
+                                                                    -ibas.numbers.valueOf(lineTotal) + (ibas.numbers.valueOf(taxTotal)) * (1 - ibas.numbers.valueOf(discount))
+                                                                , "string");
+                                                        },
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_documenttaxtotal") }),
                                                     new sap.extension.m.Input("", {
                                                         editable: false,
                                                         type: sap.m.InputType.Number
                                                     }).bindProperty("bindingValue", {
-                                                        path: "documentTaxTotal",
-                                                        type: new sap.extension.data.Sum()
+                                                        parts: [
+                                                            {
+                                                                path: "itemsTaxTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                            {
+                                                                path: "shippingsTaxTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            },
+                                                        ],
+                                                        formatter(lineTax: number, shippingTax: number): number {
+                                                            return sap.extension.data.formatValue(sap.extension.data.Sum,
+                                                                ibas.numbers.valueOf(lineTax) + ibas.numbers.valueOf(shippingTax)
+                                                                , "string");
+                                                        },
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_documenttotal") }),
                                                     new sap.extension.m.Input("", {
-                                                        editable: false,
+                                                        editable: true,
                                                         type: sap.m.InputType.Number
                                                     }).bindProperty("bindingValue", {
                                                         path: "documentTotal",
@@ -556,14 +607,6 @@ namespace purchase {
                                                         type: new sap.extension.data.Alphanumeric({
                                                             maxLength: 8
                                                         })
-                                                    }),
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_paidtotal") }),
-                                                    new sap.extension.m.Input("", {
-                                                        editable: false,
-                                                        type: sap.m.InputType.Number
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "paidTotal",
-                                                        type: new sap.extension.data.Sum()
                                                     }),
                                                 ]
                                             }).addStyleClass("sapUxAPObjectPageSubSectionAlignContent"),
@@ -731,7 +774,7 @@ namespace purchase {
                                     }),
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequoteitem_linetotal") }),
                                     new sap.extension.m.Input("", {
-                                        editable: false,
+                                        editable: true,
                                         type: sap.m.InputType.Number
                                     }).bindProperty("bindingValue", {
                                         path: "lineTotal",

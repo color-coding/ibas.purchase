@@ -463,6 +463,14 @@ namespace purchase {
                                                 editable: false,
                                                 width: "auto",
                                                 content: [
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documenttaxtotal") }),
+                                                    new sap.extension.m.Input("", {
+                                                        editable: false,
+                                                        type: sap.m.InputType.Number
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "documentTaxTotal",
+                                                        type: new sap.extension.data.Sum()
+                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documenttotal") }),
                                                     new sap.extension.m.Input("", {
                                                         editable: false,
@@ -645,7 +653,7 @@ namespace purchase {
                                     }),
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_linetotal") }),
                                     new sap.extension.m.Input("", {
-                                        editable: false,
+                                        editable: true,
                                         type: sap.m.InputType.Number
                                     }).bindProperty("bindingValue", {
                                         path: "lineTotal",

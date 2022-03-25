@@ -72,12 +72,6 @@ public class BusinessRuleDeductionTaxPrice extends BusinessRuleCommon {
 		if (taxRate == null) {
 			taxRate = Decimal.ZERO;
 		}
-		if (taxRate.compareTo(Decimal.ZERO) < 0) {
-			context.getOutputValues().put(this.getTaxRate(), Decimal.ZERO);
-			context.getOutputValues().put(this.getAfterTax(), Decimal.ZERO);
-			context.getOutputValues().put(this.getPreTax(), Decimal.ZERO);
-			return;
-		}
 		BigDecimal preTax = (BigDecimal) context.getInputValues().get(this.getPreTax());
 		if (preTax == null) {
 			preTax = Decimal.ZERO;
@@ -85,6 +79,11 @@ public class BusinessRuleDeductionTaxPrice extends BusinessRuleCommon {
 		BigDecimal afterTax = (BigDecimal) context.getInputValues().get(this.getAfterTax());
 		if (afterTax == null) {
 			afterTax = Decimal.ZERO;
+		}
+		if (taxRate.compareTo(Decimal.ZERO) < 0) {
+			context.getOutputValues().put(this.getTaxRate(), Decimal.ZERO);
+			context.getOutputValues().put(this.getAfterTax(), preTax);
+			return;
 		}
 		if (this.getPreTax().getName().equalsIgnoreCase(context.getTrigger())
 				|| this.getTaxRate().getName().equalsIgnoreCase(context.getTrigger())) {

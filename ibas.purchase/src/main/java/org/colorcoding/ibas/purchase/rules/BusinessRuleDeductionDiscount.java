@@ -7,10 +7,10 @@ import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.i18n.I18N;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleCommon;
 
-public class BusinessRuleDeductionDiscountPrice extends BusinessRuleCommon {
+public class BusinessRuleDeductionDiscount extends BusinessRuleCommon {
 
-	protected BusinessRuleDeductionDiscountPrice() {
-		this.setName(I18N.prop("msg_sl_business_rule_deduction_discount_price"));
+	protected BusinessRuleDeductionDiscount() {
+		this.setName(I18N.prop("msg_ph_business_rule_deduction_discount"));
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class BusinessRuleDeductionDiscountPrice extends BusinessRuleCommon {
 	 * @param preDiscount   属性-折扣前
 	 * @param afterDiscount 属性-折扣后
 	 */
-	public BusinessRuleDeductionDiscountPrice(IPropertyInfo<BigDecimal> discount, IPropertyInfo<BigDecimal> preDiscount,
+	public BusinessRuleDeductionDiscount(IPropertyInfo<BigDecimal> discount, IPropertyInfo<BigDecimal> preDiscount,
 			IPropertyInfo<BigDecimal> afterDiscount) {
 		this();
 		this.setDiscount(discount);
@@ -72,12 +72,6 @@ public class BusinessRuleDeductionDiscountPrice extends BusinessRuleCommon {
 		if (discount == null) {
 			discount = Decimal.ZERO;
 		}
-		if (discount.compareTo(Decimal.ZERO) < 0) {
-			context.getOutputValues().put(this.getDiscount(), Decimal.ZERO);
-			context.getOutputValues().put(this.getAfterDiscount(), Decimal.ZERO);
-			context.getOutputValues().put(this.getPreDiscount(), Decimal.ZERO);
-			return;
-		}
 		BigDecimal preDiscount = (BigDecimal) context.getInputValues().get(this.getPreDiscount());
 		if (preDiscount == null) {
 			preDiscount = Decimal.ZERO;
@@ -86,17 +80,21 @@ public class BusinessRuleDeductionDiscountPrice extends BusinessRuleCommon {
 		if (afterDiscount == null) {
 			afterDiscount = Decimal.ZERO;
 		}
-		if (Decimal.ZERO.compareTo(preDiscount) >= 0) {
-			context.getOutputValues().put(this.getPreDiscount(), afterDiscount);
-			context.getOutputValues().put(this.getDiscount(), Decimal.ONE);
-		} else if (this.getDiscount().getName().equalsIgnoreCase(context.getTrigger())
+
+		if (this.getDiscount().getName().equalsIgnoreCase(context.getTrigger())
 				|| this.getPreDiscount().getName().equalsIgnoreCase(context.getTrigger())) {
 			BigDecimal result = Decimal.multiply(preDiscount, discount);
 			context.getOutputValues().put(this.getAfterDiscount(),
 					Decimal.round(result, Decimal.DECIMAL_PLACES_RUNNING));
 		} else {
-			BigDecimal result = Decimal.divide(afterDiscount, preDiscount);
-			context.getOutputValues().put(this.getDiscount(), Decimal.round(result, Decimal.DECIMAL_PLACES_RUNNING));
+			if (Decimal.ZERO.compareTo(preDiscount) == 0) {
+				context.getOutputValues().put(this.getDiscount(), Decimal.ONE);
+				context.getOutputValues().put(this.getPreDiscount(), afterDiscount);
+			} else {
+				BigDecimal result = Decimal.divide(afterDiscount, preDiscount);
+				context.getOutputValues().put(this.getDiscount(),
+						Decimal.round(result, Decimal.DECIMAL_PLACES_RUNNING));
+			}
 		}
 	}
 

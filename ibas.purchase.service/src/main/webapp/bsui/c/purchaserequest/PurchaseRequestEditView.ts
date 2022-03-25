@@ -266,7 +266,8 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_linetotal"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            type: sap.m.InputType.Number
                                         }).bindProperty("bindingValue", {
                                             path: "lineTotal",
                                             type: new sap.extension.data.Sum()
@@ -370,8 +371,21 @@ namespace purchase {
                                 editable: false,
                                 type: sap.m.InputType.Number
                             }).bindProperty("bindingValue", {
-                                path: "documentTaxTotal",
-                                type: new sap.extension.data.Sum()
+                                parts: [
+                                    {
+                                        path: "itemsTaxTotal",
+                                        type: new sap.extension.data.Sum()
+                                    },
+                                    {
+                                        path: "shippingsTaxTotal",
+                                        type: new sap.extension.data.Sum()
+                                    },
+                                ],
+                                formatter(lineTax: number, shippingTax: number): number {
+                                    return sap.extension.data.formatValue(sap.extension.data.Sum,
+                                        ibas.numbers.valueOf(lineTax) + ibas.numbers.valueOf(shippingTax)
+                                        , "string");
+                                },
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documenttotal") }),
                             new sap.extension.m.Input("", {

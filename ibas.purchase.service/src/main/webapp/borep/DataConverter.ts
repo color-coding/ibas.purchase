@@ -180,7 +180,8 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
-                    myItem = target.userFields.register(item.name, item.valueType);
+                    // myItem = target.userFields.register(item.name, item.valueType);
+                    continue;
                 }
                 if (myItem.valueType !== item.valueType) {
                     continue;
@@ -213,6 +214,10 @@ namespace purchase {
             target.itemSign = source.itemSign;
             target.batchManagement = source.batchManagement;
             target.serialManagement = source.serialManagement;
+            target.unitPrice = source.unitPrice;
+            target.discount = source.discount;
+            target.tax = source.tax;
+            target.taxRate = source.taxRate;
             target.price = source.price;
             target.currency = source.currency;
             target.quantity = source.quantity;
@@ -221,13 +226,12 @@ namespace purchase {
             target.deliveryDate = source.deliveryDate;
             target.reference1 = source.reference1;
             target.reference2 = source.reference2;
-            target.tax = source.tax;
-            target.taxRate = source.taxRate;
             // 复制自定义字段
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
-                    myItem = target.userFields.register(item.name, item.valueType);
+                    // myItem = target.userFields.register(item.name, item.valueType);
+                    continue;
                 }
                 if (myItem.valueType !== item.valueType) {
                     continue;
@@ -303,14 +307,13 @@ namespace purchase {
             /** 计算规则 */
             protected compute(context: ibas.BusinessRuleContextCommon): void {
                 let taxRate: number = ibas.numbers.valueOf(context.inputValues.get(this.taxRate));
-                if (taxRate < 0) {
-                    context.outputValues.set(this.taxRate, 0);
-                    context.outputValues.set(this.preTax, 0);
-                    context.outputValues.set(this.afterTax, 0);
-                    return;
-                }
                 let preTax: number = ibas.numbers.valueOf(context.inputValues.get(this.preTax));
                 let afterTax: number = ibas.numbers.valueOf(context.inputValues.get(this.afterTax));
+                if (taxRate < 0) {
+                    context.outputValues.set(this.taxRate, 0);
+                    context.outputValues.set(this.afterTax, preTax);
+                    return;
+                }
                 if (ibas.strings.equalsIgnoreCase(this.preTax, context.trigger)
                     || ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)) {
                     if (taxRate === 0) {
@@ -345,8 +348,245 @@ namespace purchase {
                 }
             }
         }
-        /** 业务规则-推导折扣前折扣后价格 */
-        export class BusinessRuleDeductionDiscountPrice extends ibas.BusinessRuleCommon {
+        /** 业务规则-推导税总计 */
+        export class BusinessRuleDeductionTaxTotal extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param tax 属性-税总计
+             * @param total   属性-税前总计
+             * @param taxRate  属性-税率
+             */
+            constructor(tax: string, total: string, taxRate: string, decimalPlaces: number = undefined) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_tax_total");
+                this.taxRate = taxRate;
+                this.tax = tax;
+                this.total = total;
+                this.decimalPlaces = decimalPlaces;
+                this.inputProperties.add(this.taxRate);
+                this.inputProperties.add(this.tax);
+                this.inputProperties.add(this.total);
+                this.affectedProperties.add(this.taxRate);
+                this.affectedProperties.add(this.tax);
+            }
+            /** 税总计 */
+            tax: string;
+            /** 税前总计 */
+            total: string;
+            /** 税率 */
+            taxRate: string;
+            /** 结果保留小数位 */
+            decimalPlaces: number;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let taxRate: number = ibas.numbers.valueOf(context.inputValues.get(this.taxRate));
+                let total: number = ibas.numbers.valueOf(context.inputValues.get(this.total));
+                let tax: number = ibas.numbers.valueOf(context.inputValues.get(this.tax));
+                if (taxRate < 0) {
+                    context.outputValues.set(this.taxRate, 0);
+                    context.outputValues.set(this.tax, 0);
+                    return;
+                }
+                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger)
+                    || ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)
+                    || tax < 0) {
+                    if (taxRate === 0 || isNaN(taxRate)) {
+                        context.outputValues.set(this.tax, 0);
+                    } else {
+                        let result: number = total * taxRate;
+                        if (this.decimalPlaces >= 0) {
+                            // 差异小于近似位，则忽略
+                            let oData: number = tax * Math.pow(10, this.decimalPlaces);
+                            let nData: number = result * Math.pow(10, this.decimalPlaces);
+                            if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                                return;
+                            }
+                        }
+                        context.outputValues.set(this.tax, ibas.numbers.round(result, this.decimalPlaces));
+                    }
+                }
+            }
+        }
+        /** 业务规则-推导折扣及总计 */
+        export class BusinessRuleDeductionDiscountTotal extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param total 属性-折扣后总计
+             * @param preTotal   属性-折扣前总计
+             * @param discount  属性-折扣
+             */
+            constructor(total: string, preTotal: string, discount: string, decimalPlaces: number = undefined) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_discount_total");
+                this.total = total;
+                this.preTotal = preTotal;
+                this.discount = discount;
+                this.decimalPlaces = decimalPlaces;
+                this.inputProperties.add(this.total);
+                this.inputProperties.add(this.preTotal);
+                this.inputProperties.add(this.discount);
+                this.affectedProperties.add(this.total);
+                this.affectedProperties.add(this.discount);
+            }
+            /** 折扣后总计 */
+            total: string;
+            /** 折扣前总计 */
+            preTotal: string;
+            /** 折扣 */
+            discount: string;
+            /** 结果保留小数位 */
+            decimalPlaces: number;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let discount: number = ibas.numbers.valueOf(context.inputValues.get(this.discount));
+                let total: number = ibas.numbers.valueOf(context.inputValues.get(this.total));
+                let preTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.preTotal));
+                if (discount < 0) {
+                    context.outputValues.set(this.discount, 1);
+                    context.outputValues.set(this.total, preTotal);
+                    return;
+                }
+                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger)) {
+                    // 折扣后触发，算折扣
+                    if (preTotal === 0 || isNaN(preTotal)) {
+                        context.outputValues.set(this.discount, 1);
+                        context.outputValues.set(this.total, 0);
+                    } else {
+                        let result: number = total / preTotal;
+                        // 差异小于近似位，则忽略
+                        let oData: number = discount * Math.pow(10, 6);
+                        let nData: number = result * Math.pow(10, 6);
+                        if (Math.abs(oData - nData) < 10) {
+                            // 4舍
+                            return;
+                        }
+                        context.outputValues.set(this.discount, ibas.numbers.round(result, 6));
+                    }
+                } else {
+                    if (discount === 1 || isNaN(discount)) {
+                        context.outputValues.set(this.total, preTotal);
+                    } else {
+                        let result: number = preTotal * discount;
+                        if (this.decimalPlaces >= 0) {
+                            // 差异小于近似位，则忽略
+                            let oData: number = total * Math.pow(10, this.decimalPlaces);
+                            let nData: number = result * Math.pow(10, this.decimalPlaces);
+                            if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                                return;
+                            }
+                        }
+                        context.outputValues.set(this.total, ibas.numbers.round(result, this.decimalPlaces));
+                    }
+                }
+            }
+        }
+        /** 业务规则-推导单据总计 */
+        export class BusinessRuleDeductionDocumentTotal extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param docTotal 属性-单据总计
+             * @param disTotal   属性-折扣总计
+             * @param shipTotal  属性-运费总计
+             */
+            constructor(docTotal: string, disTotal: string, shipTotal?: string) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_document_total");
+                this.docTotal = docTotal;
+                this.disTotal = disTotal;
+                this.shipTotal = shipTotal;
+                this.inputProperties.add(this.docTotal);
+                this.inputProperties.add(this.disTotal);
+                this.inputProperties.add(this.shipTotal);
+                this.affectedProperties.add(this.docTotal);
+                this.affectedProperties.add(this.disTotal);
+            }
+            /** 单据总计 */
+            docTotal: string;
+            /** 折扣总计 */
+            disTotal: string;
+            /** 运费总计 */
+            shipTotal: string;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let docTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.docTotal));
+                let disTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.disTotal));
+                let shipTotal: number = !ibas.strings.isEmpty(this.shipTotal) ? ibas.numbers.valueOf(context.inputValues.get(this.shipTotal)) : 0;
+
+                if (ibas.strings.equalsIgnoreCase(this.docTotal, context.trigger) && docTotal > 0) {
+                    // 单据总计触发
+                    context.outputValues.set(this.disTotal, docTotal - shipTotal);
+                } else {
+                    context.outputValues.set(this.docTotal, disTotal + shipTotal);
+                }
+            }
+        }
+        /** 业务规则-推导 价格 * 数量 = 总计 */
+        export class BusinessRuleDeductionPriceQtyTotal extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param total 属性-总计
+             * @param price  属性-价格
+             * @param quantity   属性-数量
+             */
+            constructor(total: string, price: string, quantity: string, decimalPlaces: number = undefined) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_price_qty_total");
+                this.price = price;
+                this.quantity = quantity;
+                this.total = total;
+                this.decimalPlaces = decimalPlaces;
+                this.inputProperties.add(this.price);
+                this.inputProperties.add(this.quantity);
+                this.inputProperties.add(this.total);
+                this.affectedProperties.add(this.price);
+                this.affectedProperties.add(this.total);
+            }
+            /** 价格 */
+            price: string;
+            /** 数量 */
+            quantity: string;
+            /** 总计 */
+            total: string;
+            /** 结果保留小数位 */
+            decimalPlaces: number;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let price: number = ibas.numbers.valueOf(context.inputValues.get(this.price));
+                let quantity: number = ibas.numbers.valueOf(context.inputValues.get(this.quantity));
+                let total: number = ibas.numbers.valueOf(context.inputValues.get(this.total));
+
+                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger)) {
+                    // 总计触发，价格 = 总计 / 数量
+                    if (quantity === 0) {
+                        context.outputValues.set(this.price, 0);
+                    } else {
+                        let result: number = total / quantity;
+                        if (this.decimalPlaces >= 0) {
+                            // 差异小于近似位，则忽略
+                            let oData: number = price * Math.pow(10, this.decimalPlaces);
+                            let nData: number = result * Math.pow(10, this.decimalPlaces);
+                            if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                                return;
+                            }
+                        }
+                        context.outputValues.set(this.price, ibas.numbers.round(result, this.decimalPlaces));
+                    }
+                } else {
+                    let result: number = price * quantity;
+                    if (this.decimalPlaces >= 0) {
+                        // 差异小于近似位，则忽略
+                        let oData: number = total * Math.pow(10, this.decimalPlaces);
+                        let nData: number = result * Math.pow(10, this.decimalPlaces);
+                        if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                            return;
+                        }
+                    }
+                    context.outputValues.set(this.total, ibas.numbers.round(result, this.decimalPlaces));
+                }
+            }
+        }
+        /** 业务规则-推导折扣 */
+        export class BusinessRuleDeductionDiscount extends ibas.BusinessRuleCommon {
             /**
              * 构造方法
              * @param discount  属性-折扣
@@ -355,7 +595,7 @@ namespace purchase {
              */
             constructor(discount: string, preDiscount: string, afterDiscount: string, decimalPlaces: number = undefined) {
                 super();
-                this.name = ibas.i18n.prop("purchase_business_rule_deductione_discount_price");
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_discount");
                 this.discount = discount;
                 this.preDiscount = preDiscount;
                 this.afterDiscount = afterDiscount;
@@ -378,19 +618,10 @@ namespace purchase {
             /** 计算规则 */
             protected compute(context: ibas.BusinessRuleContextCommon): void {
                 let discount: number = ibas.numbers.valueOf(context.inputValues.get(this.discount));
-                if (discount < 0) {
-                    context.outputValues.set(this.discount, 0);
-                    context.outputValues.set(this.preDiscount, 0);
-                    context.outputValues.set(this.afterDiscount, 0);
-                    return;
-                }
                 let preDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.preDiscount));
                 let afterDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.afterDiscount));
-                if (preDiscount <= 0) {
-                    // 折前价格为0，则使用折后价格
-                    context.outputValues.set(this.preDiscount, afterDiscount);
-                } else if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)
-                    || ibas.strings.equalsIgnoreCase(this.preDiscount, context.trigger)) {
+
+                if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)) {
                     // 折扣触发，算成交价
                     let result: number = preDiscount * discount;
                     if (this.decimalPlaces >= 0) {
@@ -403,16 +634,81 @@ namespace purchase {
                     }
                     context.outputValues.set(this.afterDiscount, ibas.numbers.round(result, this.decimalPlaces));
                 } else {
-                    // 非折扣触发，算折扣
-                    let result: number = afterDiscount / preDiscount;
-                    // 差异小于近似位，则忽略
-                    let oData: number = discount * Math.pow(10, 6);
-                    let nData: number = result * Math.pow(10, 6);
-                    if (Math.abs(oData - nData) < 10) {
-                        // 4舍
-                        return;
+                    if (preDiscount === 0) {
+                        context.outputValues.set(this.discount, 1);
+                        context.outputValues.set(this.preDiscount, afterDiscount);
+                    } else {
+                        // 非折扣触发，算折扣
+                        let result: number = afterDiscount / preDiscount;
+                        // 差异小于近似位，则忽略
+                        let oData: number = discount * Math.pow(10, 6);
+                        let nData: number = result * Math.pow(10, 6);
+                        if (Math.abs(oData - nData) < 10) {
+                            // 4舍
+                            return;
+                        }
+                        context.outputValues.set(this.discount, ibas.numbers.round(result, 6));
                     }
-                    context.outputValues.set(this.discount, ibas.numbers.round(result, 6));
+                }
+            }
+        }
+        /** 业务规则-推导行总计 */
+        export class BusinessRuleDeductionLineTotal extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param total 属性-行总计
+             * @param preTotal   属性-税前行总计
+             * @param taxTotal  属性-税总计
+             */
+            constructor(total: string, preTotal: string, taxTotal: string, decimalPlaces: number = undefined) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deductione_line_total");
+                this.total = total;
+                this.preTotal = preTotal;
+                this.taxTotal = taxTotal;
+                this.decimalPlaces = decimalPlaces;
+                this.inputProperties.add(this.total);
+                this.inputProperties.add(this.preTotal);
+                this.inputProperties.add(this.taxTotal);
+                this.affectedProperties.add(this.total);
+                this.affectedProperties.add(this.preTotal);
+            }
+            /** 行总计 */
+            total: string;
+            /** 税前行总计 */
+            preTotal: string;
+            /** 税总计 */
+            taxTotal: string;
+            /** 结果保留小数位 */
+            decimalPlaces: number;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let total: number = ibas.numbers.valueOf(context.inputValues.get(this.total));
+                let preTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.preTotal));
+                let taxTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.taxTotal));
+
+                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger)) {
+                    let result: number = total - taxTotal;
+                    if (this.decimalPlaces >= 0) {
+                        // 差异小于近似位，则忽略
+                        let oData: number = preTotal * Math.pow(10, this.decimalPlaces);
+                        let nData: number = result * Math.pow(10, this.decimalPlaces);
+                        if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                            return;
+                        }
+                    }
+                    context.outputValues.set(this.preTotal, ibas.numbers.round(result, this.decimalPlaces));
+                } else {
+                    let result: number = preTotal + taxTotal;
+                    if (this.decimalPlaces >= 0) {
+                        // 差异小于近似位，则忽略
+                        let oData: number = total * Math.pow(10, this.decimalPlaces);
+                        let nData: number = result * Math.pow(10, this.decimalPlaces);
+                        if (Math.abs(oData - nData) < Math.pow(10, this.decimalPlaces)) {
+                            return;
+                        }
+                    }
+                    context.outputValues.set(this.total, ibas.numbers.round(result, this.decimalPlaces));
                 }
             }
         }
