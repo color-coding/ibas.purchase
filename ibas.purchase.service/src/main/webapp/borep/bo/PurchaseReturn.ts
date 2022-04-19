@@ -1420,21 +1420,13 @@ namespace purchase {
                     new BusinessRuleDeductionPriceQtyTotal(
                         PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseReturnItem.PROPERTY_PRETAXPRICE_NAME, PurchaseReturnItem.PROPERTY_QUANTITY_NAME
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算总计（含税） = 数量 * 价格（含税）
-                    new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseReturnItem.PROPERTY_LINETOTAL_NAME, PurchaseReturnItem.PROPERTY_PRICE_NAME, PurchaseReturnItem.PROPERTY_QUANTITY_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
                         PurchaseReturnItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)),
-                    // 计算税总额 = 稅前总计 * 税率
-                    new BusinessRuleDeductionTaxTotal(
-                        PurchaseReturnItem.PROPERTY_TAXTOTAL_NAME, PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseReturnItem.PROPERTY_TAXRATE_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算总计 = 税前总计 + 税总额
-                    new BusinessRuleDeductionLineTotal(
-                        PurchaseReturnItem.PROPERTY_LINETOTAL_NAME, PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseReturnItem.PROPERTY_TAXTOTAL_NAME
+                    // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
+                    new BusinessRuleDeductionPriceTaxTotal(PurchaseReturnItem.PROPERTY_LINETOTAL_NAME, PurchaseReturnItem.PROPERTY_PRICE_NAME, PurchaseReturnItem.PROPERTY_QUANTITY_NAME
+                        , PurchaseReturnItem.PROPERTY_TAXRATE_NAME, PurchaseReturnItem.PROPERTY_TAXTOTAL_NAME, PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
                 ];
             }

@@ -47,6 +47,7 @@
   "purchase_business_rule_deductione_discount_total": "推导折扣及总计",
   "purchase_business_rule_deductione_document_total": "推导单据总计",
   "purchase_business_rule_deductione_price_qty_total": "推导价格数量总计",
+  "purchase_business_rule_deductione_price_tax_total": "推导含税价格，税总计及总计",
   "purchase_business_rule_deductione_discount": "推导折扣",
   "purchase_business_rule_deductione_line_total": "推导行总计",
   "purchase_create_continue": "新建{0}，是否继续？",

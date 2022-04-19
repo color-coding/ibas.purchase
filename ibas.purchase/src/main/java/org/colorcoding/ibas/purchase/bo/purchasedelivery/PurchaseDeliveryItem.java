@@ -36,9 +36,8 @@ import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionLineTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionTaxTotal;
+import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
  * 获取-采购收货-行
@@ -2200,14 +2199,11 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem>
 				// 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
 				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE,
 						PROPERTY_QUANTITY),
-				// 计算总计（含税） = 数量 * 价格（含税）
-				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY),
 				// 计算折扣后总计 = 折扣前总计 * 折扣
 				new BusinessRuleDeductionDiscount(PROPERTY_DISCOUNT, PROPERTY_UNITLINETOTAL, PROPERTY_PRETAXLINETOTAL),
-				// 计算税总额 = 稅前总计 * 税率
-				new BusinessRuleDeductionTaxTotal(PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_TAXRATE),
-				// 计算总计 = 税前总计 + 税总额
-				new BusinessRuleDeductionLineTotal(PROPERTY_LINETOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_TAXTOTAL),
+				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
+				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY,
+						PROPERTY_TAXRATE, PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0
