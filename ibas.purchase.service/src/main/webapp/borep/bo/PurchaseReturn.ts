@@ -580,6 +580,17 @@ namespace purchase {
                 this.setProperty(PurchaseReturn.PROPERTY_ITEMSLINETOTAL_NAME, value);
             }
 
+            /** 映射的属性名称-项目的税前行总计 */
+            static PROPERTY_ITEMSPRETAXTOTAL_NAME: string = "ItemsPreTaxTotal";
+            /** 获取-项目的税前行总计 */
+            get itemsPreTaxTotal(): number {
+                return this.getProperty<number>(PurchaseReturn.PROPERTY_ITEMSPRETAXTOTAL_NAME);
+            }
+            /** 设置-项目的税前行总计 */
+            set itemsPreTaxTotal(value: number) {
+                this.setProperty(PurchaseReturn.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
+            }
+
             /** 映射的属性名称-运送费税总计 */
             static PROPERTY_SHIPPINGSTAXTOTAL_NAME: string = "ShippingsTaxTotal";
             /** 获取-运送费税总计 */
@@ -606,10 +617,13 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturn.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseReturn.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME, PurchaseReturnItem.PROPERTY_LINETOTAL_NAME),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturn.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseReturn.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME, PurchaseReturnItem.PROPERTY_TAXTOTAL_NAME),
+                    // 计算行-税前总计
+                    new ibas.BusinessRuleSumElements(
+                        PurchaseReturn.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME, PurchaseReturnItem.PROPERTY_PRETAXLINETOTAL_NAME),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         PurchaseReturn.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReturn.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),

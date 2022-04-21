@@ -715,6 +715,17 @@ namespace purchase {
                 this.setProperty(PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, value);
             }
 
+            /** 映射的属性名称-项目的税前行总计 */
+            static PROPERTY_ITEMSPRETAXTOTAL_NAME: string = "ItemsPreTaxTotal";
+            /** 获取-项目的税前行总计 */
+            get itemsPreTaxTotal(): number {
+                return this.getProperty<number>(PurchaseOrder.PROPERTY_ITEMSPRETAXTOTAL_NAME);
+            }
+            /** 设置-项目的税前行总计 */
+            set itemsPreTaxTotal(value: number) {
+                this.setProperty(PurchaseOrder.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
+            }
+
             /** 映射的属性名称-运送费税总计 */
             static PROPERTY_SHIPPINGSTAXTOTAL_NAME: string = "ShippingsTaxTotal";
             /** 获取-运送费税总计 */
@@ -745,6 +756,9 @@ namespace purchase {
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
                         PurchaseOrder.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME),
+                    // 计算行-税前总计
+                    new ibas.BusinessRuleSumElements(
+                        PurchaseOrder.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),

@@ -567,14 +567,28 @@ namespace purchase {
                 this.setProperty(PurchaseQuote.PROPERTY_ITEMSTAXTOTAL_NAME, value);
             }
 
+            /** 映射的属性名称-项目的税前行总计 */
+            static PROPERTY_ITEMSPRETAXTOTAL_NAME: string = "ItemsPreTaxTotal";
+            /** 获取-项目的税前行总计 */
+            get itemsPreTaxTotal(): number {
+                return this.getProperty<number>(PurchaseQuote.PROPERTY_ITEMSPRETAXTOTAL_NAME);
+            }
+            /** 设置-项目的税前行总计 */
+            set itemsPreTaxTotal(value: number) {
+                this.setProperty(PurchaseQuote.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
+            }
+
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_LINETOTAL_NAME),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseQuote.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseQuote.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_TAXTOTAL_NAME),
+                    // 计算行-税前总计
+                    new ibas.BusinessRuleSumElements(
+                        PurchaseQuote.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
                         PurchaseQuote.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_DISCOUNT_NAME

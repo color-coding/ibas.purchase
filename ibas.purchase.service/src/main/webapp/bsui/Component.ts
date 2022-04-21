@@ -7,6 +7,27 @@
  */
 namespace purchase {
     export namespace ui {
+        export namespace data {
+            /**
+             * 百分比类型，自从初始为1
+             */
+            export class Percentage extends sap.extension.data.Percentage {
+                /**
+                 * 格式化值到模型
+                 * @param oValue 值
+                 * @param sInternalType 视图类型
+                 */
+                parseValue(oValue: any, sInternalType: string): any {
+                    if (ibas.objects.isNull(oValue) || ibas.strings.isEmpty(oValue)) {
+                        oValue = 1;
+                    }
+                    return super.parseValue(oValue, sInternalType);
+                }
+                /** 验证数据 */
+                protected validate(oValue: any): void {
+                }
+            }
+        }
         export namespace component {
             /**
              * 仓库选择-选择框

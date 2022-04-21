@@ -492,11 +492,22 @@ namespace purchase {
             static PROPERTY_ITEMSTAXTOTAL_NAME: string = "ItemsTaxTotal";
             /** 获取-项目的税总计 */
             get itemsTaxTotal(): number {
-                return this.getProperty<number>(PurchaseOrder.PROPERTY_ITEMSTAXTOTAL_NAME);
+                return this.getProperty<number>(PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME);
             }
             /** 设置-项目的税总计 */
             set itemsTaxTotal(value: number) {
-                this.setProperty(PurchaseOrder.PROPERTY_ITEMSTAXTOTAL_NAME, value);
+                this.setProperty(PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, value);
+            }
+
+            /** 映射的属性名称-项目的税前行总计 */
+            static PROPERTY_ITEMSPRETAXTOTAL_NAME: string = "ItemsPreTaxTotal";
+            /** 获取-项目的税前行总计 */
+            get itemsPreTaxTotal(): number {
+                return this.getProperty<number>(PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME);
+            }
+            /** 设置-项目的税前行总计 */
+            set itemsPreTaxTotal(value: number) {
+                this.setProperty(PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
             }
 
 
@@ -505,10 +516,13 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME),
+                    // 计算行-税前总计
+                    new ibas.BusinessRuleSumElements(
+                        PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME),
                     // 小数舍入（单据总计）
                     new ibas.BusinessRuleRoundingOff(
                         PurchaseRequest.PROPERTY_DIFFAMOUNT_NAME, PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME,
