@@ -35,7 +35,6 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
-import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRoundingOff;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
@@ -1898,8 +1897,6 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder>
 				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
 				new BusinessRuleDeductionDocumentTotal(PROPERTY_DOCUMENTTOTAL, PROPERTY_DISCOUNTTOTAL,
 						PROPERTY_SHIPPINGSEXPENSETOTAL),
-				// 小数舍入（单据总计）
-				new BusinessRuleRoundingOff(PROPERTY_DIFFAMOUNT, PROPERTY_DOCUMENTTOTAL, PROPERTY_ROUNDING),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};

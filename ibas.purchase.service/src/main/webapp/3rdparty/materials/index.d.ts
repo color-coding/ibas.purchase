@@ -1958,6 +1958,8 @@ declare namespace materials {
             onOrdered: number;
             /** 提前期（天） */
             leadTime: number;
+            /** 缺省仓库 */
+            defaultWarehouse: string;
             /** 首选供应商 */
             preferredVendor: string;
             /** 库存单位 */
@@ -6107,6 +6109,12 @@ declare namespace materials {
             get warehouse(): string;
             /** 设置-仓库 */
             set warehouse(value: string);
+            /** 映射的属性名称-缺省仓库 */
+            static PROPERTY_DEFAULTWAREHOUSE_NAME: string;
+            /** 获取-缺省仓库 */
+            get defaultWarehouse(): string;
+            /** 设置-缺省仓库 */
+            set defaultWarehouse(value: string);
             /** 映射的属性名称-首选供应商 */
             static PROPERTY_PREFERREDVENDOR_NAME: string;
             /** 获取-首选供应商 */

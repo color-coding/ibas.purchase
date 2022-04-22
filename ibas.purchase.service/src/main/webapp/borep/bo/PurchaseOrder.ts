@@ -647,17 +647,22 @@ namespace purchase {
                         myItem.itemCode = item.itemCode;
                         myItem.itemDescription = item.itemDescription;
                         myItem.itemSign = item.itemSign;
-                        myItem.serialManagement = item.serialManagement;
                         myItem.batchManagement = item.batchManagement;
+                        myItem.serialManagement = item.serialManagement;
+                        myItem.tax = item.tax;
+                        myItem.taxRate = item.taxRate;
                         myItem.price = item.price;
                         myItem.currency = item.currency;
                         myItem.quantity = openQty;
                         myItem.uom = item.uom;
                         myItem.deliveryDate = item.requestDate;
+                        if (!(item.closedQuantity > 0)) {
+                            myItem.preTaxLineTotal = item.preTaxLineTotal;
+                            myItem.taxTotal = item.taxTotal;
+                            myItem.lineTotal = item.lineTotal;
+                        }
                         myItem.reference1 = item.reference1;
                         myItem.reference2 = item.reference2;
-                        myItem.tax = item.tax;
-                        myItem.taxRate = item.taxRate;
                         // 复制自定义字段
                         for (let uItem of item.userFields.forEach()) {
                             let myUItem: ibas.IUserField = myItem.userFields.get(uItem.name);
@@ -772,10 +777,6 @@ namespace purchase {
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseOrder.PROPERTY_DOCUMENTTOTAL_NAME,
                         PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
-                    // 小数舍入（单据总计）
-                    new ibas.BusinessRuleRoundingOff(
-                        PurchaseOrder.PROPERTY_DIFFAMOUNT_NAME, PurchaseOrder.PROPERTY_DOCUMENTTOTAL_NAME,
-                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM), PurchaseOrder.PROPERTY_ROUNDING_NAME),
                 ];
             }
             /** 重置 */

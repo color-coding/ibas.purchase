@@ -222,6 +222,11 @@ namespace purchase {
             target.currency = source.currency;
             target.quantity = source.quantity;
             target.uom = source.uom;
+            if (!(source.closedQuantity > 0)) {
+                target.preTaxLineTotal = source.preTaxLineTotal;
+                target.taxTotal = source.taxTotal;
+                target.lineTotal = source.lineTotal;
+            }
             target.warehouse = source.warehouse;
             target.deliveryDate = source.deliveryDate;
             target.reference1 = source.reference1;
@@ -250,6 +255,11 @@ namespace purchase {
             target.batchManagement = source.batchManagement;
             if (!(target instanceof PurchaseRequestItem)) {
                 target.warehouse = source.warehouse;
+                if (ibas.strings.isEmpty(source.warehouse)) {
+                    if (!ibas.strings.isEmpty(source.defaultWarehouse)) {
+                        target.warehouse = source.defaultWarehouse;
+                    }
+                }
             }
             target.quantity = 1;
             target.uom = source.inventoryUOM;
@@ -505,7 +515,10 @@ namespace purchase {
                     // 单据总计触发
                     context.outputValues.set(this.disTotal, docTotal - shipTotal);
                 } else {
-                    context.outputValues.set(this.docTotal, disTotal + shipTotal);
+                    let result: number = disTotal + shipTotal;
+                    if (!ibas.numbers.isApproximated(result, docTotal)) {
+                        context.outputValues.set(this.docTotal, result);
+                    }
                 }
             }
         }

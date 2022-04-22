@@ -595,10 +595,6 @@ namespace purchase {
                         , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseQuote.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseQuote.PROPERTY_DISCOUNTTOTAL_NAME, undefined),
-                    // 小数舍入（单据总计）
-                    new ibas.BusinessRuleRoundingOff(
-                        PurchaseQuote.PROPERTY_DIFFAMOUNT_NAME, PurchaseQuote.PROPERTY_DOCUMENTTOTAL_NAME,
-                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM), PurchaseQuote.PROPERTY_ROUNDING_NAME),
                 ];
             }
             /** 重置 */

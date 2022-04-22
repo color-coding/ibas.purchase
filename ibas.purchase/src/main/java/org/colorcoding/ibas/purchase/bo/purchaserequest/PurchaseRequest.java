@@ -28,7 +28,6 @@ import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
-import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRoundingOff;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
@@ -1479,8 +1478,6 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest>
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_DOCUMENTTOTAL, PROPERTY_PURCHASEREQUESTITEMS,
 						PurchaseRequestItem.PROPERTY_LINETOTAL),
-				// 小数舍入（单据总计）
-				new BusinessRuleRoundingOff(PROPERTY_DIFFAMOUNT, PROPERTY_DOCUMENTTOTAL, PROPERTY_ROUNDING),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};
 	}

@@ -294,10 +294,16 @@ declare namespace accounting {
             code: string;
             /** 名称 */
             name: string;
+            /** 激活 */
+            activated: ibas.emYesNo;
             /** 取消 */
             canceled: ibas.emYesNo;
             /** 状态 */
             status: ibas.emDocumentStatus;
+            /** 开始日期 */
+            startDate: Date;
+            /** 结束日期 */
+            closeDate: Date;
             /** 项目经理 */
             manager: number;
             /** 数据所有者 */
@@ -642,6 +648,8 @@ declare namespace accounting {
             preventOver: ibas.emYesNo;
             /** 限制费用项目 */
             restrictedItem: ibas.emYesNo;
+            /** 团队成员 */
+            teamMembers: string;
             /** 备注 */
             remarks: string;
             /** 费用结构-节点项目集合 */
@@ -1211,6 +1219,12 @@ declare namespace accounting {
             get name(): string;
             /** 设置-名称 */
             set name(value: string);
+            /** 映射的属性名称-激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-激活 */
+            set activated(value: ibas.emYesNo);
             /** 映射的属性名称-取消 */
             static PROPERTY_CANCELED_NAME: string;
             /** 获取-取消 */
@@ -1223,6 +1237,18 @@ declare namespace accounting {
             get status(): ibas.emDocumentStatus;
             /** 设置-状态 */
             set status(value: ibas.emDocumentStatus);
+            /** 映射的属性名称-开始日期 */
+            static PROPERTY_STARTDATE_NAME: string;
+            /** 获取-开始日期 */
+            get startDate(): Date;
+            /** 设置-开始日期 */
+            set startDate(value: Date);
+            /** 映射的属性名称-结束日期 */
+            static PROPERTY_CLOSEDATE_NAME: string;
+            /** 获取-结束日期 */
+            get closeDate(): Date;
+            /** 设置-结束日期 */
+            set closeDate(value: Date);
             /** 映射的属性名称-项目经理 */
             static PROPERTY_MANAGER_NAME: string;
             /** 获取-项目经理 */
@@ -2165,6 +2191,12 @@ declare namespace accounting {
             get restrictedItem(): ibas.emYesNo;
             /** 设置-限制费用项目 */
             set restrictedItem(value: ibas.emYesNo);
+            /** 映射的属性名称-团队成员 */
+            static PROPERTY_TEAMMEMBERS_NAME: string;
+            /** 获取-团队成员 */
+            get teamMembers(): string;
+            /** 设置-团队成员 */
+            set teamMembers(value: string);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -3334,6 +3366,9 @@ declare namespace accounting {
             private viewCostItemsLocked;
             private viewCostItemsIncurred;
             private closeCostStructureNode;
+        }
+        enum emNodeType {
+            ORGANIZATION = 0
         }
         /** 视图-费用结构 */
         interface ICostStructureListView extends ibas.IBOListView {

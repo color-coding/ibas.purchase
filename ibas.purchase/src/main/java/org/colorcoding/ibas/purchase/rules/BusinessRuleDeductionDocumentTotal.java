@@ -85,7 +85,11 @@ public class BusinessRuleDeductionDocumentTotal extends BusinessRuleCommon {
 		if (this.getDocTotal().getName().equalsIgnoreCase(context.getTrigger())) {
 			context.getOutputValues().put(this.getDisTotal(), docTotal.subtract(shipTotal));
 		} else {
-			context.getOutputValues().put(this.getDocTotal(), disTotal.add(shipTotal));
+			BigDecimal result = disTotal.add(shipTotal);
+			if (Decimal.ONE.compareTo(result.subtract(docTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				// 与原总计差值，小于0.5就忽略
+				context.getOutputValues().put(this.getDocTotal(), disTotal.add(shipTotal));
+			}
 		}
 	}
 

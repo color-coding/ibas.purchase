@@ -98,7 +98,11 @@ public class BusinessRuleDeductionDiscountTotal extends BusinessRuleCommon {
 				context.getOutputValues().put(this.getTotal(), preTotal);
 			} else {
 				BigDecimal result = Decimal.multiply(preTotal, discount);
-				context.getOutputValues().put(this.getTotal(), Decimal.round(result, Decimal.DECIMAL_PLACES_RUNNING));
+				if (Decimal.ONE.compareTo(result.subtract(total).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+					// 与原总计差值，小于0.5就忽略
+					context.getOutputValues().put(this.getTotal(),
+							Decimal.round(result, Decimal.DECIMAL_PLACES_RUNNING));
+				}
 			}
 		}
 	}

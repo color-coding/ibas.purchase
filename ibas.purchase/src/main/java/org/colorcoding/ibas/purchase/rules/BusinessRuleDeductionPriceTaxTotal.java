@@ -10,7 +10,7 @@ import org.colorcoding.ibas.bobas.rule.BusinessRuleCommon;
 public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 
 	protected BusinessRuleDeductionPriceTaxTotal() {
-		this.setName(I18N.prop("msg_ph_business_rule_deductione_price_tax_total"));
+		this.setName(I18N.prop("msg_ph_business_rule_deduction_price_tax_total"));
 	}
 
 	/**
@@ -157,9 +157,20 @@ public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 			BigDecimal rTotal = price.multiply(quantity);
 			BigDecimal rPreTotal = rTotal.divide(Decimal.ONE.add(taxRate));
 			BigDecimal rTaxTotal = rTotal.subtract(rPreTotal);
-			context.getOutputValues().put(this.getTotal(), Decimal.round(rTotal, Decimal.DECIMAL_PLACES_RUNNING));
-			context.getOutputValues().put(this.getPreTotal(), Decimal.round(rPreTotal, Decimal.DECIMAL_PLACES_RUNNING));
-			context.getOutputValues().put(this.getTaxTotal(), Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			if (Decimal.ONE.compareTo(rTotal.subtract(total).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				// 与原总计差值，小于0.5就忽略
+				context.getOutputValues().put(this.getTotal(), Decimal.round(rTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
+			if (Decimal.ONE.compareTo(rPreTotal.subtract(preTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				// 与原总计差值，小于0.5就忽略
+				context.getOutputValues().put(this.getPreTotal(),
+						Decimal.round(rPreTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
+			if (Decimal.ONE.compareTo(rTaxTotal.subtract(taxTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				// 与原总计差值，小于0.5就忽略
+				context.getOutputValues().put(this.getTaxTotal(),
+						Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
 		} else if (this.getTaxRate().getName().equalsIgnoreCase(context.getTrigger())
 				|| this.getPreTotal().getName().equalsIgnoreCase(context.getTrigger())) {
 			BigDecimal rTaxTotal = preTotal.multiply(taxRate);

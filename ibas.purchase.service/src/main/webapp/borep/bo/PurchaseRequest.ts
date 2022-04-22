@@ -523,10 +523,6 @@ namespace purchase {
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
                         PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME),
-                    // 小数舍入（单据总计）
-                    new ibas.BusinessRuleRoundingOff(
-                        PurchaseRequest.PROPERTY_DIFFAMOUNT_NAME, PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME,
-                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM), PurchaseRequest.PROPERTY_ROUNDING_NAME),
                 ];
             }
             /** 重置 */
