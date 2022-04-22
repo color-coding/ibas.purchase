@@ -602,8 +602,8 @@ namespace purchase {
                     for (let item of document.userFields.forEach()) {
                         let myItem: ibas.IUserField = this.userFields.get(item.name);
                         if (ibas.objects.isNull(myItem)) {
-                            // myItem = this.userFields.register(item.name, item.valueType);
-                            continue;
+                            myItem = this.userFields.register(item.name, item.valueType);
+                            // continue;
                         }
                         if (myItem.valueType !== item.valueType) {
                             continue;
@@ -667,8 +667,8 @@ namespace purchase {
                         for (let uItem of item.userFields.forEach()) {
                             let myUItem: ibas.IUserField = myItem.userFields.get(uItem.name);
                             if (ibas.objects.isNull(myUItem)) {
-                                // myUItem = myItem.userFields.register(uItem.name, uItem.valueType);
-                                continue;
+                                myUItem = myItem.userFields.register(uItem.name, uItem.valueType);
+                                // continue;
                             }
                             if (myUItem.valueType !== uItem.valueType) {
                                 continue;
@@ -773,7 +773,7 @@ namespace purchase {
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
                         PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseOrder.PROPERTY_DISCOUNT_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
+                    ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseOrder.PROPERTY_DOCUMENTTOTAL_NAME,
                         PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
@@ -1476,19 +1476,19 @@ namespace purchase {
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
                         PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_UNITPRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
-                    new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXPRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算折扣后总计 = 折扣前总计 * 折扣
-                    new BusinessRuleDeductionDiscount(
-                        PurchaseOrderItem.PROPERTY_DISCOUNT_NAME, PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)),
+                    ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
                     new BusinessRuleDeductionPriceTaxTotal(PurchaseOrderItem.PROPERTY_LINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
                         , PurchaseOrderItem.PROPERTY_TAXRATE_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
+                    ),
+                    // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
+                    new BusinessRuleDeductionPriceQtyTotal(
+                        PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXPRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
+                    ),
+                    // 计算折扣后总计 = 折扣前总计 * 折扣
+                    new BusinessRuleDeductionDiscount(
+                        PurchaseOrderItem.PROPERTY_DISCOUNT_NAME, PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
                 ];
             }
             /** 重置 */

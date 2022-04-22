@@ -632,7 +632,7 @@ namespace purchase {
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
                         PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseDelivery.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseDelivery.PROPERTY_DISCOUNT_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
+                    ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseDelivery.PROPERTY_DOCUMENTTOTAL_NAME,
                         PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
@@ -1378,19 +1378,19 @@ namespace purchase {
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
                         PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
-                    new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
-                    // 计算折扣后总计 = 折扣前总计 * 折扣
-                    new BusinessRuleDeductionDiscount(
-                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_PRICE)),
+                    ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
                     new BusinessRuleDeductionPriceTaxTotal(PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
                         , PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME, PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
+                    ),
+                    // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
+                    new BusinessRuleDeductionPriceQtyTotal(
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
+                    ),
+                    // 计算折扣后总计 = 折扣前总计 * 折扣
+                    new BusinessRuleDeductionDiscount(
+                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
                 ];
             }
             /** 重置 */

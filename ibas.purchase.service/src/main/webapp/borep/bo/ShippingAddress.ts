@@ -440,7 +440,7 @@ namespace purchase {
                     // 计算税前费用 = 税后费用 * 税率
                     new BusinessRuleDeductionTaxPrice(
                         ShippingAddress.PROPERTY_TAXRATE_NAME, ShippingAddress.PROPERTY_PRETAXEXPENSE_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_SUM)),
+                    ),
                     // 计算税总额 = 税后费用 - 税前费用
                     new ibas.BusinessRuleSubtraction(
                         ShippingAddress.PROPERTY_TAXTOTAL_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME, ShippingAddress.PROPERTY_PRETAXEXPENSE_NAME),

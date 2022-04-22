@@ -147,8 +147,14 @@ public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 			BigDecimal rPreTotal = total.divide(Decimal.ONE.add(taxRate));
 			BigDecimal rTaxTotal = total.subtract(rPreTotal);
 			context.getOutputValues().put(this.getPrice(), Decimal.round(rPrice, Decimal.DECIMAL_PLACES_RUNNING));
-			context.getOutputValues().put(this.getPreTotal(), Decimal.round(rPreTotal, Decimal.DECIMAL_PLACES_RUNNING));
-			context.getOutputValues().put(this.getTaxTotal(), Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			if (Decimal.ONE.compareTo(rPreTotal.subtract(preTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				context.getOutputValues().put(this.getPreTotal(),
+						Decimal.round(rPreTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
+			if (Decimal.ONE.compareTo(rTaxTotal.subtract(taxTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				context.getOutputValues().put(this.getTaxTotal(),
+						Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
 		} else if (this.getTaxTotal().getName().equalsIgnoreCase(context.getTrigger())) {
 			BigDecimal rTotal = preTotal.add(taxTotal);
 			context.getOutputValues().put(this.getTotal(), Decimal.round(rTotal, Decimal.DECIMAL_PLACES_RUNNING));
@@ -175,8 +181,13 @@ public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 				|| this.getPreTotal().getName().equalsIgnoreCase(context.getTrigger())) {
 			BigDecimal rTaxTotal = preTotal.multiply(taxRate);
 			BigDecimal rTotal = preTotal.add(rTaxTotal);
-			context.getOutputValues().put(this.getTaxTotal(), Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
-			context.getOutputValues().put(this.getTotal(), Decimal.round(rTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			if (Decimal.ONE.compareTo(rTaxTotal.subtract(taxTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				context.getOutputValues().put(this.getTaxTotal(),
+						Decimal.round(rTaxTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
+			if (Decimal.ONE.compareTo(rTotal.subtract(total).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
+				context.getOutputValues().put(this.getTotal(), Decimal.round(rTotal, Decimal.DECIMAL_PLACES_RUNNING));
+			}
 		}
 	}
 

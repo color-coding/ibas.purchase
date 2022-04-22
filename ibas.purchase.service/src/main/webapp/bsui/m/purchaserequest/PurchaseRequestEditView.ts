@@ -664,6 +664,17 @@ namespace purchase {
                                             maxLength: 8
                                         }),
                                     }),
+                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_tax") }),
+                                    new component.TaxGroupSelect("", {
+                                    }).bindProperty("bindingValue", {
+                                        path: "tax",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 8
+                                        })
+                                    }).bindProperty("rate", {
+                                        path: "taxRate",
+                                        type: new sap.extension.data.Rate()
+                                    }),
                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_supplier") }),
                                     new sap.extension.m.SelectionInput("", {
                                         showValueHelp: true,
