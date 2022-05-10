@@ -38,6 +38,8 @@ namespace purchase {
                 receiptPurchaseDeliveryEvent: Function;
                 /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
+                /** 转为采购退货事件 */
+                turnToPurchaseReturnEvent: Function;
                 defaultWarehouse: string;
                 defaultTaxGroup: string;
                 /** 绘制视图 */
@@ -159,6 +161,28 @@ namespace purchase {
                                     importance: sap.uxap.Importance.Low,
                                     press: function (): void {
                                         that.fireViewEvents(that.deleteDataEvent);
+                                    }
+                                }),
+                                new sap.uxap.ObjectPageHeaderActionButton("", {
+                                    hideText: true,
+                                    importance: sap.uxap.Importance.Medium,
+                                    text: ibas.i18n.prop("purchase_copy_to"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    icon: "sap-icon://duplicate",
+                                    press(event: sap.ui.base.Event): void {
+                                        let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
+                                            placement: sap.m.PlacementType.Bottom,
+                                            buttons: [
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_purchasereturn"),
+                                                    press(this: sap.m.Button): void {
+                                                        that.fireViewEvents(that.turnToPurchaseReturnEvent);
+                                                    }
+                                                }),
+                                            ]
+                                        });
+                                        actionSheet.openBy(event.getSource());
                                     }
                                 }),
                                 new sap.uxap.ObjectPageHeaderActionButton("", {

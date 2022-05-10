@@ -40,6 +40,8 @@ namespace purchase {
                 paymentPurchaseDeliveryEvent: Function;
                 /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
+                /** 转为采购退货事件 */
+                turnToPurchaseReturnEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -642,6 +644,22 @@ namespace purchase {
                                                         accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                                         multiple: false
                                                     });
+                                                }
+                                            }),
+                                        ],
+                                    })
+                                }),
+                                new sap.m.ToolbarSeparator(""),
+                                new sap.m.MenuButton("", {
+                                    text: ibas.i18n.prop("purchase_copy_to"),
+                                    icon: "sap-icon://duplicate",
+                                    type: sap.m.ButtonType.Transparent,
+                                    menu: new sap.m.Menu("", {
+                                        items: [
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_purchasereturn"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.turnToPurchaseReturnEvent);
                                                 }
                                             }),
                                         ],

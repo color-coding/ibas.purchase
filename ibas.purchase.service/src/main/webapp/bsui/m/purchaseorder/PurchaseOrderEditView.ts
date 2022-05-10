@@ -18,18 +18,34 @@ namespace purchase {
                 addPurchaseOrderItemEvent: Function;
                 /** 删除采购订单-行事件 */
                 removePurchaseOrderItemEvent: Function;
+                /** 选择采购订单供应商信息 */
                 choosePurchaseOrderSupplierEvent: Function;
+                /** 选择采购订单联系人信息 */
                 choosePurchaseOrderContactPersonEvent: Function;
+                /** 选择采购订单价格清单信息 */
                 choosePurchaseOrderPriceListEvent: Function;
+                /** 选择采购订单-行物料主数据 */
                 choosePurchaseOrderItemMaterialEvent: Function;
+                /** 选择采购订单-行 仓库 */
                 choosePurchaseOrderItemWarehouseEvent: Function;
+                /** 选择采购订单-行 物料序列事件 */
                 choosePurchaseOrderItemMaterialSerialEvent: Function;
+                /** 选择采购订单-行 物料批次事件 */
                 choosePurchaseOrderItemMaterialBatchEvent: Function;
+                /** 显示采购订单行额外信息事件 */
                 showPurchaseOrderItemExtraEvent: Function;
+                /** 选择采购订单-采购报价事件 */
                 choosePurchaseOrderPurchaseQuoteEvent: Function;
+                /** 选择采购订单-采购申请事件 */
                 choosePurchaseOrderPurchaseRequestEvent: Function;
-                receiptPurchaseOrderEvent: Function;
+                /** 付款采购订单 */
+                paymentPurchaseOrderEvent: Function;
+                /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
+                /** 转为采购交货事件 */
+                turnToPurchaseDeliveryEvent: Function;
+                /** 转为采购退货事件 */
+                turnToPurchaseReturnEvent: Function;
                 defaultWarehouse: string;
                 defaultTaxGroup: string;
                 /** 绘制视图 */
@@ -157,6 +173,35 @@ namespace purchase {
                                     importance: sap.uxap.Importance.Low,
                                     press: function (): void {
                                         that.fireViewEvents(that.deleteDataEvent);
+                                    }
+                                }),
+                                new sap.uxap.ObjectPageHeaderActionButton("", {
+                                    hideText: true,
+                                    importance: sap.uxap.Importance.Medium,
+                                    text: ibas.i18n.prop("purchase_copy_to"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    icon: "sap-icon://duplicate",
+                                    press(event: sap.ui.base.Event): void {
+                                        let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
+                                            placement: sap.m.PlacementType.Bottom,
+                                            buttons: [
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_purchasedelivery"),
+                                                    press(this: sap.m.Button): void {
+                                                        that.fireViewEvents(that.turnToPurchaseDeliveryEvent);
+                                                    }
+                                                }),
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_purchasereturn"),
+                                                    press(this: sap.m.Button): void {
+                                                        that.fireViewEvents(that.turnToPurchaseReturnEvent);
+                                                    }
+                                                }),
+                                            ]
+                                        });
+                                        actionSheet.openBy(event.getSource());
                                     }
                                 }),
                                 new sap.uxap.ObjectPageHeaderActionButton("", {

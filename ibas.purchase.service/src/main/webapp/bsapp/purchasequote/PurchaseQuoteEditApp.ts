@@ -38,6 +38,7 @@ namespace purchase {
                 this.view.choosePurchaseQuoteItemWarehouseEvent = this.choosePurchaseQuoteItemWarehouse;
                 this.view.choosePurchaseQuotePurchaseRequestEvent = this.choosePurchaseQuotePurchaseRequest;
                 this.view.showPurchaseQuoteItemExtraEvent = this.showPurchaseQuoteItemExtra;
+                this.view.turnToPurchaseOrderEvent = this.turnToPurchaseOrder;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -566,6 +567,24 @@ namespace purchase {
                     }
                 });
             }
+            /** 转为采购订单 */
+            protected turnToPurchaseOrder(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let target: bo.PurchaseOrder = new bo.PurchaseOrder();
+                target.supplierCode = this.editData.supplierCode;
+                target.supplierName = this.editData.supplierName;
+                target.baseDocument(this.editData);
+
+                let app: PurchaseOrderEditApp = new PurchaseOrderEditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(target);
+
+
+            }
         }
         /** 视图-采购报价 */
         export interface IPurchaseQuoteEditView extends ibas.IBOEditView {
@@ -595,6 +614,8 @@ namespace purchase {
             showPurchaseQuoteItems(datas: bo.PurchaseQuoteItem[]): void;
             /** 选择采购报价-采购申请事件 */
             choosePurchaseQuotePurchaseRequestEvent: Function;
+            /** 转为采购订单事件 */
+            turnToPurchaseOrderEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }

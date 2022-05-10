@@ -18,13 +18,22 @@ namespace purchase {
                 addPurchaseQuoteItemEvent: Function;
                 /** 删除采购报价-行事件 */
                 removePurchaseQuoteItemEvent: Function;
+                /** 选择采购报价供应商信息 */
                 choosePurchaseQuoteSupplierEvent: Function;
+                /** 选择采购报价联系人信息 */
                 choosePurchaseQuoteContactPersonEvent: Function;
+                /** 选择采购报价价格清单信息 */
                 choosePurchaseQuotePriceListEvent: Function;
+                /** 选择采购报价-行物料主数据 */
                 choosePurchaseQuoteItemMaterialEvent: Function;
+                /** 选择采购报价-行 仓库 */
                 choosePurchaseQuoteItemWarehouseEvent: Function;
+                /** 显示采购报价额外信息事件 */
                 showPurchaseQuoteItemExtraEvent: Function;
+                /** 选择采购报价-采购申请事件 */
                 choosePurchaseQuotePurchaseRequestEvent: Function;
+                /** 转为采购订单事件 */
+                turnToPurchaseOrderEvent: Function;
                 defaultWarehouse: string;
                 defaultTaxGroup: string;
                 /** 绘制视图 */
@@ -127,6 +136,28 @@ namespace purchase {
                                     importance: sap.uxap.Importance.Low,
                                     press: function (): void {
                                         that.fireViewEvents(that.deleteDataEvent);
+                                    }
+                                }),
+                                new sap.uxap.ObjectPageHeaderActionButton("", {
+                                    hideText: true,
+                                    importance: sap.uxap.Importance.Medium,
+                                    text: ibas.i18n.prop("purchase_copy_to"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    icon: "sap-icon://duplicate",
+                                    press(event: sap.ui.base.Event): void {
+                                        let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
+                                            placement: sap.m.PlacementType.Bottom,
+                                            buttons: [
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_purchaseorder"),
+                                                    press(this: sap.m.Button): void {
+                                                        that.fireViewEvents(that.turnToPurchaseOrderEvent);
+                                                    }
+                                                }),
+                                            ]
+                                        });
+                                        actionSheet.openBy(event.getSource());
                                     }
                                 }),
                                 new sap.uxap.ObjectPageHeaderActionButton("", {

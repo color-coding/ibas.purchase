@@ -52,6 +52,7 @@
   "purchase_business_rule_deduction_line_total": "推导行总计",
   "purchase_create_continue": "新建{0}，是否继续？",
   "purchase_copy_data_continue": "复制{0}，是否继续？",
+  "purchase_copy_to": "复制到",
   "purchase_unrecognized_extra_information": "不能识别的信息[{0}]",
   "purchase_remove_base_items_continue": "此操作会移出基于的行项目，是否继续？",
   "purchase_change_item_warehouse_continue": "是否更改单据行的仓库为[{0}]？",

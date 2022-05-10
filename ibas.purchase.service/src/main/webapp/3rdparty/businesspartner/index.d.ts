@@ -39,6 +39,8 @@ declare namespace businesspartner {
         const BO_CODE_BUSINESSPARTNERASSET: string;
         /** 业务对象编码-业务伙伴资产日记账 */
         const BO_CODE_BUSINESSPARTNERASSETJOURNAL: string;
+        /** 业务对象编码-潜在客户 */
+        const BO_CODE_LEAD: string;
         /** 业务伙伴性质 */
         enum emBusinessPartnerNature {
             /** 公司 */
@@ -51,7 +53,9 @@ declare namespace businesspartner {
             /** 客户 */
             CUSTOMER = 0,
             /** 供应商 */
-            SUPPLIER = 1
+            SUPPLIER = 1,
+            /** 潜在客户 */
+            LEAD = 2
         }
         /** 性别 */
         enum emGender {
@@ -465,6 +469,8 @@ declare namespace businesspartner {
             channel: string;
             /** 组织单位 */
             organizationalUnit: string;
+            /** 潜在客户 */
+            lead: string;
         }
     }
 }
@@ -830,6 +836,102 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 潜在客户 */
+        interface ILead extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 标识 */
+            sign: string;
+            /** 组代码 */
+            group: string;
+            /** 激活 */
+            activated: ibas.emYesNo;
+            /** 公司/个人 */
+            companyPrivate: emBusinessPartnerNature;
+            /** 联系人 */
+            contactPerson: number;
+            /** 账单地址 */
+            billAddress: number;
+            /** 送货地址 */
+            shipAddress: number;
+            /** 注册地址 */
+            registrationAddress: number;
+            /** 电话 1 */
+            telephone1: string;
+            /** 电话 2 */
+            telephone2: string;
+            /** 移动电话 */
+            mobilePhone: string;
+            /** 传真号 */
+            faxNumber: string;
+            /** 价格清单 */
+            priceList: number;
+            /** 货币 */
+            currency: string;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 底价清单 */
+            floorList: number;
+            /** 税收组 */
+            taxGroup: string;
+            /** 备注 */
+            remarks: string;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
+            /** 已删除 */
+            deleted: ibas.emYesNo;
+            /** 对象编号 */
+            docEntry: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 审批状态 */
+            approvalStatus: ibas.emApprovalStatus;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 所属渠道 */
+            channel: string;
+            /** 组织单位 */
+            organizationalUnit: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryBusinessPartner extends ibas.IBORepositoryApplication {
             /**
@@ -927,6 +1029,16 @@ declare namespace businesspartner {
              * @param fetcher 查询者
              */
             fetchCustomerAsset(fetcher: IAssetRequester): void;
+            /**
+             * 查询 潜在客户
+             * @param fetcher 查询者
+             */
+            fetchLead(fetcher: ibas.IFetchCaller<bo.ILead>): void;
+            /**
+             * 保存 潜在客户
+             * @param saver 保存者
+             */
+            saveLead(saver: ibas.ISaveCaller<bo.ILead>): void;
         }
         /**
          * 查询调用者
@@ -1789,6 +1901,12 @@ declare namespace businesspartner {
             get organizationalUnit(): string;
             /** 设置-组织单位 */
             set organizationalUnit(value: string);
+            /** 映射的属性名称-潜在客户 */
+            static PROPERTY_LEAD_NAME: string;
+            /** 获取-潜在客户 */
+            get lead(): string;
+            /** 设置-潜在客户 */
+            set lead(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -2733,6 +2851,272 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 潜在客户 */
+        class Lead extends ibas.BOMasterData<Lead> implements ILead {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-标识 */
+            static PROPERTY_SIGN_NAME: string;
+            /** 获取-标识 */
+            get sign(): string;
+            /** 设置-标识 */
+            set sign(value: string);
+            /** 映射的属性名称-组代码 */
+            static PROPERTY_GROUP_NAME: string;
+            /** 获取-组代码 */
+            get group(): string;
+            /** 设置-组代码 */
+            set group(value: string);
+            /** 映射的属性名称-激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-激活 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-公司/个人 */
+            static PROPERTY_COMPANYPRIVATE_NAME: string;
+            /** 获取-公司/个人 */
+            get companyPrivate(): emBusinessPartnerNature;
+            /** 设置-公司/个人 */
+            set companyPrivate(value: emBusinessPartnerNature);
+            /** 映射的属性名称-联系人 */
+            static PROPERTY_CONTACTPERSON_NAME: string;
+            /** 获取-联系人 */
+            get contactPerson(): number;
+            /** 设置-联系人 */
+            set contactPerson(value: number);
+            /** 映射的属性名称-账单地址 */
+            static PROPERTY_BILLADDRESS_NAME: string;
+            /** 获取-账单地址 */
+            get billAddress(): number;
+            /** 设置-账单地址 */
+            set billAddress(value: number);
+            /** 映射的属性名称-送货地址 */
+            static PROPERTY_SHIPADDRESS_NAME: string;
+            /** 获取-送货地址 */
+            get shipAddress(): number;
+            /** 设置-送货地址 */
+            set shipAddress(value: number);
+            /** 映射的属性名称-注册地址 */
+            static PROPERTY_REGISTRATIONADDRESS_NAME: string;
+            /** 获取-注册地址 */
+            get registrationAddress(): number;
+            /** 设置-注册地址 */
+            set registrationAddress(value: number);
+            /** 映射的属性名称-电话 1 */
+            static PROPERTY_TELEPHONE1_NAME: string;
+            /** 获取-电话 1 */
+            get telephone1(): string;
+            /** 设置-电话 1 */
+            set telephone1(value: string);
+            /** 映射的属性名称-电话 2 */
+            static PROPERTY_TELEPHONE2_NAME: string;
+            /** 获取-电话 2 */
+            get telephone2(): string;
+            /** 设置-电话 2 */
+            set telephone2(value: string);
+            /** 映射的属性名称-移动电话 */
+            static PROPERTY_MOBILEPHONE_NAME: string;
+            /** 获取-移动电话 */
+            get mobilePhone(): string;
+            /** 设置-移动电话 */
+            set mobilePhone(value: string);
+            /** 映射的属性名称-传真号 */
+            static PROPERTY_FAXNUMBER_NAME: string;
+            /** 获取-传真号 */
+            get faxNumber(): string;
+            /** 设置-传真号 */
+            set faxNumber(value: string);
+            /** 映射的属性名称-价格清单 */
+            static PROPERTY_PRICELIST_NAME: string;
+            /** 获取-价格清单 */
+            get priceList(): number;
+            /** 设置-价格清单 */
+            set priceList(value: number);
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
+            /** 映射的属性名称-生效日期 */
+            static PROPERTY_VALIDDATE_NAME: string;
+            /** 获取-生效日期 */
+            get validDate(): Date;
+            /** 设置-生效日期 */
+            set validDate(value: Date);
+            /** 映射的属性名称-失效日期 */
+            static PROPERTY_INVALIDDATE_NAME: string;
+            /** 获取-失效日期 */
+            get invalidDate(): Date;
+            /** 设置-失效日期 */
+            set invalidDate(value: Date);
+            /** 映射的属性名称-底价清单 */
+            static PROPERTY_FLOORLIST_NAME: string;
+            /** 获取-底价清单 */
+            get floorList(): number;
+            /** 设置-底价清单 */
+            set floorList(value: number);
+            /** 映射的属性名称-税收组 */
+            static PROPERTY_TAXGROUP_NAME: string;
+            /** 获取-税收组 */
+            get taxGroup(): string;
+            /** 设置-税收组 */
+            set taxGroup(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已删除 */
+            static PROPERTY_DELETED_NAME: string;
+            /** 获取-已删除 */
+            get deleted(): ibas.emYesNo;
+            /** 设置-已删除 */
+            set deleted(value: ibas.emYesNo);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-对象编号 */
+            get docEntry(): number;
+            /** 设置-对象编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-审批状态 */
+            static PROPERTY_APPROVALSTATUS_NAME: string;
+            /** 获取-审批状态 */
+            get approvalStatus(): ibas.emApprovalStatus;
+            /** 设置-审批状态 */
+            set approvalStatus(value: ibas.emApprovalStatus);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-所属渠道 */
+            static PROPERTY_CHANNEL_NAME: string;
+            /** 获取-所属渠道 */
+            get channel(): string;
+            /** 设置-所属渠道 */
+            set channel(value: string);
+            /** 映射的属性名称-组织单位 */
+            static PROPERTY_ORGANIZATIONALUNIT_NAME: string;
+            /** 获取-组织单位 */
+            get organizationalUnit(): string;
+            /** 设置-组织单位 */
+            set organizationalUnit(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         namespace ibas4j {
             /** ibas的java端数据声明 */
             /** 操作消息 */
@@ -2934,6 +3318,16 @@ declare namespace businesspartner {
              * @param fetcher 查询者
              */
             fetchCustomerAsset(fetcher: IAssetRequester): void;
+            /**
+             * 查询 潜在客户
+             * @param fetcher 查询者
+             */
+            fetchLead(fetcher: ibas.IFetchCaller<bo.Lead>): void;
+            /**
+             * 保存 潜在客户
+             * @param saver 保存者
+             */
+            saveLead(saver: ibas.ISaveCaller<bo.Lead>): void;
         }
     }
 }
@@ -4393,6 +4787,242 @@ declare namespace businesspartner {
         interface IBusinessPartnerAssetJournalEditView extends ibas.IBOEditView {
             /** 显示数据 */
             showBusinessPartnerAssetJournal(data: bo.BusinessPartnerAssetJournal): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        class LeadFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 列表应用-潜在客户 */
+        class LeadListApp extends ibas.BOListApplication<ILeadListView, bo.Lead> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.Lead): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.Lead): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.Lead | bo.Lead[]): void;
+        }
+        /** 视图-潜在客户 */
+        interface ILeadListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.Lead[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 选择应用-潜在客户 */
+        class LeadChooseApp extends ibas.BOChooseService<ILeadChooseView, bo.Lead> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-潜在客户 */
+        interface ILeadChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.Lead[]): void;
+        }
+        /** 潜在客户选择服务映射 */
+        class LeadChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.Lead>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 编辑应用-潜在潜在客户 */
+        class LeadEditApp extends ibas.BOEditApplication<ILeadEditView, bo.Lead> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 运行,覆盖原方法 */
+            run(): void;
+            run(data: bo.Lead): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+            private chooseLeadGroup;
+            private chooseLeadContactPerson;
+            private chooseLeadShipAddress;
+            private chooseLeadBillAddress;
+            private chooseLeadRegistrationAddress;
+            private chooseLeadPriceList;
+            private chooseLeadFloorList;
+            private createContactPerson;
+            private createAddress;
+            /** 转为客户 */
+            private turnToCustomer;
+        }
+        /** 视图-潜在客户 */
+        interface ILeadEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showLead(data: bo.Lead): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+            /** 选择潜在客户组事件 */
+            chooseLeadGroupEvent: Function;
+            /** 选择潜在客户联系人事件 */
+            chooseLeadContactPersonEvent: Function;
+            /** 选择潜在客户送货地址事件 */
+            chooseLeadShipAddressEvent: Function;
+            /** 选择潜在客户账单地址事件 */
+            chooseLeadBillAddressEvent: Function;
+            /** 选择潜在客户注册地址事件 */
+            chooseLeadRegistrationAddress: Function;
+            /** 选择潜在客户价格清单事件 */
+            chooseLeadPriceListEvent: Function;
+            /** 选择潜在客户底价清单事件 */
+            chooseLeadFloorListEvent: Function;
+            /** 选择潜在客户仓库事件 */
+            chooseLeadWarehouseEvent: Function;
+            /** 创建联系人 */
+            createContactPersonEvent: Function;
+            /** 创建地址 */
+            createAddressEvent: Function;
+            /** 转为客户 */
+            turnToCustomerEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 查看应用-潜在客户 */
+        class LeadViewApp extends ibas.BOViewService<ILeadViewView, bo.Lead> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.Lead): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-潜在客户 */
+        interface ILeadViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showLead(data: bo.Lead): void;
+        }
+        /** 潜在客户连接服务映射 */
+        class LeadLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
         }
     }
 }

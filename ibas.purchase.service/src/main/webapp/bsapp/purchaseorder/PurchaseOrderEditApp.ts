@@ -42,6 +42,8 @@ namespace purchase {
                 this.view.choosePurchaseOrderPurchaseRequestEvent = this.choosePurchaseOrderPurchaseRequest;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.showPurchaseOrderItemExtraEvent = this.showSaleOrderItemExtra;
+                this.view.turnToPurchaseDeliveryEvent = this.turnToPurchaseDelivery;
+                this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -750,6 +752,40 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(data, this.editData);
             }
+            /** 转为采购交货 */
+            protected turnToPurchaseDelivery(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let target: bo.PurchaseDelivery = new bo.PurchaseDelivery();
+                target.supplierCode = this.editData.supplierCode;
+                target.supplierName = this.editData.supplierName;
+                target.baseDocument(this.editData);
+
+                let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(target);
+
+            }
+            /** 转为采购退货 */
+            protected turnToPurchaseReturn(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let target: bo.PurchaseReturn = new bo.PurchaseReturn();
+                target.supplierCode = this.editData.supplierCode;
+                target.supplierName = this.editData.supplierName;
+                target.baseDocument(this.editData);
+
+                let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(target);
+
+            }
 
         }
         /** 视图-采购订单 */
@@ -788,6 +824,10 @@ namespace purchase {
             choosePurchaseOrderPurchaseRequestEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
+            /** 转为采购交货事件 */
+            turnToPurchaseDeliveryEvent: Function;
+            /** 转为采购退货事件 */
+            turnToPurchaseReturnEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
