@@ -126,7 +126,7 @@ namespace purchase {
                         if (action !== ibas.emMessageAction.YES) {
                             return;
                         }
-                        let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase;
+                        let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
                         ibas.queues.execute(beDeleteds, (data, next) => {
                             // 处理数据
                             boRepository.savePurchaseRequest({

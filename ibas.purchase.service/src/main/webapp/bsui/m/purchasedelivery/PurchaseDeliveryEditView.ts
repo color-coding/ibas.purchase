@@ -774,266 +774,276 @@ namespace purchase {
                 /** 编辑数据（采购交货-行） */
                 editPurchaseDeliveryItem(data: bo.PurchaseDeliveryItem): void {
                     let that: this = this;
-                    let editForm: sap.m.Dialog = new sap.m.Dialog("", {
-                        title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), data.lineId),
-                        type: sap.m.DialogType.Standard,
-                        state: sap.ui.core.ValueState.None,
-                        stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
-                        horizontalScrolling: true,
-                        verticalScrolling: true,
-                        content: [
-                            new sap.extension.layout.DataSimpleForm("", {
-                                editable: true,
-                                userFieldsTitle: "",
-                                userFieldsMode: "input",
-                                dataInfo: {
-                                    code: bo.PurchaseDelivery.BUSINESS_OBJECT_CODE,
-                                    name: bo.PurchaseDeliveryItem.name,
-                                },
-                                content: [
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_lineid") }),
-                                    new sap.extension.m.Input("", {
-                                        editable: false,
-                                        type: sap.m.InputType.Number
-                                    }).bindProperty("bindingValue", {
-                                        path: "lineId",
-                                        type: new sap.extension.data.Numeric(),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_linestatus") }),
-                                    new sap.extension.m.EnumSelect("", {
-                                        enumType: ibas.emDocumentStatus
-                                    }).bindProperty("bindingValue", {
-                                        path: "lineStatus",
-                                        type: new sap.extension.data.DocumentStatus(),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_itemcode") }),
-                                    new sap.extension.m.Input("", {
-                                        showValueHelp: true,
-                                        valueHelpRequest: function (this: sap.extension.m.Input): void {
-                                            let model: any = this.getModel();
-                                            if (model instanceof sap.extension.model.JSONModel) {
-                                                let data: any = model.getData();
-                                                if (data) {
-                                                    that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialEvent, data);
-                                                }
-                                            }
-                                        }
-                                    }).bindProperty("bindingValue", {
-                                        path: "itemCode",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 20
+                    let editForm: sap.m.Dialog = <any>sap.ui.getCore().byId(this.id + "_editform");
+                    if (!(editForm instanceof sap.m.Dialog)) {
+                        editForm = new sap.m.Dialog(this.id + "_editform", {
+                            title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), data.lineId),
+                            type: sap.m.DialogType.Standard,
+                            state: sap.ui.core.ValueState.None,
+                            stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
+                            horizontalScrolling: true,
+                            verticalScrolling: true,
+                            content: [
+                                new sap.extension.layout.DataSimpleForm("", {
+                                    editable: true,
+                                    userFieldsTitle: "",
+                                    userFieldsMode: "input",
+                                    dataInfo: {
+                                        code: bo.PurchaseDelivery.BUSINESS_OBJECT_CODE,
+                                        name: bo.PurchaseDeliveryItem.name,
+                                    },
+                                    content: [
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_lineid") }),
+                                        new sap.extension.m.Input("", {
+                                            editable: false,
+                                            type: sap.m.InputType.Number
+                                        }).bindProperty("bindingValue", {
+                                            path: "lineId",
+                                            type: new sap.extension.data.Numeric(),
                                         }),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_itemdescription") }),
-                                    new sap.extension.m.Input("", {
-                                        editable: false,
-                                    }).bindProperty("bindingValue", {
-                                        path: "itemDescription",
-                                        type: new sap.extension.data.Alphanumeric()
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_warehouse") }),
-                                    new sap.extension.m.RepositoryInput("", {
-                                        showValueHelp: true,
-                                        repository: materials.bo.BORepositoryMaterials,
-                                        dataInfo: {
-                                            type: materials.bo.Warehouse,
-                                            key: materials.bo.Warehouse.PROPERTY_CODE_NAME,
-                                            text: materials.bo.Warehouse.PROPERTY_NAME_NAME
-                                        },
-                                        valueHelpRequest: function (this: sap.extension.m.Input): void {
-                                            let model: any = this.getModel();
-                                            if (model instanceof sap.extension.model.JSONModel) {
-                                                let data: any = model.getData();
-                                                if (data) {
-                                                    that.fireViewEvents(that.choosePurchaseDeliveryItemWarehouseEvent, data);
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_linestatus") }),
+                                        new sap.extension.m.EnumSelect("", {
+                                            enumType: ibas.emDocumentStatus
+                                        }).bindProperty("bindingValue", {
+                                            path: "lineStatus",
+                                            type: new sap.extension.data.DocumentStatus(),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_itemcode") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (this: sap.extension.m.Input): void {
+                                                let model: any = this.getModel();
+                                                if (model instanceof sap.extension.model.JSONModel) {
+                                                    let data: any = model.getData();
+                                                    if (data) {
+                                                        that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialEvent, data);
+                                                    }
                                                 }
                                             }
-                                        }
-                                    }).bindProperty("bindingValue", {
-                                        path: "warehouse",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 8
-                                        })
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_quantity") }),
-                                    new sap.m.FlexBox("", {
-                                        width: "100%",
-                                        justifyContent: sap.m.FlexJustifyContent.Start,
-                                        renderType: sap.m.FlexRendertype.Bare,
-                                        items: [
-                                            new sap.extension.m.Input("", {
-                                                type: sap.m.InputType.Number
-                                            }).bindProperty("bindingValue", {
-                                                path: "quantity",
-                                                type: new sap.extension.data.Quantity(),
-                                            }).bindProperty("description", {
-                                                path: "uom",
-                                                type: new sap.extension.data.Alphanumeric({
-                                                    maxLength: 8
-                                                }),
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemCode",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 20
                                             }),
-                                            new sap.m.Button("", {
-                                                icon: "sap-icon://tags",
-                                                type: sap.m.ButtonType.Transparent,
-                                                visible: {
-                                                    path: "serialManagement",
-                                                    type: new sap.extension.data.YesNo(),
-                                                },
-                                                press: function (): void {
-                                                    that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialSerialEvent);
-                                                },
-                                            }).addStyleClass("sapUiTinyMarginBegin"),
-                                            new sap.m.Button("", {
-                                                icon: "sap-icon://tags",
-                                                type: sap.m.ButtonType.Transparent,
-                                                visible: {
-                                                    path: "batchManagement",
-                                                    type: new sap.extension.data.YesNo(),
-                                                },
-                                                press: function (): void {
-                                                    that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialBatchEvent);
-                                                },
-                                            }).addStyleClass("sapUiTinyMarginBegin"),
-                                        ]
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_price") }),
-                                    new sap.extension.m.Input("", {
-                                        type: sap.m.InputType.Number
-                                    }).bindProperty("bindingValue", {
-                                        path: "price",
-                                        type: new sap.extension.data.Price(),
-                                    }).bindProperty("description", {
-                                        path: "currency",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 8
                                         }),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_linetotal") }),
-                                    new sap.extension.m.Input("", {
-                                        editable: true,
-                                        type: sap.m.InputType.Number
-                                    }).bindProperty("bindingValue", {
-                                        path: "lineTotal",
-                                        type: new sap.extension.data.Sum(),
-                                    }).bindProperty("description", {
-                                        path: "currency",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 8
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_itemdescription") }),
+                                        new sap.extension.m.Input("", {
+                                            editable: false,
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemDescription",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_tax") }),
-                                    new component.TaxGroupSelect("", {
-                                    }).bindProperty("bindingValue", {
-                                        path: "tax",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 8
-                                        })
-                                    }).bindProperty("rate", {
-                                        path: "taxRate",
-                                        type: new sap.extension.data.Rate()
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_reference1") }),
-                                    new sap.extension.m.Input("", {
-                                    }).bindProperty("bindingValue", {
-                                        path: "reference1",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 100
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_warehouse") }),
+                                        new sap.extension.m.RepositoryInput("", {
+                                            showValueHelp: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.Warehouse,
+                                                key: materials.bo.Warehouse.PROPERTY_CODE_NAME,
+                                                text: materials.bo.Warehouse.PROPERTY_NAME_NAME
+                                            },
+                                            valueHelpRequest: function (this: sap.extension.m.Input): void {
+                                                let model: any = this.getModel();
+                                                if (model instanceof sap.extension.model.JSONModel) {
+                                                    let data: any = model.getData();
+                                                    if (data) {
+                                                        that.fireViewEvents(that.choosePurchaseDeliveryItemWarehouseEvent, data);
+                                                    }
+                                                }
+                                            }
+                                        }).bindProperty("bindingValue", {
+                                            path: "warehouse",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
                                         }),
-                                    }),
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_reference2") }),
-                                    new sap.extension.m.Input("", {
-                                    }).bindProperty("bindingValue", {
-                                        path: "reference2",
-                                        type: new sap.extension.data.Alphanumeric({
-                                            maxLength: 200
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_quantity") }),
+                                        new sap.m.FlexBox("", {
+                                            width: "100%",
+                                            justifyContent: sap.m.FlexJustifyContent.Start,
+                                            renderType: sap.m.FlexRendertype.Bare,
+                                            items: [
+                                                new sap.extension.m.Input("", {
+                                                    type: sap.m.InputType.Number
+                                                }).bindProperty("bindingValue", {
+                                                    path: "quantity",
+                                                    type: new sap.extension.data.Quantity(),
+                                                }).bindProperty("description", {
+                                                    path: "uom",
+                                                    type: new sap.extension.data.Alphanumeric({
+                                                        maxLength: 8
+                                                    }),
+                                                }),
+                                                new sap.m.Button("", {
+                                                    icon: "sap-icon://tags",
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    visible: {
+                                                        path: "serialManagement",
+                                                        type: new sap.extension.data.YesNo(),
+                                                    },
+                                                    press: function (): void {
+                                                        that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialSerialEvent);
+                                                    },
+                                                }).addStyleClass("sapUiTinyMarginBegin"),
+                                                new sap.m.Button("", {
+                                                    icon: "sap-icon://tags",
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    visible: {
+                                                        path: "batchManagement",
+                                                        type: new sap.extension.data.YesNo(),
+                                                    },
+                                                    press: function (): void {
+                                                        that.fireViewEvents(that.choosePurchaseDeliveryItemMaterialBatchEvent);
+                                                    },
+                                                }).addStyleClass("sapUiTinyMarginBegin"),
+                                            ]
                                         }),
-                                    }),
-                                ],
-                            }),
-                        ],
-                        buttons: [
-                            new sap.m.Button("", {
-                                width: "20%",
-                                icon: "sap-icon://arrow-left",
-                                type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            let index: number = datas.indexOf(form.getModel().getData());
-                                            index = index <= 0 ? datas.length - 1 : index - 1;
-                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
-                                        } else {
-                                            that.application.viewShower.messages({
-                                                title: that.title,
-                                                type: ibas.emMessageType.WARNING,
-                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                            });
-                                        }
-                                    }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                width: "20%",
-                                icon: "sap-icon://arrow-right",
-                                type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            let index: number = datas.indexOf(form.getModel().getData());
-                                            index = index >= datas.length - 1 ? 0 : index + 1;
-                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
-                                        } else {
-                                            that.application.viewShower.messages({
-                                                title: that.title,
-                                                type: ibas.emMessageType.WARNING,
-                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                            });
-                                        }
-                                    }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                width: "20%",
-                                text: ibas.i18n.prop("shell_data_remove"),
-                                type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            that.fireViewEvents(that.removePurchaseDeliveryItemEvent, form.getModel().getData());
-                                            if (datas.length === 1) {
-                                                // 无数据，退出
-                                                (<any>editForm.getButtons()[3]).firePress({});
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_price") }),
+                                        new sap.extension.m.Input("", {
+                                            type: sap.m.InputType.Number
+                                        }).bindProperty("bindingValue", {
+                                            path: "price",
+                                            type: new sap.extension.data.Price(),
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            }),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_linetotal") }),
+                                        new sap.extension.m.Input("", {
+                                            editable: true,
+                                            type: sap.m.InputType.Number
+                                        }).bindProperty("bindingValue", {
+                                            path: "lineTotal",
+                                            type: new sap.extension.data.Sum(),
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            }),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_tax") }),
+                                        new component.TaxGroupSelect("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "tax",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
+                                        }).bindProperty("rate", {
+                                            path: "taxRate",
+                                            type: new sap.extension.data.Rate()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_reference1") }),
+                                        new sap.extension.m.Input("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "reference1",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 100
+                                            }),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedeliveryitem_reference2") }),
+                                        new sap.extension.m.Input("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "reference2",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 200
+                                            }),
+                                        }),
+                                    ],
+                                }),
+                            ],
+                            buttons: [
+                                new sap.m.Button("", {
+                                    width: "20%",
+                                    icon: "sap-icon://arrow-left",
+                                    type: sap.m.ButtonType.Transparent,
+                                    press: function (): void {
+                                        let form: any = editForm.getContent()[0];
+                                        if (form instanceof sap.extension.layout.SimpleForm) {
+                                            let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
+                                            if (datas instanceof Array && datas.length > 0) {
+                                                let index: number = datas.indexOf(form.getModel().getData());
+                                                index = index <= 0 ? datas.length - 1 : index - 1;
+                                                form.setModel(new sap.extension.model.JSONModel(datas[index]));
+                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
                                             } else {
-                                                // 下一个
-                                                (<any>editForm.getButtons()[1]).firePress({});
+                                                that.application.viewShower.messages({
+                                                    title: that.title,
+                                                    type: ibas.emMessageType.WARNING,
+                                                    message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+                                                });
                                             }
                                         }
                                     }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                text: ibas.i18n.prop("shell_exit"),
-                                type: sap.m.ButtonType.Transparent,
-                                press(this: sap.m.Button): void {
-                                    if (this.getParent() instanceof sap.m.Dialog) {
-                                        (<sap.m.Dialog>this.getParent()).close();
-                                    } else {
-                                        editForm.close();
+                                }),
+                                new sap.m.Button("", {
+                                    width: "20%",
+                                    icon: "sap-icon://arrow-right",
+                                    type: sap.m.ButtonType.Transparent,
+                                    press: function (): void {
+                                        let form: any = editForm.getContent()[0];
+                                        if (form instanceof sap.extension.layout.SimpleForm) {
+                                            let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
+                                            if (datas instanceof Array && datas.length > 0) {
+                                                let index: number = datas.indexOf(form.getModel().getData());
+                                                index = index >= datas.length - 1 ? 0 : index + 1;
+                                                form.setModel(new sap.extension.model.JSONModel(datas[index]));
+                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_purchasedeliveryitem"), datas[index].lineId));
+                                            } else {
+                                                that.application.viewShower.messages({
+                                                    title: that.title,
+                                                    type: ibas.emMessageType.WARNING,
+                                                    message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+                                                });
+                                            }
+                                        }
                                     }
-                                }
-                            }),
-                        ]
-                    }).addStyleClass("sapUiNoContentPadding");
+                                }),
+                                new sap.m.Button("", {
+                                    width: "20%",
+                                    text: ibas.i18n.prop("shell_data_remove"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    press: function (): void {
+                                        let form: any = editForm.getContent()[0];
+                                        if (form instanceof sap.extension.layout.SimpleForm) {
+                                            let datas: any = that.listPurchaseDeliveryItem.getModel().getData("rows");
+                                            if (datas instanceof Array && datas.length > 0) {
+                                                that.fireViewEvents(that.removePurchaseDeliveryItemEvent, form.getModel().getData());
+                                                if (datas.length === 1) {
+                                                    // 无数据，退出
+                                                    (<any>editForm.getButtons()[3]).firePress({});
+                                                } else {
+                                                    // 下一个
+                                                    (<any>editForm.getButtons()[1]).firePress({});
+                                                }
+                                            }
+                                        }
+                                    }
+                                }),
+                                new sap.m.Button("", {
+                                    text: ibas.i18n.prop("shell_exit"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    press(this: sap.m.Button): void {
+                                        if (this.getParent() instanceof sap.m.Dialog) {
+                                            (<sap.m.Dialog>this.getParent()).close();
+                                        } else {
+                                            editForm.close();
+                                        }
+                                    }
+                                }),
+                            ]
+                        }).addStyleClass("sapUiNoContentPadding");
+                    }
                     editForm.getContent()[0].setModel(new sap.extension.model.JSONModel(data));
                     editForm.open();
+                }
+                protected onClosed(): void {
+                    super.onClosed();
+                    let form: any = sap.ui.getCore().byId(this.id + "_editform");
+                    if (form instanceof sap.m.Dialog) {
+                        form.destroy();
+                    }
                 }
             }
         }
