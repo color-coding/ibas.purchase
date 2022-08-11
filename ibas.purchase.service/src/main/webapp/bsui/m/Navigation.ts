@@ -13,6 +13,8 @@
 /// <reference path="./purchasereturn/index.ts" />
 /// <reference path="./purchasequote/index.ts" />
 /// <reference path="./purchaserequest/index.ts" />
+/// <reference path="./purchasecreditnote/index.ts" />
+/// <reference path="./purchaseinvoice/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
 namespace purchase {
     export namespace ui {
@@ -98,6 +100,30 @@ namespace purchase {
                         break;
                     case app.ShippingAddressesEditApp.APPLICATION_ID:
                         view = new m.ShippingAddressesEditView();
+                        break;
+                    case app.PurchaseInvoiceListApp.APPLICATION_ID:
+                        view = new m.PurchaseInvoiceListView();
+                        break;
+                    case app.PurchaseInvoiceChooseApp.APPLICATION_ID:
+                        view = new m.PurchaseInvoiceChooseView();
+                        break;
+                    case app.PurchaseInvoiceViewApp.APPLICATION_ID:
+                        view = new m.PurchaseInvoiceViewView();
+                        break;
+                    case app.PurchaseInvoiceEditApp.APPLICATION_ID:
+                        view = new m.PurchaseInvoiceEditView();
+                        break;
+                    case app.PurchaseCreditNoteListApp.APPLICATION_ID:
+                        view = new m.PurchaseCreditNoteListView();
+                        break;
+                    case app.PurchaseCreditNoteChooseApp.APPLICATION_ID:
+                        view = new m.PurchaseCreditNoteChooseView();
+                        break;
+                    case app.PurchaseCreditNoteViewApp.APPLICATION_ID:
+                        view = new m.PurchaseCreditNoteViewView();
+                        break;
+                    case app.PurchaseCreditNoteEditApp.APPLICATION_ID:
+                        view = new m.PurchaseCreditNoteEditView();
                         break;
                     default:
                         break;

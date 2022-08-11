@@ -41,6 +41,34 @@ namespace purchase {
                 fileRepository.download("download", caller);
             }
             /**
+             * 查询 采购贷项
+             * @param fetcher 查询者
+             */
+            fetchPurchaseCreditNote(fetcher: ibas.IFetchCaller<bo.PurchaseCreditNote>): void {
+                super.fetch(bo.PurchaseCreditNote.name, fetcher);
+            }
+            /**
+             * 保存 采购贷项
+             * @param saver 保存者
+             */
+            savePurchaseCreditNote(saver: ibas.ISaveCaller<bo.PurchaseCreditNote>): void {
+                super.save(bo.PurchaseCreditNote.name, saver);
+            }
+            /**
+             * 查询 采购发票
+             * @param fetcher 查询者
+             */
+            fetchPurchaseInvoice(fetcher: ibas.IFetchCaller<bo.PurchaseInvoice>): void {
+                super.fetch(bo.PurchaseInvoice.name, fetcher);
+            }
+            /**
+             * 保存 采购发票
+             * @param saver 保存者
+             */
+            savePurchaseInvoice(saver: ibas.ISaveCaller<bo.PurchaseInvoice>): void {
+                super.save(bo.PurchaseInvoice.name, saver);
+            }
+            /**
              * 查询 采购收货
              * @param fetcher 查询者
              */

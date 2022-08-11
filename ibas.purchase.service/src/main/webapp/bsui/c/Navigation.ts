@@ -13,6 +13,8 @@
 /// <reference path="./purchasereturn/index.ts" />
 /// <reference path="./purchasequote/index.ts" />
 /// <reference path="./purchaserequest/index.ts" />
+/// <reference path="./purchasecreditnote/index.ts" />
+/// <reference path="./purchaseinvoice/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
 namespace purchase {
     export namespace ui {
@@ -99,6 +101,30 @@ namespace purchase {
                         break;
                     case app.PurchaseRequestItemExtraApp.APPLICATION_ID:
                         view = new c.PurchaseRequestItemExtraView();
+                        break;
+                    case app.PurchaseInvoiceListApp.APPLICATION_ID:
+                        view = new c.PurchaseInvoiceListView();
+                        break;
+                    case app.PurchaseInvoiceChooseApp.APPLICATION_ID:
+                        view = new c.PurchaseInvoiceChooseView();
+                        break;
+                    case app.PurchaseInvoiceViewApp.APPLICATION_ID:
+                        view = new c.PurchaseInvoiceViewView();
+                        break;
+                    case app.PurchaseInvoiceEditApp.APPLICATION_ID:
+                        view = new c.PurchaseInvoiceEditView();
+                        break;
+                    case app.PurchaseCreditNoteListApp.APPLICATION_ID:
+                        view = new c.PurchaseCreditNoteListView();
+                        break;
+                    case app.PurchaseCreditNoteChooseApp.APPLICATION_ID:
+                        view = new c.PurchaseCreditNoteChooseView();
+                        break;
+                    case app.PurchaseCreditNoteViewApp.APPLICATION_ID:
+                        view = new c.PurchaseCreditNoteViewView();
+                        break;
+                    case app.PurchaseCreditNoteEditApp.APPLICATION_ID:
+                        view = new c.PurchaseCreditNoteEditView();
                         break;
                     default:
                         break;

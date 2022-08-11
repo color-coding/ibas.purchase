@@ -11,6 +11,8 @@
 /// <reference path="./bo/PurchaseReturn.ts" />
 /// <reference path="./bo/PurchaseQuote.ts" />
 /// <reference path="./bo/PurchaseRequest.ts" />
+/// <reference path="./bo/PurchaseInvoice.ts" />
+/// <reference path="./bo/PurchaseCreditNote.ts" />
 /// <reference path="./bo/ShippingAddress.ts" />
 /// <reference path="./DataConverter.ts" />
 /// <reference path="./BORepository.ts" />
@@ -25,6 +27,8 @@ namespace purchase {
         boFactory.register(PurchaseReturn.BUSINESS_OBJECT_CODE, PurchaseReturn);
         boFactory.register(PurchaseQuote.BUSINESS_OBJECT_CODE, PurchaseQuote);
         boFactory.register(PurchaseRequest.BUSINESS_OBJECT_CODE, PurchaseRequest);
+        boFactory.register(PurchaseInvoice.BUSINESS_OBJECT_CODE, PurchaseInvoice);
+        boFactory.register(PurchaseCreditNote.BUSINESS_OBJECT_CODE, PurchaseCreditNote);
         boFactory.register(ShippingAddress.BUSINESS_OBJECT_CODE, ShippingAddress);
     }
 }

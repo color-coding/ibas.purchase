@@ -4,8 +4,12 @@ import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.bobas.repository.BORepositoryServiceApplication;
+import org.colorcoding.ibas.purchase.bo.purchasecreditnote.IPurchaseCreditNote;
+import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoice;
+import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.IPurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.IPurchaseQuote;
@@ -20,6 +24,94 @@ import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
  */
 public class BORepositoryPurchase extends BORepositoryServiceApplication
 		implements IBORepositoryPurchaseSvc, IBORepositoryPurchaseApp {
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购贷项
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseCreditNote> fetchPurchaseCreditNote(ICriteria criteria, String token) {
+		return super.fetch(criteria, token, PurchaseCreditNote.class);
+	}
+
+	/**
+	 * 查询-采购贷项（提前设置用户口令）
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseCreditNote> fetchPurchaseCreditNote(ICriteria criteria) {
+		return new OperationResult<IPurchaseCreditNote>(this.fetchPurchaseCreditNote(criteria, this.getUserToken()));
+	}
+
+	/**
+	 * 保存-采购贷项
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseCreditNote> savePurchaseCreditNote(PurchaseCreditNote bo, String token) {
+		return super.save(bo, token);
+	}
+
+	/**
+	 * 保存-采购贷项（提前设置用户口令）
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseCreditNote> savePurchaseCreditNote(IPurchaseCreditNote bo) {
+		return new OperationResult<IPurchaseCreditNote>(
+				this.savePurchaseCreditNote((PurchaseCreditNote) bo, this.getUserToken()));
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购发票
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseInvoice> fetchPurchaseInvoice(ICriteria criteria, String token) {
+		return super.fetch(criteria, token, PurchaseInvoice.class);
+	}
+
+	/**
+	 * 查询-采购发票（提前设置用户口令）
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseInvoice> fetchPurchaseInvoice(ICriteria criteria) {
+		return new OperationResult<IPurchaseInvoice>(this.fetchPurchaseInvoice(criteria, this.getUserToken()));
+	}
+
+	/**
+	 * 保存-采购发票
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseInvoice> savePurchaseInvoice(PurchaseInvoice bo, String token) {
+		return super.save(bo, token);
+	}
+
+	/**
+	 * 保存-采购发票（提前设置用户口令）
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseInvoice> savePurchaseInvoice(IPurchaseInvoice bo) {
+		return new OperationResult<IPurchaseInvoice>(
+				this.savePurchaseInvoice((PurchaseInvoice) bo, this.getUserToken()));
+	}
 
 	// --------------------------------------------------------------------------------------------//
 	/**

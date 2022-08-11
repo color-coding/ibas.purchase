@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseReturnPurchaseOrderEvent = this.choosePurchaseReturnPurchaseOrder;
                 this.view.choosePurchaseReturnPurchaseDeliveryEvent = this.choosePurchaseReturnPurchaseDelivery;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
+                this.view.turnToPurchaseCreditNoteEvent = this.turnToPurchaseCreditNote;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -666,6 +667,22 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(this.editData.shippingAddresss);
             }
+            protected turnToPurchaseCreditNote(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let target: bo.PurchaseCreditNote = new bo.PurchaseCreditNote();
+                target.supplierCode = this.editData.supplierCode;
+                target.supplierName = this.editData.supplierName;
+                target.baseDocument(this.editData);
+
+                let app: PurchaseCreditNoteEditApp = new PurchaseCreditNoteEditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(target);
+
+            }
 
         }
         /** 视图-采购退货 */
@@ -702,6 +719,8 @@ namespace purchase {
             choosePurchaseReturnPurchaseDeliveryEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
+            /** 转为采购贷项事件 */
+            turnToPurchaseCreditNoteEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }

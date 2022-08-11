@@ -9,7 +9,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
+import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.PurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
@@ -21,6 +23,69 @@ import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
  */
 @Path("data")
 public class DataService extends BORepositoryPurchase {
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购贷项
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("fetchPurchaseCreditNote")
+	public OperationResult<PurchaseCreditNote> fetchPurchaseCreditNote(Criteria criteria,
+			@QueryParam("token") String token) {
+		return super.fetchPurchaseCreditNote(criteria, token);
+	}
+
+	/**
+	 * 保存-采购贷项
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("savePurchaseCreditNote")
+	public OperationResult<PurchaseCreditNote> savePurchaseCreditNote(PurchaseCreditNote bo,
+			@QueryParam("token") String token) {
+		return super.savePurchaseCreditNote(bo, token);
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购发票
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("fetchPurchaseInvoice")
+	public OperationResult<PurchaseInvoice> fetchPurchaseInvoice(Criteria criteria, @QueryParam("token") String token) {
+		return super.fetchPurchaseInvoice(criteria, token);
+	}
+
+	/**
+	 * 保存-采购发票
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("savePurchaseInvoice")
+	public OperationResult<PurchaseInvoice> savePurchaseInvoice(PurchaseInvoice bo, @QueryParam("token") String token) {
+		return super.savePurchaseInvoice(bo, token);
+	}
 
 	// --------------------------------------------------------------------------------------------//
 	/**

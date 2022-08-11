@@ -9,7 +9,9 @@ import javax.xml.bind.JAXBException;
 import org.colorcoding.ibas.bobas.bo.UserFieldProxy;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
+import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.PurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
@@ -29,7 +31,7 @@ public class Resolver implements ContextResolver<JAXBContext> {
 			if (jaxbContext == null) {
 				jaxbContext = JAXBContext.newInstance(Criteria.class, OperationResult.class, UserFieldProxy.class,
 						PurchaseDelivery.class, PurchaseOrder.class, PurchaseReturn.class, PurchaseQuote.class,
-						ShippingAddress.class);
+						ShippingAddress.class, PurchaseCreditNote.class, PurchaseInvoice.class);
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();

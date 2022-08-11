@@ -21,6 +21,31 @@ namespace purchase {
              */
             download(caller: ibas.IDownloadFileCaller<Blob>): void;
             /**
+             * 查询 采购贷项
+             * @param fetcher 查询者
+             */
+            fetchPurchaseCreditNote(fetcher: ibas.IFetchCaller<bo.IPurchaseCreditNote>): void;
+            /**
+             * 保存 采购贷项
+             * @param saver 保存者
+             */
+            savePurchaseCreditNote(saver: ibas.ISaveCaller<bo.IPurchaseCreditNote>): void;
+            /**
+             * 查询 采购发票
+             * @param fetcher 查询者
+             */
+            fetchPurchaseInvoice(fetcher: ibas.IFetchCaller<bo.IPurchaseInvoice>): void;
+            /**
+             * 保存 采购发票
+             * @param saver 保存者
+             */
+            savePurchaseInvoice(saver: ibas.ISaveCaller<bo.IPurchaseInvoice>): void;
+            /**
+             * 查询 采购报价
+             * @param fetcher 查询者
+             */
+            fetchPurchaseQuote(fetcher: ibas.IFetchCaller<bo.IPurchaseQuote>): void;
+            /**
              * 查询 采购收货
              * @param fetcher 查询者
              */

@@ -11,6 +11,8 @@
 /// <reference path="./purchasereturn/index.ts" />
 /// <reference path="./purchasequote/index.ts" />
 /// <reference path="./purchaserequest/index.ts" />
+/// <reference path="./purchaseinvoice/index.ts" />
+/// <reference path="./purchasecreditnote/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
 /// <reference path="./others/index.ts" />
 namespace purchase {
@@ -41,6 +43,8 @@ namespace purchase {
                 this.register(new PurchaseOrderFunc());
                 this.register(new PurchaseDeliveryFunc());
                 this.register(new PurchaseReturnFunc());
+                this.register(new PurchaseInvoiceFunc());
+                this.register(new PurchaseCreditNoteFunc());
                 // 注册服务应用
                 this.register(new PurchaseDeliveryChooseServiceMapping());
                 this.register(new PurchaseDeliveryLinkServiceMapping());
@@ -57,6 +61,12 @@ namespace purchase {
                 this.register(new PurchaseRequestChooseServiceMapping());
                 this.register(new PurchaseRequestLinkServiceMapping());
                 this.register(new PurchaseRequestEditServiceMapping());
+                this.register(new PurchaseInvoiceChooseServiceMapping());
+                this.register(new PurchaseInvoiceLinkServiceMapping());
+                this.register(new PurchaseInvoiceEditServiceMapping());
+                this.register(new PurchaseCreditNoteChooseServiceMapping());
+                this.register(new PurchaseCreditNoteLinkServiceMapping());
+                this.register(new PurchaseCreditNoteEditServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 this.register(new PurchaseReturnReceiptServiceMapping());

@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseDeliveryPurchaseOrderEvent = this.choosePurchaseDeliveryPurchaseOrder;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
+                this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -682,6 +683,23 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(target);
             }
+            /** 转为采购发票 */
+            protected turnToPurchaseInvoice(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
+                target.supplierCode = this.editData.supplierCode;
+                target.supplierName = this.editData.supplierName;
+                target.baseDocument(this.editData);
+
+                let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(target);
+
+            }
         }
         /** 视图-采购收货 */
         export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
@@ -717,6 +735,8 @@ namespace purchase {
             editShippingAddressesEvent: Function;
             /** 转为采购退货事件 */
             turnToPurchaseReturnEvent: Function;
+            /** 转为采购发票事件 */
+            turnToPurchaseInvoiceEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

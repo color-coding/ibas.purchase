@@ -3,7 +3,9 @@ package org.colorcoding.ibas.purchase.repository;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.repository.IBORepositoryApplication;
+import org.colorcoding.ibas.purchase.bo.purchasecreditnote.IPurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.IPurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.IPurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.IPurchaseRequest;
@@ -13,6 +15,39 @@ import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturn;
  * Purchase仓库应用
  */
 public interface IBORepositoryPurchaseApp extends IBORepositoryApplication {
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购贷项
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseCreditNote> fetchPurchaseCreditNote(ICriteria criteria);
+
+	/**
+	 * 保存-采购贷项
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseCreditNote> savePurchaseCreditNote(IPurchaseCreditNote bo);
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购发票
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseInvoice> fetchPurchaseInvoice(ICriteria criteria);
+
+	/**
+	 * 保存-采购发票
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseInvoice> savePurchaseInvoice(IPurchaseInvoice bo);
 
 	// --------------------------------------------------------------------------------------------//
 	/**

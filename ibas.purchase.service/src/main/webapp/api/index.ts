@@ -11,5 +11,7 @@
 /// <reference path="./bo/PurchaseReturn.ts" />
 /// <reference path="./bo/PurchaseQuote.ts" />
 /// <reference path="./bo/PurchaseRequest.ts" />
+/// <reference path="./bo/PurchaseInvoice.ts" />
+/// <reference path="./bo/PurchaseCreditNote.ts" />
 /// <reference path="./bo/ShippingAddress.ts" />
 /// <reference path="./BORepository.ts" />

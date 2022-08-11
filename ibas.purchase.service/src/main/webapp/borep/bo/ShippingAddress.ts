@@ -450,7 +450,7 @@ namespace purchase {
 
         /** 送货地址 集合 */
         export class ShippingAddresss
-            extends ibas.BusinessObjects<ShippingAddress, IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn> implements IShippingAddresss {
+            extends ibas.BusinessObjects<ShippingAddress, IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseInvoice | IPurchaseCreditNote> implements IShippingAddresss {
 
             /** 创建并添加子项 */
             create(): ShippingAddress {

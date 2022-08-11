@@ -40,6 +40,10 @@ namespace purchase {
         export const BO_CODE_PURCHASEQUOTE: string = "${Company}_PH_PURCHQUOTE";
         /** 业务对象编码-采购申请 */
         export const BO_CODE_PURCHASEREQUEST: string = "${Company}_PH_PURCHREQUEST";
+        /** 业务对象编码-采购贷项 */
+        export const BO_CODE_PURCHASECREDITNOTE: string = "${Company}_PH_PURCHASECREDIT";
+        /** 业务对象编码-采购发票 */
+        export const BO_CODE_PURCHASEINVOICE: string = "${Company}_PH_PURCHASEINVOICE";
 
         /** 运输状态 */
         export enum emShippingStatus {
