@@ -393,6 +393,7 @@
         "bo_purchaseorder_remarks": "备注",
         "bo_purchaseorder_referenced": "已引用",
         "bo_purchaseorder_deleted": "已删除",
+        "bo_purchaseorder_supplier": "供应商",
         "bo_purchaseorder_suppliercode": "供应商代码",
         "bo_purchaseorder_suppliername": "供应商名称",
         "bo_purchaseorder_contactperson": "联系人",

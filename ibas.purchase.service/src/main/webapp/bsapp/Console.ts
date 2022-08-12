@@ -45,6 +45,7 @@ namespace purchase {
                 this.register(new PurchaseReturnFunc());
                 this.register(new PurchaseInvoiceFunc());
                 this.register(new PurchaseCreditNoteFunc());
+                this.register(new PurchasingAssistantFunc());
                 // 注册服务应用
                 this.register(new PurchaseDeliveryChooseServiceMapping());
                 this.register(new PurchaseDeliveryLinkServiceMapping());

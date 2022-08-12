@@ -51,6 +51,9 @@ namespace purchase {
                     case app.PurchaseOrderViewApp.APPLICATION_ID:
                         view = new c.PurchaseOrderViewView();
                         break;
+                    case app.PurchasingAssistantApp.APPLICATION_ID:
+                        view = new c.PurchasingAssistantView();
+                        break;
                     case app.PurchaseOrderEditApp.APPLICATION_ID:
                         view = new c.PurchaseOrderEditView();
                         break;

@@ -11,3 +11,4 @@
 /// <reference path="./PurchaseOrderListApp.ts" />
 /// <reference path="./PurchaseOrderViewApp.ts" />
 /// <reference path="./PurchaseOrderItemExtraApp.ts" />
+/// <reference path="./PurchasingAssistantApp.ts" />
