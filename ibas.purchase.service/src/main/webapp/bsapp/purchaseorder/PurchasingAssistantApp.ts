@@ -310,30 +310,43 @@ namespace purchase {
                 }
                 let purchaseItem: bo.PurchaseOrderItem = null;
                 for (let item of orderItems) {
+                    if (item.orderedQuantity >= item.quantity) {
+                        continue;
+                    }
                     if (merge === true) {
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(c => ibas.strings.equals(c.itemCode, item.itemCode));
+                    } else {
+                        purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(
+                            c => ibas.strings.equals(c.baseDocumentType, item.objectCode)
+                                && c.baseDocumentEntry === item.docEntry
+                                && c.baseDocumentLineId === item.lineId
+                        );
                     }
                     if (ibas.objects.isNull(purchaseItem)) {
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.create();
                         purchaseItem.itemCode = item.itemCode;
                         purchaseItem.itemDescription = item.itemDescription;
-                        purchaseItem.baseDocumentType = item.objectCode;
-                        purchaseItem.baseDocumentEntry = item.docEntry;
-                        purchaseItem.baseDocumentLineId = item.lineId;
-                        purchaseItem.originalDocumentType = item.baseDocumentType;
-                        purchaseItem.originalDocumentEntry = item.baseDocumentEntry;
-                        purchaseItem.originalDocumentLineId = item.baseDocumentLineId;
+                        if (merge !== true) {
+                            purchaseItem.baseDocumentType = item.objectCode;
+                            purchaseItem.baseDocumentEntry = item.docEntry;
+                            purchaseItem.baseDocumentLineId = item.lineId;
+                            purchaseItem.originalDocumentType = item.baseDocumentType;
+                            purchaseItem.originalDocumentEntry = item.baseDocumentEntry;
+                            purchaseItem.originalDocumentLineId = item.baseDocumentLineId;
+                        }
                         purchaseItem.batchManagement = item.batchManagement;
                         purchaseItem.serialManagement = item.serialManagement;
                         purchaseItem.reference1 = item.reference1;
                         purchaseItem.reference2 = item.reference2;
                     }
-                    purchaseItem.quantity = purchaseItem.quantity > 0 ? purchaseItem.quantity + item.quantity : item.quantity;
+                    purchaseItem.quantity = purchaseItem.quantity > 0 ?
+                        purchaseItem.quantity + (item.quantity - item.orderedQuantity) : (item.quantity - item.orderedQuantity);
                     purchaseItem.uom = item.uom;
                     purchaseItem.warehouse = item.warehouse;
                     if (ibas.strings.isEmpty(purchaseItem.warehouse)) {
                         purchaseItem.warehouse = this.view.defaultWarehouse;
                     }
+                    item.orderedQuantity += purchaseItem.quantity;
                 }
                 this.view.showPurchaseOrderItems(this.purchaseOrder.purchaseOrderItems.filterDeleted());
                 if (this.purchaseOrder.priceList > 0) {

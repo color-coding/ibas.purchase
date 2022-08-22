@@ -38,6 +38,8 @@ import org.colorcoding.ibas.purchase.logic.IPurchaseRequestClosingContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
+import org.colorcoding.ibas.sales.bo.salesorder.SalesOrder;
+import org.colorcoding.ibas.sales.logic.ISalesOrderOrderContract;
 
 /**
  * 获取-采购订单-行
@@ -2259,7 +2261,7 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(2);
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(3);
 		if (this.getLineStatus() == emDocumentStatus.RELEASED) {
 			// 物料已订购数量
 			contracts.add(new IMaterialOrderedJournalContract() {
@@ -2330,6 +2332,37 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 			}
 
 		});
+		// 销售订单订购数量
+		if (MyConfiguration.applyVariables(SalesOrder.BUSINESS_OBJECT_CODE)
+				.equalsIgnoreCase(this.getBaseDocumentType())) {
+			contracts.add(new ISalesOrderOrderContract() {
+
+				@Override
+				public String getIdentifiers() {
+					return PurchaseOrderItem.this.getIdentifiers();
+				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseOrderItem.this.getBaseDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseOrderItem.this.getBaseDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseOrderItem.this.getBaseDocumentLineId();
+				}
+
+				@Override
+				public BigDecimal getQuantity() {
+					return PurchaseOrderItem.this.getQuantity();
+				}
+			});
+		}
 		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 }

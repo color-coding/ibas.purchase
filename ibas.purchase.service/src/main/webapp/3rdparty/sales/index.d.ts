@@ -664,6 +664,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 已订购数量 */
+            orderedQuantity: number;
             /** 销售订单-行-额外信息集合 */
             salesOrderItemExtras: ISalesOrderItemExtras;
             /** 赋值产品 */
@@ -3712,6 +3714,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-已订购数量 */
+            static PROPERTY_ORDEREDQUANTITY_NAME: string;
+            /** 获取-已订购数量 */
+            get orderedQuantity(): number;
+            /** 设置-已订购数量 */
+            set orderedQuantity(value: number);
             /** 映射的属性名称-销售订单-行-额外信息集合 */
             static PROPERTY_SALESORDERITEMEXTRAS_NAME: string;
             /** 获取-销售订单-行-额外信息集合 */

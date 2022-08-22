@@ -42,6 +42,7 @@ namespace purchase {
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
                 this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
+                this.view.turnToSalesDeliveryEvent = this.turnToSalesDelivery;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -700,6 +701,128 @@ namespace purchase {
                 app.run(target);
 
             }
+            /** 转为销售交货 */
+            protected turnToSalesDelivery(salesOrders?: ibas.IList<sales.bo.SalesOrder>): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                if (salesOrders instanceof Array) {
+                    let target: sales.bo.SalesDelivery = new sales.bo.SalesDelivery();
+
+                    for (let item of this.editData.purchaseDeliveryItems) {
+                        let sItem: sales.bo.SalesDeliveryItem = target.salesDeliveryItems.create();
+                        sItem.itemCode = item.itemCode;
+                        sItem.itemDescription = item.itemDescription;
+                        sItem.itemSign = item.itemSign;
+                        sItem.quantity = item.quantity;
+                        sItem.warehouse = item.warehouse;
+                        sItem.uom = item.uom;
+                        let order: sales.bo.SalesOrder = salesOrders.firstOrDefault(
+                            c => !ibas.strings.isEmpty(item.originalDocumentType)
+                                && ibas.strings.equalsIgnoreCase(item.originalDocumentType, c.objectCode)
+                                && c.docEntry === item.originalDocumentEntry);
+                        if (!ibas.objects.isNull(order)) {
+                            if (ibas.strings.isEmpty(target.customerCode)) {
+                                target.customerCode = order.customerCode;
+                            }
+                            if (ibas.strings.isEmpty(target.customerName)) {
+                                target.customerName = order.customerName;
+                            }
+                            if (!(target.contactPerson > 0)) {
+                                target.contactPerson = order.contactPerson;
+                            }
+                            sItem.baseDocumentType = item.originalDocumentType;
+                            sItem.baseDocumentEntry = item.originalDocumentEntry;
+                            sItem.baseDocumentLineId = item.originalDocumentLineId;
+
+                            let orderItem: sales.bo.SalesOrderItem = order.salesOrderItems.firstOrDefault(
+                                c => c.lineId === item.originalDocumentLineId);
+                            if (!ibas.objects.isNull(orderItem)) {
+                                sItem.originalDocumentType = orderItem.baseDocumentType;
+                                sItem.originalDocumentEntry = orderItem.baseDocumentEntry;
+                                sItem.originalDocumentLineId = orderItem.baseDocumentLineId;
+
+                                sItem.unitPrice = orderItem.unitPrice;
+                                sItem.discount = orderItem.discount;
+                                sItem.tax = orderItem.tax;
+                                sItem.taxRate = orderItem.taxRate;
+                                sItem.price = orderItem.price;
+                                sItem.currency = orderItem.currency;
+                                if (!(orderItem.closedQuantity > 0)) {
+                                    sItem.preTaxLineTotal = orderItem.preTaxLineTotal;
+                                    sItem.taxTotal = orderItem.taxTotal;
+                                    sItem.lineTotal = orderItem.lineTotal;
+                                }
+                                sItem.reference1 = orderItem.reference1;
+                                sItem.reference2 = orderItem.reference2;
+                                // 复制自定义字段
+                                for (let uItem of orderItem.userFields.forEach()) {
+                                    let myItem: ibas.IUserField = sItem.userFields.get(uItem.name);
+                                    if (ibas.objects.isNull(myItem)) {
+                                        myItem = sItem.userFields.register(uItem.name, uItem.valueType);
+                                        // continue;
+                                    }
+                                    if (myItem.valueType !== uItem.valueType) {
+                                        continue;
+                                    }
+                                    myItem.value = uItem.value;
+                                }
+                                // 复制批次
+                                for (let batch of orderItem.materialBatches) {
+                                    let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
+                                    myBatch.batchCode = batch.batchCode;
+                                    myBatch.quantity = batch.quantity;
+                                }
+                                // 复制序列
+                                for (let serial of orderItem.materialSerials) {
+                                    let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
+                                    mySerial.serialCode = serial.serialCode;
+                                }
+                            }
+                        }
+                    }
+                    ibas.servicesManager.runEditService({
+                        boCode: target.objectCode,
+                        editData: target,
+                        onCompleted: (result) => {
+                        }
+                    });
+                } else {
+                    let condition: ibas.ICondition = null;
+                    let sCriteria: ibas.ICriteria = new ibas.Criteria();
+                    for (let item of this.editData.purchaseDeliveryItems) {
+                        if (!ibas.strings.equalsIgnoreCase(
+                            item.originalDocumentType, ibas.config.applyVariables(sales.bo.SalesOrder.BUSINESS_OBJECT_CODE))) {
+                            continue;
+                        }
+                        condition = sCriteria.conditions.create();
+                        condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
+                        condition.value = item.originalDocumentEntry.toString();
+                        if (sCriteria.conditions.length > 0) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (sCriteria.conditions.length === 0) {
+                        this.turnToSalesDelivery(new ibas.ArrayList<sales.bo.SalesOrder>());
+                    } else {
+                        let boRepository: sales.bo.BORepositorySales = new sales.bo.BORepositorySales();
+                        boRepository.fetchSalesOrder({
+                            criteria: sCriteria,
+                            onCompleted: (opRslt) => {
+                                try {
+                                    if (opRslt.resultCode !== 0) {
+                                        throw new Error(opRslt.message);
+                                    }
+                                    this.turnToSalesDelivery(opRslt.resultObjects);
+                                } catch (error) {
+                                    this.messages(error);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         }
         /** 视图-采购收货 */
         export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
@@ -737,6 +860,8 @@ namespace purchase {
             turnToPurchaseReturnEvent: Function;
             /** 转为采购发票事件 */
             turnToPurchaseInvoiceEvent: Function;
+            /** 转为销售交货 */
+            turnToSalesDeliveryEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

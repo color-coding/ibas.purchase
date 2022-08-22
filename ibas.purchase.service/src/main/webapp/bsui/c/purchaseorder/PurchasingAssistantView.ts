@@ -167,7 +167,6 @@ namespace purchase {
                                     }),
                                     new sap.m.Toolbar("", {
                                         content: [
-                                            new sap.m.ToolbarSpacer(),
                                             new sap.m.Title("", {
                                                 width: "8rem",
                                                 text: ibas.i18n.prop("purchase_assistant_order_type")
@@ -201,6 +200,10 @@ namespace purchase {
                                                     })
                                                 ]
                                             }),
+                                            this.checkOrdered = new sap.m.CheckBox("", {
+                                                text: ibas.i18n.prop("purchase_assistant_filter_ordered"),
+                                                selected: true,
+                                            })
                                         ]
                                     })
                                 ]
@@ -305,6 +308,22 @@ namespace purchase {
                                                         condition.relationship = ibas.emConditionRelationship.OR;
                                                     }
                                                 }
+                                            }
+                                            // 已订购筛选
+                                            if (that.checkOrdered.getSelected() === true) {
+                                                if (ibas.objects.isNull(childCriteria)) {
+                                                    childCriteria = criteria.childCriterias.create();
+                                                    childCriteria.propertyPath = sales.bo.SalesOrder.PROPERTY_SALESORDERITEMS_NAME;
+                                                    childCriteria.onlyHasChilds = true;
+                                                }
+                                                if (childCriteria.conditions.length > 1) {
+                                                    childCriteria.conditions.firstOrDefault().bracketOpen += 1;
+                                                    childCriteria.conditions.lastOrDefault().bracketClose += 1;
+                                                }
+                                                condition = childCriteria.conditions.create();
+                                                condition.alias = sales.bo.SalesOrderItem.PROPERTY_ORDEREDQUANTITY_NAME;
+                                                condition.operation = ibas.emConditionOperation.LESS_THAN;
+                                                condition.comparedAlias = sales.bo.SalesOrderItem.PROPERTY_QUANTITY_NAME;
                                             }
                                             that.fireViewEvents(that.fetchSalesOrderEvent, criteria);
                                         }
@@ -454,6 +473,7 @@ namespace purchase {
                                                                                             return ibas.strings.format("{1} ({0})", code, name);
                                                                                         }
                                                                                     }),
+                                                                                    new sap.m.ToolbarSpacer(""),
                                                                                     new sap.m.GenericTag("", {
                                                                                         design: sap.m.GenericTagDesign.StatusIconHidden,
                                                                                         text: ibas.i18n.prop("purchase_assistant_order_date"),
@@ -544,7 +564,6 @@ namespace purchase {
                                                                                             return sap.ui.core.ValueState.Error;
                                                                                         }
                                                                                     }),
-                                                                                    new sap.m.ToolbarSpacer(),
                                                                                     new sap.m.Button("", {
                                                                                         // type: sap.m.ButtonType.Attention,
                                                                                         text: ibas.i18n.prop("purchase_assistant_view_details"),
@@ -587,19 +606,16 @@ namespace purchase {
                                                                                             }
                                                                                         },
                                                                                         content: [
-                                                                                            new sap.m.HBox("", {
-                                                                                                alignItems: sap.m.FlexAlignItems.Center,
-                                                                                                alignContent: sap.m.FlexAlignContent.Center,
-                                                                                                justifyContent: sap.m.FlexJustifyContent.Start,
-                                                                                                items: [
-                                                                                                    new sap.m.Label("", {
+                                                                                            new sap.m.Toolbar("", {
+                                                                                                content: [
+                                                                                                    new sap.m.ObjectAttribute("", {
                                                                                                     }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
                                                                                                         path: "lineId",
                                                                                                         formatter(data: number): string {
                                                                                                             return data ? ibas.strings.format("{0}.", data) : undefined;
                                                                                                         }
                                                                                                     }),
-                                                                                                    new sap.m.Label("", {
+                                                                                                    new sap.m.ObjectAttribute("", {
                                                                                                     }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
                                                                                                         parts: [
                                                                                                             {
@@ -613,20 +629,43 @@ namespace purchase {
                                                                                                             return ibas.strings.format("{1} ({0})", code, name);
                                                                                                         }
                                                                                                     }),
-                                                                                                    new sap.m.Label("", {
-                                                                                                    }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
-                                                                                                        parts: [
-                                                                                                            {
-                                                                                                                path: "quantity",
-                                                                                                                type: new sap.extension.data.Quantity()
-                                                                                                            },
-                                                                                                            {
-                                                                                                                path: "uom",
-                                                                                                                type: new sap.extension.data.Alphanumeric()
+                                                                                                    new sap.m.ObjectAttribute("", {
+                                                                                                        text: "×",
+                                                                                                    }).addStyleClass("sapUiTinyMarginBegin"),
+                                                                                                    new sap.m.ObjectNumber("", {
+                                                                                                        number: {
+                                                                                                            path: "quantity",
+                                                                                                            type: new sap.extension.data.Quantity()
+                                                                                                        },
+                                                                                                        unit: {
+                                                                                                            path: "uom",
+                                                                                                            type: new sap.extension.data.Alphanumeric()
+                                                                                                        }
+                                                                                                    }).addStyleClass("sapUiTinyMarginBegin"),
+                                                                                                    new sap.m.ToolbarSpacer(""),
+                                                                                                    new sap.m.ObjectAttribute("", {
+                                                                                                        text: ibas.i18n.prop("purchase_assistant_order_quantity")
+                                                                                                    }),
+                                                                                                    new sap.m.ObjectNumber("", {
+                                                                                                        number: {
+                                                                                                            parts: [
+                                                                                                                {
+                                                                                                                    path: "quantity",
+                                                                                                                    type: new sap.extension.data.Quantity()
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    path: "orderedQuantity",
+                                                                                                                    type: new sap.extension.data.Quantity()
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            formatter(quantity: number, orderedQuantity: number): string {
+                                                                                                                return String((quantity - orderedQuantity) > 0
+                                                                                                                    ? (quantity - orderedQuantity) : 0);
                                                                                                             }
-                                                                                                        ],
-                                                                                                        formatter(code: string, name: string): string {
-                                                                                                            return ibas.strings.format("× {0} {1}", code, name);
+                                                                                                        },
+                                                                                                        unit: {
+                                                                                                            path: "uom",
+                                                                                                            type: new sap.extension.data.Alphanumeric()
                                                                                                         }
                                                                                                     }),
                                                                                                 ]
@@ -678,7 +717,28 @@ namespace purchase {
                                                         new sap.m.ToolbarSpacer(),
                                                         that.checkMerge = new sap.m.CheckBox("", {
                                                             text: ibas.i18n.prop("purchase_assistant_merge_purchasing"),
-                                                            selected: true,
+                                                            selected: false,
+                                                            select(event: sap.ui.base.Event): void {
+                                                                let source: any = event.getSource();
+                                                                if (source instanceof sap.m.CheckBox && source.getSelected() === true) {
+                                                                    that.application.viewShower.messages({
+                                                                        title: that.title,
+                                                                        type: ibas.emMessageType.WARNING,
+                                                                        message: ibas.i18n.prop("purchase_merge_purchasing_will_be_lost_association_relationship_continue"),
+                                                                        actions: [
+                                                                            ibas.emMessageAction.YES,
+                                                                            ibas.emMessageAction.NO,
+                                                                        ],
+                                                                        onCompleted: (reslut) => {
+                                                                            if (reslut === ibas.emMessageAction.NO) {
+                                                                                if (source instanceof sap.m.CheckBox) {
+                                                                                    source.setSelected(false);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
                                                         }),
                                                         new sap.m.ToolbarSeparator(),
                                                         new sap.m.Button("", {
@@ -917,6 +977,7 @@ namespace purchase {
                 private inputDateTo: sap.m.DatePicker;
                 private checkSuppiler: sap.m.CheckBox;
                 private checkMerge: sap.m.CheckBox;
+                private checkOrdered: sap.m.CheckBox;
                 private selectType: sap.m.Select;
                 private selectPaid: sap.m.Select;
 
@@ -936,7 +997,7 @@ namespace purchase {
                 /** 显示销售订单 */
                 showSalesOrders(datas: sales.bo.SalesOrder[]): void {
                     let model: sap.extension.model.JSONModel = this.leftOrder.getModel();
-                    if (model?.getData() instanceof Array) {
+                    if (model?.getData() instanceof Array && (<Array<any>>model?.getData()).length < datas.length) {
                         let mDatas: sales.bo.SalesOrder[] = model.getData();
                         if (mDatas.length > 0) {
                             mDatas.splice(0, mDatas.length);
@@ -946,6 +1007,7 @@ namespace purchase {
                         }
                         model.refresh(true);
                     } else {
+                        this.leftOrder.destroyItems();
                         this.leftOrder.setModel(new sap.extension.model.JSONModel(datas));
                     }
                 }
@@ -956,6 +1018,10 @@ namespace purchase {
                 /** 显示采购订单 */
                 showPurchaseOrderItems(datas: bo.PurchaseOrderItem[]): void {
                     this.rightOrder.setModel(new sap.extension.model.JSONModel(datas));
+                    let model: sap.extension.model.JSONModel = this.leftOrder.getModel();
+                    if (model instanceof sap.extension.model.JSONModel) {
+                        model.refresh(false);
+                    }
                 }
                 /** 添加采购订单编辑链接 */
                 addPurchaseOrderEditLink(data: bo.PurchaseOrder): void {

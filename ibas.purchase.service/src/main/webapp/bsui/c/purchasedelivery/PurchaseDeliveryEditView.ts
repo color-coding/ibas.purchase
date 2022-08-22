@@ -44,6 +44,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseInvoiceEvent: Function;
+                /** 转为销售交货 */
+                turnToSalesDeliveryEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -668,6 +670,12 @@ namespace purchase {
                                                 text: ibas.i18n.prop("bo_purchaseinvoice"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.turnToPurchaseInvoiceEvent);
+                                                }
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_salesdelivery"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.turnToSalesDeliveryEvent);
                                                 }
                                             }),
                                         ],

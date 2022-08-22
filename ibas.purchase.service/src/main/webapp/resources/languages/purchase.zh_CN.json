@@ -77,7 +77,9 @@
   "purchase_assistant_order_paid_none": "无限制",
   "purchase_assistant_order_paid_part": "部分付款",
   "purchase_assistant_order_paid_full": "全部付款",
+  "purchase_assistant_order_quantity": "待采:",
   "purchase_assistant_filter_supplier": "筛选供应商",
+  "purchase_assistant_filter_ordered": "筛选已订购",
   "purchase_assistant_edit_details": "编辑详情",
   "purchase_assistant_view_details": "查看详情",
   "purchase_assistant_merge_purchasing": "合并采购项目",
@@ -88,5 +90,6 @@
   "purchase_remove_base_items_continue": "此操作会移出基于的行项目，是否继续？",
   "purchase_change_item_warehouse_continue": "是否更改单据行的仓库为[{0}]？",
   "purchase_change_item_price_continue": "价格清单已更新，是否更改单据行的价格？",
+  "purchase_merge_purchasing_will_be_lost_association_relationship_continue": "合并采购将丢失与销售订单的关联，是否继续？",
   "purchase_closing_delimiter": "----结束----"
 }

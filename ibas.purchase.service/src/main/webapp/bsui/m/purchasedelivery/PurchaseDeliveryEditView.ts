@@ -42,6 +42,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseInvoiceEvent: Function;
+                /** 转为销售交货 */
+                turnToSalesDeliveryEvent: Function;
                 defaultWarehouse: string;
                 defaultTaxGroup: string;
                 /** 绘制视图 */
@@ -187,6 +189,13 @@ namespace purchase {
                                                     text: ibas.i18n.prop("bo_purchaseinvoice"),
                                                     press: function (): void {
                                                         that.fireViewEvents(that.turnToPurchaseInvoiceEvent);
+                                                    }
+                                                }),
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_salesdelivery"),
+                                                    press: function (): void {
+                                                        that.fireViewEvents(that.turnToSalesDeliveryEvent);
                                                     }
                                                 }),
                                             ]
