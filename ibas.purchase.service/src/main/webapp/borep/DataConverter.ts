@@ -111,6 +111,14 @@ namespace purchase {
                     if (property === bo.ShippingAddress.PROPERTY_SHIPPINGSTATUS_NAME) {
                         return ibas.enums.toString(emShippingStatus, value);
                     }
+                } else if (boName === bo.BlanketAgreement.name) {
+                    if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTMETHOD_NAME) {
+                        return ibas.enums.toString(emAgreementMethod, value);
+                    } else if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTTYPE_NAME) {
+                        return ibas.enums.toString(emAgreementType, value);
+                    } else if (property === bo.BlanketAgreement.PROPERTY_PRICEMODE_NAME) {
+                        return ibas.enums.toString(emPriceMode, value);
+                    }
                 }
                 return super.convertData(boName, property, value);
             }
@@ -190,6 +198,14 @@ namespace purchase {
                 } else if (boName === bo.ShippingAddress.name) {
                     if (property === bo.ShippingAddress.PROPERTY_SHIPPINGSTATUS_NAME) {
                         return ibas.enums.valueOf(emShippingStatus, value);
+                    }
+                } else if (boName === bo.BlanketAgreement.name) {
+                    if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTMETHOD_NAME) {
+                        return ibas.enums.valueOf(emAgreementMethod, value);
+                    } else if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTTYPE_NAME) {
+                        return ibas.enums.valueOf(emAgreementType, value);
+                    } else if (property === bo.BlanketAgreement.PROPERTY_PRICEMODE_NAME) {
+                        return ibas.enums.valueOf(emPriceMode, value);
                     }
                 }
                 return super.parsingData(boName, property, value);

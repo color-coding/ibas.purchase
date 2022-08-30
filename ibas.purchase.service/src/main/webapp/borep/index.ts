@@ -14,6 +14,7 @@
 /// <reference path="./bo/PurchaseInvoice.ts" />
 /// <reference path="./bo/PurchaseCreditNote.ts" />
 /// <reference path="./bo/ShippingAddress.ts" />
+/// <reference path="./bo/BlanketAgreement.ts" />
 /// <reference path="./DataConverter.ts" />
 /// <reference path="./BORepository.ts" />
 
@@ -30,5 +31,6 @@ namespace purchase {
         boFactory.register(PurchaseInvoice.BUSINESS_OBJECT_CODE, PurchaseInvoice);
         boFactory.register(PurchaseCreditNote.BUSINESS_OBJECT_CODE, PurchaseCreditNote);
         boFactory.register(ShippingAddress.BUSINESS_OBJECT_CODE, ShippingAddress);
+        boFactory.register(BlanketAgreement.BUSINESS_OBJECT_CODE, BlanketAgreement);
     }
 }

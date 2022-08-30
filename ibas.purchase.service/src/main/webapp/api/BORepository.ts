@@ -98,6 +98,16 @@ namespace purchase {
              * @param saver 保存者
              */
             savePurchaseRequest(saver: ibas.ISaveCaller<bo.IPurchaseRequest>): void;
+            /**
+             * 查询 一揽子协议
+             * @param fetcher 查询者
+             */
+            fetchBlanketAgreement(fetcher: ibas.IFetchCaller<bo.IBlanketAgreement>): void;
+            /**
+             * 保存 一揽子协议
+             * @param saver 保存者
+             */
+            saveBlanketAgreement(saver: ibas.ISaveCaller<bo.IBlanketAgreement>): void;
 
         }
     }

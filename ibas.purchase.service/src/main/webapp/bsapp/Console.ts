@@ -14,6 +14,7 @@
 /// <reference path="./purchaseinvoice/index.ts" />
 /// <reference path="./purchasecreditnote/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
+/// <reference path="./blanketagreement/index.ts" />
 /// <reference path="./others/index.ts" />
 namespace purchase {
     export namespace app {
@@ -38,6 +39,7 @@ namespace purchase {
             /** 初始化 */
             protected registers(): void {
                 // 注册功能
+                this.register(new BlanketAgreementFunc());
                 this.register(new PurchaseRequestFunc());
                 this.register(new PurchaseQuoteFunc());
                 this.register(new PurchaseOrderFunc());
@@ -68,6 +70,8 @@ namespace purchase {
                 this.register(new PurchaseCreditNoteChooseServiceMapping());
                 this.register(new PurchaseCreditNoteLinkServiceMapping());
                 this.register(new PurchaseCreditNoteEditServiceMapping());
+                this.register(new BlanketAgreementChooseServiceMapping());
+                this.register(new BlanketAgreementLinkServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 this.register(new PurchaseReturnReceiptServiceMapping());

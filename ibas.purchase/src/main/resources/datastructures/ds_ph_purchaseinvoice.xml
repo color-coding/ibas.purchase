@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Domain>
-<Domain Name="Purchase" ShortName="SL">
+<Domain Name="Purchase" ShortName="PH">
   <Model Name="PurchaseInvoice" Description="采购发票" ModelType="Document" Mapped="${Company}_PH_OINV">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
     <Property Name="DocNum" Description="期间编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocNum"/>

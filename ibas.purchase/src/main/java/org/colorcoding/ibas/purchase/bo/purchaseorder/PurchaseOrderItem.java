@@ -34,6 +34,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.logic.IMaterialOrderedJournalContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseRequestClosingContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2261,7 +2262,7 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(3);
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(4);
 		if (this.getLineStatus() == emDocumentStatus.RELEASED) {
 			// 物料已订购数量
 			contracts.add(new IMaterialOrderedJournalContract() {
@@ -2332,6 +2333,42 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 			}
 
 		});
+		// 一揽子协议
+		contracts.add(new IBlanketAgreementQuantityContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public BigDecimal getQuantity() {
+				return PurchaseOrderItem.this.getQuantity();
+			}
+
+			@Override
+			public BigDecimal getAmount() {
+				return PurchaseOrderItem.this.getLineTotal();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseOrderItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseOrderItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseOrderItem.this.getBaseDocumentLineId();
+			}
+
+		}
+
+		);
 		// 销售订单订购数量
 		if (MyConfiguration.applyVariables(SalesOrder.BUSINESS_OBJECT_CODE)
 				.equalsIgnoreCase(this.getBaseDocumentType())) {

@@ -28,6 +28,8 @@ namespace purchase {
                 choosePurchaseQuoteItemMaterialEvent: Function;
                 /** 选择采购报价-行 仓库 */
                 choosePurchaseQuoteItemWarehouseEvent: Function;
+                /** 选择采购报价-一揽子协议事件 */
+                choosePurchaseQuoteBlanketAgreementEvent: Function;
                 /** 显示采购报价额外信息事件 */
                 showPurchaseQuoteItemExtraEvent: Function;
                 /** 选择采购报价-采购申请事件 */
@@ -66,6 +68,12 @@ namespace purchase {
                                                 text: ibas.i18n.prop("bo_purchaserequest"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseQuotePurchaseRequestEvent);
+                                                }
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_blanketagreement"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.choosePurchaseQuoteBlanketAgreementEvent);
                                                 }
                                             }),
                                         ]

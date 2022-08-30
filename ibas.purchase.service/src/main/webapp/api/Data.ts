@@ -44,6 +44,8 @@ namespace purchase {
         export const BO_CODE_PURCHASECREDITNOTE: string = "${Company}_PH_PURCHASECREDIT";
         /** 业务对象编码-采购发票 */
         export const BO_CODE_PURCHASEINVOICE: string = "${Company}_PH_PURCHASEINVOICE";
+        /** 业务对象编码-一揽子协议 */
+        export const BO_CODE_BLANKETAGREEMENT: string = "${Company}_PH_BLANKETAGT";
 
         /** 运输状态 */
         export enum emShippingStatus {
@@ -59,6 +61,19 @@ namespace purchase {
              * 已送达
              */
             SHIPPED,
+        }
+        export enum emAgreementType {
+            GENERAL,
+            SPECIFIC
+        }
+
+        export enum emAgreementMethod {
+            ITEM,
+            MONETARY
+        }
+        export enum emPriceMode {
+            NET,
+            GROSS
         }
     }
 }

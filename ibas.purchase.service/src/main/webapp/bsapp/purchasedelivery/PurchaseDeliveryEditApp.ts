@@ -39,6 +39,7 @@ namespace purchase {
                 this.view.choosePurchaseDeliveryItemMaterialBatchEvent = this.choosePurchaseDeliveryItemMaterialBatch;
                 this.view.choosePurchaseDeliveryItemMaterialSerialEvent = this.choosePurchaseDeliveryItemMaterialSerial;
                 this.view.choosePurchaseDeliveryPurchaseOrderEvent = this.choosePurchaseDeliveryPurchaseOrder;
+                this.view.choosePurchaseDeliveryBlanketAgreementEvent = this.choosePurchaseDeliveryBlanketAgreement;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
                 this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
@@ -860,6 +861,129 @@ namespace purchase {
                     }
                 }
             }
+            /** 选择一揽子协议事件 */
+            private choosePurchaseDeliveryBlanketAgreement(): void {
+                if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("bo_purchasedelivery_suppliercode")
+                    ));
+                    return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                // 未取消的
+                condition.alias = bo.BlanketAgreement.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 未删除的
+                condition = criteria.conditions.create();
+                condition.alias = bo.BlanketAgreement.PROPERTY_DELETED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 仅下达的
+                condition = criteria.conditions.create();
+                condition.alias = bo.BlanketAgreement.PROPERTY_DOCUMENTSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emDocumentStatus.RELEASED.toString();
+                // 审批通过的或未进审批
+                condition = criteria.conditions.create();
+                condition.alias = bo.BlanketAgreement.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.APPROVED.toString();
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.BlanketAgreement.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                // 当前供应商的
+                condition = criteria.conditions.create();
+                condition.alias = bo.BlanketAgreement.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = this.editData.supplierCode;
+                // 未过期的
+                condition = criteria.conditions.create();
+                condition.bracketOpen = 1;
+                condition.alias = bo.BlanketAgreement.PROPERTY_ENDDATE_NAME;
+                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                condition.value = ibas.dates.toString(ibas.dates.today());
+                condition = criteria.conditions.create();
+                condition.bracketClose = 1;
+                condition.alias = bo.BlanketAgreement.PROPERTY_ENDDATE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                // 调用选择服务
+                let that: this = this;
+                ibas.servicesManager.runChooseService<bo.BlanketAgreement>({
+                    boCode: bo.BlanketAgreement.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: criteria,
+                    onCompleted(selecteds: ibas.IList<bo.BlanketAgreement>): void {
+                        criteria = new ibas.Criteria();
+                        for (let selected of selecteds) {
+                            if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
+                                continue;
+                            }
+                            for (let item of selected.blanketAgreementItems) {
+                                condition = criteria.conditions.create();
+                                condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;
+                                condition.value = item.itemCode;
+                                if (criteria.conditions.length > 0) {
+                                    condition.relationship = ibas.emConditionRelationship.OR;
+                                }
+                            }
+                        }
+                        if (criteria.conditions.length > 0) {
+                            let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                            boRepository.fetchProduct({
+                                criteria: criteria,
+                                onCompleted: (opRsltPRD) => {
+                                    for (let selected of selecteds) {
+                                        if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
+                                            continue;
+                                        }
+                                        for (let baItem of selected.blanketAgreementItems) {
+                                            if (baItem.canceled === ibas.emYesNo.YES) {
+                                                continue;
+                                            }
+                                            if (baItem.lineStatus !== ibas.emDocumentStatus.RELEASED) {
+                                                continue;
+                                            }
+                                            if (that.editData.purchaseDeliveryItems.firstOrDefault(
+                                                c => c.baseDocumentType === baItem.objectCode
+                                                    && c.baseDocumentEntry === baItem.docEntry
+                                                    && c.baseDocumentLineId === baItem.lineId) !== null) {
+                                                continue;
+                                            }
+                                            let item: bo.PurchaseDeliveryItem = that.editData.purchaseDeliveryItems.create();
+                                            item.itemCode = baItem.itemCode;
+                                            item.itemDescription = baItem.itemDescription;
+                                            item.itemSign = baItem.itemSign;
+                                            item.baseDocumentType = baItem.objectCode;
+                                            item.baseDocumentEntry = baItem.docEntry;
+                                            item.baseDocumentLineId = baItem.lineId;
+                                            item.uom = baItem.uom;
+                                            for (let mmItem of opRsltPRD.resultObjects.where(c => ibas.strings.equalsIgnoreCase(c.code, item.itemCode))) {
+                                                item.baseProduct(mmItem);
+                                            }
+                                            item.quantity = baItem.quantity - baItem.closedQuantity;
+                                            if (selected.priceMode === bo.emPriceMode.NET) {
+                                                item.unitPrice = baItem.price;
+                                            } else if (selected.priceMode === bo.emPriceMode.GROSS) {
+                                                item.price = baItem.price;
+                                            }
+                                            item.reference1 = baItem.reference1;
+                                            item.reference2 = baItem.reference2;
+                                        }
+                                    }
+                                    that.view.showPurchaseDeliveryItems(that.editData.purchaseDeliveryItems.filterDeleted());
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购收货 */
         export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
@@ -891,6 +1015,8 @@ namespace purchase {
             showPurchaseDeliveryItems(datas: bo.PurchaseDeliveryItem[]): void;
             /** 选择采购收货-采购订单事件 */
             choosePurchaseDeliveryPurchaseOrderEvent: Function;
+            /** 选择采购收货-一揽子协议事件 */
+            choosePurchaseDeliveryBlanketAgreementEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为采购退货事件 */

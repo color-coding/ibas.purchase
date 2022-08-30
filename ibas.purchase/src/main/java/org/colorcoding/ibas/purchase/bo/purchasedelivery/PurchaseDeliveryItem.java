@@ -34,6 +34,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2312,6 +2313,40 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem>
 					@Override
 					public BigDecimal getQuantity() {
 						return PurchaseDeliveryItem.this.getQuantity();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseDeliveryItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseDeliveryItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
+					}
+
+				},
+				// 一揽子协议
+				new IBlanketAgreementQuantityContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseDeliveryItem.this.getIdentifiers();
+					}
+
+					@Override
+					public BigDecimal getQuantity() {
+						return PurchaseDeliveryItem.this.getQuantity();
+					}
+
+					@Override
+					public BigDecimal getAmount() {
+						return PurchaseDeliveryItem.this.getLineTotal();
 					}
 
 					@Override

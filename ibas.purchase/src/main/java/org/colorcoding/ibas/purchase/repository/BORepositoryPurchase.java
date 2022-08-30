@@ -4,6 +4,8 @@ import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.bobas.repository.BORepositoryServiceApplication;
+import org.colorcoding.ibas.purchase.bo.blanketagreement.BlanketAgreement;
+import org.colorcoding.ibas.purchase.bo.blanketagreement.IBlanketAgreement;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.IPurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
@@ -328,6 +330,50 @@ public class BORepositoryPurchase extends BORepositoryServiceApplication
 	public IOperationResult<IPurchaseRequest> savePurchaseRequest(IPurchaseRequest bo) {
 		return new OperationResult<IPurchaseRequest>(
 				this.savePurchaseRequest((PurchaseRequest) bo, this.getUserToken()));
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-一揽子协议
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	public OperationResult<BlanketAgreement> fetchBlanketAgreement(ICriteria criteria, String token) {
+		return super.fetch(criteria, token, BlanketAgreement.class);
+	}
+
+	/**
+	 * 查询-一揽子协议（提前设置用户口令）
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	public IOperationResult<IBlanketAgreement> fetchBlanketAgreement(ICriteria criteria) {
+		return new OperationResult<IBlanketAgreement>(this.fetchBlanketAgreement(criteria, this.getUserToken()));
+	}
+
+	/**
+	 * 保存-一揽子协议
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<BlanketAgreement> saveBlanketAgreement(BlanketAgreement bo, String token) {
+		return super.save(bo, token);
+	}
+
+	/**
+	 * 保存-一揽子协议（提前设置用户口令）
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	public IOperationResult<IBlanketAgreement> saveBlanketAgreement(IBlanketAgreement bo) {
+		return new OperationResult<IBlanketAgreement>(
+				this.saveBlanketAgreement((BlanketAgreement) bo, this.getUserToken()));
 	}
 
 	// --------------------------------------------------------------------------------------------//

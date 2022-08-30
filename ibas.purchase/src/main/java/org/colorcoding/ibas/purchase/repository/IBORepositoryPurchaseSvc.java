@@ -3,6 +3,7 @@ package org.colorcoding.ibas.purchase.repository;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.bobas.repository.IBORepositorySmartService;
+import org.colorcoding.ibas.purchase.bo.blanketagreement.BlanketAgreement;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
@@ -148,6 +149,25 @@ public interface IBORepositoryPurchaseSvc extends IBORepositorySmartService {
 	 * @return 操作结果
 	 */
 	OperationResult<PurchaseRequest> savePurchaseRequest(PurchaseRequest bo, String token);
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-一揽子协议
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	OperationResult<BlanketAgreement> fetchBlanketAgreement(ICriteria criteria, String token);
+
+	/**
+	 * 保存-一揽子协议
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	OperationResult<BlanketAgreement> saveBlanketAgreement(BlanketAgreement bo, String token);
 
 	// --------------------------------------------------------------------------------------------//
 

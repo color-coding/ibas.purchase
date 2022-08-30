@@ -7,14 +7,15 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchIssueParent;
-import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialIssueParent;
+import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchReceiptParent;
+import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialReceiptParent;
 
 /**
  * 采购发票-行 接口
  * 
  */
-public interface IPurchaseInvoiceItem extends IBODocumentLine, IMaterialBatchIssueParent, IMaterialSerialIssueParent {
+public interface IPurchaseInvoiceItem
+		extends IBODocumentLine, IMaterialBatchReceiptParent, IMaterialSerialReceiptParent {
 
 	/**
 	 * 获取-编码

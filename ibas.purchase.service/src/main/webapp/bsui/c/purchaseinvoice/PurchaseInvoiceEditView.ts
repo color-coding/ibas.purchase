@@ -9,40 +9,42 @@ namespace purchase {
     export namespace ui {
         export namespace c {
             /**
-             * 编辑视图-采购交货
+             * 编辑视图-采购发票
              */
             export class PurchaseInvoiceEditView extends ibas.BOEditView implements app.IPurchaseInvoiceEditView {
                 /** 删除数据事件 */
                 deleteDataEvent: Function;
                 /** 新建数据事件，参数1：是否克隆 */
                 createDataEvent: Function;
-                /** 添加采购交货-行事件 */
+                /** 添加采购发票-行事件 */
                 addPurchaseInvoiceItemEvent: Function;
-                /** 删除采购交货-行事件 */
+                /** 删除采购发票-行事件 */
                 removePurchaseInvoiceItemEvent: Function;
-                /** 选择采购交货客户信息 */
+                /** 选择采购发票客户信息 */
                 choosePurchaseInvoiceSupplierEvent: Function;
-                /** 选择采购交货联系人信息 */
+                /** 选择采购发票联系人信息 */
                 choosePurchaseInvoiceContactPersonEvent: Function;
-                /** 选择采购交货价格清单信息 */
+                /** 选择采购发票价格清单信息 */
                 choosePurchaseInvoicePriceListEvent: Function;
-                /** 选择采购交货-行物料主数据 */
+                /** 选择采购发票-行物料主数据 */
                 choosePurchaseInvoiceItemMaterialEvent: Function;
-                /** 选择采购交货-行 仓库 */
+                /** 选择采购发票-行 仓库 */
                 choosePurchaseInvoiceItemWarehouseEvent: Function;
-                /** 选择采购交货-行 物料序列事件 */
+                /** 选择采购发票-行 物料序列事件 */
                 choosePurchaseInvoiceItemMaterialSerialEvent: Function;
-                /** 选择采购交货-行 物料批次事件 */
+                /** 选择采购发票-行 物料批次事件 */
                 choosePurchaseInvoiceItemMaterialBatchEvent: Function;
-                /** 选择采购交货项目-采购订单事件 */
+                /** 选择采购发票项目-采购订单事件 */
                 choosePurchaseInvoicePurchaseOrderEvent: Function;
-                /** 选择采购交货项目-采购交货事件 */
+                /** 选择采购发票项目-采购发票事件 */
                 choosePurchaseInvoicePurchaseDeliveryEvent: Function;
-                /** 收款采购交货 */
+                /** 选择采购发票-一揽子协议事件 */
+                choosePurchaseInvoiceBlanketAgreementEvent: Function;
+                /** 收款采购发票 */
                 receiptPurchaseInvoiceEvent: Function;
                 /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
-                /** 转为采购交货事件 */
+                /** 转为采购发票事件 */
                 turnToPurchaseCreditNoteEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
@@ -225,6 +227,12 @@ namespace purchase {
                                                         text: ibas.i18n.prop("bo_purchasedelivery"),
                                                         press: function (): void {
                                                             that.fireViewEvents(that.choosePurchaseInvoicePurchaseDeliveryEvent);
+                                                        }
+                                                    }),
+                                                    new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("bo_blanketagreement"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.choosePurchaseInvoiceBlanketAgreementEvent);
                                                         }
                                                     }),
                                                 ]
@@ -769,7 +777,7 @@ namespace purchase {
                     // 改变页面状态
                     sap.extension.pages.changeStatus(this.page);
                 }
-                /** 显示数据-采购交货-行 */
+                /** 显示数据-采购发票-行 */
                 showPurchaseInvoiceItems(datas: bo.PurchaseInvoiceItem[]): void {
                     this.tablePurchaseInvoiceItem.setModel(new sap.extension.model.JSONModel({ rows: datas }));
                 }

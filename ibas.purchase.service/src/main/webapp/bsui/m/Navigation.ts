@@ -16,6 +16,7 @@
 /// <reference path="./purchasecreditnote/index.ts" />
 /// <reference path="./purchaseinvoice/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
+/// <reference path="./blanketagreement/index.ts" />
 namespace purchase {
     export namespace ui {
         /**
@@ -124,6 +125,18 @@ namespace purchase {
                         break;
                     case app.PurchaseCreditNoteEditApp.APPLICATION_ID:
                         view = new m.PurchaseCreditNoteEditView();
+                        break;
+                    case app.BlanketAgreementListApp.APPLICATION_ID:
+                        view = new m.BlanketAgreementListView();
+                        break;
+                    case app.BlanketAgreementChooseApp.APPLICATION_ID:
+                        view = new m.BlanketAgreementChooseView();
+                        break;
+                    case app.BlanketAgreementViewApp.APPLICATION_ID:
+                        view = new m.BlanketAgreementViewView();
+                        break;
+                    case app.BlanketAgreementEditApp.APPLICATION_ID:
+                        view = new m.BlanketAgreementEditView();
                         break;
                     default:
                         break;
