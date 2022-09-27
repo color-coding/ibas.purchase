@@ -37,6 +37,13 @@ namespace purchase {
                                 showValueHelp: true,
                                 valueHelpRequest: function (): void {
                                     that.fireViewEvents(that.chooseBlanketAgreementSupplierEvent);
+                                },
+                                showValueLink: true,
+                                valueLinkRequest: function (event: sap.ui.base.Event): void {
+                                    ibas.servicesManager.runLinkService({
+                                        boCode: businesspartner.bo.Supplier.BUSINESS_OBJECT_CODE,
+                                        linkValue: event.getParameter("value")
+                                    });
                                 }
                             }).bindProperty("bindingValue", {
                                 path: "supplierCode",
@@ -220,6 +227,13 @@ namespace purchase {
                                                     // 获取当前对象
                                                     this.getBindingContext().getObject()
                                                 );
+                                            },
+                                            showValueLink: true,
+                                            valueLinkRequest: function (event: sap.ui.base.Event): void {
+                                                ibas.servicesManager.runLinkService({
+                                                    boCode: materials.bo.Material.BUSINESS_OBJECT_CODE,
+                                                    linkValue: event.getParameter("value")
+                                                });
                                             }
                                         }).bindProperty("bindingValue", {
                                             path: "itemCode",
@@ -245,7 +259,7 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_quantity"),
                                         template: new sap.extension.m.Input("", {
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "quantity",
                                             type: new sap.extension.data.Quantity(),
@@ -264,7 +278,7 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_price"),
                                         template: new sap.extension.m.Input("", {
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "price",
                                             type: new sap.extension.data.Price(),
@@ -273,7 +287,7 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_linetotal"),
                                         template: new sap.extension.m.Input("", {
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "lineTotal",
                                             type: new sap.extension.data.Sum(),
@@ -350,6 +364,12 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_dataowner") }),
                             new sap.extension.m.DataOwnerInput("", {
                                 showValueHelp: true,
+                                organization: {
+                                    path: "organization",
+                                    type: new sap.extension.data.Alphanumeric({
+                                        maxLength: 8
+                                    })
+                                }
                             }).bindProperty("bindingValue", {
                                 path: "dataOwner",
                                 type: new sap.extension.data.Numeric()

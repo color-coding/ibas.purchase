@@ -466,7 +466,7 @@ namespace purchase {
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documenttaxtotal") }),
                                                     new sap.extension.m.Input("", {
                                                         editable: false,
-                                                        type: sap.m.InputType.Number
+
                                                     }).bindProperty("bindingValue", {
                                                         path: "documentTaxTotal",
                                                         type: new sap.extension.data.Sum()
@@ -474,7 +474,7 @@ namespace purchase {
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_documenttotal") }),
                                                     new sap.extension.m.Input("", {
                                                         editable: false,
-                                                        type: sap.m.InputType.Number
+
                                                     }).bindProperty("bindingValue", {
                                                         path: "documentTotal",
                                                         type: new sap.extension.data.Sum()
@@ -505,6 +505,12 @@ namespace purchase {
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_dataowner") }),
                                                     new sap.extension.m.DataOwnerInput("", {
                                                         showValueHelp: true,
+                                                        organization: {
+                                                            path: "organization",
+                                                            type: new sap.extension.data.Alphanumeric({
+                                                                maxLength: 8
+                                                            })
+                                                        }
                                                     }).bindProperty("bindingValue", {
                                                         path: "dataOwner",
                                                         type: new sap.extension.data.Numeric()
@@ -592,7 +598,7 @@ namespace purchase {
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_lineid") }),
                                         new sap.extension.m.Input("", {
                                             editable: false,
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "lineId",
                                             type: new sap.extension.data.Numeric(),
@@ -615,6 +621,13 @@ namespace purchase {
                                                         that.fireViewEvents(that.choosePurchaseRequestItemMaterialEvent, data);
                                                     }
                                                 }
+                                            },
+                                            showValueLink: true,
+                                            valueLinkRequest: function (event: sap.ui.base.Event): void {
+                                                ibas.servicesManager.runLinkService({
+                                                    boCode: materials.bo.Material.BUSINESS_OBJECT_CODE,
+                                                    linkValue: event.getParameter("value")
+                                                });
                                             }
                                         }).bindProperty("bindingValue", {
                                             path: "itemCode",
@@ -631,7 +644,7 @@ namespace purchase {
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_quantity") }),
                                         new sap.extension.m.Input("", {
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "quantity",
                                             type: new sap.extension.data.Quantity(),
@@ -643,7 +656,7 @@ namespace purchase {
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_price") }),
                                         new sap.extension.m.Input("", {
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "price",
                                             type: new sap.extension.data.Price(),
@@ -656,7 +669,7 @@ namespace purchase {
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_linetotal") }),
                                         new sap.extension.m.Input("", {
                                             editable: true,
-                                            type: sap.m.InputType.Number
+
                                         }).bindProperty("bindingValue", {
                                             path: "lineTotal",
                                             type: new sap.extension.data.Sum(),

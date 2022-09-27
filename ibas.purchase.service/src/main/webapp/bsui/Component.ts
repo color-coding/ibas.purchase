@@ -19,7 +19,11 @@ namespace purchase {
                  */
                 parseValue(oValue: any, sInternalType: string): any {
                     if (ibas.objects.isNull(oValue) || ibas.strings.isEmpty(oValue)) {
-                        oValue = 1;
+                        if (this instanceof sap.ui.model.type.Float) {
+                            oValue = "1";
+                        } else {
+                            oValue = 1;
+                        }
                     }
                     return super.parseValue(oValue, sInternalType);
                 }

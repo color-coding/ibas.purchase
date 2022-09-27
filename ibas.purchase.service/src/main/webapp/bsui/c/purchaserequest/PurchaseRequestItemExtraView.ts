@@ -133,12 +133,13 @@ namespace purchase {
                                         }
                                         return data;
                                     }
-                                })
+                                }),
+                                width: "100%",
                             }),
                             new sap.extension.table.Column("", {
                                 label: ibas.i18n.prop("bo_purchaseorderitemextra_quantity"),
                                 template: new sap.extension.m.Input("", {
-                                    type: sap.m.InputType.Number
+
                                 }).bindProperty("bindingValue", {
                                     path: "quantity",
                                     type: new sap.extension.data.Quantity(),
@@ -152,6 +153,7 @@ namespace purchase {
                         state: sap.ui.core.ValueState.None,
                         horizontalScrolling: true,
                         verticalScrolling: true,
+                        contentWidth: "60%",
                         subHeader: new sap.m.Toolbar("", {
                             content: [
                                 new sap.m.Label("", {

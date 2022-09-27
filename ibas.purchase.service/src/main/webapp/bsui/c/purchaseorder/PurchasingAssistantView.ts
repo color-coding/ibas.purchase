@@ -853,7 +853,7 @@ namespace purchase {
                                                                         }
                                                                     }),
                                                                     new sap.extension.m.Input("", {
-                                                                        type: sap.m.InputType.Number,
+
                                                                         fieldWidth: "80%",
                                                                     }).bindProperty("bindingValue", {
                                                                         path: "quantity",
@@ -863,7 +863,7 @@ namespace purchase {
                                                                         type: new sap.extension.data.Alphanumeric()
                                                                     }),
                                                                     new sap.extension.m.Input("", {
-                                                                        type: sap.m.InputType.Number
+
                                                                     }).bindProperty("bindingValue", {
                                                                         path: "price",
                                                                         type: new sap.extension.data.Price()
