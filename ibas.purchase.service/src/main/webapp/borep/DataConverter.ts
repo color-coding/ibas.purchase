@@ -332,9 +332,14 @@ namespace purchase {
                 accounting.taxrate.assign(target.tax, (rate) => {
                     if (rate >= 0) {
                         target.taxRate = rate;
+                        if (!(target instanceof PurchaseRequestItem)) {
+                            target.unitPrice = 0;
+                        }
                         if (source.taxed === ibas.emYesNo.NO) {
                             // 重新赋值价格，以激活计算逻辑
                             target.preTaxPrice = source.price;
+                        } else {
+                            target.price = source.price;
                         }
                     }
                 });

@@ -475,8 +475,11 @@ namespace purchase {
                                     accounting.taxrate.assign(item.tax, (rate) => {
                                         if (rate >= 0) {
                                             item.taxRate = rate;
+                                            item.unitPrice = 0;
                                             if (selected.taxed === ibas.emYesNo.NO) {
                                                 item.preTaxPrice = selected.price;
+                                            } else {
+                                                item.price = selected.price;
                                             }
                                         }
                                     });

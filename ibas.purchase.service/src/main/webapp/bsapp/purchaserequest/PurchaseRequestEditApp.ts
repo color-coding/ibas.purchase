@@ -377,6 +377,8 @@ namespace purchase {
                                         item.taxRate = rate;
                                         if (selected.taxed === ibas.emYesNo.NO) {
                                             item.preTaxPrice = selected.price;
+                                        } else {
+                                            item.price = selected.price;
                                         }
                                     }
                                 });
