@@ -294,7 +294,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -534,7 +534,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -834,7 +834,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -1076,7 +1076,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -1368,7 +1368,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -1610,7 +1610,7 @@ declare namespace sales {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
@@ -1933,7 +1933,7 @@ declare namespace sales {
             customerName: string;
             /** 联系人 */
             contactPerson: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 项目代码 */
             project: string;
@@ -2733,11 +2733,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -3463,11 +3463,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -4367,11 +4367,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -5225,11 +5225,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -5955,11 +5955,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -6685,11 +6685,11 @@ declare namespace sales {
             get priceList(): number;
             /** 设置-价格清单 */
             set priceList(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
@@ -7627,11 +7627,11 @@ declare namespace sales {
             get contactPerson(): number;
             /** 设置-联系人 */
             set contactPerson(value: number);
-            /** 映射的属性名称-付款条款代码 */
+            /** 映射的属性名称-付款条款 */
             static PROPERTY_PAYMENTCODE_NAME: string;
-            /** 获取-付款条款代码 */
+            /** 获取-付款条款 */
             get paymentCode(): string;
-            /** 设置-付款条款代码 */
+            /** 设置-付款条款 */
             set paymentCode(value: string);
             /** 映射的属性名称-项目代码 */
             static PROPERTY_PROJECT_NAME: string;

@@ -282,6 +282,7 @@ namespace purchase {
                         that.editData.priceList = selected.priceList;
                         that.editData.contactPerson = selected.contactPerson;
                         that.editData.documentCurrency = selected.currency;
+                        that.editData.paymentCode = selected.paymentCode;
                         if (!ibas.strings.isEmpty(selected.warehouse)) {
                             that.view.defaultWarehouse = selected.warehouse;
                         }
@@ -928,6 +929,7 @@ namespace purchase {
                             if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
                                 continue;
                             }
+                            that.editData.paymentCode = selected.paymentCode;
                             for (let item of selected.blanketAgreementItems) {
                                 condition = criteria.conditions.create();
                                 condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;

@@ -525,7 +525,17 @@ namespace purchase {
                                                         }),
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_paymentcode") }),
-                                                    new sap.extension.m.Input("", {
+                                                    new sap.extension.m.SelectionInput("", {
+                                                        showValueHelp: true,
+                                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                                        dataInfo: {
+                                                            type: businesspartner.bo.PaymentTerm,
+                                                            key: businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME,
+                                                            text: businesspartner.bo.PaymentTerm.PROPERTY_NAME_NAME,
+                                                        },
+                                                        criteria: [
+                                                            new ibas.Condition(businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                                        ]
                                                     }).bindProperty("bindingValue", {
                                                         path: "paymentCode",
                                                         type: new sap.extension.data.Alphanumeric({

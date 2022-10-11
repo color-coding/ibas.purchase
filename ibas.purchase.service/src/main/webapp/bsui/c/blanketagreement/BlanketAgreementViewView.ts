@@ -370,7 +370,13 @@ namespace purchase {
                                             }),
                                         },
                                     }),
-                                    new sap.extension.m.ObjectAttribute("", {
+                                    new sap.extension.m.RepositoryObjectAttribute("", {
+                                        repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                        dataInfo: {
+                                            type: businesspartner.bo.PaymentTerm,
+                                            key: businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME,
+                                            text: businesspartner.bo.PaymentTerm.PROPERTY_NAME_NAME,
+                                        },
                                         title: ibas.i18n.prop("bo_blanketagreement_paymentcode"),
                                         bindingValue: {
                                             path: "paymentCode",

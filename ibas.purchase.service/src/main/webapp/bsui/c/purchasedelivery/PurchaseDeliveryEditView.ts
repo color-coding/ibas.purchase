@@ -616,6 +616,24 @@ namespace purchase {
                                 path: "paidTotal",
                                 type: new sap.extension.data.Sum()
                             }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_paymentcode") }),
+                            new sap.extension.m.SelectionInput("", {
+                                showValueHelp: true,
+                                repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                dataInfo: {
+                                    type: businesspartner.bo.PaymentTerm,
+                                    key: businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME,
+                                    text: businesspartner.bo.PaymentTerm.PROPERTY_NAME_NAME,
+                                },
+                                criteria: [
+                                    new ibas.Condition(businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                ]
+                            }).bindProperty("bindingValue", {
+                                path: "paymentCode",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 8
+                                }),
+                            }),
                         ]
                     });
                     return this.page = new sap.extension.m.DataPage("", {

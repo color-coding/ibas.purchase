@@ -219,6 +219,7 @@ namespace purchase {
                         that.editData.supplierCode = selected.code;
                         that.editData.supplierName = selected.name;
                         that.editData.contactPerson = selected.contactPerson;
+                        that.editData.paymentCode = selected.paymentCode;
                     }
                 });
             }

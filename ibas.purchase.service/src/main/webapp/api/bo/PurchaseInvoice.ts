@@ -89,7 +89,7 @@ namespace purchase {
             paidTotal: number;
             /** 价格清单 */
             priceList: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;

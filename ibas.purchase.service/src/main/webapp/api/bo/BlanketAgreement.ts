@@ -75,7 +75,7 @@ namespace purchase {
             supplierName: string;
             /** 联系人 */
             contactPerson: number;
-            /** 付款条款代码 */
+            /** 付款条款 */
             paymentCode: string;
             /** 项目代码 */
             project: string;

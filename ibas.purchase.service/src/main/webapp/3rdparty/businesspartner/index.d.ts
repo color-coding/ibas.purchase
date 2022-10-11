@@ -41,6 +41,8 @@ declare namespace businesspartner {
         const BO_CODE_BUSINESSPARTNERASSETJOURNAL: string;
         /** 业务对象编码-潜在客户 */
         const BO_CODE_LEAD: string;
+        /** 业务对象编码-付款条款 */
+        const BO_CODE_PAYMENTTERM: string;
         /** 业务伙伴性质 */
         enum emBusinessPartnerNature {
             /** 公司 */
@@ -63,6 +65,24 @@ declare namespace businesspartner {
             MALE = 0,
             /** 女 */
             FEMALE = 1
+        }
+        enum emDueDateBaseOn {
+            /** 单据日期 */
+            DOCUMENT_DATE = 0,
+            /** 过账日期 */
+            POSTING_DATE = 1,
+            /** 系统日期 */
+            SYSTEM_DATE = 2
+        }
+        enum emPayTermDueType {
+            /** 无 */
+            NONE = 0,
+            /** 月初 */
+            MONTH_START = 1,
+            /** 月中 */
+            MONTH_HALF = 2,
+            /** 月末 */
+            MONTH_END = 3
         }
         /** 资产请求 */
         class IAssetRequest {
@@ -427,6 +447,8 @@ declare namespace businesspartner {
             floorList: number;
             /** 税收组 */
             taxGroup: string;
+            /** 付款条款 */
+            paymentCode: string;
             /** 备注 */
             remarks: string;
             /** 已引用 */
@@ -539,6 +561,8 @@ declare namespace businesspartner {
             floorList: number;
             /** 税收组 */
             taxGroup: string;
+            /** 付款条款 */
+            paymentCode: string;
             /** 备注 */
             remarks: string;
             /** 已引用 */
@@ -932,6 +956,68 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 付款条款 */
+        interface IPaymentTerm extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 激活 */
+            activated: ibas.emYesNo;
+            /** 起始于 */
+            startAt: emPayTermDueType;
+            /** 附加月数 */
+            extraMonth: number;
+            /** 附加天数 */
+            extraDays: number;
+            /** 到期日基于 */
+            dueDateBaseOn: emDueDateBaseOn;
+            /** 容差天数 */
+            toleranceDays: number;
+            /** 对象编号 */
+            docEntry: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryBusinessPartner extends ibas.IBORepositoryApplication {
             /**
@@ -1039,6 +1125,16 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveLead(saver: ibas.ISaveCaller<bo.ILead>): void;
+            /**
+             * 查询 付款条款
+             * @param fetcher 查询者
+             */
+            fetchPaymentTerm(fetcher: ibas.IFetchCaller<bo.IPaymentTerm>): void;
+            /**
+             * 保存 付款条款
+             * @param saver 保存者
+             */
+            savePaymentTerm(saver: ibas.ISaveCaller<bo.IPaymentTerm>): void;
         }
         /**
          * 查询调用者
@@ -1775,6 +1871,12 @@ declare namespace businesspartner {
             get taxGroup(): string;
             /** 设置-税收组 */
             set taxGroup(value: string);
+            /** 映射的属性名称-付款条款 */
+            static PROPERTY_PAYMENTCODE_NAME: string;
+            /** 获取-付款条款 */
+            get paymentCode(): string;
+            /** 设置-付款条款 */
+            set paymentCode(value: string);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -2089,6 +2191,12 @@ declare namespace businesspartner {
             get taxGroup(): string;
             /** 设置-税收组 */
             set taxGroup(value: string);
+            /** 映射的属性名称-付款条款 */
+            static PROPERTY_PAYMENTCODE_NAME: string;
+            /** 获取-付款条款 */
+            get paymentCode(): string;
+            /** 设置-付款条款 */
+            set paymentCode(value: string);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -3117,6 +3225,170 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 付款条款 */
+        class PaymentTerm extends ibas.BOMasterData<PaymentTerm> implements IPaymentTerm {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-激活 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-起始于 */
+            static PROPERTY_STARTAT_NAME: string;
+            /** 获取-起始于 */
+            get startAt(): emPayTermDueType;
+            /** 设置-起始于 */
+            set startAt(value: emPayTermDueType);
+            /** 映射的属性名称-附加月数 */
+            static PROPERTY_EXTRAMONTH_NAME: string;
+            /** 获取-附加月数 */
+            get extraMonth(): number;
+            /** 设置-附加月数 */
+            set extraMonth(value: number);
+            /** 映射的属性名称-附加天数 */
+            static PROPERTY_EXTRADAYS_NAME: string;
+            /** 获取-附加天数 */
+            get extraDays(): number;
+            /** 设置-附加天数 */
+            set extraDays(value: number);
+            /** 映射的属性名称-到期日基于 */
+            static PROPERTY_DUEDATEBASEON_NAME: string;
+            /** 获取-到期日基于 */
+            get dueDateBaseOn(): emDueDateBaseOn;
+            /** 设置-到期日基于 */
+            set dueDateBaseOn(value: emDueDateBaseOn);
+            /** 映射的属性名称-容差天数 */
+            static PROPERTY_TOLERANCEDAYS_NAME: string;
+            /** 获取-容差天数 */
+            get toleranceDays(): number;
+            /** 设置-容差天数 */
+            set toleranceDays(value: number);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-对象编号 */
+            get docEntry(): number;
+            /** 设置-对象编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         namespace ibas4j {
             /** ibas的java端数据声明 */
             /** 操作消息 */
@@ -3328,6 +3600,16 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveLead(saver: ibas.ISaveCaller<bo.Lead>): void;
+            /**
+             * 查询 付款条款
+             * @param fetcher 查询者
+             */
+            fetchPaymentTerm(fetcher: ibas.IFetchCaller<bo.PaymentTerm>): void;
+            /**
+             * 保存 付款条款
+             * @param saver 保存者
+             */
+            savePaymentTerm(saver: ibas.ISaveCaller<bo.PaymentTerm>): void;
         }
     }
 }
@@ -3493,6 +3775,50 @@ declare namespace businesspartner {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.Address[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 查看应用-业务伙伴地址 */
+        class AddressViewApp extends ibas.BOViewService<IAddressViewView, bo.Address> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.Address): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-业务伙伴地址 */
+        interface IAddressViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showAddress(data: bo.Address): void;
+        }
+        /** 业务伙伴地址连接服务映射 */
+        class AddressLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
         }
     }
 }
@@ -3818,6 +4144,50 @@ declare namespace businesspartner {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.ContactPerson[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 查看应用-业务伙伴联系人 */
+        class ContactPersonViewApp extends ibas.BOViewService<IContactPersonViewView, bo.ContactPerson> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.ContactPerson): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-业务伙伴联系人 */
+        interface IContactPersonViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showContactPerson(data: bo.ContactPerson): void;
+        }
+        /** 业务伙伴联系人连接服务映射 */
+        class ContactPersonLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
         }
     }
 }
@@ -4442,6 +4812,7 @@ declare namespace businesspartner {
         }
         /** 视图-资产项目 */
         interface IAssetItemViewView extends ibas.IBOViewView {
+            showAssetItem(viewData: bo.AssetItem): void;
         }
         /** 资产项目连接服务映射 */
         class AssetItemLinkServiceMapping extends ibas.BOLinkServiceMapping {
@@ -5023,6 +5394,208 @@ declare namespace businesspartner {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        class PaymentTermFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 列表应用-付款条款 */
+        class PaymentTermListApp extends ibas.BOListApplication<IPaymentTermListView, bo.PaymentTerm> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.PaymentTerm): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.PaymentTerm): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.PaymentTerm | bo.PaymentTerm[]): void;
+        }
+        /** 视图-付款条款 */
+        interface IPaymentTermListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.PaymentTerm[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 选择应用-付款条款 */
+        class PaymentTermChooseApp extends ibas.BOChooseService<IPaymentTermChooseView, bo.PaymentTerm> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-付款条款 */
+        interface IPaymentTermChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.PaymentTerm[]): void;
+        }
+        /** 付款条款选择服务映射 */
+        class PaymentTermChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.PaymentTerm>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 查看应用-付款条款 */
+        class PaymentTermViewApp extends ibas.BOViewService<IPaymentTermViewView, bo.PaymentTerm> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.PaymentTerm): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-付款条款 */
+        interface IPaymentTermViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showPaymentTerm(data: bo.PaymentTerm): void;
+        }
+        /** 付款条款连接服务映射 */
+        class PaymentTermLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace app {
+        /** 编辑应用-付款条款 */
+        class PaymentTermEditApp extends ibas.BOEditApplication<IPaymentTermEditView, bo.PaymentTerm> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.PaymentTerm): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-付款条款 */
+        interface IPaymentTermEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showPaymentTerm(data: bo.PaymentTerm): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
         }
     }
 }
