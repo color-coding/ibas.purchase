@@ -107,6 +107,12 @@ namespace purchase {
                     } else if (property === bo.PurchaseCreditNoteItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.toString(ibas.emYesNo, value);
                     }
+                } else if (boName === bo.PurchaseRequestItem.name) {
+                    if (property === bo.PurchaseRequestItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseRequestItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    }
                 } else if (boName === bo.ShippingAddress.name) {
                     if (property === bo.ShippingAddress.PROPERTY_SHIPPINGSTATUS_NAME) {
                         return ibas.enums.toString(emShippingStatus, value);
@@ -193,6 +199,12 @@ namespace purchase {
                     if (property === bo.PurchaseCreditNoteItem.PROPERTY_BATCHMANAGEMENT_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
                     } else if (property === bo.PurchaseCreditNoteItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    }
+                } else if (boName === bo.PurchaseRequestItem.name) {
+                    if (property === bo.PurchaseRequestItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseRequestItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
                     }
                 } else if (boName === bo.ShippingAddress.name) {
