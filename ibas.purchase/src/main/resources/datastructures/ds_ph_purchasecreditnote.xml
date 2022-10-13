@@ -106,7 +106,7 @@
     <Property Name="DistributionRule4" Description="分配规则4" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode4"/>
     <Property Name="DistributionRule5" Description="分配规则5" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode5"/>
   </Model>
-  <BusinessObject MappedModel="PurchaseCreditNote" ShortName="${Company}_PH_PURCHASECREDIT">
+  <BusinessObject MappedModel="PurchaseCreditNote" ShortName="${Company}_PH_PURCHCREDIT">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseCreditNoteItem"/>
   </BusinessObject>
 </Domain>

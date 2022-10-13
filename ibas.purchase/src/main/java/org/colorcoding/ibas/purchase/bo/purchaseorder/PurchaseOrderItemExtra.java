@@ -44,7 +44,7 @@ public class PurchaseOrderItemExtra extends BusinessObject<PurchaseOrderItemExtr
 	/**
 	 * 业务对象编码
 	 */
-	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHASEORDER";
+	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHORDER";
 
 	/**
 	 * 业务对象名称

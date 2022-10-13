@@ -68,7 +68,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 业务对象编码
 	 */
-	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHASECREDIT";
+	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHCREDIT";
 
 	/**
 	 * 业务对象名称

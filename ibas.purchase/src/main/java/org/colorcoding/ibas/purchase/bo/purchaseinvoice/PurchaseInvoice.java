@@ -74,7 +74,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 	/**
 	 * 业务对象编码
 	 */
-	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHASEINVOICE";
+	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHINVOICE";
 
 	/**
 	 * 业务对象名称

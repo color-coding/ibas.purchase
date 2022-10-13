@@ -44,7 +44,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 业务对象编码
 	 */
-	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHASEQUOTE";
+	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHQUOTE";
 
 	/**
 	 * 业务对象名称
