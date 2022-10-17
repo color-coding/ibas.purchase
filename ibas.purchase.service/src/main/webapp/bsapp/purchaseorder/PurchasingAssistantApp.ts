@@ -216,6 +216,9 @@ namespace purchase {
                         if (!ibas.strings.isEmpty(selected.warehouse)) {
                             that.view.defaultWarehouse = selected.warehouse;
                         }
+                        if (!ibas.strings.isEmpty(selected.taxGroup)) {
+                            that.view.defaultTaxGroup = selected.taxGroup;
+                        }
                         // 供应商改变，清除旧地址
                         that.purchaseOrder.shippingAddresss.clear();
                         that.changePurchaseOrderItemPrice(that.purchaseOrder.priceList, that.purchaseOrder.purchaseOrderItems);
@@ -285,28 +288,29 @@ namespace purchase {
                         onCompleted: (opRslt) => {
                             for (let item of opRslt.resultObjects) {
                                 orderItems.forEach((value) => {
-                                    if (item.taxed === ibas.emYesNo.YES) {
-                                        // 含税价格
-                                        value.isLoading = true;
-                                        value.discount = 1;
-                                        value.unitPrice = 0;
-                                        value.preTaxPrice = 0;
-                                        value.price = 0;
-                                        value.isLoading = false;
-                                        // 税后价格
-                                        value.price = item.price;
-                                        value.currency = item.currency;
-                                    } else {
-                                        // 不含税价格
-                                        value.isLoading = true;
-                                        value.discount = 1;
-                                        value.unitPrice = 0;
-                                        value.preTaxPrice = 0;
-                                        value.price = 0;
-                                        value.isLoading = false;
-                                        // 税前价格
-                                        value.preTaxPrice = item.price;
-                                        value.currency = item.currency;
+                                    if (value.itemCode === item.itemCode) {
+                                        if (item.taxed === ibas.emYesNo.YES) {
+                                            value.unitPrice = 0;
+                                            value.price = item.price;
+                                            value.currency = item.currency;
+                                        } else {
+                                            value.unitPrice = 0;
+                                            value.preTaxPrice = item.price;
+                                            value.currency = item.currency;
+                                        }
+                                        if (!ibas.strings.isEmpty(value.tax)) {
+                                            accounting.taxrate.assign(value.tax, (rate) => {
+                                                if (rate >= 0) {
+                                                    value.taxRate = rate;
+                                                    value.unitPrice = 0;
+                                                    if (item.taxed === ibas.emYesNo.NO) {
+                                                        value.preTaxPrice = item.price;
+                                                    } else {
+                                                        value.price = item.price;
+                                                    }
+                                                }
+                                            });
+                                        }
                                     }
                                 });
                             }
@@ -321,6 +325,7 @@ namespace purchase {
                 if (orderItems.length === 0) {
                     return;
                 }
+                let purchaseItems: ibas.IList<bo.PurchaseOrderItem> = new ibas.ArrayList<bo.PurchaseOrderItem>();
                 let purchaseItem: bo.PurchaseOrderItem = null;
                 for (let item of orderItems) {
                     if (item.orderedQuantity >= item.quantity) {
@@ -339,6 +344,7 @@ namespace purchase {
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.create();
                         purchaseItem.itemCode = item.itemCode;
                         purchaseItem.itemDescription = item.itemDescription;
+                        purchaseItem.tax = this.view.defaultTaxGroup;
                         if (merge !== true) {
                             purchaseItem.baseDocumentType = item.objectCode;
                             purchaseItem.baseDocumentEntry = item.docEntry;
@@ -351,6 +357,7 @@ namespace purchase {
                         purchaseItem.serialManagement = item.serialManagement;
                         purchaseItem.reference1 = item.reference1;
                         purchaseItem.reference2 = item.reference2;
+                        purchaseItems.add(purchaseItem);
                     }
                     purchaseItem.quantity = purchaseItem.quantity > 0 ?
                         purchaseItem.quantity + (item.quantity - item.orderedQuantity) : (item.quantity - item.orderedQuantity);
@@ -361,9 +368,42 @@ namespace purchase {
                     }
                     item.orderedQuantity += purchaseItem.quantity;
                 }
-                this.view.showPurchaseOrderItems(this.purchaseOrder.purchaseOrderItems.filterDeleted());
-                if (this.purchaseOrder.priceList > 0) {
-                    this.changePurchaseOrderItemPrice(this.purchaseOrder.priceList, this.purchaseOrder.purchaseOrderItems);
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                for (let item of orderItems) {
+                    if (!ibas.strings.isEmpty(item.tax)) {
+                        let condition: ibas.ICondition = criteria.conditions.create();
+                        condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;
+                        condition.value = item.itemCode;
+                        if (criteria.conditions.length > 0) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                }
+                if (criteria.conditions.length > 0) {
+                    let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                    boRepository.fetchMaterial({
+                        criteria: criteria,
+                        onCompleted: (opRslt) => {
+                            for (let item of opRslt.resultObjects) {
+                                if (!ibas.strings.isEmpty(item.purchaseTaxGroup)) {
+                                    purchaseItems.forEach((c) => {
+                                        if (ibas.strings.isEmpty(c.tax) && ibas.strings.equalsIgnoreCase(c.itemCode, item.code)) {
+                                            c.tax = item.purchaseTaxGroup;
+                                        }
+                                    });
+                                }
+                            }
+                            if (this.purchaseOrder.priceList > 0 && purchaseItems.length > 0) {
+                                this.changePurchaseOrderItemPrice(this.purchaseOrder.priceList, purchaseItems);
+                            }
+                            this.view.showPurchaseOrderItems(this.purchaseOrder.purchaseOrderItems.filterDeleted());
+                        }
+                    });
+                } else {
+                    if (this.purchaseOrder.priceList > 0 && purchaseItems.length > 0) {
+                        this.changePurchaseOrderItemPrice(this.purchaseOrder.priceList, purchaseItems);
+                    }
+                    this.view.showPurchaseOrderItems(this.purchaseOrder.purchaseOrderItems.filterDeleted());
                 }
             }
             /** 编辑采购订单 */
@@ -462,6 +502,8 @@ namespace purchase {
             addPurchaseOrderEditLink(data: bo.PurchaseOrder): void;
             /** 默认仓库 */
             defaultWarehouse: string;
+            /** 默认税组 */
+            defaultTaxGroup: string;
         }
     }
 }

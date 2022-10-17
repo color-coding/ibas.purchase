@@ -304,25 +304,11 @@ namespace purchase {
                             for (let item of opRslt.resultObjects) {
                                 this.editData.purchaseQuoteItems.forEach((value) => {
                                     if (item.taxed === ibas.emYesNo.YES) {
-                                        // 含税价格
-                                        value.isLoading = true;
-                                        value.discount = 1;
                                         value.unitPrice = 0;
-                                        value.preTaxPrice = 0;
-                                        value.price = 0;
-                                        value.isLoading = false;
-                                        // 税后价格
                                         value.price = item.price;
                                         value.currency = item.currency;
                                     } else {
-                                        // 不含税价格
-                                        value.isLoading = true;
-                                        value.discount = 1;
                                         value.unitPrice = 0;
-                                        value.preTaxPrice = 0;
-                                        value.price = 0;
-                                        value.isLoading = false;
-                                        // 税前价格
                                         value.preTaxPrice = item.price;
                                         value.currency = item.currency;
                                     }

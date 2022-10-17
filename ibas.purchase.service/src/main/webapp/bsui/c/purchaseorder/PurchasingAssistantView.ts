@@ -994,6 +994,8 @@ namespace purchase {
                 set defaultWarehouse(value: string) {
                     this.selectWarehouse.setSelectedKey(value);
                 }
+                /** 默认税组 */
+                defaultTaxGroup: string;
                 /** 显示销售订单 */
                 showSalesOrders(datas: sales.bo.SalesOrder[]): void {
                     let model: sap.extension.model.JSONModel = this.leftOrder.getModel();
