@@ -19,6 +19,7 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
+import org.colorcoding.ibas.bobas.data.emDirection;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
@@ -1836,6 +1837,11 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote>
 					@Override
 					public String getIdentifiers() {
 						return PurchaseQuote.this.getIdentifiers();
+					}
+
+					@Override
+					public emDirection getDirection() {
+						return emDirection.IN;
 					}
 
 					@Override
