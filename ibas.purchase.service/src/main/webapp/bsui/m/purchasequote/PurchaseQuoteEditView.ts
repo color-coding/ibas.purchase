@@ -28,6 +28,8 @@ namespace purchase {
                 choosePurchaseQuoteItemMaterialEvent: Function;
                 /** 选择采购报价-行 仓库 */
                 choosePurchaseQuoteItemWarehouseEvent: Function;
+                /** 选择采购报价-行 单位 */
+                choosePurchaseQuoteItemUnitEvent: Function;
                 /** 选择采购报价-一揽子协议事件 */
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
                 /** 显示采购报价额外信息事件 */

@@ -38,6 +38,7 @@ namespace purchase {
                 this.view.choosePurchaseInvoiceItemMaterialBatchEvent = this.choosePurchaseInvoiceLineMaterialBatch;
                 this.view.choosePurchaseInvoiceItemMaterialSerialEvent = this.choosePurchaseInvoiceLineMaterialSerial;
                 this.view.choosePurchaseInvoiceItemWarehouseEvent = this.choosePurchaseInvoiceItemWarehouse;
+                this.view.choosePurchaseInvoiceItemUnitEvent = this.choosePurchaseInvoiceItemUnit;
                 this.view.choosePurchaseInvoicePurchaseOrderEvent = this.choosePurchaseInvoicePurchaseOrder;
                 this.view.choosePurchaseInvoicePurchaseDeliveryEvent = this.choosePurchaseInvoicePurchaseDelivery;
                 this.view.choosePurchaseInvoiceBlanketAgreementEvent = this.choosePurchaseInvoiceBlanketAgreement;
@@ -400,6 +401,7 @@ namespace purchase {
                         let item: bo.PurchaseInvoiceItem = that.editData.purchaseInvoiceItems[index];
                         // 选择返回数量多余触发数量时,自动创建新的项目
                         let created: boolean = false;
+                        let beChangeds: ibas.IList<materials.app.IBeChangedUOMSource> = new ibas.ArrayList<materials.app.IBeChangedUOMSource>();
                         for (let selected of selecteds) {
                             if (ibas.objects.isNull(item)) {
                                 item = that.editData.purchaseInvoiceItems.create();
@@ -425,11 +427,31 @@ namespace purchase {
                                     });
                                 }
                             }
+                            beChangeds.add({
+                                caller: item,
+                                sourceUnit: item.uom,
+                                targetUnit: item.inventoryUOM,
+                                material: item.itemCode,
+                                setUnitRate(this: bo.PurchaseInvoiceItem, value: number): void {
+                                    this.uomRate = value;
+                                }
+                            });
                             item = null;
                         }
                         if (created) {
                             // 创建了新的行项目
                             that.view.showPurchaseInvoiceItems(that.editData.purchaseInvoiceItems.filterDeleted());
+                        }
+                        if (beChangeds.length > 0) {
+                            // 设置单位换算率
+                            materials.app.changeMaterialsUnitRate({
+                                data: beChangeds,
+                                onCompleted: (error) => {
+                                    if (error instanceof Error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -523,8 +545,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialBatches: item.materialBatches,
                     });
                 }
@@ -541,8 +563,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialSerials: item.materialSerials
                     });
                 }
@@ -824,6 +846,7 @@ namespace purchase {
                             boRepository.fetchProduct({
                                 criteria: criteria,
                                 onCompleted: (opRsltPRD) => {
+                                    let beChangeds: ibas.IList<materials.app.IBeChangedUOMSource> = new ibas.ArrayList<materials.app.IBeChangedUOMSource>();
                                     for (let selected of selecteds) {
                                         if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
                                             continue;
@@ -848,9 +871,11 @@ namespace purchase {
                                             item.baseDocumentType = baItem.objectCode;
                                             item.baseDocumentEntry = baItem.docEntry;
                                             item.baseDocumentLineId = baItem.lineId;
-                                            item.uom = baItem.uom;
                                             for (let mmItem of opRsltPRD.resultObjects.where(c => ibas.strings.equalsIgnoreCase(c.code, item.itemCode))) {
                                                 item.baseProduct(mmItem);
+                                            }
+                                            if (!ibas.strings.isEmpty(baItem.uom)) {
+                                                item.uom = baItem.uom;
                                             }
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             if (selected.priceMode === bo.emPriceMode.NET) {
@@ -860,12 +885,68 @@ namespace purchase {
                                             }
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
+                                            beChangeds.add({
+                                                caller: item,
+                                                sourceUnit: item.uom,
+                                                targetUnit: item.inventoryUOM,
+                                                material: item.itemCode,
+                                                setUnitRate(this: bo.PurchaseInvoiceItem, value: number): void {
+                                                    this.uomRate = value;
+                                                }
+                                            });
                                         }
+                                    }
+                                    if (beChangeds.length > 0) {
+                                        // 设置单位换算率
+                                        materials.app.changeMaterialsUnitRate({
+                                            data: beChangeds,
+                                            onCompleted: (error) => {
+                                                if (error instanceof Error) {
+                                                    that.messages(error);
+                                                }
+                                            }
+                                        });
                                     }
                                     that.view.showPurchaseInvoiceItems(that.editData.purchaseInvoiceItems.filterDeleted());
                                 }
                             });
                         }
+                    }
+                });
+            }
+            private choosePurchaseInvoiceItemUnit(caller: bo.PurchaseInvoiceItem): void {
+                let that: this = this;
+                ibas.servicesManager.runChooseService<materials.bo.IUnit>({
+                    boCode: materials.bo.BO_CODE_UNIT,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: [
+                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                    ],
+                    onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
+                        for (let selected of selecteds) {
+                            caller.uom = selected.name;
+                        }
+                        materials.app.changeMaterialsUnitRate({
+                            data: {
+                                get sourceUnit(): string {
+                                    return caller.uom;
+                                },
+                                get targetUnit(): string {
+                                    return caller.inventoryUOM;
+                                },
+                                get material(): string {
+                                    return caller.itemCode;
+                                },
+                                setUnitRate(rate: number): void {
+                                    caller.uomRate = rate;
+                                }
+                            },
+                            onCompleted: (error) => {
+                                if (error instanceof Error) {
+                                    that.messages(error);
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -894,6 +975,8 @@ namespace purchase {
             choosePurchaseInvoiceItemMaterialEvent: Function;
             /** 选择采购发票仓库事件 */
             choosePurchaseInvoiceItemWarehouseEvent: Function;
+            /** 选择采购发票单位事件 */
+            choosePurchaseInvoiceItemUnitEvent: Function;
             /** 选择采购发票单行物料批次事件 */
             choosePurchaseInvoiceItemMaterialBatchEvent: Function;
             /** 选择采购发票行物料序列事件 */

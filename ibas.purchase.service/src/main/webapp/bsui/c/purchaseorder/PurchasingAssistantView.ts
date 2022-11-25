@@ -442,7 +442,6 @@ namespace purchase {
                                                         items: {
                                                             path: "/",
                                                             template: new sap.m.CustomListItem("", {
-                                                                templateShareable: false,
                                                                 content: [
                                                                     new sap.m.Panel("", {
                                                                         expandable: true,

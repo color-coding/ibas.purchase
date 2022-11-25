@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseReturnItemMaterialEvent: Function;
                 /** 选择采购退货-行 仓库 */
                 choosePurchaseReturnItemWarehouseEvent: Function;
+                /** 选择采购退货-行 单位 */
+                choosePurchaseReturnItemUnitEvent: Function;
                 /** 选择采购退货-行 物料序列事件 */
                 choosePurchaseReturnItemMaterialSerialEvent: Function;
                 /** 选择采购退货-行 物料批次事件 */
@@ -401,13 +403,21 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereturnitem_uom"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseReturnItemUnitEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            }
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             })
                                         }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereturnitem_price"),

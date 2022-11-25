@@ -272,6 +272,15 @@ namespace purchase {
             /** 计量单位 */
             uom: string;
 
+            /** 库存单位 */
+            inventoryUOM: string;
+
+            /** 单位换算率 */
+            uomRate: number;
+
+            /** 库存数量 */
+            inventoryQuantity: number;
+
             /** 仓库 */
             warehouse: string;
 

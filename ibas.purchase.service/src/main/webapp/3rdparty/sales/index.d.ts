@@ -390,6 +390,12 @@ declare namespace sales {
             quantity: number;
             /** 计量单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -630,6 +636,12 @@ declare namespace sales {
             quantity: number;
             /** 计量单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -930,6 +942,12 @@ declare namespace sales {
             quantity: number;
             /** 计量单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -1166,6 +1184,12 @@ declare namespace sales {
             quantity: number;
             /** 计量单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -1466,6 +1490,12 @@ declare namespace sales {
             quantity: number;
             /** 单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -1708,6 +1738,12 @@ declare namespace sales {
             quantity: number;
             /** 单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 价格 */
@@ -3042,6 +3078,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -3198,6 +3252,7 @@ declare namespace sales {
             get materialSerials(): materials.bo.MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: materials.bo.MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -3772,6 +3827,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -3940,6 +4013,7 @@ declare namespace sales {
             get materialSerials(): materials.bo.MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: materials.bo.MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -4654,6 +4728,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -5534,6 +5626,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -5690,6 +5800,7 @@ declare namespace sales {
             get materialSerials(): materials.bo.MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: materials.bo.MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -6264,6 +6375,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -6420,6 +6549,7 @@ declare namespace sales {
             get materialSerials(): materials.bo.MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: materials.bo.MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -6994,6 +7124,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string;
             /** 获取-仓库 */
@@ -7150,6 +7298,7 @@ declare namespace sales {
             get materialSerials(): materials.bo.MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: materials.bo.MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -7933,6 +8082,7 @@ declare namespace sales {
         }
         /** 模块业务对象工厂 */
         const boFactory: ibas.BOFactory;
+        const CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE: string;
         /**
          * 基于单据
          * @param target 目标
@@ -8528,6 +8678,7 @@ declare namespace sales {
             protected turnToSalesInvoice(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesDeliveryBlanketAgreement;
+            private chooseSalesDeliveryItemUnit;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -8553,6 +8704,8 @@ declare namespace sales {
             chooseSalesDeliveryItemMaterialEvent: Function;
             /** 选择销售交货仓库事件 */
             chooseSalesDeliveryItemWarehouseEvent: Function;
+            /** 选择销售交货单位事件 */
+            chooseSalesDeliveryItemUnitEvent: Function;
             /** 选择销售交货单行物料批次事件 */
             chooseSalesDeliveryItemMaterialBatchEvent: Function;
             /** 选择销售交货行物料序列事件 */
@@ -8810,6 +8963,8 @@ declare namespace sales {
             protected turnToSalesInvoice(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesOrderBlanketAgreement;
+            /** 选择销售订单-行 单位 */
+            private chooseSalesOrderItemUnit;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -8835,6 +8990,8 @@ declare namespace sales {
             chooseSalesOrderItemMaterialEvent: Function;
             /** 选择销售订单仓库事件 */
             chooseSalesOrderItemWarehouseEvent: Function;
+            /** 选择销售订单-行 单位 */
+            chooseSalesOrderItemUnitEvent: Function;
             /** 选择销售订单行物料序列事件 */
             chooseSalesOrderItemMaterialSerialEvent: Function;
             /** 选择销售订单行物料批次事件 */
@@ -9139,6 +9296,7 @@ declare namespace sales {
             private editShippingAddresses;
             /** 转为销售贷项事件 */
             protected turnToSalesCreditNote(): void;
+            private chooseSalesReturnItemUnit;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -9164,6 +9322,8 @@ declare namespace sales {
             chooseSalesReturnItemMaterialEvent: Function;
             /** 选择销售退货仓库事件 */
             chooseSalesReturnItemWarehouseEvent: Function;
+            /** 选择销售退货-行 单位 */
+            chooseSalesReturnItemUnitEvent: Function;
             /** 选择销售退货单行物料批次事件 */
             chooseSalesReturnItemMaterialBatchEvent: Function;
             /** 选择销售退货行物料序列事件 */
@@ -9402,6 +9562,7 @@ declare namespace sales {
             protected turnToSalesOrder(salesOrder?: bo.SalesOrder): void;
             /** 选择一揽子协议事件 */
             private chooseSalesQuoteBlanketAgreement;
+            private chooseSalesQuoteItemUnit;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -9429,6 +9590,8 @@ declare namespace sales {
             chooseSalesQuoteBlanketAgreementEvent: Function;
             /** 选择销售报价仓库事件 */
             chooseSalesQuoteItemWarehouseEvent: Function;
+            /** 选择销售报价单位事件 */
+            chooseSalesQuoteItemUnitEvent: Function;
             /** 显示销售报价额外信息事件 */
             showSalesQuoteItemExtraEvent: Function;
             /** 转为销售订单事件 */
@@ -9715,6 +9878,7 @@ declare namespace sales {
             protected turnToSalesCreditNote(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesInvoiceBlanketAgreement;
+            private chooseSalesInvoiceItemUnit;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -9740,6 +9904,8 @@ declare namespace sales {
             chooseSalesInvoiceItemMaterialEvent: Function;
             /** 选择销售发票仓库事件 */
             chooseSalesInvoiceItemWarehouseEvent: Function;
+            /** 选择销售发票单位事件 */
+            chooseSalesInvoiceItemUnitEvent: Function;
             /** 选择销售发票单行物料批次事件 */
             chooseSalesInvoiceItemMaterialBatchEvent: Function;
             /** 选择销售发票行物料序列事件 */
@@ -9988,6 +10154,7 @@ declare namespace sales {
             /** 选择联系人 */
             private chooseSalesCreditNoteContactPerson;
             private editShippingAddresses;
+            private chooseSalesCreditNoteItemUnit;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -10013,6 +10180,8 @@ declare namespace sales {
             chooseSalesCreditNoteItemMaterialEvent: Function;
             /** 选择销售贷项仓库事件 */
             chooseSalesCreditNoteItemWarehouseEvent: Function;
+            /** 选择销售贷项-行 单位 */
+            chooseSalesCreditNoteItemUnitEvent: Function;
             /** 选择销售贷项单行物料批次事件 */
             chooseSalesCreditNoteItemMaterialBatchEvent: Function;
             /** 选择销售贷项行物料序列事件 */
@@ -10407,6 +10576,7 @@ declare namespace sales {
             private chooseBlanketAgreementContactPerson;
             /** 选择一揽子协议物料事件 */
             private chooseBlanketAgreementItemMaterial;
+            private chooseBlanketAgreementItemUnit;
         }
         /** 视图-一揽子协议 */
         interface IBlanketAgreementEditView extends ibas.IBOEditView {
@@ -10428,6 +10598,8 @@ declare namespace sales {
             chooseBlanketAgreementContactPersonEvent: Function;
             /** 选择一揽子协议行物料事件 */
             chooseBlanketAgreementItemMaterialEvent: Function;
+            /** 选择一揽子协议行单位事件 */
+            chooseBlanketAgreementItemUnitEvent: Function;
         }
     }
 }

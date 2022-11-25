@@ -223,6 +223,7 @@ namespace purchase {
                 return super.parsingData(boName, property, value);
             }
         }
+        export const CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE: string = "onlySetExistingUserFields";
         /**
          * 基于单据
          * @param target 目标
@@ -249,8 +250,10 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
+                    if (config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE) === true) {
+                        continue;
+                    }
                     myItem = target.userFields.register(item.name, item.valueType);
-                    // continue;
                 }
                 if (myItem.valueType !== item.valueType) {
                     continue;
@@ -291,6 +294,8 @@ namespace purchase {
             target.currency = source.currency;
             target.quantity = source.quantity;
             target.uom = source.uom;
+            target.inventoryUOM = source.inventoryUOM;
+            target.uomRate = source.uomRate;
             if (!(source.closedQuantity > 0)) {
                 target.preTaxLineTotal = source.preTaxLineTotal;
                 target.taxTotal = source.taxTotal;
@@ -304,8 +309,10 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
+                    if (config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE) === true) {
+                        continue;
+                    }
                     myItem = target.userFields.register(item.name, item.valueType);
-                    // continue;
                 }
                 if (myItem.valueType !== item.valueType) {
                     continue;
@@ -331,7 +338,11 @@ namespace purchase {
                 }
             }
             target.quantity = 1;
-            target.uom = source.inventoryUOM;
+            target.uom = source.purchaseUOM;
+            if (ibas.strings.isEmpty(target.uom)) {
+                target.uom = source.inventoryUOM;
+            }
+            target.inventoryUOM = source.inventoryUOM;
             if (!ibas.strings.isEmpty(source.purchaseTaxGroup)) {
                 target.tax = source.purchaseTaxGroup;
             }

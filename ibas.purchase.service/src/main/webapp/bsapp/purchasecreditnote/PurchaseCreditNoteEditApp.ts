@@ -38,6 +38,7 @@ namespace purchase {
                 this.view.choosePurchaseCreditNoteItemMaterialBatchEvent = this.choosePurchaseCreditNoteLineMaterialBatch;
                 this.view.choosePurchaseCreditNoteItemMaterialSerialEvent = this.choosePurchaseCreditNoteLineMaterialSerial;
                 this.view.choosePurchaseCreditNoteItemWarehouseEvent = this.choosePurchaseCreditNoteItemWarehouse;
+                this.view.choosePurchaseCreditNoteItemUnitEvent = this.choosePurchaseCreditNoteItemUnit;
                 this.view.choosePurchaseCreditNotePurchaseReturnEvent = this.choosePurchaseCreditNotePurchaseReturn;
                 this.view.choosePurchaseCreditNotePurchaseInvoiceEvent = this.choosePurchaseCreditNotePurchaseInvoice;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
@@ -391,6 +392,7 @@ namespace purchase {
                         let item: bo.PurchaseCreditNoteItem = that.editData.purchaseCreditNoteItems[index];
                         // 选择返回数量多余触发数量时,自动创建新的项目
                         let created: boolean = false;
+                        let beChangeds: ibas.IList<materials.app.IBeChangedUOMSource> = new ibas.ArrayList<materials.app.IBeChangedUOMSource>();
                         for (let selected of selecteds) {
                             if (ibas.objects.isNull(item)) {
                                 item = that.editData.purchaseCreditNoteItems.create();
@@ -400,11 +402,31 @@ namespace purchase {
                             if (!ibas.strings.isEmpty(that.view.defaultWarehouse)) {
                                 item.warehouse = that.view.defaultWarehouse;
                             }
+                            beChangeds.add({
+                                caller: item,
+                                sourceUnit: item.uom,
+                                targetUnit: item.inventoryUOM,
+                                material: item.itemCode,
+                                setUnitRate(this: bo.PurchaseCreditNoteItem, value: number): void {
+                                    this.uomRate = value;
+                                }
+                            });
                             item = null;
                         }
                         if (created) {
                             // 创建了新的行项目
                             that.view.showPurchaseCreditNoteItems(that.editData.purchaseCreditNoteItems.filterDeleted());
+                        }
+                        if (beChangeds.length > 0) {
+                            // 设置单位换算率
+                            materials.app.changeMaterialsUnitRate({
+                                data: beChangeds,
+                                onCompleted: (error) => {
+                                    if (error instanceof Error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -498,8 +520,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialBatches: item.materialBatches,
                     });
                 }
@@ -516,8 +538,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialSerials: item.materialSerials
                     });
                 }
@@ -677,6 +699,42 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(this.editData.shippingAddresss);
             }
+            private choosePurchaseCreditNoteItemUnit(caller: bo.PurchaseCreditNoteItem): void {
+                let that: this = this;
+                ibas.servicesManager.runChooseService<materials.bo.IUnit>({
+                    boCode: materials.bo.BO_CODE_UNIT,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: [
+                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                    ],
+                    onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
+                        for (let selected of selecteds) {
+                            caller.uom = selected.name;
+                        }
+                        materials.app.changeMaterialsUnitRate({
+                            data: {
+                                get sourceUnit(): string {
+                                    return caller.uom;
+                                },
+                                get targetUnit(): string {
+                                    return caller.inventoryUOM;
+                                },
+                                get material(): string {
+                                    return caller.itemCode;
+                                },
+                                setUnitRate(rate: number): void {
+                                    caller.uomRate = rate;
+                                }
+                            },
+                            onCompleted: (error) => {
+                                if (error instanceof Error) {
+                                    that.messages(error);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
         /** 视图-采购贷项 */
         export interface IPurchaseCreditNoteEditView extends ibas.IBOEditView {
@@ -702,6 +760,8 @@ namespace purchase {
             choosePurchaseCreditNoteItemMaterialEvent: Function;
             /** 选择采购贷项仓库事件 */
             choosePurchaseCreditNoteItemWarehouseEvent: Function;
+            /** 选择采购贷项行单位事件 */
+            choosePurchaseCreditNoteItemUnitEvent: Function;
             /** 选择采购贷项单行物料批次事件 */
             choosePurchaseCreditNoteItemMaterialBatchEvent: Function;
             /** 选择采购贷项行物料序列事件 */

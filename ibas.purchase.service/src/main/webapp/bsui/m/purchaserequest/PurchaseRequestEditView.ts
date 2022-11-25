@@ -22,6 +22,8 @@ namespace purchase {
                 choosePurchaseRequestPriceListEvent: Function;
                 /** 选择采购申请-行物料主数据 */
                 choosePurchaseRequestItemMaterialEvent: Function;
+                /** 选择采购申请-行物料单位 */
+                choosePurchaseRequestItemUnitEvent: Function;
                 /** 显示采购申请额外信息事件 */
                 showPurchaseRequestItemExtraEvent: Function;
                 /** 绘制视图 */

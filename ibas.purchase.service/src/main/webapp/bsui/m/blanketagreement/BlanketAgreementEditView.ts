@@ -24,6 +24,8 @@ namespace purchase {
                 chooseBlanketAgreementContactPersonEvent: Function;
                 /** 选择一揽子协议行物料事件 */
                 chooseBlanketAgreementItemMaterialEvent: Function;
+                /** 选择一揽子协议行单位事件 */
+                chooseBlanketAgreementItemUnitEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

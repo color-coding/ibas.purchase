@@ -61,6 +61,10 @@ declare namespace materials {
         const BO_CODE_MATERIALSPECIFICATION: string;
         /** 业务对象编码-规格模板 */
         const BO_CODE_SPECIFICATION: string;
+        /** 业务对象编码-计量单位 */
+        const BO_CODE_UNIT: string;
+        /** 业务对象编码-计量单位换算率 */
+        const BO_CODE_UNITRATE: string;
         /** 物料类型 */
         enum emItemType {
             /** 物料 */
@@ -334,7 +338,27 @@ declare namespace materials {
                 /** 查询条件字段-供应商 */
                 const CONDITION_ALIAS_SUPPLIER: string;
             }
+            namespace unitrate {
+                const CONDITION_VALUE_TEMPLATE: string;
+                /** 默认查询条件 */
+                function create(material: string | bo.IMaterial): ibas.ICriteria;
+            }
         }
+        interface IBeChangedUOMSource {
+            caller?: any;
+            readonly sourceUnit: string;
+            readonly targetUnit: string;
+            readonly material?: string;
+            setUnitRate(value: number): void;
+        }
+        /**
+         * 获取物料单位换算率
+         * @param caller
+         */
+        function changeMaterialsUnitRate(caller: {
+            data: IBeChangedUOMSource | IBeChangedUOMSource[];
+            onCompleted?(error?: Error): void;
+        }): void;
     }
 }
 /**
@@ -910,6 +934,10 @@ declare namespace materials {
             purchaseTaxGroup: string;
             /** 销售税收组 */
             salesTaxGroup: string;
+            /** 采购单位 */
+            purchaseUOM: string;
+            /** 销售单位 */
+            salesUOM: string;
             /** 生效日期 */
             validDate: Date;
             /** 失效日期 */
@@ -1131,7 +1159,7 @@ declare namespace materials {
             /** 仓库 */
             warehouse: string;
             /** 数量 */
-            quantity: number;
+            readonly targetQuantity: number;
             /** 物料批次集合 */
             materialBatches: IMaterialBatchItems;
         }
@@ -1730,7 +1758,7 @@ declare namespace materials {
             /** 仓库 */
             warehouse: string;
             /** 数量 */
-            quantity: number;
+            readonly targetQuantity: number;
             /** 物料序列集合 */
             materialSerials: IMaterialSerialItems;
         }
@@ -1972,6 +2000,10 @@ declare namespace materials {
             purchaseTaxGroup: string;
             /** 销售税收组 */
             salesTaxGroup: string;
+            /** 采购单位 */
+            purchaseUOM: string;
+            /** 销售单位 */
+            salesUOM: string;
             /** 生效日期 */
             validDate: Date;
             /** 失效日期 */
@@ -2548,6 +2580,110 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 计量单位 */
+        interface IUnit extends ibas.IBOSimple {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 名称 */
+            name: string;
+            /** 外文名称 */
+            foreignName: string;
+            /** 符号 */
+            symbol: string;
+            /** 是否激活 */
+            activated: ibas.emYesNo;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
+        /** 计量单位换算率 */
+        interface IUnitRate extends ibas.IBOSimple {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 源 */
+            source: string;
+            /** 目标 */
+            target: string;
+            /** 换算率 */
+            rate: number;
+            /** 条件 */
+            condition: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryMaterials extends ibas.IBORepositoryApplication {
             /**
@@ -2730,6 +2866,26 @@ declare namespace materials {
              * @param fetcher 查询者
              */
             fetchSpecificationTree(fetcher: ibas.IFetchCaller<bo.ISpecificationTree>): void;
+            /**
+             * 查询 计量单位
+             * @param fetcher 查询者
+             */
+            fetchUnit(fetcher: ibas.IFetchCaller<bo.IUnit>): void;
+            /**
+             * 保存 计量单位
+             * @param saver 保存者
+             */
+            saveUnit(saver: ibas.ISaveCaller<bo.IUnit>): void;
+            /**
+             * 查询 计量单位换算率
+             * @param fetcher 查询者
+             */
+            fetchUnitRate(fetcher: ibas.IFetchCaller<bo.IUnitRate>): void;
+            /**
+             * 保存 计量单位换算率
+             * @param saver 保存者
+             */
+            saveUnitRate(saver: ibas.ISaveCaller<bo.IUnitRate>): void;
         }
         interface ICloseCaller<T> extends ibas.IMethodCaller<string> {
             /** 查询条件 */
@@ -3218,6 +3374,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -3700,6 +3857,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -4188,6 +4346,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -4379,6 +4538,18 @@ declare namespace materials {
             get salesTaxGroup(): string;
             /** 设置-销售税收组 */
             set salesTaxGroup(value: string);
+            /** 映射的属性名称-采购单位 */
+            static PROPERTY_PURCHASEUOM_NAME: string;
+            /** 获取-采购单位 */
+            get purchaseUOM(): string;
+            /** 设置-采购单位 */
+            set purchaseUOM(value: string);
+            /** 映射的属性名称-销售单位 */
+            static PROPERTY_SALESUOM_NAME: string;
+            /** 获取-销售单位 */
+            get salesUOM(): string;
+            /** 设置-销售单位 */
+            set salesUOM(value: string);
             /** 映射的属性名称-生效日期 */
             static PROPERTY_VALIDDATE_NAME: string;
             /** 获取-生效日期 */
@@ -6193,6 +6364,18 @@ declare namespace materials {
             get salesTaxGroup(): string;
             /** 设置-销售税收组 */
             set salesTaxGroup(value: string);
+            /** 映射的属性名称-采购单位 */
+            static PROPERTY_PURCHASEUOM_NAME: string;
+            /** 获取-采购单位 */
+            get purchaseUOM(): string;
+            /** 设置-采购单位 */
+            set purchaseUOM(value: string);
+            /** 映射的属性名称-销售单位 */
+            static PROPERTY_SALESUOM_NAME: string;
+            /** 获取-销售单位 */
+            get salesUOM(): string;
+            /** 设置-销售单位 */
+            set salesUOM(value: string);
             /** 映射的属性名称-生效日期 */
             static PROPERTY_VALIDDATE_NAME: string;
             /** 获取-生效日期 */
@@ -6857,8 +7040,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get quantity(): number;
-            set quantity(value: number);
+            get targetQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];
@@ -7678,6 +7860,274 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 计量单位 */
+        class Unit extends ibas.BOSimple<Unit> implements IUnit {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-外文名称 */
+            static PROPERTY_FOREIGNNAME_NAME: string;
+            /** 获取-外文名称 */
+            get foreignName(): string;
+            /** 设置-外文名称 */
+            set foreignName(value: string);
+            /** 映射的属性名称-符号 */
+            static PROPERTY_SYMBOL_NAME: string;
+            /** 获取-符号 */
+            get symbol(): string;
+            /** 设置-符号 */
+            set symbol(value: string);
+            /** 映射的属性名称-是否激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-是否激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-是否激活 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
+        /** 计量单位换算率 */
+        class UnitRate extends ibas.BOSimple<UnitRate> implements IUnitRate {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-源 */
+            static PROPERTY_SOURCE_NAME: string;
+            /** 获取-源 */
+            get source(): string;
+            /** 设置-源 */
+            set source(value: string);
+            /** 映射的属性名称-目标 */
+            static PROPERTY_TARGET_NAME: string;
+            /** 获取-目标 */
+            get target(): string;
+            /** 设置-目标 */
+            set target(value: string);
+            /** 映射的属性名称-换算率 */
+            static PROPERTY_RATE_NAME: string;
+            /** 获取-换算率 */
+            get rate(): number;
+            /** 设置-换算率 */
+            set rate(value: number);
+            /** 映射的属性名称-条件 */
+            static PROPERTY_CONDITION_NAME: string;
+            /** 获取-条件 */
+            get condition(): string;
+            /** 设置-条件 */
+            set condition(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -7938,6 +8388,26 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialSpecification(saver: ibas.ISaveCaller<bo.MaterialSpecification>): void;
+            /**
+             * 查询 计量单位
+             * @param fetcher 查询者
+             */
+            fetchUnit(fetcher: ibas.IFetchCaller<bo.Unit>): void;
+            /**
+             * 保存 计量单位
+             * @param saver 保存者
+             */
+            saveUnit(saver: ibas.ISaveCaller<bo.Unit>): void;
+            /**
+             * 查询 计量单位换算率
+             * @param fetcher 查询者
+             */
+            fetchUnitRate(fetcher: ibas.IFetchCaller<bo.UnitRate>): void;
+            /**
+             * 保存 计量单位换算率
+             * @param saver 保存者
+             */
+            saveUnitRate(saver: ibas.ISaveCaller<bo.UnitRate>): void;
         }
     }
 }
@@ -8769,6 +9239,9 @@ declare namespace materials {
             private chooseMaterialGroup;
             /** 上传图片事件 */
             private uploadPicture;
+            /** 选择物料组事件 */
+            private chooseMaterialUOM;
+            private editMaterialUnitRate;
         }
         /** 视图-物料 */
         interface IMaterialEditView extends ibas.IBOEditView {
@@ -8784,6 +9257,10 @@ declare namespace materials {
             chooseMaterialGroupEvent: Function;
             /** 上传图片事件 */
             uploadPictureEvent: Function;
+            /** 选择物料单位事件 */
+            chooseMaterialUOMEvent: Function;
+            /** 选择物料单位换算率事件 */
+            editMaterialUnitRateEvent: Function;
         }
     }
 }
@@ -8907,6 +9384,7 @@ declare namespace materials {
             /** 删除数据，参数：目标数据集合 */
             protected deleteData(data: bo.Material | bo.Material[]): void;
             private materialGroup;
+            private materialUnit;
         }
         /** 视图-物料 */
         interface IMaterialListView extends ibas.IBOListView {
@@ -8916,6 +9394,8 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 物料组事件 */
             materialGroupEvent: Function;
+            /** 物料单位事件 */
+            materialUnitEvent: Function;
             /** 显示数据 */
             showData(datas: bo.Material[]): void;
         }
@@ -11121,6 +11601,210 @@ declare namespace materials {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        class UnitFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-计量单位 */
+        class UnitListApp extends ibas.BOListApplication<IUnitListView, bo.Unit> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.Unit): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.Unit): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.Unit | bo.Unit[]): void;
+        }
+        /** 视图-计量单位 */
+        interface IUnitListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.Unit[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 选择应用-计量单位 */
+        class UnitChooseApp extends ibas.BOChooseService<IUnitChooseView, bo.Unit> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-计量单位 */
+        interface IUnitChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.Unit[]): void;
+        }
+        /** 计量单位选择服务映射 */
+        class UnitChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.Unit>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 编辑应用-计量单位 */
+        class UnitEditApp extends ibas.BOEditApplication<IUnitEditView, bo.Unit> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.Unit): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-计量单位 */
+        interface IUnitEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showUnit(data: bo.Unit): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-计量单位换算率 */
+        class UnitRateEditListApp extends ibas.Application<IUnitRateEditListView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            run(material?: bo.Material): void;
+            private material;
+            private editDatas;
+            protected saveData(): void;
+            protected addData(): void;
+            protected removeData(data: bo.UnitRate): void;
+            protected chooseDataUnit(data: bo.UnitRate, type: string): void;
+        }
+        /** 视图-计量单位换算率 */
+        interface IUnitRateEditListView extends ibas.IView {
+            /** 保存数据事件 */
+            saveDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.UnitRate[]): void;
+            /** 添加数据事件 */
+            addDataEvent: Function;
+            /** 删除数据事件 */
+            removeDataEvent: Function;
+            /** 选择单位事件 */
+            chooseDataUnitEvent: Function;
         }
     }
 }

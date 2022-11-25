@@ -1104,6 +1104,39 @@ namespace purchase {
                 this.setProperty(PurchaseDeliveryItem.PROPERTY_UOM_NAME, value);
             }
 
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string = "InventoryUOM";
+            /** 获取-库存单位 */
+            get inventoryUOM(): string {
+                return this.getProperty<string>(PurchaseDeliveryItem.PROPERTY_INVENTORYUOM_NAME);
+            }
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string) {
+                this.setProperty(PurchaseDeliveryItem.PROPERTY_INVENTORYUOM_NAME, value);
+            }
+
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string = "UOMRate";
+            /** 获取-单位换算率 */
+            get uomRate(): number {
+                return this.getProperty<number>(PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME);
+            }
+            /** 设置-单位换算率 */
+            set uomRate(value: number) {
+                this.setProperty(PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME, value);
+            }
+
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number {
+                return this.getProperty<number>(PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME);
+            }
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number) {
+                this.setProperty(PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
+            }
+
             /** 映射的属性名称-仓库 */
             static PROPERTY_WAREHOUSE_NAME: string = "Warehouse";
             /** 获取-仓库 */
@@ -1357,6 +1390,10 @@ namespace purchase {
                 this.setProperty(PurchaseDeliveryItem.PROPERTY_MATERIALSERIALS_NAME, value);
             }
 
+            get targetQuantity(): number {
+                return this.inventoryQuantity;
+            }
+
             /** 初始化数据 */
             protected init(): void {
                 this.materialBatches = new materials.bo.MaterialBatchItems(this);
@@ -1364,6 +1401,7 @@ namespace purchase {
                 this.currency = ibas.config.get(ibas.CONFIG_ITEM_DEFAULT_CURRENCY);
                 this.discount = 1;
                 this.taxRate = 0;
+                this.uomRate = 1;
             }
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void {
@@ -1375,17 +1413,21 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算库存数量 = 数量 * 换算率
+                    new ibas.BusinessRuleMultiplication(
+                        PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME
+                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
+                        PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME, PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME
                         , PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME, PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(

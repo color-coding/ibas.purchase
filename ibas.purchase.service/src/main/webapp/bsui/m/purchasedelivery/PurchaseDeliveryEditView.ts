@@ -28,13 +28,15 @@ namespace purchase {
                 choosePurchaseDeliveryItemMaterialEvent: Function;
                 /** 选择采购交货-行 仓库 */
                 choosePurchaseDeliveryItemWarehouseEvent: Function;
+                /** 选择采购收货-行 单位 */
+                choosePurchaseDeliveryItemUnitEvent: Function;
                 /** 选择采购交货-行 物料序列事件 */
                 choosePurchaseDeliveryItemMaterialSerialEvent: Function;
                 /** 选择采购交货-行 物料批次事件 */
                 choosePurchaseDeliveryItemMaterialBatchEvent: Function;
                 /** 选择采购交货项目-采购订单事件 */
                 choosePurchaseDeliveryPurchaseOrderEvent: Function;
-                /** 选择采购收货-一揽子协议事件 */
+                /** 选择采购交货-一揽子协议事件 */
                 choosePurchaseDeliveryBlanketAgreementEvent: Function;
                 /** 收款采购交货 */
                 receiptPurchaseDeliveryEvent: Function;

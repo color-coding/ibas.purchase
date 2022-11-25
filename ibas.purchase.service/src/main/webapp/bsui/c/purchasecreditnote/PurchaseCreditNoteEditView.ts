@@ -9,34 +9,36 @@ namespace purchase {
     export namespace ui {
         export namespace c {
             /**
-             * 编辑视图-采购退货
+             * 编辑视图-采购贷项
              */
             export class PurchaseCreditNoteEditView extends ibas.BOEditView implements app.IPurchaseCreditNoteEditView {
                 /** 删除数据事件 */
                 deleteDataEvent: Function;
                 /** 新建数据事件，参数1：是否克隆 */
                 createDataEvent: Function;
-                /** 添加采购退货-行事件 */
+                /** 添加采购贷项-行事件 */
                 addPurchaseCreditNoteItemEvent: Function;
-                /** 删除采购退货-行事件 */
+                /** 删除采购贷项-行事件 */
                 removePurchaseCreditNoteItemEvent: Function;
-                /** 选择采购退货客户信息 */
+                /** 选择采购贷项客户信息 */
                 choosePurchaseCreditNoteSupplierEvent: Function;
-                /** 选择采购退货联系人信息 */
+                /** 选择采购贷项联系人信息 */
                 choosePurchaseCreditNoteContactPersonEvent: Function;
-                /** 选择采购退货价格清单信息 */
+                /** 选择采购贷项价格清单信息 */
                 choosePurchaseCreditNotePriceListEvent: Function;
-                /** 选择采购退货-行物料主数据 */
+                /** 选择采购贷项-行物料主数据 */
                 choosePurchaseCreditNoteItemMaterialEvent: Function;
-                /** 选择采购退货-行 仓库 */
+                /** 选择采购贷项-行 仓库 */
                 choosePurchaseCreditNoteItemWarehouseEvent: Function;
-                /** 选择采购退货-行 物料序列事件 */
+                /** 选择采购贷项-行单位事件 */
+                choosePurchaseCreditNoteItemUnitEvent: Function;
+                /** 选择采购贷项-行 物料序列事件 */
                 choosePurchaseCreditNoteItemMaterialSerialEvent: Function;
-                /** 选择采购退货-行 物料批次事件 */
+                /** 选择采购贷项-行 物料批次事件 */
                 choosePurchaseCreditNoteItemMaterialBatchEvent: Function;
-                /** 选择采购退货项目-采购发票事件 */
+                /** 选择采购贷项项目-采购发票事件 */
                 choosePurchaseCreditNotePurchaseInvoiceEvent: Function;
-                /** 选择采购退货项目-采购退货事件 */
+                /** 选择采购贷项项目-采购贷项事件 */
                 choosePurchaseCreditNotePurchaseReturnEvent: Function;
                 /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
@@ -412,13 +414,21 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasecreditnoteitem_uom"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseCreditNoteItemUnitEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            }
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             })
                                         }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasecreditnoteitem_price"),

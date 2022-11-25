@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseQuoteItemMaterialEvent: Function;
                 /** 选择采购报价-行 仓库 */
                 choosePurchaseQuoteItemWarehouseEvent: Function;
+                /** 选择采购报价-行 单位 */
+                choosePurchaseQuoteItemUnitEvent: Function;
                 /** 显示采购报价额外信息事件 */
                 showPurchaseQuoteItemExtraEvent: Function;
                 /** 选择采购报价-采购申请事件 */
@@ -313,13 +315,21 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasequoteitem_uom"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseQuoteItemUnitEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            }
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             })
                                         }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasequoteitem_price"),

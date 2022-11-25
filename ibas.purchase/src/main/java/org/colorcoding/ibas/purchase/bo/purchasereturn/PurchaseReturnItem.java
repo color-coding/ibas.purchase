@@ -25,6 +25,7 @@ import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
+import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMultiplication;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItems;
 import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItem;
@@ -1156,6 +1157,99 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 	}
 
 	/**
+	 * 属性名称-库存单位
+	 */
+	private static final String PROPERTY_INVENTORYUOM_NAME = "InventoryUOM";
+
+	/**
+	 * 库存单位 属性
+	 */
+	@DbField(name = "InvUOM", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<String> PROPERTY_INVENTORYUOM = registerProperty(PROPERTY_INVENTORYUOM_NAME,
+			String.class, MY_CLASS);
+
+	/**
+	 * 获取-库存单位
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_INVENTORYUOM_NAME)
+	public final String getInventoryUOM() {
+		return this.getProperty(PROPERTY_INVENTORYUOM);
+	}
+
+	/**
+	 * 设置-库存单位
+	 * 
+	 * @param value 值
+	 */
+	public final void setInventoryUOM(String value) {
+		this.setProperty(PROPERTY_INVENTORYUOM, value);
+	}
+
+	/**
+	 * 属性名称-单位换算率
+	 */
+	private static final String PROPERTY_UOMRATE_NAME = "UOMRate";
+
+	/**
+	 * 单位换算率 属性
+	 */
+	@DbField(name = "UOMRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_UOMRATE = registerProperty(PROPERTY_UOMRATE_NAME,
+			BigDecimal.class, MY_CLASS);
+
+	/**
+	 * 获取-单位换算率
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_UOMRATE_NAME)
+	public final BigDecimal getUOMRate() {
+		return this.getProperty(PROPERTY_UOMRATE);
+	}
+
+	/**
+	 * 设置-单位换算率
+	 * 
+	 * @param value 值
+	 */
+	public final void setUOMRate(BigDecimal value) {
+		this.setProperty(PROPERTY_UOMRATE, value);
+	}
+
+	/**
+	 * 属性名称-库存数量
+	 */
+	private static final String PROPERTY_INVENTORYQUANTITY_NAME = "InventoryQuantity";
+
+	/**
+	 * 库存数量 属性
+	 */
+	@DbField(name = "InvQty", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_INVENTORYQUANTITY = registerProperty(
+			PROPERTY_INVENTORYQUANTITY_NAME, BigDecimal.class, MY_CLASS);
+
+	/**
+	 * 获取-库存数量
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_INVENTORYQUANTITY_NAME)
+	public final BigDecimal getInventoryQuantity() {
+		return this.getProperty(PROPERTY_INVENTORYQUANTITY);
+	}
+
+	/**
+	 * 设置-库存数量
+	 * 
+	 * @param value 值
+	 */
+	public final void setInventoryQuantity(BigDecimal value) {
+		this.setProperty(PROPERTY_INVENTORYQUANTITY, value);
+	}
+
+	/**
 	 * 属性名称-仓库
 	 */
 	private static final String PROPERTY_WAREHOUSE_NAME = "Warehouse";
@@ -2167,6 +2261,16 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 		this.setProperty(PROPERTY_MATERIALSERIALS, value);
 	}
 
+	@Override
+	public BigDecimal getTargetQuantity() {
+		return this.getInventoryQuantity();
+	}
+
+	@Override
+	public String getTargetUOM() {
+		return this.getInventoryUOM();
+	}
+
 	/**
 	 * 初始化数据
 	 */
@@ -2178,6 +2282,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
 		this.setDiscount(Decimal.ONE);
 		this.setTaxRate(Decimal.ZERO);
+		this.setUOMRate(Decimal.ONE);
 
 	}
 
@@ -2196,16 +2301,21 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXPRICE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_UOMRATE), // 不能低于0
+				// 库存数量 = 数量 * 单位换算率
+				new BusinessRuleMultiplication(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY, PROPERTY_UOMRATE),
 				// 计算折扣前总计 = 数量 * 折扣前价格
-				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_UNITLINETOTAL, PROPERTY_UNITPRICE, PROPERTY_QUANTITY),
+				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_UNITLINETOTAL, PROPERTY_UNITPRICE,
+						PROPERTY_INVENTORYQUANTITY),
 				// 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
 				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE,
-						PROPERTY_QUANTITY),
+						PROPERTY_INVENTORYQUANTITY),
 				// 计算折扣后总计 = 折扣前总计 * 折扣
 				new BusinessRuleDeductionDiscount(PROPERTY_DISCOUNT, PROPERTY_UNITLINETOTAL, PROPERTY_PRETAXLINETOTAL),
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY,
+				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_INVENTORYQUANTITY,
 						PROPERTY_TAXRATE, PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL),
+				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0
@@ -2275,7 +2385,12 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 
 					@Override
 					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
+						return PurchaseReturnItem.this.getInventoryQuantity();
+					}
+
+					@Override
+					public String getUOM() {
+						return PurchaseReturnItem.this.getInventoryUOM();
 					}
 
 					@Override

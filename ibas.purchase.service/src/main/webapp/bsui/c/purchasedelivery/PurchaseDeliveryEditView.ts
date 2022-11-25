@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseDeliveryItemMaterialEvent: Function;
                 /** 选择采购收货-行 仓库 */
                 choosePurchaseDeliveryItemWarehouseEvent: Function;
+                /** 选择采购收货-行 单位 */
+                choosePurchaseDeliveryItemUnitEvent: Function;
                 /** 选择采购收货-行 物料序列事件 */
                 choosePurchaseDeliveryItemMaterialSerialEvent: Function;
                 /** 选择采购收货-行 物料批次事件 */
@@ -404,13 +406,21 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasedeliveryitem_uom"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseDeliveryItemUnitEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            }
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             })
                                         }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasedeliveryitem_price"),

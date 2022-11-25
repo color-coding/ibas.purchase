@@ -36,6 +36,7 @@ namespace purchase {
                 this.view.choosePurchaseReturnPriceListEvent = this.choosePurchaseReturnPriceList;
                 this.view.choosePurchaseReturnItemMaterialEvent = this.choosePurchaseReturnItemMaterial;
                 this.view.choosePurchaseReturnItemWarehouseEvent = this.choosePurchaseReturnItemWarehouse;
+                this.view.choosePurchaseReturnItemUnitEvent = this.choosePurchaseReturnItemUnit;
                 this.view.choosePurchaseReturnItemMaterialBatchEvent = this.choosePurchaseReturnItemMaterialBatch;
                 this.view.choosePurchaseReturnItemMaterialSerialEvent = this.choosePurchaseReturnItemMaterialSerial;
                 this.view.choosePurchaseReturnPurchaseOrderEvent = this.choosePurchaseReturnPurchaseOrder;
@@ -400,6 +401,7 @@ namespace purchase {
                         let item: bo.PurchaseReturnItem = that.editData.purchaseReturnItems[index];
                         // 选择返回数量多余触发数量时,自动创建新的项目
                         let created: boolean = false;
+                        let beChangeds: ibas.IList<materials.app.IBeChangedUOMSource> = new ibas.ArrayList<materials.app.IBeChangedUOMSource>();
                         for (let selected of selecteds) {
                             if (ibas.objects.isNull(item)) {
                                 item = that.editData.purchaseReturnItems.create();
@@ -409,11 +411,31 @@ namespace purchase {
                             if (!ibas.strings.isEmpty(that.view.defaultWarehouse)) {
                                 item.warehouse = that.view.defaultWarehouse;
                             }
+                            beChangeds.add({
+                                caller: item,
+                                sourceUnit: item.uom,
+                                targetUnit: item.inventoryUOM,
+                                material: item.itemCode,
+                                setUnitRate(this: bo.PurchaseReturnItem, value: number): void {
+                                    this.uomRate = value;
+                                }
+                            });
                             item = null;
                         }
                         if (created) {
                             // 创建了新的行项目
                             that.view.showPurchaseReturnItems(that.editData.purchaseReturnItems.filterDeleted());
+                        }
+                        if (beChangeds.length > 0) {
+                            // 设置单位换算率
+                            materials.app.changeMaterialsUnitRate({
+                                data: beChangeds,
+                                onCompleted: (error) => {
+                                    if (error instanceof Error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -478,8 +500,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialBatches: item.materialBatches,
                     });
                 }
@@ -496,8 +518,8 @@ namespace purchase {
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
                         warehouse: item.warehouse,
-                        quantity: item.quantity,
-                        uom: item.uom,
+                        quantity: item.inventoryQuantity,
+                        uom: item.inventoryUOM,
                         materialSerials: item.materialSerials
                     });
                 }
@@ -692,6 +714,42 @@ namespace purchase {
 
             }
 
+            private choosePurchaseReturnItemUnit(caller: bo.PurchaseReturnItem): void {
+                let that: this = this;
+                ibas.servicesManager.runChooseService<materials.bo.IUnit>({
+                    boCode: materials.bo.BO_CODE_UNIT,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: [
+                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                    ],
+                    onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
+                        for (let selected of selecteds) {
+                            caller.uom = selected.name;
+                        }
+                        materials.app.changeMaterialsUnitRate({
+                            data: {
+                                get sourceUnit(): string {
+                                    return caller.uom;
+                                },
+                                get targetUnit(): string {
+                                    return caller.inventoryUOM;
+                                },
+                                get material(): string {
+                                    return caller.itemCode;
+                                },
+                                setUnitRate(rate: number): void {
+                                    caller.uomRate = rate;
+                                }
+                            },
+                            onCompleted: (error) => {
+                                if (error instanceof Error) {
+                                    that.messages(error);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
         /** 视图-采购退货 */
         export interface IPurchaseReturnEditView extends ibas.IBOEditView {
@@ -715,6 +773,8 @@ namespace purchase {
             choosePurchaseReturnItemMaterialEvent: Function;
             /** 选择采购退货-行 仓库 */
             choosePurchaseReturnItemWarehouseEvent: Function;
+            /** 选择采购退货-行 单位 */
+            choosePurchaseReturnItemUnitEvent: Function;
             /** 选择采购退货-行 物料序列事件 */
             choosePurchaseReturnItemMaterialSerialEvent: Function;
             /** 选择采购退货-行 物料批次事件 */

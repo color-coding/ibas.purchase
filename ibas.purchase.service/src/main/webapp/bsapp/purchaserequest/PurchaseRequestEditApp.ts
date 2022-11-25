@@ -34,6 +34,7 @@ namespace purchase {
                 this.view.choosePurchaseRequestPriceListEvent = this.choosePurchaseRequestPriceList;
                 this.view.choosePurchaseRequestItemMaterialEvent = this.choosePurchaseRequestItemMaterial;
                 this.view.showPurchaseRequestItemExtraEvent = this.showPurchaseRequestItemExtra;
+                this.view.choosePurchaseRequestItemUnitEvent = this.choosePurchaseRequestItemUnit;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -352,6 +353,7 @@ namespace purchase {
                         let item: bo.PurchaseRequestItem = that.editData.purchaseRequestItems[index];
                         // 选择返回数量多余触发数量时,自动创建新的项目
                         let created: boolean = false;
+                        let beChangeds: ibas.IList<materials.app.IBeChangedUOMSource> = new ibas.ArrayList<materials.app.IBeChangedUOMSource>();
                         for (let selected of selecteds) {
                             if (ibas.objects.isNull(item)) {
                                 item = that.editData.purchaseRequestItems.create();
@@ -371,11 +373,31 @@ namespace purchase {
                                     }
                                 });
                             }
+                            beChangeds.add({
+                                caller: item,
+                                sourceUnit: item.uom,
+                                targetUnit: item.inventoryUOM,
+                                material: item.itemCode,
+                                setUnitRate(this: bo.PurchaseRequestItem, value: number): void {
+                                    this.uomRate = value;
+                                }
+                            });
                             item = null;
                         }
                         if (created) {
                             // 创建了新的行项目
                             that.view.showPurchaseRequestItems(that.editData.purchaseRequestItems.filterDeleted());
+                        }
+                        if (beChangeds.length > 0) {
+                            // 设置单位换算率
+                            materials.app.changeMaterialsUnitRate({
+                                data: beChangeds,
+                                onCompleted: (error) => {
+                                    if (error instanceof Error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -392,6 +414,42 @@ namespace purchase {
                 app.navigation = this.navigation;
                 app.viewShower = this.viewShower;
                 app.run(data, this.editData);
+            }
+            private choosePurchaseRequestItemUnit(caller: bo.PurchaseRequestItem): void {
+                let that: this = this;
+                ibas.servicesManager.runChooseService<materials.bo.IUnit>({
+                    boCode: materials.bo.BO_CODE_UNIT,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: [
+                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                    ],
+                    onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
+                        for (let selected of selecteds) {
+                            caller.uom = selected.name;
+                        }
+                        materials.app.changeMaterialsUnitRate({
+                            data: {
+                                get sourceUnit(): string {
+                                    return caller.uom;
+                                },
+                                get targetUnit(): string {
+                                    return caller.inventoryUOM;
+                                },
+                                get material(): string {
+                                    return caller.itemCode;
+                                },
+                                setUnitRate(rate: number): void {
+                                    caller.uomRate = rate;
+                                }
+                            },
+                            onCompleted: (error) => {
+                                if (error instanceof Error) {
+                                    that.messages(error);
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
         /** 视图-采购申请 */
@@ -410,6 +468,8 @@ namespace purchase {
             choosePurchaseRequestPriceListEvent: Function;
             /** 选择采购申请-行物料主数据 */
             choosePurchaseRequestItemMaterialEvent: Function;
+            /** 选择采购申请-行物料单位 */
+            choosePurchaseRequestItemUnitEvent: Function;
             /** 显示采购申请额外信息事件 */
             showPurchaseRequestItemExtraEvent: Function;
             /** 显示数据-采购申请-行 */

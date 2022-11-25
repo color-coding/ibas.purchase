@@ -359,9 +359,12 @@ namespace purchase {
                         purchaseItem.reference2 = item.reference2;
                         purchaseItems.add(purchaseItem);
                     }
+                    // 统一到库存单位
                     purchaseItem.quantity = purchaseItem.quantity > 0 ?
-                        purchaseItem.quantity + (item.quantity - item.orderedQuantity) : (item.quantity - item.orderedQuantity);
-                    purchaseItem.uom = item.uom;
+                        purchaseItem.quantity + (item.inventoryQuantity - item.orderedQuantity) : (item.inventoryQuantity - item.orderedQuantity);
+                    purchaseItem.uom = item.inventoryUOM;
+                    purchaseItem.inventoryUOM = item.inventoryUOM;
+                    purchaseItem.uomRate = 1;
                     purchaseItem.warehouse = item.warehouse;
                     if (ibas.strings.isEmpty(purchaseItem.warehouse)) {
                         purchaseItem.warehouse = this.view.defaultWarehouse;

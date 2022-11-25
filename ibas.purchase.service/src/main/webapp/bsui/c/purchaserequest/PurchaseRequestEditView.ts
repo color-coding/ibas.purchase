@@ -24,6 +24,8 @@ namespace purchase {
                 choosePurchaseRequestPriceListEvent: Function;
                 /** 选择采购申请-行物料主数据 */
                 choosePurchaseRequestItemMaterialEvent: Function;
+                /** 选择采购申请-行物料单位 */
+                choosePurchaseRequestItemUnitEvent: Function;
                 /** 显示采购申请额外信息事件 */
                 showPurchaseRequestItemExtraEvent: Function;
                 /** 绘制视图 */
@@ -254,13 +256,21 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_uom"),
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseRequestItemUnitEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            }
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             })
                                         }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_price"),
