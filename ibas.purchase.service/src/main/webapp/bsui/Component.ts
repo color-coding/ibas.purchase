@@ -148,26 +148,23 @@ namespace purchase {
                     },
                 },
                 renderer: function (this: ShippingAddressSelect, oRm: sap.ui.core.RenderManager, oControl: ShippingAddressSelect): void {
-                    oRm.write("<div");
-                    oRm.writeControlData(oControl);
-                    oRm.write(">");
-                    oRm.write("<div");
-                    oRm.addClass("sapMInputBaseContentWrapper sapMInputBaseHasEndIcons");
-                    oRm.writeClasses();
-                    oRm.addStyle("display", "inline-flex");
-                    oRm.addStyle("width", "100%");
-                    oRm.addStyle("height", "100%");
-                    oRm.addStyle("border", "0");
-                    oRm.addStyle("background-color", "transparent");
-                    oRm.writeStyles();
-                    oRm.write(">");
+                    oRm.openStart("div", oControl).openEnd();
+                    oRm.openStart("div");
+                    oRm.class("sapMInputBaseContentWrapper");
+                    oRm.class("sapMInputBaseHasEndIcons");
+                    oRm.style("display", "inline-flex");
+                    oRm.style("width", "100%");
+                    oRm.style("height", "100%");
+                    oRm.style("border", "0");
+                    oRm.style("background-color", "transparent");
+                    oRm.openEnd();
                     oRm.renderControl(<sap.ui.core.Control>oControl.getAggregation("_select", undefined));
                     oRm.renderControl(<sap.ui.core.Control>oControl.getAggregation("_button", undefined));
-                    oRm.write("</div>");
-                    oRm.write("<div>");
+                    oRm.close("div");
+                    oRm.openStart("div").openEnd();
                     oRm.renderControl(<sap.ui.core.Control>oControl.getAggregation("_textarea", undefined));
-                    oRm.write("</div>");
-                    oRm.write("</div>");
+                    oRm.close("div");
+                    oRm.close("div");
                 },
                 init(this: ShippingAddressSelect): void {
                     (<any>sap.ui.core.Control.prototype).init.apply(this, arguments);

@@ -49,14 +49,14 @@ declare namespace purchase {
              * 税收组选择-选择框
              */
             class TaxGroupSelect extends sap.extension.m.Select {
-                addItem(oItem: sap.ui.core.Item): TaxGroupSelect;
-                addItem(oItem: { code: string, name: string, rate: number }): TaxGroupSelect;
+                addItem(oItem: sap.ui.core.Item): this;
+                addItem(oItem: { code: string, name: string, rate: number }): this;
                 getRate(): number;
-                setRate(rate: number): TaxGroupItem;
+                setRate(rate: number): this;
             }
             class TaxGroupItem extends sap.ui.core.Item {
                 getRate(): number;
-                setRate(rate: number): TaxGroupItem;
+                setRate(rate: number): this;
             }
         }
     }
