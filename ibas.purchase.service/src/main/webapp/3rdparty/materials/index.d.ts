@@ -8143,6 +8143,24 @@ declare namespace materials {
         /** 模块业务对象工厂 */
         const boFactory: ibas.BOFactory;
         function baseMaterial(target: IGoodsIssueLine | IGoodsReceiptLine | IInventoryTransferLine, source: materials.bo.IMaterial): void;
+        /** 业务规则-计算库存数量 */
+        class BusinessRuleCalculateInventoryQuantity extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param inventoryQuantity 属性-库存数量
+             * @param quantity          属性-数量
+             * @param uomRate           属性-换算率
+             */
+            constructor(inventoryQuantity: string, quantity: string, uomRate: string);
+            /** 库存数量 */
+            inventoryQuantity: string;
+            /** 数量 */
+            quantity: string;
+            /** 换算率 */
+            uomRate: string;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void;
+        }
         namespace bo4j {
             /** 操作消息 */
             interface IDataDeclaration {

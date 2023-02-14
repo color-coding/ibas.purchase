@@ -74,6 +74,8 @@ declare namespace receiptpayment {
             icon?: string;
             /** 可用金额 */
             amount: number;
+            /** 单位 */
+            unit?: string;
             /** 折扣 */
             discount?: number;
             /** 交易 */
@@ -2972,9 +2974,11 @@ declare namespace receiptpayment {
             /** 描述 */
             description: string;
             /** 图标 */
-            icon?: string;
+            icon: string;
             /** 可用金额 */
             amount: number;
+            /** 单位 */
+            unit: string;
             /** 折扣 */
             discount: number;
             /** 交易 */
@@ -3320,8 +3324,6 @@ declare namespace receiptpayment {
             showBusinessPartner(data: BusinessPartner): void;
             /** 显示收款目标 */
             showTarget(data: ReceiptTarget): void;
-            /** 显示收款方式 */
-            showMethods(methods: ibas.IElement[]): void;
             /** 显示收款交易方式 */
             showTradingMethods(methods: IReceiptTradingMethod[]): void;
             /** 显示收款交易 */

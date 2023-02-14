@@ -1514,9 +1514,8 @@ namespace purchase {
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算库存数量 = 数量 * 换算率
-                    new ibas.BusinessRuleMultiplication(
-                        PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME, PurchaseOrderItem.PROPERTY_UOMRATE_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)),
+                    new materials.bo.BusinessRuleCalculateInventoryQuantity(
+                        PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME, PurchaseOrderItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
                         PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_UNITPRICE_NAME, PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME

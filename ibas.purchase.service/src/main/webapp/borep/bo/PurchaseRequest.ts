@@ -1181,9 +1181,8 @@ namespace purchase {
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算库存数量 = 数量 * 换算率
-                    new ibas.BusinessRuleMultiplication(
-                        PurchaseRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseRequestItem.PROPERTY_QUANTITY_NAME, PurchaseRequestItem.PROPERTY_UOMRATE_NAME
-                        , ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)),
+                    new materials.bo.BusinessRuleCalculateInventoryQuantity(
+                        PurchaseRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseRequestItem.PROPERTY_QUANTITY_NAME, PurchaseRequestItem.PROPERTY_UOMRATE_NAME),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
                     new BusinessRuleDeductionPriceTaxTotal(PurchaseRequestItem.PROPERTY_LINETOTAL_NAME, PurchaseRequestItem.PROPERTY_PRICE_NAME, PurchaseRequestItem.PROPERTY_INVENTORYQUANTITY_NAME
                         , PurchaseRequestItem.PROPERTY_TAXRATE_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
