@@ -363,7 +363,8 @@ namespace purchase {
                                             }),
                                         }),
                                     }),
-                                ]
+                                ],
+                                sortProperty: "visOrder",
                             }),
                         ]
                     });

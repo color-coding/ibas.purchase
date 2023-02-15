@@ -151,7 +151,8 @@ namespace purchase {
                                     }),
                                 ]
                             }),
-                        }
+                        },
+                        sortProperty: "visOrder",
                     });
                     return this.page = new sap.extension.uxap.DataObjectPageLayout("", {
                         dataInfo: {

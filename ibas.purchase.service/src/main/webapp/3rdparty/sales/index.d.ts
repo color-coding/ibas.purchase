@@ -382,6 +382,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -628,6 +630,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -934,6 +938,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -1176,6 +1182,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -1482,6 +1490,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -1730,6 +1740,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 产品版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -3054,6 +3066,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -3803,6 +3821,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -4704,6 +4728,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -5602,6 +5632,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -6351,6 +6387,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -7100,6 +7142,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-产品版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-产品版本 */
+            get itemVersion(): string;
+            /** 设置-产品版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -8679,6 +8727,7 @@ declare namespace sales {
             /** 选择一揽子协议事件 */
             private chooseSalesDeliveryBlanketAgreement;
             private chooseSalesDeliveryItemUnit;
+            private chooseSalesDeliveryItemMaterialVersion;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -8710,6 +8759,8 @@ declare namespace sales {
             chooseSalesDeliveryItemMaterialBatchEvent: Function;
             /** 选择销售交货行物料序列事件 */
             chooseSalesDeliveryItemMaterialSerialEvent: Function;
+            /** 选择销售交货-行 物料版本 */
+            chooseSalesDeliveryItemMaterialVersionEvent: Function;
             /** 选择销售交货-销售订单事件 */
             chooseSalesDeliverySalesOrderEvent: Function;
             /** 选择销售交货-一揽子协议事件 */
@@ -8965,6 +9016,7 @@ declare namespace sales {
             private chooseSalesOrderBlanketAgreement;
             /** 选择销售订单-行 单位 */
             private chooseSalesOrderItemUnit;
+            private chooseSalesOrderItemMaterialVersion;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -8996,6 +9048,8 @@ declare namespace sales {
             chooseSalesOrderItemMaterialSerialEvent: Function;
             /** 选择销售订单行物料批次事件 */
             chooseSalesOrderItemMaterialBatchEvent: Function;
+            /** 选择销售订单-行 物料版本 */
+            chooseSalesOrderItemMaterialVersionEvent: Function;
             /** 显示销售订单行额外信息事件 */
             showSalesOrderItemExtraEvent: Function;
             /** 选择销售订单-销售报价事件 */
@@ -9297,6 +9351,7 @@ declare namespace sales {
             /** 转为销售贷项事件 */
             protected turnToSalesCreditNote(): void;
             private chooseSalesReturnItemUnit;
+            private chooseSalesReturnItemMaterialVersion;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -9328,6 +9383,8 @@ declare namespace sales {
             chooseSalesReturnItemMaterialBatchEvent: Function;
             /** 选择销售退货行物料序列事件 */
             chooseSalesReturnItemMaterialSerialEvent: Function;
+            /** 选择销售退货-行 物料版本 */
+            chooseSalesReturnItemMaterialVersionEvent: Function;
             /** 选择销售退货项目-销售订单事件 */
             chooseSalesReturnSalesOrderEvent: Function;
             /** 选择销售退货项目-销售交货事件 */
@@ -9563,6 +9620,7 @@ declare namespace sales {
             /** 选择一揽子协议事件 */
             private chooseSalesQuoteBlanketAgreement;
             private chooseSalesQuoteItemUnit;
+            private chooseSalesQuoteItemMaterialVersion;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -9586,6 +9644,8 @@ declare namespace sales {
             chooseSalesQuotePriceListEvent: Function;
             /** 选择销售报价行物料事件 */
             chooseSalesQuoteItemMaterialEvent: Function;
+            /** 选择销售报价-行 物料版本 */
+            chooseSalesQuoteItemMaterialVersionEvent: Function;
             /** 选择销售报价一揽子协议事件 */
             chooseSalesQuoteBlanketAgreementEvent: Function;
             /** 选择销售报价仓库事件 */
@@ -9879,6 +9939,7 @@ declare namespace sales {
             /** 选择一揽子协议事件 */
             private chooseSalesInvoiceBlanketAgreement;
             private chooseSalesInvoiceItemUnit;
+            private chooseSalesInvoiceItemMaterialVersion;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -9910,6 +9971,8 @@ declare namespace sales {
             chooseSalesInvoiceItemMaterialBatchEvent: Function;
             /** 选择销售发票行物料序列事件 */
             chooseSalesInvoiceItemMaterialSerialEvent: Function;
+            /** 选择销售发票-行 物料版本 */
+            chooseSalesInvoiceItemMaterialVersionEvent: Function;
             /** 选择销售发票-销售订单事件 */
             chooseSalesInvoiceSalesOrderEvent: Function;
             /** 选择销售发票-销售交货事件 */
@@ -10155,6 +10218,7 @@ declare namespace sales {
             private chooseSalesCreditNoteContactPerson;
             private editShippingAddresses;
             private chooseSalesCreditNoteItemUnit;
+            private chooseSalesCreditNoteItemMaterialVersion;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -10186,6 +10250,8 @@ declare namespace sales {
             chooseSalesCreditNoteItemMaterialBatchEvent: Function;
             /** 选择销售贷项行物料序列事件 */
             chooseSalesCreditNoteItemMaterialSerialEvent: Function;
+            /** 选择销售贷项-行 物料版本 */
+            chooseSalesCreditNoteItemMaterialVersionEvent: Function;
             /** 选择销售贷项-销售退货事件 */
             chooseSalesCreditNoteSalesReturnEvent: Function;
             /** 选择销售贷项-销售发票事件 */
