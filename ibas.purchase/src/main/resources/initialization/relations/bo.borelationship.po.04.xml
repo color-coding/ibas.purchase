@@ -4,6 +4,6 @@
 	<Code>${Company}_PH_PURCHORDER</Code>
 	<Relation>DOCUMENT_BASED</Relation>
 	<AssociatedProperty>PurchaseOrderItems</AssociatedProperty>
-	<Target>${Company}_PH_PURCHREQUEST</Target>
+	<Target>${Company}_SL_SALESORDER</Target>
 	<Description>基于单据</Description>
 </ns2:BORelationship>
