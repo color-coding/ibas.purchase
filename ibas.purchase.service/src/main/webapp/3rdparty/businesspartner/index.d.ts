@@ -307,6 +307,8 @@ declare namespace businesspartner {
             dataOwner: number;
             /** 数据所属组织 */
             organization: string;
+            /** 备注 */
+            remarks: string;
         }
     }
 }
@@ -1494,6 +1496,12 @@ declare namespace businesspartner {
             get organization(): string;
             /** 设置-数据所属组织 */
             set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
         }

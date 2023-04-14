@@ -2459,6 +2459,21 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem>
 					public emYesNo getSerialManagement() {
 						return PurchaseInvoiceItem.this.getSerialManagement();
 					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseInvoiceItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseInvoiceItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseInvoiceItem.this.getBaseDocumentLineId();
+					}
 				},
 
 				// 采购订单发货

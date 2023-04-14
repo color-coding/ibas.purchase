@@ -2460,6 +2460,21 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 						return PurchaseCreditNoteItem.this.getSerialManagement();
 					}
 
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseCreditNoteItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseCreditNoteItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseCreditNoteItem.this.getBaseDocumentLineId();
+					}
+
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

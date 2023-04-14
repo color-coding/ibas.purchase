@@ -69,6 +69,10 @@ declare namespace materials {
         const BO_CODE_MATERIALVERSION: string;
         /** 业务对象编码-物料废品率 */
         const BO_CODE_MATERIALSCRAP: string;
+        /** 业务对象编码-物料库存预留 */
+        const BO_CODE_MATERIALINVENTORYRESERVATION: string;
+        /** 业务对象编码-物料替代 */
+        const BO_CODE_MATERIALSUBSTITUTE: string;
         /** 物料类型 */
         enum emItemType {
             /** 物料 */
@@ -311,6 +315,28 @@ declare namespace materials {
         /** 规格服务代理 */
         class SpecificationTreeServiceProxy extends ibas.ServiceProxy<ISpecificationTreeContract> {
         }
+        /** 物料库存预留服务契约 */
+        interface IMaterialInventoryReservationTarget extends ibas.IServiceContract {
+            targetType: string;
+            targetEntry: number;
+            businessPartner?: string;
+            items: IMaterialInventoryReservationTargetLine[];
+        }
+        interface IMaterialInventoryReservationTargetLine {
+            targetLineId: number;
+            itemCode: string;
+            itemDescription?: string;
+            itemVersion?: string;
+            quantity: number;
+            uom: string;
+            warehouse?: string;
+            serialManagement?: ibas.emYesNo;
+            batchManagement?: ibas.emYesNo;
+            mixingBatches?: ibas.emYesNo;
+        }
+        /** 物料库存预留服务代理 */
+        class MaterialInventoryReservationServiceProxy extends ibas.ServiceProxy<IMaterialInventoryReservationTarget> {
+        }
         /** 查询条件 */
         namespace conditions {
             namespace material {
@@ -388,6 +414,10 @@ declare namespace materials {
                 /** 默认查询条件 */
                 function create(material: string | bo.IMaterial): ibas.ICriteria;
             }
+            namespace materialsubstitute {
+                /** 默认查询条件 */
+                function create(): ibas.IList<ibas.ICondition>;
+            }
         }
         interface IBeChangedUOMSource {
             caller?: any;
@@ -396,6 +426,10 @@ declare namespace materials {
             readonly material?: string;
             setUnitRate(value: number): void;
         }
+        interface IBeChangedUOMSourceEx<T> extends IBeChangedUOMSource {
+            caller?: T;
+            setUnitRate(this: T, value: number): void;
+        }
         /**
          * 获取物料单位换算率
          * @param caller
@@ -403,6 +437,15 @@ declare namespace materials {
         function changeMaterialsUnitRate(caller: {
             data: IBeChangedUOMSource | IBeChangedUOMSource[];
             onCompleted?(error?: Error): void;
+        }): void;
+        /**
+         * 使用物料预留库存
+         * @param caller
+         */
+        function useReservedMaterialsInventory(caller: {
+            targetType: string;
+            targetEntries: number | number[];
+            onCompleted(results: ibas.IList<bo.MaterialInventoryReservation> | Error): void;
         }): void;
     }
 }
@@ -967,6 +1010,8 @@ declare namespace materials {
             onCommited: number;
             /** 已订购 */
             onOrdered: number;
+            /** 已预留 */
+            onReserved: number;
             /** 最低库存量 */
             minimumInventory: number;
             /** 最低订购数量 */
@@ -1068,9 +1113,11 @@ declare namespace materials {
             onCommited: number;
             /** 已订购 */
             onOrdered: number;
+            /** 已预留 */
+            onReserved: number;
             /** 单位 */
             uom: string;
-            /** 可用量（库存+已订购-已承诺） */
+            /** 可用量（库存 + 已订购 - 已承诺 - 已预留） */
             onAvailable(): number;
         }
         /** 物料价格 */
@@ -1110,6 +1157,8 @@ declare namespace materials {
             warehouse: string;
             /** 数量 */
             quantity: number;
+            /** 预留数量 */
+            reservedQuantity: number;
             /** 锁定 */
             locked: ibas.emYesNo;
             /** 供应商序号 */
@@ -1390,6 +1439,12 @@ declare namespace materials {
             baseDocumentEntry: number;
             /** 基于行号 */
             baseDocumentLineId: number;
+            /** 原始类型 */
+            originalDocumentType: string;
+            /** 原始标识 */
+            originalDocumentEntry: number;
+            /** 原始行号 */
+            originalDocumentLineId: number;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -1468,6 +1523,8 @@ declare namespace materials {
             dataOwner: number;
             /** 数据所属组织 */
             organization: string;
+            /** 备注 */
+            remarks: string;
         }
     }
 }
@@ -1496,6 +1553,8 @@ declare namespace materials {
             onCommited: number;
             /** 已订购 */
             onOrdered: number;
+            /** 已预留 */
+            onReserved: number;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -1550,6 +1609,12 @@ declare namespace materials {
             baseDocumentEntry: number;
             /** 基于行号 */
             baseDocumentLineId: number;
+            /** 原始类型 */
+            originalDocumentType: string;
+            /** 原始标识 */
+            originalDocumentEntry: number;
+            /** 原始行号 */
+            originalDocumentLineId: number;
             /** 方向 */
             direction: ibas.emDirection;
             /** 数量 */
@@ -1709,6 +1774,8 @@ declare namespace materials {
             inStock: ibas.emYesNo;
             /** 锁定 */
             locked: ibas.emYesNo;
+            /** 预留 */
+            reserved: ibas.emYesNo;
             /** 供应商序号 */
             supplierSerial: string;
             /** 批次序号 */
@@ -1983,6 +2050,12 @@ declare namespace materials {
             baseDocumentEntry: number;
             /** 基于行号 */
             baseDocumentLineId: number;
+            /** 原始类型 */
+            originalDocumentType: string;
+            /** 原始标识 */
+            originalDocumentEntry: number;
+            /** 原始行号 */
+            originalDocumentLineId: number;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -2305,6 +2378,12 @@ declare namespace materials {
             country: string;
             /** 邮编 */
             zipCode: string;
+            /** 供应商 */
+            supplier: string;
+            /** 可排程 */
+            schedulable: ibas.emYesNo;
+            /** 可预留 */
+            reservable: ibas.emYesNo;
             /** 已引用 */
             referenced: ibas.emYesNo;
             /** 已删除 */
@@ -2341,6 +2420,8 @@ declare namespace materials {
             dataOwner: number;
             /** 数据所属组织 */
             organization: string;
+            /** 备注 */
+            remarks: string;
         }
     }
 }
@@ -2953,6 +3034,138 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 物料库存预留 */
+        interface IMaterialInventoryReservation extends ibas.IBOSimple {
+            /** 物料编码 */
+            itemCode: string;
+            /** 仓库编号 */
+            warehouse: string;
+            /** 批次编码 */
+            batchCode: string;
+            /** 序列编码 */
+            serialCode: string;
+            /** 数量 */
+            quantity: number;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 失效时间 */
+            invalidTime: number;
+            /** 目标单据类型 */
+            targetDocumentType: string;
+            /** 目标单据编号 */
+            targetDocumentEntry: number;
+            /** 目标单据行号 */
+            targetDocumentLineId: number;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 原因 */
+            causes: string;
+            /** 备注 */
+            remarks: string;
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 基于物料库存信息 */
+            baseBusinessObject(data: IMaterialInventory): void;
+            /** 基于物料批次信息 */
+            baseBusinessObject(data: IMaterialBatch): void;
+            /** 基于物料序列信息 */
+            baseBusinessObject(data: IMaterialSerial): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
+        /** 物料替代 */
+        interface IMaterialSubstitute extends ibas.IBOSimple {
+            /** 编号 */
+            objectKey: number;
+            /** 类型 */
+            objectCode: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 编号系列 */
+            series: number;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 物料编码 */
+            itemCode: string;
+            /** 替代物料 */
+            substitute: string;
+            /** 已激活的 */
+            activated: ibas.emYesNo;
+            /** 数量 */
+            quantity: number;
+            /** 计量单位 */
+            uom: string;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryMaterials extends ibas.IBORepositoryApplication {
             /**
@@ -3175,6 +3388,26 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialVersion(saver: ibas.ISaveCaller<bo.IMaterialVersion>): void;
+            /**
+             * 查询 物料库存预留
+             * @param fetcher 查询者
+             */
+            fetchMaterialInventoryReservation(fetcher: ibas.IFetchCaller<bo.IMaterialInventoryReservation>): void;
+            /**
+             * 保存 物料库存预留
+             * @param saver 保存者
+             */
+            saveMaterialInventoryReservation(saver: ibas.ISaveCaller<bo.IMaterialInventoryReservation>): void;
+            /**
+             * 查询 物料替代
+             * @param fetcher 查询者
+             */
+            fetchMaterialSubstitute(fetcher: ibas.IFetchCaller<bo.IMaterialSubstitute>): void;
+            /**
+             * 保存 物料替代
+             * @param saver 保存者
+             */
+            saveMaterialSubstitute(saver: ibas.ISaveCaller<bo.IMaterialSubstitute>): void;
         }
         interface ICloseCaller<T> extends ibas.IMethodCaller<string> {
             /** 查询条件 */
@@ -4791,6 +5024,12 @@ declare namespace materials {
             get onOrdered(): number;
             /** 设置-已订购 */
             set onOrdered(value: number);
+            /** 映射的属性名称-已预留 */
+            static PROPERTY_ONRESERVED_NAME: string;
+            /** 获取-已预留 */
+            get onReserved(): number;
+            /** 设置-已预留 */
+            set onReserved(value: number);
             /** 映射的属性名称-最低库存量 */
             static PROPERTY_MINIMUMINVENTORY_NAME: string;
             /** 获取-最低库存量 */
@@ -5053,7 +5292,7 @@ declare namespace materials {
             protected init(): void;
             /** 重置 */
             reset(): void;
-            /** 可用量（库存+已订购-已承诺） */
+            /** 可用量（库存 + 已订购 - 已承诺 - 已预留） */
             onAvailable(): number;
         }
         /** 物料数量 */
@@ -5088,6 +5327,12 @@ declare namespace materials {
             get onCommited(): number;
             /** 设置-库存 */
             set onCommited(value: number);
+            /** 映射的属性名称-已预留 */
+            static PROPERTY_ONRESERVED_NAME: string;
+            /** 获取-已预留 */
+            get onReserved(): number;
+            /** 设置-已预留 */
+            set onReserved(value: number);
             /** 映射的属性名称-计量单位 */
             static PROPERTY_UOM_NAME: string;
             /** 获取-计量单位 */
@@ -5100,7 +5345,7 @@ declare namespace materials {
             criteria(): ibas.ICriteria;
             /** 初始化数据 */
             protected init(): void;
-            /** 可用量（库存+已订购-已承诺） */
+            /** 可用量（库存 + 已订购 - 已承诺 - 已预留） */
             onAvailable(): number;
         }
         /** 物料价格 */
@@ -5200,6 +5445,12 @@ declare namespace materials {
             get locked(): ibas.emYesNo;
             /** 设置-锁定 */
             set locked(value: ibas.emYesNo);
+            /** 映射的属性名称-预留数量 */
+            static PROPERTY_RESERVEDQUANTITY_NAME: string;
+            /** 获取-预留数量 */
+            get reservedQuantity(): number;
+            /** 设置-预留数量 */
+            set reservedQuantity(value: number);
             /** 映射的属性名称-供应商序号 */
             static PROPERTY_SUPPLIERSERIAL_NAME: string;
             /** 获取-供应商序号 */
@@ -5259,13 +5510,13 @@ declare namespace materials {
             /** 获取-基于标识 */
             get baseDocumentEntry(): number;
             /** 设置-基于标识 */
-            set baseDocubaseDocumentEntrymentType(value: number);
+            set baseDocumentEntry(value: number);
             /** 映射的属性名称-基于行号 */
             static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
             /** 获取-基于行号 */
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
-            set baseDocubaseDocumentEntrymentLineId(value: number);
+            set baseDocumentLineId(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -5414,6 +5665,24 @@ declare namespace materials {
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
             set baseDocumentLineId(value: number);
+            /** 映射的属性名称-原始类型 */
+            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
+            /** 获取-原始类型 */
+            get originalDocumentType(): string;
+            /** 设置-原始类型 */
+            set originalDocumentType(value: string);
+            /** 映射的属性名称-原始标识 */
+            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
+            /** 获取-原始标识 */
+            get originalDocumentEntry(): number;
+            /** 设置-原始标识 */
+            set originalDocumentEntry(value: number);
+            /** 映射的属性名称-原始行号 */
+            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
+            /** 获取-原始行号 */
+            get originalDocumentLineId(): number;
+            /** 设置-原始行号 */
+            set originalDocumentLineId(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -5626,6 +5895,12 @@ declare namespace materials {
             get organization(): string;
             /** 设置-数据所属组织 */
             set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -5688,6 +5963,12 @@ declare namespace materials {
             get onOrdered(): number;
             /** 设置-已订购 */
             set onOrdered(value: number);
+            /** 映射的属性名称-已预留 */
+            static PROPERTY_ONRESERVED_NAME: string;
+            /** 获取-已预留 */
+            get onReserved(): number;
+            /** 设置-已预留 */
+            set onReserved(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -5770,7 +6051,7 @@ declare namespace materials {
             protected init(): void;
             /** 重置 */
             reset(): void;
-            /** 可用量（库存+已订购-已承诺） */
+            /** 可用量（库存 + 已订购 - 已承诺 - 已预留） */
             onAvailable(): number;
         }
     }
@@ -5826,6 +6107,24 @@ declare namespace materials {
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
             set baseDocumentLineId(value: number);
+            /** 映射的属性名称-原始类型 */
+            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
+            /** 获取-原始类型 */
+            get originalDocumentType(): string;
+            /** 设置-原始类型 */
+            set originalDocumentType(value: string);
+            /** 映射的属性名称-原始标识 */
+            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
+            /** 获取-原始标识 */
+            get originalDocumentEntry(): number;
+            /** 设置-原始标识 */
+            set originalDocumentEntry(value: number);
+            /** 映射的属性名称-原始行号 */
+            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
+            /** 获取-原始行号 */
+            get originalDocumentLineId(): number;
+            /** 设置-原始行号 */
+            set originalDocumentLineId(value: number);
             /** 映射的属性名称-方向 */
             static PROPERTY_DIRECTION_NAME: string;
             /** 获取-方向 */
@@ -6264,6 +6563,12 @@ declare namespace materials {
             get locked(): ibas.emYesNo;
             /** 设置-锁定 */
             set locked(value: ibas.emYesNo);
+            /** 映射的属性名称-预留 */
+            static PROPERTY_RESERVED_NAME: string;
+            /** 获取-预留 */
+            get reserved(): ibas.emYesNo;
+            /** 设置-预留 */
+            set reserved(value: ibas.emYesNo);
             /** 映射的属性名称-供应商序号 */
             static PROPERTY_SUPPLIERSERIAL_NAME: string;
             /** 获取-供应商序号 */
@@ -6341,13 +6646,13 @@ declare namespace materials {
             /** 获取-基于标识 */
             get baseDocumentEntry(): number;
             /** 设置-基于标识 */
-            set baseDocubaseDocumentEntrymentType(value: number);
+            set baseDocumentEntry(value: number);
             /** 映射的属性名称-基于行号 */
             static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
             /** 获取-基于行号 */
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
-            set baseDocubaseDocumentEntrymentLineId(value: number);
+            set baseDocumentLineId(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -6490,6 +6795,24 @@ declare namespace materials {
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
             set baseDocumentLineId(value: number);
+            /** 映射的属性名称-原始类型 */
+            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
+            /** 获取-原始类型 */
+            get originalDocumentType(): string;
+            /** 设置-原始类型 */
+            set originalDocumentType(value: string);
+            /** 映射的属性名称-原始标识 */
+            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
+            /** 获取-原始标识 */
+            get originalDocumentEntry(): number;
+            /** 设置-原始标识 */
+            set originalDocumentEntry(value: number);
+            /** 映射的属性名称-原始行号 */
+            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
+            /** 获取-原始行号 */
+            get originalDocumentLineId(): number;
+            /** 设置-原始行号 */
+            set originalDocumentLineId(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -6719,6 +7042,12 @@ declare namespace materials {
             get onOrdered(): number;
             /** 设置-已订购 */
             set onOrdered(value: number);
+            /** 映射的属性名称-已预留 */
+            static PROPERTY_ONRESERVED_NAME: string;
+            /** 获取-已预留 */
+            get onReserved(): number;
+            /** 设置-已预留 */
+            set onReserved(value: number);
             /** 映射的属性名称-提前期（天） */
             static PROPERTY_LEADTIME_NAME: string;
             /** 获取-提前期（天） */
@@ -6959,6 +7288,24 @@ declare namespace materials {
             get zipCode(): string;
             /** 设置-邮编 */
             set zipCode(value: string);
+            /** 映射的属性名称-供应商 */
+            static PROPERTY_SUPPLIER_NAME: string;
+            /** 获取-供应商 */
+            get supplier(): string;
+            /** 设置-供应商 */
+            set supplier(value: string);
+            /** 映射的属性名称-可排程 */
+            static PROPERTY_SCHEDULABLE_NAME: string;
+            /** 获取-可排程 */
+            get schedulable(): ibas.emYesNo;
+            /** 设置-可排程 */
+            set schedulable(value: ibas.emYesNo);
+            /** 映射的属性名称-可预留 */
+            static PROPERTY_RESERVABLE_NAME: string;
+            /** 获取-可预留 */
+            get reservable(): ibas.emYesNo;
+            /** 设置-可预留 */
+            set reservable(value: ibas.emYesNo);
             /** 映射的属性名称-已引用 */
             static PROPERTY_REFERENCED_NAME: string;
             /** 获取-已引用 */
@@ -7067,6 +7414,12 @@ declare namespace materials {
             get organization(): string;
             /** 设置-数据所属组织 */
             set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -9021,6 +9374,346 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 物料库存预留 */
+        class MaterialInventoryReservation extends ibas.BOSimple<MaterialInventoryReservation> implements IMaterialInventoryReservation {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-物料编码 */
+            static PROPERTY_ITEMCODE_NAME: string;
+            /** 获取-物料编码 */
+            get itemCode(): string;
+            /** 设置-物料编码 */
+            set itemCode(value: string);
+            /** 映射的属性名称-仓库编号 */
+            static PROPERTY_WAREHOUSE_NAME: string;
+            /** 获取-仓库编号 */
+            get warehouse(): string;
+            /** 设置-仓库编号 */
+            set warehouse(value: string);
+            /** 映射的属性名称-批次编码 */
+            static PROPERTY_BATCHCODE_NAME: string;
+            /** 获取-批次编码 */
+            get batchCode(): string;
+            /** 设置-批次编码 */
+            set batchCode(value: string);
+            /** 映射的属性名称-序列编码 */
+            static PROPERTY_SERIALCODE_NAME: string;
+            /** 获取-序列编码 */
+            get serialCode(): string;
+            /** 设置-序列编码 */
+            set serialCode(value: string);
+            /** 映射的属性名称-数量 */
+            static PROPERTY_QUANTITY_NAME: string;
+            /** 获取-数量 */
+            get quantity(): number;
+            /** 设置-数量 */
+            set quantity(value: number);
+            /** 映射的属性名称-失效日期 */
+            static PROPERTY_INVALIDDATE_NAME: string;
+            /** 获取-失效日期 */
+            get invalidDate(): Date;
+            /** 设置-失效日期 */
+            set invalidDate(value: Date);
+            /** 映射的属性名称-失效时间 */
+            static PROPERTY_INVALIDTIME_NAME: string;
+            /** 获取-失效时间 */
+            get invalidTime(): number;
+            /** 设置-失效时间 */
+            set invalidTime(value: number);
+            /** 映射的属性名称-目标单据类型 */
+            static PROPERTY_TARGETDOCUMENTTYPE_NAME: string;
+            /** 获取-目标单据类型 */
+            get targetDocumentType(): string;
+            /** 设置-目标单据类型 */
+            set targetDocumentType(value: string);
+            /** 映射的属性名称-目标单据编号 */
+            static PROPERTY_TARGETDOCUMENTENTRY_NAME: string;
+            /** 获取-目标单据编号 */
+            get targetDocumentEntry(): number;
+            /** 设置-目标单据编号 */
+            set targetDocumentEntry(value: number);
+            /** 映射的属性名称-目标单据行号 */
+            static PROPERTY_TARGETDOCUMENTLINEID_NAME: string;
+            /** 获取-目标单据行号 */
+            get targetDocumentLineId(): number;
+            /** 设置-目标单据行号 */
+            set targetDocumentLineId(value: number);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-原因 */
+            static PROPERTY_CAUSES_NAME: string;
+            /** 获取-原因 */
+            get causes(): string;
+            /** 设置-原因 */
+            set causes(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 基于物料库存信息 */
+            baseBusinessObject(data: IMaterialInventory): void;
+            /** 基于物料批次信息 */
+            baseBusinessObject(data: IMaterialBatch): void;
+            /** 基于物料序列信息 */
+            baseBusinessObject(data: IMaterialSerial): void;
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
+        /** 物料替代 */
+        class MaterialSubstitute extends ibas.BOSimple<MaterialSubstitute> implements IMaterialSubstitute {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-编号 */
+            get objectKey(): number;
+            /** 设置-编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-编号系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-编号系列 */
+            get series(): number;
+            /** 设置-编号系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-物料编码 */
+            static PROPERTY_ITEMCODE_NAME: string;
+            /** 获取-物料编码 */
+            get itemCode(): string;
+            /** 设置-物料编码 */
+            set itemCode(value: string);
+            /** 映射的属性名称-替代物料 */
+            static PROPERTY_SUBSTITUTE_NAME: string;
+            /** 获取-替代物料 */
+            get substitute(): string;
+            /** 设置-替代物料 */
+            set substitute(value: string);
+            /** 映射的属性名称-已激活的 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-已激活的 */
+            get activated(): ibas.emYesNo;
+            /** 设置-已激活的 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-数量 */
+            static PROPERTY_QUANTITY_NAME: string;
+            /** 获取-数量 */
+            get quantity(): number;
+            /** 设置-数量 */
+            set quantity(value: number);
+            /** 映射的属性名称-计量单位 */
+            static PROPERTY_UOM_NAME: string;
+            /** 获取-计量单位 */
+            get uom(): string;
+            /** 设置-计量单位 */
+            set uom(value: string);
+            /** 映射的属性名称-生效日期 */
+            static PROPERTY_VALIDDATE_NAME: string;
+            /** 获取-生效日期 */
+            get validDate(): Date;
+            /** 设置-生效日期 */
+            set validDate(value: Date);
+            /** 映射的属性名称-失效日期 */
+            static PROPERTY_INVALIDDATE_NAME: string;
+            /** 获取-失效日期 */
+            get invalidDate(): Date;
+            /** 设置-失效日期 */
+            set invalidDate(value: Date);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -9339,6 +10032,26 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialVersion(saver: ibas.ISaveCaller<bo.MaterialVersion>): void;
+            /**
+             * 查询 物料库存预留
+             * @param fetcher 查询者
+             */
+            fetchMaterialInventoryReservation(fetcher: ibas.IFetchCaller<bo.MaterialInventoryReservation>): void;
+            /**
+             * 保存 物料库存预留
+             * @param saver 保存者
+             */
+            saveMaterialInventoryReservation(saver: ibas.ISaveCaller<bo.MaterialInventoryReservation>): void;
+            /**
+             * 查询 物料替代
+             * @param fetcher 查询者
+             */
+            fetchMaterialSubstitute(fetcher: ibas.IFetchCaller<bo.MaterialSubstitute>): void;
+            /**
+             * 保存 物料替代
+             * @param saver 保存者
+             */
+            saveMaterialSubstitute(saver: ibas.ISaveCaller<bo.MaterialSubstitute>): void;
         }
     }
 }
@@ -10178,6 +10891,8 @@ declare namespace materials {
             private chooseMaterialScrap;
             /** 选择计划员事件 */
             private chooseScheduler;
+            /** 编辑物料替代事件 */
+            private editMaterialSubstitute;
         }
         /** 视图-物料 */
         interface IMaterialEditView extends ibas.IBOEditView {
@@ -10195,12 +10910,14 @@ declare namespace materials {
             uploadPictureEvent: Function;
             /** 选择物料单位事件 */
             chooseMaterialUOMEvent: Function;
-            /** 选择物料单位换算率事件 */
+            /** 编辑物料单位换算率事件 */
             editMaterialUnitRateEvent: Function;
             /** 选择物废品率事件 */
             chooseMaterialScrapEvent: Function;
             /** 选择计划员事件 */
             chooseSchedulerEvent: Function;
+            /** 编辑物料替代事件 */
+            editMaterialSubstituteEvent: Function;
         }
     }
 }
@@ -10377,6 +11094,9 @@ declare namespace materials {
             private editMaterialBatch;
             private fetchMaterialSerial;
             private editMaterialSerial;
+            private fetchMaterialReservation;
+            /** 释放预留库存 */
+            private releaseMaterialReservation;
         }
         /** 视图-物料 */
         interface IMaterialOverviewView extends ibas.IBOListView {
@@ -10402,6 +11122,12 @@ declare namespace materials {
             editMaterialSerialEvent: Function;
             /** 显示物料序列信息 */
             showMaterialSerial(datas: bo.IMaterialSerial[]): void;
+            /** 查询预留信息 */
+            fetchMaterialReservationEvent: Function;
+            /** 释放预留信息 */
+            releaseMaterialReservationEvent: Function;
+            /** 显示物料预留信息 */
+            showMaterialReservation(datas: bo.IMaterialInventoryReservation[]): void;
         }
     }
 }
@@ -10499,6 +11225,169 @@ declare namespace materials {
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+declare namespace materials {
+    namespace app {
+        class ReservationWorking extends ibas.Bindable {
+            constructor(data: IMaterialInventoryReservationTarget);
+            get data(): IMaterialInventoryReservationTarget;
+            get targetType(): string;
+            get targetEntry(): number;
+            get businessPartner(): string;
+            get items(): ibas.IList<ReservationWorkingItem>;
+        }
+        class ReservationWorkingItem extends ibas.Bindable {
+            constructor(data: IMaterialInventoryReservationTargetLine);
+            get data(): IMaterialInventoryReservationTargetLine;
+            /** 行号 */
+            get lineId(): number;
+            /** 物料编码 */
+            get itemCode(): string;
+            /** 物料描述 */
+            get itemDescription(): string;
+            set itemDescription(value: string);
+            /** 物料版本 */
+            get itemVersion(): string;
+            /** 仓库编码 */
+            get warehouse(): string;
+            /** 数量 */
+            get quantity(): number;
+            /** 单位 */
+            get uom(): string;
+            /** 序列号管理 */
+            get serialManagement(): ibas.emYesNo;
+            set serialManagement(value: ibas.emYesNo);
+            /** 批次管理 */
+            get batchManagement(): ibas.emYesNo;
+            set batchManagement(value: ibas.emYesNo);
+            /** 混用批次 */
+            get mixingBatches(): ibas.emYesNo;
+            set mixingBatches(value: ibas.emYesNo);
+            /** 库存数量 */
+            get inventoryQuantity(): number;
+            /** 库存单位 */
+            get inventoryUOM(): string;
+            set inventoryUOM(value: string);
+            /** 单位汇率 */
+            get uomRate(): number;
+            set uomRate(value: number);
+            /** 剩余数量 */
+            get remaining(): number;
+            /** 操作结果 */
+            get results(): ReservationWorkingItemResults;
+            fireProcessing(): void;
+        }
+        class ReservationWorkingItemResults extends ibas.ArrayList<bo.MaterialInventoryReservation> {
+            constructor(parent: ReservationWorkingItem);
+            protected get parent(): ReservationWorkingItem;
+            add(item: bo.MaterialInventoryReservation | bo.MaterialInventoryReservation[]): void;
+            private listener;
+            remove(item: bo.MaterialInventoryReservation): boolean;
+            filterDeleted(): bo.MaterialInventoryReservation[];
+            total(): number;
+        }
+        /** 应用-物料库存预留 */
+        class MaterialInventoryReservationService extends ibas.ServiceApplication<IMaterialInventoryReservationView, IMaterialInventoryReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private workingData;
+            protected runService(contract: IMaterialInventoryReservationTarget): void;
+            private warehouses;
+            private currentWorkingItem;
+            /** 切换工作数据 */
+            private changeWorkingItem;
+            /** 预留库存 */
+            private reserveInventory;
+            /** 释放预留库存 */
+            private releaseReservation;
+            /** 保存预留库存 */
+            private saveReservation;
+        }
+        /** 视图-物料库存预留 */
+        interface IMaterialInventoryReservationView extends ibas.IView {
+            /** 切换工作数据 */
+            changeWorkingItemEvent: Function;
+            /** 预留库存 */
+            reserveInventoryEvent: Function;
+            /** 释放预留库存 */
+            releaseReservationEvent: Function;
+            /** 显示工作顺序 */
+            showWorkingData(data: ReservationWorking): void;
+            /** 显示物料库存 */
+            showInventories(datas: bo.MaterialInventory[] | bo.MaterialBatch[] | bo.MaterialSerial[]): void;
+            /** 显示预留 */
+            showReservations(datas: bo.MaterialInventoryReservation[]): void;
+            /** 保存预留库存 */
+            saveReservationEvent: Function;
+        }
+        /** 物料库存预留服务映射 */
+        class MaterialInventoryReservationServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-物料替代 */
+        class MaterialSubstituteListApp extends ibas.Application<IMaterialSubstituteListView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(material?: bo.Material): void;
+            private material;
+            private substitutes;
+            protected removeMaterialSubstitute(data: materials.bo.MaterialSubstitute | materials.bo.MaterialSubstitute[]): void;
+            protected addMaterialSubstitute(caller?: bo.MaterialSubstitute): void;
+            protected saveMaterialSubstitute(beSaveds: materials.bo.MaterialSubstitute[]): void;
+            /** 关闭视图 */
+            close(): void;
+        }
+        /** 视图-物料替代 */
+        interface IMaterialSubstituteListView extends ibas.IView {
+            /** 保存数据事件 */
+            saveSubstituteEvent: Function;
+            /** 添加数据事件 */
+            addSubstituteEvent: Function;
+            /** 移除数据事件 */
+            removeSubstituteEvent: Function;
+            /** 显示数据 */
+            showSubstitutes(datas: bo.MaterialSubstitute[]): void;
+            /** 显示数据 */
+            showMaterials(data: bo.Material): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
@@ -10563,8 +11452,7 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            run(): void;
-            run(data: bo.MaterialBatch): void;
+            run(data?: bo.MaterialBatch | ibas.Criteria): void;
             /** 保存数据 */
             protected saveData(): void;
             /** 选择物料规格 */
@@ -11317,8 +12205,7 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            run(): void;
-            run(data: bo.MaterialSerial): void;
+            run(data?: bo.MaterialSerial | ibas.Criteria): void;
             /** 保存数据 */
             protected saveData(): void;
             /** 选择物料规格 */

@@ -2419,6 +2419,20 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 						return PurchaseReturnItem.this.getSerialManagement();
 					}
 
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseReturnItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseReturnItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseReturnItem.this.getBaseDocumentLineId();
+					}
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

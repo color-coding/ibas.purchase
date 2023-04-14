@@ -2417,6 +2417,21 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem>
 					public emYesNo getSerialManagement() {
 						return PurchaseDeliveryItem.this.getSerialManagement();
 					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseDeliveryItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseDeliveryItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
+					}
 				},
 				// 采购订单收货
 				new IPurchaseOrderReceiptContract() {

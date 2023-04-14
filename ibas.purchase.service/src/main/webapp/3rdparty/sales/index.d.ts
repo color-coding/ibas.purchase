@@ -9017,6 +9017,8 @@ declare namespace sales {
             /** 选择销售订单-行 单位 */
             private chooseSalesOrderItemUnit;
             private chooseSalesOrderItemMaterialVersion;
+            /** 预留物料库存 */
+            private reserveMaterialsInventory;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -9066,6 +9068,8 @@ declare namespace sales {
             turnToSalesReturnEvent: Function;
             /** 转为销售发票事件 */
             turnToSalesInvoiceEvent: Function;
+            /** 预留物料库存 */
+            reserveMaterialsInventoryEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
