@@ -3140,8 +3140,12 @@ declare namespace materials {
             organization: string;
             /** 物料编码 */
             itemCode: string;
+            /** 位置 */
+            position: number;
             /** 替代物料 */
             substitute: string;
+            /** 物料版本 */
+            version: string;
             /** 已激活的 */
             activated: ibas.emYesNo;
             /** 数量 */
@@ -9658,6 +9662,12 @@ declare namespace materials {
             get itemCode(): string;
             /** 设置-物料编码 */
             set itemCode(value: string);
+            /** 映射的属性名称-位置 */
+            static PROPERTY_POSITION_NAME: string;
+            /** 获取-位置 */
+            get position(): number;
+            /** 设置-位置 */
+            set position(value: number);
             /** 映射的属性名称-替代物料 */
             static PROPERTY_SUBSTITUTE_NAME: string;
             /** 获取-替代物料 */
@@ -9670,6 +9680,12 @@ declare namespace materials {
             get activated(): ibas.emYesNo;
             /** 设置-已激活的 */
             set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_VERSION_NAME: string;
+            /** 获取-物料版本 */
+            get version(): string;
+            /** 设置-物料版本 */
+            set version(value: string);
             /** 映射的属性名称-数量 */
             static PROPERTY_QUANTITY_NAME: string;
             /** 获取-数量 */
@@ -9702,6 +9718,16 @@ declare namespace materials {
             set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
+        }
+        /** 物料替代 集合 */
+        class MaterialSubstitutes extends ibas.BusinessObjectsBase<MaterialSubstitute> {
+            /** 创建并添加子项 */
+            create(): MaterialSubstitute;
+            /**
+             * 添加项目后
+             * @param item 项目
+             */
+            protected afterAdd(item: MaterialSubstitute): void;
         }
     }
 }
@@ -11365,6 +11391,8 @@ declare namespace materials {
             protected saveMaterialSubstitute(beSaveds: materials.bo.MaterialSubstitute[]): void;
             /** 关闭视图 */
             close(): void;
+            /** 选择物料版本 */
+            private chooseSubstituteVersion;
         }
         /** 视图-物料替代 */
         interface IMaterialSubstituteListView extends ibas.IView {
@@ -11378,6 +11406,8 @@ declare namespace materials {
             showSubstitutes(datas: bo.MaterialSubstitute[]): void;
             /** 显示数据 */
             showMaterials(data: bo.Material): void;
+            /** 选择数据版本事件 */
+            chooseSubstituteVersionEvent: Function;
         }
     }
 }

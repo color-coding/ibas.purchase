@@ -184,13 +184,18 @@ namespace purchase {
                     criteria.conditions.lastOrDefault().bracketClose += 1;
                 }
                 criteria.conditions.add(conditions.salesorder.create());
+                this.busy(true);
                 let boRepository: sales.bo.BORepositorySales = new sales.bo.BORepositorySales();
                 boRepository.fetchSalesOrder({
                     criteria: criteria,
                     onCompleted: (opRslt) => {
                         try {
+                            this.busy(false);
                             if (opRslt.resultCode !== 0) {
                                 throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                this.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_fetched_none"));
                             }
                             this.view.showSalesOrders(opRslt.resultObjects);
                         } catch (error) {

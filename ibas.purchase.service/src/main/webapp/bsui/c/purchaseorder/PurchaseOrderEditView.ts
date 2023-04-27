@@ -731,13 +731,14 @@ namespace purchase {
                                 }),
                                 new sap.m.ToolbarSeparator(""),
                                 new sap.m.MenuButton("", {
-                                    text: ibas.i18n.prop("purchase_copy_to"),
-                                    icon: "sap-icon://duplicate",
+                                    text: ibas.i18n.prop("shell_quick_to"),
+                                    icon: "sap-icon://generate-shortcut",
                                     type: sap.m.ButtonType.Transparent,
                                     menu: new sap.m.Menu("", {
                                         items: [
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchasedelivery"),
+                                                icon: "sap-icon://doc-attachment",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.turnToPurchaseDeliveryEvent);
                                                 },
@@ -750,6 +751,7 @@ namespace purchase {
                                             }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchaseinvoice"),
+                                                icon: "sap-icon://doc-attachment",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.turnToPurchaseInvoiceEvent);
                                                 },
@@ -762,6 +764,7 @@ namespace purchase {
                                             }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchasereturn"),
+                                                icon: "sap-icon://doc-attachment",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.turnToPurchaseReturnEvent);
                                                 },

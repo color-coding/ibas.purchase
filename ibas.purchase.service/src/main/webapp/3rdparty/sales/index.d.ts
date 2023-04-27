@@ -155,6 +155,8 @@ declare namespace sales {
             objectKey: number;
             /** 对象行号 */
             lineId: number;
+            /** 显示顺序 */
+            visOrder: number;
             /** 对象类型 */
             objectCode: string;
             /** 实例号 */
@@ -191,6 +193,10 @@ declare namespace sales {
             currency: string;
             /** 总计 */
             lineTotal: number;
+            /** 参考1 */
+            reference1: string;
+            /** 参考2 */
+            reference2: string;
         }
         interface IProductSuitEx extends IProductSuit {
             extend: materials.bo.IProduct;
@@ -2412,6 +2418,12 @@ declare namespace sales {
             get lineId(): number;
             /** 设置-对象行号 */
             set lineId(value: number);
+            /** 映射的属性名称-显示顺序 */
+            static PROPERTY_VISORDER_NAME: string;
+            /** 获取-显示顺序 */
+            get visOrder(): number;
+            /** 设置-显示顺序 */
+            set visOrder(value: number);
             /** 映射的属性名称-对象类型 */
             static PROPERTY_OBJECTCODE_NAME: string;
             /** 获取-对象类型 */
@@ -2520,6 +2532,18 @@ declare namespace sales {
             get lineTotal(): number;
             /** 设置-总计 */
             set lineTotal(value: number);
+            /** 映射的属性名称-参考1 */
+            static PROPERTY_REFERENCE1_NAME: string;
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 映射的属性名称-参考2 */
+            static PROPERTY_REFERENCE2_NAME: string;
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
             /** 初始化数据 */
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];

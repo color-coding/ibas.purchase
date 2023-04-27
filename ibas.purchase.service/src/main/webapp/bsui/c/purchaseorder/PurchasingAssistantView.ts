@@ -43,7 +43,7 @@ namespace purchase {
                                             }),
                                             this.inputCustomer = new sap.m.MultiInput("", {
                                                 showValueHelp: true,
-                                                valueHelpOnly: false,
+                                                valueHelpOnly: true,
                                                 valueHelpRequest(event: sap.ui.base.Event): void {
                                                     let source: any = event.getSource();
                                                     ibas.servicesManager.runChooseService<businesspartner.bo.Customer>({
@@ -139,7 +139,7 @@ namespace purchase {
                                             }),
                                             this.inputMaterial = new sap.m.MultiInput("", {
                                                 showValueHelp: true,
-                                                valueHelpOnly: false,
+                                                valueHelpOnly: true,
                                                 valueHelpRequest(event: sap.ui.base.Event): void {
                                                     let source: sap.m.Input = <any>event.getSource();
                                                     ibas.servicesManager.runChooseService<materials.bo.Material>({
@@ -215,7 +215,7 @@ namespace purchase {
                                         icon: "sap-icon://search",
                                         text: ibas.i18n.prop("shell_query"),
                                         type: sap.m.ButtonType.Accept,
-                                        width: "8rem",
+                                        width: "100%",
                                         press(): void {
                                             let value: string;
                                             let count: number;
@@ -327,7 +327,25 @@ namespace purchase {
                                             }
                                             that.fireViewEvents(that.fetchSalesOrderEvent, criteria);
                                         }
-                                    })
+                                    }),
+                                    new sap.m.Button("", {
+                                        icon: "sap-icon://reset",
+                                        text: ibas.i18n.prop("shell_reset"),
+                                        type: sap.m.ButtonType.Reject,
+                                        width: "100%",
+                                        press(): void {
+                                            that.inputCustomer.destroyTokens();
+                                            that.inputOrder.setValue(null);
+                                            that.inputOrderTo.setValue(null);
+                                            that.inputDate.setValue(null);
+                                            that.inputDateTo.setValue(null);
+                                            that.inputMaterial.destroyTokens();
+                                            that.selectType.setSelectedItem(null);
+                                            that.selectPaid.setSelectedItem(null);
+                                            that.checkSuppiler.setSelected(false);
+                                            that.checkOrdered.setSelected(true);
+                                        }
+                                    }),
                                 ]
                             }).addStyleClass("sapUiTinyMargin")
                         ],
@@ -406,99 +424,87 @@ namespace purchase {
                         ]
                     });
                     return new sap.ui.layout.Splitter("", {
+                        orientation: sap.ui.core.Orientation.Horizontal,
+                        layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                            resizable: true,
+                        }),
                         contentAreas: [
-                            new sap.extension.m.Page("", {
-                                showHeader: false,
-                                enableScrolling: false,
+                            new sap.ui.layout.Splitter("", {
+                                width: "auto",
+                                orientation: sap.ui.core.Orientation.Vertical,
                                 layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                    size: "60%"
+                                    size: "60%",
+                                    resizable: true,
                                 }),
-                                content: [
-                                    new sap.ui.layout.Splitter("", {
-                                        width: "auto",
-                                        orientation: sap.ui.core.Orientation.Vertical,
-                                        contentAreas: [
-                                            new sap.m.Page("", {
-                                                showHeader: false,
-                                                enableScrolling: true,
-                                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                                    size: "28%",
-                                                    resizable: false,
-                                                }),
-                                                content: [
-                                                    this.leftTop,
-                                                ],
-                                            }),
-                                            new sap.m.Page("", {
-                                                showHeader: false,
-                                                enableScrolling: true,
-                                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                                    size: "72%",
-                                                    resizable: false,
-                                                }),
-                                                content: [
-                                                    this.leftOrder = new sap.extension.m.List("", {
-                                                        width: "auto",
-                                                        items: {
-                                                            path: "/",
-                                                            template: new sap.m.CustomListItem("", {
-                                                                content: [
-                                                                    new sap.m.Panel("", {
-                                                                        expandable: true,
-                                                                        expanded: false,
-                                                                        headerToolbar:
-                                                                            new sap.m.Toolbar("", {
-                                                                                content: [
-                                                                                    new sap.m.Title("", {
-                                                                                        width: "auto",
-                                                                                    }).bindProperty("text", {
-                                                                                        path: "docEntry",
-                                                                                        formatter(data: number): string {
-                                                                                            return data ? ibas.strings.format("# {0}", data) : undefined;
-                                                                                        }
-                                                                                    }),
-                                                                                    new sap.m.Title("", {
-                                                                                        width: "auto",
-                                                                                    }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
-                                                                                        parts: [
-                                                                                            {
-                                                                                                path: "customerCode",
-                                                                                            },
-                                                                                            {
-                                                                                                path: "customerName"
-                                                                                            }
-                                                                                        ],
-                                                                                        formatter(code: string, name: string): string {
-                                                                                            return ibas.strings.format("{1} ({0})", code, name);
-                                                                                        }
-                                                                                    }),
-                                                                                    new sap.m.ToolbarSpacer(""),
-                                                                                    new sap.m.GenericTag("", {
-                                                                                        design: sap.m.GenericTagDesign.StatusIconHidden,
-                                                                                        text: ibas.i18n.prop("purchase_assistant_order_date"),
-                                                                                        value: new sap.m.ObjectNumber("", {
-                                                                                            emphasized: false,
-                                                                                            number: {
-                                                                                                path: "deliveryDate",
-                                                                                                type: new sap.extension.data.Date()
-                                                                                            },
-                                                                                            state: {
-                                                                                                path: "deliveryDate",
-                                                                                                formatter(deliveryDate: Date): sap.ui.core.ValueState {
-                                                                                                    if (ibas.dates.difference(
-                                                                                                        ibas.dates.emDifferenceType.DAY, deliveryDate, ibas.dates.today()
-                                                                                                    ) > 7) {
-                                                                                                        return sap.ui.core.ValueState.Success;
-                                                                                                    } else if (ibas.dates.difference(
-                                                                                                        ibas.dates.emDifferenceType.DAY, deliveryDate, ibas.dates.today()
-                                                                                                    ) > 3) {
-                                                                                                        return sap.ui.core.ValueState.Warning;
-                                                                                                    }
-                                                                                                    return sap.ui.core.ValueState.Error;
-                                                                                                }
-                                                                                            }
-                                                                                        })
-                                                                                    }).addStyleClass("sapUiSmallMarginBegin").bindProperty("status", {
+                                contentAreas: [
+                                    new sap.m.Page("", {
+                                        showHeader: false,
+                                        enableScrolling: true,
+                                        layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                                            size: "12rem",
+                                            resizable: false,
+                                        }),
+                                        content: [
+                                            this.leftTop,
+                                        ],
+                                    }),
+                                    new sap.m.Page("", {
+                                        showHeader: false,
+                                        enableScrolling: true,
+                                        layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                                            size: "auto",
+                                            resizable: false,
+                                        }),
+                                        content: [
+                                            this.leftOrder = new sap.extension.m.List("", {
+                                                backgroundDesign: sap.m.BackgroundDesign.Transparent,
+                                                width: "auto",
+                                                items: {
+                                                    path: "/",
+                                                    template: new sap.m.CustomListItem("", {
+                                                        content: [
+                                                            new sap.m.Panel("", {
+                                                                expandable: true,
+                                                                expanded: false,
+                                                                headerToolbar:
+                                                                    new sap.m.Toolbar("", {
+                                                                        content: [
+                                                                            new sap.m.Title("", {
+                                                                                width: "auto",
+                                                                                titleStyle: sap.ui.core.TitleLevel.H5,
+                                                                            }).bindProperty("text", {
+                                                                                path: "docEntry",
+                                                                                formatter(data: number): string {
+                                                                                    return data ? ibas.strings.format("# {0}", data) : undefined;
+                                                                                }
+                                                                            }),
+                                                                            new sap.m.Title("", {
+                                                                                width: "auto",
+                                                                                titleStyle: sap.ui.core.TitleLevel.H5,
+                                                                            }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
+                                                                                parts: [
+                                                                                    {
+                                                                                        path: "customerCode",
+                                                                                    },
+                                                                                    {
+                                                                                        path: "customerName"
+                                                                                    }
+                                                                                ],
+                                                                                formatter(code: string, name: string): string {
+                                                                                    return ibas.strings.format("{1} ({0})", code, name);
+                                                                                }
+                                                                            }),
+                                                                            new sap.m.ToolbarSpacer(""),
+                                                                            new sap.m.GenericTag("", {
+                                                                                design: sap.m.GenericTagDesign.StatusIconHidden,
+                                                                                text: ibas.i18n.prop("purchase_assistant_order_date"),
+                                                                                value: new sap.m.ObjectNumber("", {
+                                                                                    emphasized: false,
+                                                                                    number: {
+                                                                                        path: "deliveryDate",
+                                                                                        type: new sap.extension.data.Date()
+                                                                                    },
+                                                                                    state: {
                                                                                         path: "deliveryDate",
                                                                                         formatter(deliveryDate: Date): sap.ui.core.ValueState {
                                                                                             if (ibas.dates.difference(
@@ -512,40 +518,37 @@ namespace purchase {
                                                                                             }
                                                                                             return sap.ui.core.ValueState.Error;
                                                                                         }
-                                                                                    }),
-                                                                                    new sap.m.GenericTag("", {
-                                                                                        design: sap.m.GenericTagDesign.StatusIconHidden,
-                                                                                        text: ibas.i18n.prop("purchase_assistant_order_paid_total"),
-                                                                                        value: new sap.m.ObjectNumber("", {
-                                                                                            emphasized: false,
-                                                                                            number: {
-                                                                                                path: "paidTotal",
-                                                                                                type: new sap.extension.data.Sum()
-                                                                                            },
-                                                                                            unit: {
-                                                                                                path: "documentCurrency",
-                                                                                                type: new sap.extension.data.Alphanumeric()
-                                                                                            },
-                                                                                            state: {
-                                                                                                parts: [
-                                                                                                    {
-                                                                                                        path: "paidTotal",
-                                                                                                    },
-                                                                                                    {
-                                                                                                        path: "documentTotal",
-                                                                                                    }
-                                                                                                ],
-                                                                                                formatter(paidTotal: number, documentTotal: number): sap.ui.core.ValueState {
-                                                                                                    if (paidTotal >= documentTotal) {
-                                                                                                        return sap.ui.core.ValueState.Success;
-                                                                                                    } else if (paidTotal > 0) {
-                                                                                                        return sap.ui.core.ValueState.Warning;
-                                                                                                    }
-                                                                                                    return sap.ui.core.ValueState.Error;
-                                                                                                }
-                                                                                            }
-                                                                                        })
-                                                                                    }).addStyleClass("sapUiTinyMarginBegin").bindProperty("status", {
+                                                                                    }
+                                                                                })
+                                                                            }).addStyleClass("sapUiSmallMarginBegin").bindProperty("status", {
+                                                                                path: "deliveryDate",
+                                                                                formatter(deliveryDate: Date): sap.ui.core.ValueState {
+                                                                                    if (ibas.dates.difference(
+                                                                                        ibas.dates.emDifferenceType.DAY, deliveryDate, ibas.dates.today()
+                                                                                    ) > 7) {
+                                                                                        return sap.ui.core.ValueState.Success;
+                                                                                    } else if (ibas.dates.difference(
+                                                                                        ibas.dates.emDifferenceType.DAY, deliveryDate, ibas.dates.today()
+                                                                                    ) > 3) {
+                                                                                        return sap.ui.core.ValueState.Warning;
+                                                                                    }
+                                                                                    return sap.ui.core.ValueState.Error;
+                                                                                }
+                                                                            }),
+                                                                            new sap.m.GenericTag("", {
+                                                                                design: sap.m.GenericTagDesign.StatusIconHidden,
+                                                                                text: ibas.i18n.prop("purchase_assistant_order_paid_total"),
+                                                                                value: new sap.m.ObjectNumber("", {
+                                                                                    emphasized: false,
+                                                                                    number: {
+                                                                                        path: "paidTotal",
+                                                                                        type: new sap.extension.data.Sum()
+                                                                                    },
+                                                                                    unit: {
+                                                                                        path: "documentCurrency",
+                                                                                        type: new sap.extension.data.Alphanumeric()
+                                                                                    },
+                                                                                    state: {
                                                                                         parts: [
                                                                                             {
                                                                                                 path: "paidTotal",
@@ -562,405 +565,429 @@ namespace purchase {
                                                                                             }
                                                                                             return sap.ui.core.ValueState.Error;
                                                                                         }
-                                                                                    }),
-                                                                                    new sap.m.Button("", {
-                                                                                        // type: sap.m.ButtonType.Attention,
-                                                                                        text: ibas.i18n.prop("purchase_assistant_view_details"),
-                                                                                        icon: "sap-icon://detail-view",
-                                                                                        press(this: sap.m.Button): void {
-                                                                                            let order: any = this.getBindingContext().getObject();
-                                                                                            if (order instanceof sales.bo.SalesOrder) {
-                                                                                                let criteria: ibas.ICriteria = new ibas.Criteria();
-                                                                                                criteria.businessObject = sales.bo.BO_CODE_SALESORDER;
-                                                                                                let condition: ibas.ICondition = criteria.conditions.create();
-                                                                                                condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
-                                                                                                condition.value = order.docEntry.toString();
-                                                                                                ibas.servicesManager.runLinkService({
-                                                                                                    boCode: criteria.businessObject,
-                                                                                                    linkValue: criteria
-                                                                                                });
-                                                                                            }
-                                                                                        }
-                                                                                    })
-                                                                                ]
+                                                                                    }
+                                                                                })
+                                                                            }).addStyleClass("sapUiTinyMarginBegin").bindProperty("status", {
+                                                                                parts: [
+                                                                                    {
+                                                                                        path: "paidTotal",
+                                                                                    },
+                                                                                    {
+                                                                                        path: "documentTotal",
+                                                                                    }
+                                                                                ],
+                                                                                formatter(paidTotal: number, documentTotal: number): sap.ui.core.ValueState {
+                                                                                    if (paidTotal >= documentTotal) {
+                                                                                        return sap.ui.core.ValueState.Success;
+                                                                                    } else if (paidTotal > 0) {
+                                                                                        return sap.ui.core.ValueState.Warning;
+                                                                                    }
+                                                                                    return sap.ui.core.ValueState.Error;
+                                                                                }
                                                                             }),
-                                                                        content: [
-                                                                            new sap.extension.m.List("", {
-                                                                                width: "auto",
-                                                                                inset: false,
-                                                                                growing: true,
-                                                                                mode: sap.m.ListMode.None,
-                                                                                items: {
-                                                                                    path: "salesOrderItems",
-                                                                                    templateShareable: false,
-                                                                                    template: new sap.extension.m.CustomListItem("", {
-                                                                                        type: sap.m.ListType.Detail,
-                                                                                        detailIcon: "sap-icon://forward",
-                                                                                        detailTooltip: ibas.i18n.prop("shell_data_choose"),
-                                                                                        detailPress(this: sap.m.ListItemBase): void {
-                                                                                            let orderItem: any = this.getBindingContext().getObject();
-                                                                                            if (orderItem instanceof sales.bo.SalesOrderItem) {
-                                                                                                that.fireViewEvents(
-                                                                                                    that.chooseSalesOrderItemEvent, orderItem, that.checkMerge.getSelected());
-                                                                                            }
-                                                                                        },
+                                                                            new sap.m.Button("", {
+                                                                                type: sap.m.ButtonType.Ghost,
+                                                                                // text: ibas.i18n.prop("purchase_assistant_view_details"),
+                                                                                icon: "sap-icon://detail-view",
+                                                                                press(this: sap.m.Button): void {
+                                                                                    let order: any = this.getBindingContext().getObject();
+                                                                                    if (order instanceof sales.bo.SalesOrder) {
+                                                                                        let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                                                        criteria.businessObject = sales.bo.BO_CODE_SALESORDER;
+                                                                                        let condition: ibas.ICondition = criteria.conditions.create();
+                                                                                        condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
+                                                                                        condition.value = order.docEntry.toString();
+                                                                                        ibas.servicesManager.runLinkService({
+                                                                                            boCode: criteria.businessObject,
+                                                                                            linkValue: criteria
+                                                                                        });
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        ]
+                                                                    }),
+                                                                content: [
+                                                                    new sap.extension.m.List("", {
+                                                                        width: "auto",
+                                                                        inset: false,
+                                                                        growing: true,
+                                                                        mode: sap.m.ListMode.None,
+                                                                        items: {
+                                                                            path: "salesOrderItems",
+                                                                            templateShareable: false,
+                                                                            template: new sap.extension.m.CustomListItem("", {
+                                                                                type: sap.m.ListType.Detail,
+                                                                                detailIcon: "sap-icon://forward",
+                                                                                detailTooltip: ibas.i18n.prop("shell_data_choose"),
+                                                                                detailPress(this: sap.m.ListItemBase): void {
+                                                                                    let orderItem: any = this.getBindingContext().getObject();
+                                                                                    if (orderItem instanceof sales.bo.SalesOrderItem) {
+                                                                                        that.fireViewEvents(
+                                                                                            that.chooseSalesOrderItemEvent, orderItem, that.checkMerge.getSelected());
+                                                                                    }
+                                                                                },
+                                                                                content: [
+                                                                                    new sap.m.Toolbar("", {
                                                                                         content: [
-                                                                                            new sap.m.Toolbar("", {
-                                                                                                content: [
-                                                                                                    new sap.m.ObjectAttribute("", {
-                                                                                                    }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
-                                                                                                        path: "lineId",
-                                                                                                        formatter(data: number): string {
-                                                                                                            return data ? ibas.strings.format("{0}.", data) : undefined;
-                                                                                                        }
-                                                                                                    }),
-                                                                                                    new sap.m.ObjectAttribute("", {
-                                                                                                    }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
-                                                                                                        parts: [
-                                                                                                            {
-                                                                                                                path: "itemCode",
-                                                                                                            },
-                                                                                                            {
-                                                                                                                path: "itemDescription"
-                                                                                                            }
-                                                                                                        ],
-                                                                                                        formatter(code: string, name: string): string {
-                                                                                                            return ibas.strings.format("{1} ({0})", code, name);
-                                                                                                        }
-                                                                                                    }),
-                                                                                                    new sap.m.ObjectAttribute("", {
-                                                                                                        text: "×",
-                                                                                                    }).addStyleClass("sapUiTinyMarginBegin"),
-                                                                                                    new sap.m.ObjectNumber("", {
-                                                                                                        number: {
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
+                                                                                                path: "lineId",
+                                                                                                formatter(data: number): string {
+                                                                                                    return data ? ibas.strings.format("{0}.", data) : undefined;
+                                                                                                }
+                                                                                            }),
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin").bindProperty("text", {
+                                                                                                parts: [
+                                                                                                    {
+                                                                                                        path: "itemCode",
+                                                                                                    },
+                                                                                                    {
+                                                                                                        path: "itemDescription"
+                                                                                                    }
+                                                                                                ],
+                                                                                                formatter(code: string, name: string): string {
+                                                                                                    return ibas.strings.format("{1} ({0})", code, name);
+                                                                                                }
+                                                                                            }),
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                                text: "×",
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin"),
+                                                                                            new sap.m.ObjectNumber("", {
+                                                                                                number: {
+                                                                                                    path: "quantity",
+                                                                                                    type: new sap.extension.data.Quantity()
+                                                                                                },
+                                                                                                unit: {
+                                                                                                    path: "uom",
+                                                                                                    type: new sap.extension.data.Alphanumeric()
+                                                                                                }
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                                text: {
+                                                                                                    path: "reference1",
+                                                                                                    type: new sap.extension.data.Alphanumeric()
+                                                                                                },
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin"),
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                                text: {
+                                                                                                    path: "reference2",
+                                                                                                    type: new sap.extension.data.Alphanumeric()
+                                                                                                },
+                                                                                            }).addStyleClass("sapUiTinyMarginBegin"),
+                                                                                            new sap.m.ToolbarSpacer(""),
+                                                                                            new sap.m.ObjectAttribute("", {
+                                                                                                text: ibas.i18n.prop("purchase_assistant_order_quantity")
+                                                                                            }),
+                                                                                            new sap.m.ObjectNumber("", {
+                                                                                                number: {
+                                                                                                    parts: [
+                                                                                                        {
                                                                                                             path: "quantity",
                                                                                                             type: new sap.extension.data.Quantity()
                                                                                                         },
-                                                                                                        unit: {
-                                                                                                            path: "uom",
-                                                                                                            type: new sap.extension.data.Alphanumeric()
+                                                                                                        {
+                                                                                                            path: "orderedQuantity",
+                                                                                                            type: new sap.extension.data.Quantity()
                                                                                                         }
-                                                                                                    }).addStyleClass("sapUiTinyMarginBegin"),
-                                                                                                    new sap.m.ToolbarSpacer(""),
-                                                                                                    new sap.m.ObjectAttribute("", {
-                                                                                                        text: ibas.i18n.prop("purchase_assistant_order_quantity")
-                                                                                                    }),
-                                                                                                    new sap.m.ObjectNumber("", {
-                                                                                                        number: {
-                                                                                                            parts: [
-                                                                                                                {
-                                                                                                                    path: "quantity",
-                                                                                                                    type: new sap.extension.data.Quantity()
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    path: "orderedQuantity",
-                                                                                                                    type: new sap.extension.data.Quantity()
-                                                                                                                }
-                                                                                                            ],
-                                                                                                            formatter(quantity: number, orderedQuantity: number): string {
-                                                                                                                return String((quantity - orderedQuantity) > 0
-                                                                                                                    ? (quantity - orderedQuantity) : 0);
-                                                                                                            }
-                                                                                                        },
-                                                                                                        unit: {
-                                                                                                            path: "uom",
-                                                                                                            type: new sap.extension.data.Alphanumeric()
-                                                                                                        }
-                                                                                                    }),
-                                                                                                ]
+                                                                                                    ],
+                                                                                                    formatter(quantity: number, orderedQuantity: number): string {
+                                                                                                        return String((quantity - orderedQuantity) > 0
+                                                                                                            ? (quantity - orderedQuantity) : 0);
+                                                                                                    }
+                                                                                                },
+                                                                                                unit: {
+                                                                                                    path: "uom",
+                                                                                                    type: new sap.extension.data.Alphanumeric()
+                                                                                                }
                                                                                             }),
                                                                                         ]
                                                                                     }),
-                                                                                }
-                                                                            }).addStyleClass("sapUiSmallMarginBegin"),
-                                                                        ],
-                                                                    })
-                                                                ]
-                                                            }),
+                                                                                ]
+                                                                            }),
+                                                                        }
+                                                                    }).addStyleClass("sapUiSmallMarginBegin"),
+                                                                ],
+                                                            })
+                                                        ]
+                                                    }),
 
-                                                        },
+                                                },
+                                            }),
+                                        ],
+                                        floatingFooter: false,
+                                        footer: new sap.m.Toolbar("", {
+                                            content: [
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    icon: "sap-icon://navigation-right-arrow",
+                                                    press: function (this: sap.m.Button): void {
+                                                        if (this.getIcon() === "sap-icon://navigation-right-arrow") {
+                                                            for (let pItem of that.leftOrder.getItems()) {
+                                                                if (pItem instanceof sap.m.CustomListItem) {
+                                                                    for (let vItem of pItem.getContent()) {
+                                                                        if (vItem instanceof sap.m.Panel) {
+                                                                            vItem.setExpanded(true);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            this.setIcon("sap-icon://navigation-down-arrow");
+                                                        } else {
+                                                            for (let pItem of that.leftOrder.getItems()) {
+                                                                if (pItem instanceof sap.m.CustomListItem) {
+                                                                    for (let vItem of pItem.getContent()) {
+                                                                        if (vItem instanceof sap.m.Panel) {
+                                                                            vItem.setExpanded(false);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            this.setIcon("sap-icon://navigation-right-arrow");
+                                                        }
+                                                    }
+                                                }),
+                                                new sap.m.ToolbarSpacer(),
+                                                that.checkMerge = new sap.m.CheckBox("", {
+                                                    text: ibas.i18n.prop("purchase_assistant_merge_purchasing"),
+                                                    selected: false,
+                                                    select(event: sap.ui.base.Event): void {
+                                                        let source: any = event.getSource();
+                                                        if (source instanceof sap.m.CheckBox && source.getSelected() === true) {
+                                                            that.application.viewShower.messages({
+                                                                title: that.title,
+                                                                type: ibas.emMessageType.WARNING,
+                                                                message: ibas.i18n.prop("purchase_merge_purchasing_will_be_lost_association_relationship_continue"),
+                                                                actions: [
+                                                                    ibas.emMessageAction.YES,
+                                                                    ibas.emMessageAction.NO,
+                                                                ],
+                                                                onCompleted: (reslut) => {
+                                                                    if (reslut === ibas.emMessageAction.NO) {
+                                                                        if (source instanceof sap.m.CheckBox) {
+                                                                            source.setSelected(false);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                }),
+                                                new sap.m.ToolbarSeparator(),
+                                                new sap.m.Button("", {
+                                                    text: ibas.i18n.prop("purchase_assistant_choose_all"),
+                                                    icon: "sap-icon://forward",
+                                                    type: sap.m.ButtonType.Accept,
+                                                    press(this: sap.m.Button): void {
+                                                        let datas: any = that.leftOrder.getModel()?.getData();
+                                                        let items: ibas.ArrayList<sales.bo.SalesOrderItem> = new ibas.ArrayList<sales.bo.SalesOrderItem>();
+                                                        if (datas instanceof Array) {
+                                                            for (let data of datas) {
+                                                                if (data instanceof sales.bo.SalesOrder) {
+                                                                    items.add(data.salesOrderItems.filterDeleted());
+                                                                }
+                                                            }
+                                                        }
+                                                        that.fireViewEvents(that.chooseSalesOrderItemEvent, items, that.checkMerge.getSelected());
+                                                    }
+                                                })
+                                            ]
+                                        }),
+                                    })
+                                ]
+                            }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
+                            new sap.ui.layout.Splitter("", {
+                                width: "auto",
+                                orientation: sap.ui.core.Orientation.Vertical,
+                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                                    size: "40%",
+                                    resizable: true,
+                                }),
+                                contentAreas: [
+                                    new sap.m.Page("", {
+                                        showHeader: false,
+                                        enableScrolling: true,
+                                        layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                                            size: "14rem",
+                                            resizable: false,
+                                        }),
+                                        content: [
+                                            this.rightTop,
+                                        ],
+                                    }),
+                                    new sap.m.Page("", {
+                                        showHeader: false,
+                                        enableScrolling: true,
+                                        layoutData: new sap.ui.layout.SplitterLayoutData("", {
+                                            size: "auto",
+                                            resizable: false,
+                                        }),
+                                        content: [
+                                            this.rightOrder = new sap.extension.m.DataTable("", {
+                                                columns: [
+                                                    new sap.extension.m.Column("", {
+                                                        width: "3rem",
+                                                        hAlign: sap.ui.core.TextAlign.Center,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_lineid"),
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "100%",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_itemdescription"),
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "8rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_quantity"),
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_price"),
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_linetotal"),
                                                     }),
                                                 ],
-                                                floatingFooter: false,
-                                                footer: new sap.m.Toolbar("", {
-                                                    content: [
-                                                        new sap.m.Button("", {
-                                                            type: sap.m.ButtonType.Transparent,
-                                                            icon: "sap-icon://navigation-right-arrow",
-                                                            press: function (this: sap.m.Button): void {
-                                                                if (this.getIcon() === "sap-icon://navigation-right-arrow") {
-                                                                    for (let pItem of that.leftOrder.getItems()) {
-                                                                        if (pItem instanceof sap.m.CustomListItem) {
-                                                                            for (let vItem of pItem.getContent()) {
-                                                                                if (vItem instanceof sap.m.Panel) {
-                                                                                    vItem.setExpanded(true);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    this.setIcon("sap-icon://navigation-down-arrow");
-                                                                } else {
-                                                                    for (let pItem of that.leftOrder.getItems()) {
-                                                                        if (pItem instanceof sap.m.CustomListItem) {
-                                                                            for (let vItem of pItem.getContent()) {
-                                                                                if (vItem instanceof sap.m.Panel) {
-                                                                                    vItem.setExpanded(false);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    this.setIcon("sap-icon://navigation-right-arrow");
-                                                                }
+                                                items: {
+                                                    path: "/",
+                                                    template: new sap.extension.m.ColumnListItem("", {
+                                                        type: sap.m.ListType.Detail,
+                                                        detailIcon: "sap-icon://delete",
+                                                        detailTooltip: ibas.i18n.prop("shell_data_remove"),
+                                                        detailPress(this: sap.m.ListItemBase): void {
+                                                            let orderItem: any = this.getBindingContext().getObject();
+                                                            if (orderItem instanceof bo.PurchaseOrderItem) {
+                                                                that.fireViewEvents(that.removePurchaseOrderItemEvent, orderItem);
                                                             }
-                                                        }),
-                                                        new sap.m.ToolbarSpacer(),
-                                                        that.checkMerge = new sap.m.CheckBox("", {
-                                                            text: ibas.i18n.prop("purchase_assistant_merge_purchasing"),
-                                                            selected: false,
-                                                            select(event: sap.ui.base.Event): void {
-                                                                let source: any = event.getSource();
-                                                                if (source instanceof sap.m.CheckBox && source.getSelected() === true) {
-                                                                    that.application.viewShower.messages({
-                                                                        title: that.title,
-                                                                        type: ibas.emMessageType.WARNING,
-                                                                        message: ibas.i18n.prop("purchase_merge_purchasing_will_be_lost_association_relationship_continue"),
-                                                                        actions: [
-                                                                            ibas.emMessageAction.YES,
-                                                                            ibas.emMessageAction.NO,
-                                                                        ],
-                                                                        onCompleted: (reslut) => {
-                                                                            if (reslut === ibas.emMessageAction.NO) {
-                                                                                if (source instanceof sap.m.CheckBox) {
-                                                                                    source.setSelected(false);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    });
+                                                        },
+                                                        cells: [
+                                                            new sap.extension.m.ObjectAttribute("", {
+                                                                bindingValue: {
+                                                                    path: "lineId",
+                                                                    type: new sap.extension.data.Numeric(),
                                                                 }
-                                                            },
-                                                        }),
-                                                        new sap.m.ToolbarSeparator(),
-                                                        new sap.m.Button("", {
-                                                            text: ibas.i18n.prop("purchase_assistant_choose_all"),
-                                                            icon: "sap-icon://forward",
-                                                            type: sap.m.ButtonType.Accept,
-                                                            press(this: sap.m.Button): void {
-                                                                let datas: any = that.leftOrder.getModel()?.getData();
-                                                                let items: ibas.ArrayList<sales.bo.SalesOrderItem> = new ibas.ArrayList<sales.bo.SalesOrderItem>();
-                                                                if (datas instanceof Array) {
-                                                                    for (let data of datas) {
-                                                                        if (data instanceof sales.bo.SalesOrder) {
-                                                                            items.add(data.salesOrderItems.filterDeleted());
-                                                                        }
-                                                                    }
-                                                                }
-                                                                that.fireViewEvents(that.chooseSalesOrderItemEvent, items, that.checkMerge.getSelected());
-                                                            }
-                                                        })
-                                                    ]
-                                                }),
-                                            })
-                                        ]
-                                    }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
-                                ]
-                            }),
-                            new sap.extension.m.Page("", {
-                                showHeader: false,
-                                enableScrolling: false,
-                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                    size: "40%"
-                                }),
-                                content: [
-                                    new sap.ui.layout.Splitter("", {
-                                        width: "auto",
-                                        orientation: sap.ui.core.Orientation.Vertical,
-                                        contentAreas: [
-                                            new sap.m.Page("", {
-                                                showHeader: false,
-                                                enableScrolling: true,
-                                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                                    size: "35%",
-                                                    resizable: false,
-                                                }),
-                                                content: [
-                                                    this.rightTop,
-                                                ],
-                                            }),
-                                            new sap.m.Page("", {
-                                                showHeader: false,
-                                                enableScrolling: true,
-                                                layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                                    size: "65%",
-                                                    resizable: false,
-                                                }),
-                                                content: [
-                                                    this.rightOrder = new sap.extension.m.DataTable("", {
-                                                        columns: [
-                                                            new sap.extension.m.Column("", {
-                                                                width: "3rem",
-                                                                hAlign: sap.ui.core.TextAlign.Center,
-                                                                header: ibas.i18n.prop("bo_purchaseorderitem_lineid"),
                                                             }),
-                                                            new sap.extension.m.Column("", {
-                                                                width: "100%",
-                                                                hAlign: sap.ui.core.TextAlign.Begin,
-                                                                header: ibas.i18n.prop("bo_purchaseorderitem_itemdescription"),
-                                                            }),
-                                                            new sap.extension.m.Column("", {
-                                                                width: "8rem",
-                                                                hAlign: sap.ui.core.TextAlign.Begin,
-                                                                header: ibas.i18n.prop("bo_purchaseorderitem_quantity"),
-                                                            }),
-                                                            new sap.extension.m.Column("", {
-                                                                width: "6rem",
-                                                                hAlign: sap.ui.core.TextAlign.Begin,
-                                                                header: ibas.i18n.prop("bo_purchaseorderitem_price"),
-                                                            }),
-                                                            new sap.extension.m.Column("", {
-                                                                width: "6rem",
-                                                                hAlign: sap.ui.core.TextAlign.Begin,
-                                                                header: ibas.i18n.prop("bo_purchaseorderitem_linetotal"),
-                                                            }),
-                                                        ],
-                                                        items: {
-                                                            path: "/",
-                                                            template: new sap.extension.m.ColumnListItem("", {
-                                                                type: sap.m.ListType.Detail,
-                                                                detailIcon: "sap-icon://delete",
-                                                                detailTooltip: ibas.i18n.prop("shell_data_remove"),
-                                                                detailPress(this: sap.m.ListItemBase): void {
-                                                                    let orderItem: any = this.getBindingContext().getObject();
-                                                                    if (orderItem instanceof bo.PurchaseOrderItem) {
-                                                                        that.fireViewEvents(that.removePurchaseOrderItemEvent, orderItem);
-                                                                    }
+                                                            new sap.extension.m.ObjectIdentifier("", {
+                                                                title: {
+                                                                    path: "itemDescription",
+                                                                    type: new sap.extension.data.Alphanumeric(),
                                                                 },
-                                                                cells: [
-                                                                    new sap.extension.m.ObjectAttribute("", {
-                                                                        bindingValue: {
-                                                                            path: "lineId",
-                                                                            type: new sap.extension.data.Numeric(),
-                                                                        }
-                                                                    }),
-                                                                    new sap.extension.m.ObjectIdentifier("", {
-                                                                        title: {
-                                                                            path: "itemDescription",
-                                                                            type: new sap.extension.data.Alphanumeric(),
-                                                                        },
-                                                                        text: {
-                                                                            path: "itemCode",
-                                                                            type: new sap.extension.data.Alphanumeric(),
-                                                                        }
-                                                                    }),
-                                                                    new sap.extension.m.Input("", {
-
-                                                                        fieldWidth: "80%",
-                                                                    }).bindProperty("bindingValue", {
-                                                                        path: "quantity",
-                                                                        type: new sap.extension.data.Quantity()
-                                                                    }).bindProperty("description", {
-                                                                        path: "uom",
-                                                                        type: new sap.extension.data.Alphanumeric()
-                                                                    }),
-                                                                    new sap.extension.m.Input("", {
-
-                                                                    }).bindProperty("bindingValue", {
-                                                                        path: "price",
-                                                                        type: new sap.extension.data.Price()
-                                                                    }),
-                                                                    new sap.extension.m.ObjectNumber("", {
-                                                                        number: {
-                                                                            path: "lineTotal",
-                                                                            type: new sap.extension.data.Sum(),
-                                                                        },
-                                                                        unit: {
-                                                                            path: "currency",
-                                                                            type: new sap.extension.data.Alphanumeric(),
-                                                                        }
-                                                                    }),
-                                                                ]
+                                                                text: {
+                                                                    path: "itemCode",
+                                                                    type: new sap.extension.data.Alphanumeric(),
+                                                                }
                                                             }),
-                                                        }
-                                                    })
-                                                ],
-                                                floatingFooter: false,
-                                                footer: new sap.m.Toolbar("", {
-                                                    content: [
-                                                        new sap.m.Label("", {
-                                                            wrapping: false,
-                                                            text: ibas.i18n.prop("purchase_assistant_warehouse")
-                                                        }).addStyleClass("sapUiTinyMarginBegin"),
-                                                        this.selectWarehouse = new component.WarehouseSelect("", {
-                                                            width: "auto",
-                                                            change(this: sap.m.Select, event: sap.ui.base.Event): void {
-                                                                let sItem: any = this.getSelectedItem();
-                                                                if (sItem instanceof sap.ui.core.Item && !ibas.strings.isEmpty(sItem.getKey())) {
-                                                                    let model: any = that.rightOrder.getModel();
-                                                                    if (model instanceof sap.extension.model.JSONModel) {
-                                                                        let data: any[] = model.getData();
-                                                                        if (data instanceof Array) {
-                                                                            let items: ibas.IList<bo.PurchaseOrderItem> = new ibas.ArrayList<bo.PurchaseOrderItem>();
-                                                                            for (let item of data) {
-                                                                                if (item instanceof bo.PurchaseOrderItem) {
-                                                                                    if (item.warehouse !== sItem.getKey()) {
-                                                                                        items.add(item);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            if (items.length > 0) {
-                                                                                that.application.viewShower.messages({
-                                                                                    title: that.title,
-                                                                                    type: ibas.emMessageType.QUESTION,
-                                                                                    message: ibas.i18n.prop("purchase_change_item_warehouse_continue", sItem.getText()),
-                                                                                    actions: [
-                                                                                        ibas.emMessageAction.YES,
-                                                                                        ibas.emMessageAction.NO,
-                                                                                    ],
-                                                                                    onCompleted: (reslut) => {
-                                                                                        if (reslut === ibas.emMessageAction.YES) {
-                                                                                            for (let item of items) {
-                                                                                                item.warehouse = sItem.getKey();
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                });
+                                                            new sap.extension.m.Input("", {
+
+                                                                fieldWidth: "80%",
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "quantity",
+                                                                type: new sap.extension.data.Quantity()
+                                                            }).bindProperty("description", {
+                                                                path: "uom",
+                                                                type: new sap.extension.data.Alphanumeric()
+                                                            }),
+                                                            new sap.extension.m.Input("", {
+
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "price",
+                                                                type: new sap.extension.data.Price()
+                                                            }),
+                                                            new sap.extension.m.ObjectNumber("", {
+                                                                number: {
+                                                                    path: "lineTotal",
+                                                                    type: new sap.extension.data.Sum(),
+                                                                },
+                                                                unit: {
+                                                                    path: "currency",
+                                                                    type: new sap.extension.data.Alphanumeric(),
+                                                                }
+                                                            }),
+                                                        ]
+                                                    }),
+                                                }
+                                            })
+                                        ],
+                                        floatingFooter: false,
+                                        footer: new sap.m.Toolbar("", {
+                                            content: [
+                                                new sap.m.Label("", {
+                                                    wrapping: false,
+                                                    text: ibas.i18n.prop("purchase_assistant_warehouse")
+                                                }).addStyleClass("sapUiTinyMarginBegin"),
+                                                this.selectWarehouse = new component.WarehouseSelect("", {
+                                                    width: "auto",
+                                                    change(this: sap.m.Select, event: sap.ui.base.Event): void {
+                                                        let sItem: any = this.getSelectedItem();
+                                                        if (sItem instanceof sap.ui.core.Item && !ibas.strings.isEmpty(sItem.getKey())) {
+                                                            let model: any = that.rightOrder.getModel();
+                                                            if (model instanceof sap.extension.model.JSONModel) {
+                                                                let data: any[] = model.getData();
+                                                                if (data instanceof Array) {
+                                                                    let items: ibas.IList<bo.PurchaseOrderItem> = new ibas.ArrayList<bo.PurchaseOrderItem>();
+                                                                    for (let item of data) {
+                                                                        if (item instanceof bo.PurchaseOrderItem) {
+                                                                            if (item.warehouse !== sItem.getKey()) {
+                                                                                items.add(item);
                                                                             }
                                                                         }
                                                                     }
+                                                                    if (items.length > 0) {
+                                                                        that.application.viewShower.messages({
+                                                                            title: that.title,
+                                                                            type: ibas.emMessageType.QUESTION,
+                                                                            message: ibas.i18n.prop("purchase_change_item_warehouse_continue", sItem.getText()),
+                                                                            actions: [
+                                                                                ibas.emMessageAction.YES,
+                                                                                ibas.emMessageAction.NO,
+                                                                            ],
+                                                                            onCompleted: (reslut) => {
+                                                                                if (reslut === ibas.emMessageAction.YES) {
+                                                                                    for (let item of items) {
+                                                                                        item.warehouse = sItem.getKey();
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
                                                                 }
                                                             }
-                                                        }),
-                                                        new sap.m.ToolbarSpacer(""),
-                                                        this.menuEditData = new sap.m.MenuButton("", {
-                                                            text: ibas.i18n.prop("purchase_assistant_edit_details"),
-                                                            type: sap.m.ButtonType.Attention,
-                                                            icon: "sap-icon://edit",
-                                                            buttonMode: sap.m.MenuButtonMode.Split,
-                                                            menuPosition: sap.ui.core.Popup.Dock.EndTop,
-                                                            useDefaultActionOnly: true,
-                                                            defaultAction(): void {
-                                                                that.fireViewEvents(that.editPurchaseOrderEvent);
-                                                            },
-                                                            menu: new sap.m.Menu("", {
-                                                                items: [
-                                                                ]
-                                                            })
-                                                        }),
-                                                        new sap.m.ToolbarSeparator(""),
-                                                        new sap.m.Button("", {
-                                                            text: ibas.i18n.prop("shell_data_save"),
-                                                            type: sap.m.ButtonType.Accept,
-                                                            icon: "sap-icon://save",
-                                                            press: function (): void {
-                                                                that.fireViewEvents(that.savePurchaseOrderEvent);
-                                                            }
-                                                        }),
-                                                    ]
+                                                        }
+                                                    }
                                                 }),
-                                            })
-                                        ]
-                                    }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
-                                ],
-                            }),
+                                                new sap.m.ToolbarSpacer(""),
+                                                this.menuEditData = new sap.m.MenuButton("", {
+                                                    text: ibas.i18n.prop("purchase_assistant_edit_details"),
+                                                    type: sap.m.ButtonType.Attention,
+                                                    icon: "sap-icon://edit",
+                                                    buttonMode: sap.m.MenuButtonMode.Split,
+                                                    menuPosition: sap.ui.core.Popup.Dock.EndTop,
+                                                    useDefaultActionOnly: true,
+                                                    defaultAction(): void {
+                                                        that.fireViewEvents(that.editPurchaseOrderEvent);
+                                                    },
+                                                    menu: new sap.m.Menu("", {
+                                                        items: [
+                                                        ]
+                                                    })
+                                                }),
+                                                new sap.m.ToolbarSeparator(""),
+                                                new sap.m.Button("", {
+                                                    text: ibas.i18n.prop("shell_data_save"),
+                                                    type: sap.m.ButtonType.Accept,
+                                                    icon: "sap-icon://save",
+                                                    press: function (): void {
+                                                        that.fireViewEvents(that.savePurchaseOrderEvent);
+                                                    }
+                                                }),
+                                            ]
+                                        }),
+                                    })
+                                ]
+                            }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
                         ]
                     });
                 }

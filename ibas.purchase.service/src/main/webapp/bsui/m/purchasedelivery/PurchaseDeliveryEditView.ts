@@ -180,9 +180,9 @@ namespace purchase {
                                 new sap.uxap.ObjectPageHeaderActionButton("", {
                                     hideText: true,
                                     importance: sap.uxap.Importance.Medium,
-                                    text: ibas.i18n.prop("purchase_copy_to"),
                                     type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://duplicate",
+                                    text: ibas.i18n.prop("shell_quick_to"),
+                                    icon: "sap-icon://generate-shortcut",
                                     press(event: sap.ui.base.Event): void {
                                         let actionSheet: sap.m.ActionSheet = new sap.m.ActionSheet("", {
                                             placement: sap.m.PlacementType.Bottom,
@@ -190,6 +190,7 @@ namespace purchase {
                                                 new sap.m.Button("", {
                                                     type: sap.m.ButtonType.Transparent,
                                                     text: ibas.i18n.prop("bo_purchasereturn"),
+                                                    icon: "sap-icon://doc-attachment",
                                                     press(this: sap.m.Button): void {
                                                         that.fireViewEvents(that.turnToPurchaseReturnEvent);
                                                     },
@@ -203,6 +204,7 @@ namespace purchase {
                                                 new sap.m.Button("", {
                                                     type: sap.m.ButtonType.Transparent,
                                                     text: ibas.i18n.prop("bo_purchaseinvoice"),
+                                                    icon: "sap-icon://doc-attachment",
                                                     press: function (): void {
                                                         that.fireViewEvents(that.turnToPurchaseInvoiceEvent);
                                                     },
@@ -216,6 +218,7 @@ namespace purchase {
                                                 new sap.m.Button("", {
                                                     type: sap.m.ButtonType.Transparent,
                                                     text: ibas.i18n.prop("bo_salesdelivery"),
+                                                    icon: "sap-icon://doc-attachment",
                                                     press: function (): void {
                                                         that.fireViewEvents(that.turnToSalesDeliveryEvent);
                                                     },
