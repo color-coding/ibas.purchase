@@ -393,6 +393,48 @@ public interface IPurchaseRequestItem extends IBODocumentLine {
 	void setOriginalDocumentLineId(Integer value);
 
 	/**
+	 * 获取-目标单据类型
+	 * 
+	 * @return 值
+	 */
+	String getTargetDocumentType();
+
+	/**
+	 * 设置-目标单据类型
+	 * 
+	 * @param value 值
+	 */
+	void setTargetDocumentType(String value);
+
+	/**
+	 * 获取-目标单据编号
+	 * 
+	 * @return 值
+	 */
+	Integer getTargetDocumentEntry();
+
+	/**
+	 * 设置-目标单据编号
+	 * 
+	 * @param value 值
+	 */
+	void setTargetDocumentEntry(Integer value);
+
+	/**
+	 * 获取-目标单据行号
+	 * 
+	 * @return 值
+	 */
+	Integer getTargetDocumentLineId();
+
+	/**
+	 * 设置-目标单据行号
+	 * 
+	 * @param value 值
+	 */
+	void setTargetDocumentLineId(Integer value);
+
+	/**
 	 * 获取-物料编码
 	 * 
 	 * @return 值

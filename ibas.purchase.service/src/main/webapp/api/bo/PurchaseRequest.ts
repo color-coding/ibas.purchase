@@ -159,6 +159,12 @@ namespace purchase {
             originalDocumentEntry: number;
             /** 原始行号 */
             originalDocumentLineId: number;
+            /** 目标类型 */
+            targetDocumentType: string;
+            /** 目标编号 */
+            targetDocumentEntry: number;
+            /** 目标行号 */
+            targetDocumentLineId: number;
             /** 物料编码 */
             itemCode: string;
             /** 物料/服务描述 */

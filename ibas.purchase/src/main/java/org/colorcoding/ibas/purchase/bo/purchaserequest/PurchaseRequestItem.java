@@ -898,6 +898,99 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	/**
+	 * 属性名称-目标单据类型
+	 */
+	private static final String PROPERTY_TARGETDOCUMENTTYPE_NAME = "TargetDocumentType";
+
+	/**
+	 * 目标单据类型 属性
+	 */
+	@DbField(name = "TargetType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<String> PROPERTY_TARGETDOCUMENTTYPE = registerProperty(
+			PROPERTY_TARGETDOCUMENTTYPE_NAME, String.class, MY_CLASS);
+
+	/**
+	 * 获取-目标单据类型
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_TARGETDOCUMENTTYPE_NAME)
+	public final String getTargetDocumentType() {
+		return this.getProperty(PROPERTY_TARGETDOCUMENTTYPE);
+	}
+
+	/**
+	 * 设置-目标单据类型
+	 * 
+	 * @param value 值
+	 */
+	public final void setTargetDocumentType(String value) {
+		this.setProperty(PROPERTY_TARGETDOCUMENTTYPE, value);
+	}
+
+	/**
+	 * 属性名称-目标单据编号
+	 */
+	private static final String PROPERTY_TARGETDOCUMENTENTRY_NAME = "TargetDocumentEntry";
+
+	/**
+	 * 目标单据编号 属性
+	 */
+	@DbField(name = "TargetEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<Integer> PROPERTY_TARGETDOCUMENTENTRY = registerProperty(
+			PROPERTY_TARGETDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
+
+	/**
+	 * 获取-目标单据编号
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_TARGETDOCUMENTENTRY_NAME)
+	public final Integer getTargetDocumentEntry() {
+		return this.getProperty(PROPERTY_TARGETDOCUMENTENTRY);
+	}
+
+	/**
+	 * 设置-目标单据编号
+	 * 
+	 * @param value 值
+	 */
+	public final void setTargetDocumentEntry(Integer value) {
+		this.setProperty(PROPERTY_TARGETDOCUMENTENTRY, value);
+	}
+
+	/**
+	 * 属性名称-目标单据行号
+	 */
+	private static final String PROPERTY_TARGETDOCUMENTLINEID_NAME = "TargetDocumentLineId";
+
+	/**
+	 * 目标单据行号 属性
+	 */
+	@DbField(name = "TargetLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<Integer> PROPERTY_TARGETDOCUMENTLINEID = registerProperty(
+			PROPERTY_TARGETDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
+
+	/**
+	 * 获取-目标单据行号
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_TARGETDOCUMENTLINEID_NAME)
+	public final Integer getTargetDocumentLineId() {
+		return this.getProperty(PROPERTY_TARGETDOCUMENTLINEID);
+	}
+
+	/**
+	 * 设置-目标单据行号
+	 * 
+	 * @param value 值
+	 */
+	public final void setTargetDocumentLineId(Integer value) {
+		this.setProperty(PROPERTY_TARGETDOCUMENTLINEID, value);
+	}
+
+	/**
 	 * 属性名称-物料编码
 	 */
 	private static final String PROPERTY_ITEMCODE_NAME = "ItemCode";

@@ -857,6 +857,39 @@ namespace purchase {
                 this.setProperty(PurchaseRequestItem.PROPERTY_ORIGINALDOCUMENTLINEID_NAME, value);
             }
 
+            /** 映射的属性名称-目标类型 */
+            static PROPERTY_TARGETDOCUMENTTYPE_NAME: string = "TargetDocumentType";
+            /** 获取-目标类型 */
+            get targetDocumentType(): string {
+                return this.getProperty<string>(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTTYPE_NAME);
+            }
+            /** 设置-目标类型 */
+            set targetDocumentType(value: string) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTTYPE_NAME, value);
+            }
+
+            /** 映射的属性名称-目标编号 */
+            static PROPERTY_TARGETDOCUMENTENTRY_NAME: string = "TargetDocumentEntry";
+            /** 获取-目标编号 */
+            get targetDocumentEntry(): number {
+                return this.getProperty<number>(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTENTRY_NAME);
+            }
+            /** 设置-目标编号 */
+            set targetDocumentEntry(value: number) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTENTRY_NAME, value);
+            }
+
+            /** 映射的属性名称-目标行号 */
+            static PROPERTY_TARGETDOCUMENTLINEID_NAME: string = "TargetDocumentLineId";
+            /** 获取-目标行号 */
+            get targetDocumentLineId(): number {
+                return this.getProperty<number>(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTLINEID_NAME);
+            }
+            /** 设置-目标行号 */
+            set targetDocumentLineId(value: number) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_TARGETDOCUMENTLINEID_NAME, value);
+            }
+
             /** 映射的属性名称-物料编码 */
             static PROPERTY_ITEMCODE_NAME: string = "ItemCode";
             /** 获取-物料编码 */
