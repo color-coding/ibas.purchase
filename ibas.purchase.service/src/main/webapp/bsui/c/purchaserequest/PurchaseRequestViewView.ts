@@ -59,12 +59,22 @@ namespace purchase {
                                     }),
                                     new sap.extension.m.ObjectIdentifier("", {
                                         title: {
-                                            path: "itemDescription",
+                                            path: "itemCode",
                                             type: new sap.extension.data.Alphanumeric(),
                                         },
                                         text: {
-                                            path: "itemCode",
+                                            path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric(),
+                                        },
+                                        titleActive: true,
+                                        titlePress(this: sap.extension.m.ObjectIdentifier): void {
+                                            let data: any = this.getTitle();
+                                            if (!ibas.strings.isEmpty(data)) {
+                                                ibas.servicesManager.runLinkService({
+                                                    boCode: materials.bo.Material.BUSINESS_OBJECT_CODE,
+                                                    linkValue: data,
+                                                });
+                                            }
                                         }
                                     }),
                                     new sap.extension.m.ObjectNumber("", {
@@ -296,7 +306,7 @@ namespace purchase {
                         ],
                         sections: [
                             new sap.uxap.ObjectPageSection("", {
-                                title: ibas.i18n.prop("bo_purchaserequest_purchaserequestitems"),
+                                title: ibas.i18n.prop("bo_purchaserequestitem"),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [
@@ -344,13 +354,6 @@ namespace purchase {
                                                             type: new sap.extension.data.Alphanumeric(),
                                                         }
                                                     }),
-                                                    new sap.extension.m.OrganizationObjectAttribute("", {
-                                                        title: ibas.i18n.prop("bo_purchaserequest_organization"),
-                                                        bindingValue: {
-                                                            path: "organization",
-                                                            type: new sap.extension.data.Alphanumeric(),
-                                                        }
-                                                    }),
                                                     new sap.extension.m.RepositoryObjectAttribute("", {
                                                         title: ibas.i18n.prop("bo_purchaserequest_project"),
                                                         bindingValue: {
@@ -363,6 +366,13 @@ namespace purchase {
                                                             key: accounting.bo.Project.PROPERTY_CODE_NAME,
                                                             text: accounting.bo.Project.PROPERTY_NAME_NAME,
                                                         },
+                                                    }),
+                                                    new sap.extension.m.OrganizationObjectAttribute("", {
+                                                        title: ibas.i18n.prop("bo_purchaserequest_organization"),
+                                                        bindingValue: {
+                                                            path: "organization",
+                                                            type: new sap.extension.data.Alphanumeric(),
+                                                        }
                                                     }),
                                                 ]
                                             }),

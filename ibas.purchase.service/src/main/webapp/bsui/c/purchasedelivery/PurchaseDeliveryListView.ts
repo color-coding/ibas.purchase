@@ -32,7 +32,11 @@ namespace purchase {
                         columns: [
                             new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchasedelivery_docentry"),
-                                template: new sap.extension.m.Text("", {
+                                template: new sap.extension.m.DataLink("", {
+                                    objectCode: {
+                                        path: "objectCode",
+                                        type: new sap.extension.data.Alphanumeric(),
+                                    }
                                 }).bindProperty("bindingValue", {
                                     path: "docEntry",
                                     type: new sap.extension.data.Numeric()
@@ -64,7 +68,8 @@ namespace purchase {
                             }),
                             new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchasedelivery_suppliercode"),
-                                template: new sap.extension.m.Text("", {
+                                template: new sap.extension.m.DataLink("", {
+                                    objectCode: businesspartner.bo.Supplier.BUSINESS_OBJECT_CODE,
                                 }).bindProperty("bindingValue", {
                                     path: "supplierCode",
                                     type: new sap.extension.data.Alphanumeric()

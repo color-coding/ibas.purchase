@@ -30,7 +30,11 @@ namespace purchase {
                         columns: [
                             new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchaserequest_docentry"),
-                                template: new sap.extension.m.Text("", {
+                                template: new sap.extension.m.DataLink("", {
+                                    objectCode: {
+                                        path: "objectCode",
+                                        type: new sap.extension.data.Alphanumeric(),
+                                    }
                                 }).bindProperty("bindingValue", {
                                     path: "docEntry",
                                     type: new sap.extension.data.Numeric()
