@@ -2420,6 +2420,21 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				public Integer getDocumentLineId() {
 					return PurchaseOrderItem.this.getLineId();
 				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseOrderItem.this.getBaseDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseOrderItem.this.getBaseDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseOrderItem.this.getBaseDocumentLineId();
+				}
 			});
 		}
 		// 采购请求完成
