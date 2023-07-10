@@ -54,6 +54,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseInvoiceEvent: Function;
+                /** 预留物料订购 */
+                reserveMaterialsOrderedEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -774,6 +776,13 @@ namespace purchase {
                                                     category: undefined,
                                                     description: undefined
                                                 })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("purchase_orderer_reservation"),
+                                                icon: "sap-icon://blank-tag",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.reserveMaterialsOrderedEvent);
+                                                }
                                             }),
                                         ],
                                     })

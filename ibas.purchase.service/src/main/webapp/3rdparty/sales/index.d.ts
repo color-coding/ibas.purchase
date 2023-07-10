@@ -5270,7 +5270,7 @@ declare namespace sales {
             /** 设置-过账日期 */
             set postingDate(value: Date);
             /** 映射的属性名称-到期日 */
-            static PROPERTY_RETURNDATE_NAME: string;
+            static PROPERTY_DELIVERYDATE_NAME: string;
             /** 获取-到期日 */
             get deliveryDate(): Date;
             /** 设置-到期日 */
@@ -5735,7 +5735,7 @@ declare namespace sales {
             /** 设置-行总计 */
             set lineTotal(value: number);
             /** 映射的属性名称-行交货日期 */
-            static PROPERTY_RETURNDATE_NAME: string;
+            static PROPERTY_DELIVERYDATE_NAME: string;
             /** 获取-行交货日期 */
             get deliveryDate(): Date;
             /** 设置-行交货日期 */
@@ -9105,6 +9105,24 @@ declare namespace sales {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IBOEditServiceCaller<bo.SalesOrder>>;
+        }
+        class MaterialOrderedReservationTargetSalesOrderService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialOrderedReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected runService(contract: materials.app.IMaterialOrderedReservationTarget): void;
+            protected viewShowed(): void;
+        }
+        class MaterialOrderedReservationTargetSalesOrderServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
         }
     }
 }

@@ -98,5 +98,6 @@
   "purchase_change_item_price_continue": "价格清单已更新，是否更改单据行的价格？",
   "purchase_invaild_status_not_support_turn_to_operation": "单据的状态无效，不支持此操作",
   "purchase_merge_purchasing_will_be_lost_association_relationship_continue": "合并采购将丢失与销售订单的关联，是否继续？",
+  "purchase_orderer_reservation": "订购预留",
   "purchase_closing_delimiter": "----结束----"
 }

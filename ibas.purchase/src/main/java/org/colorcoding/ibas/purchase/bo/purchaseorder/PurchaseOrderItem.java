@@ -33,6 +33,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.logic.IMaterialOrderedJournalContract;
+import org.colorcoding.ibas.materials.logic.IMaterialOrderedReservationCreateContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
@@ -2466,6 +2467,55 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 			}
 
 		});
+		// 物料订购预留创建
+		contracts.add(new IMaterialOrderedReservationCreateContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getDocumentType() {
+				return PurchaseOrderItem.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getDocumentEntry() {
+				return PurchaseOrderItem.this.getDocEntry();
+			}
+
+			@Override
+			public Integer getDocumentLineId() {
+				return PurchaseOrderItem.this.getLineId();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseOrderItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseOrderItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseOrderItem.this.getBaseDocumentLineId();
+			}
+
+			@Override
+			public String getWarehouse() {
+				return PurchaseOrderItem.this.getWarehouse();
+			}
+
+			@Override
+			public BigDecimal getQuantity() {
+				return PurchaseOrderItem.this.getInventoryQuantity();
+			}
+
+		});
 		// 一揽子协议
 		contracts.add(new IBlanketAgreementQuantityContract() {
 
@@ -2499,9 +2549,7 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				return PurchaseOrderItem.this.getBaseDocumentLineId();
 			}
 
-		}
-
-		);
+		});
 		// 销售订单订购数量
 		if (MyConfiguration.applyVariables(SalesOrder.BUSINESS_OBJECT_CODE)
 				.equalsIgnoreCase(this.getBaseDocumentType())) {

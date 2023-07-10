@@ -131,9 +131,6 @@ declare namespace importexport {
              */
             CELL = 1
         }
-        /**
-         * 框线样式
-         */
         enum emLineStyle {
             /**
              * 实线
@@ -151,6 +148,20 @@ declare namespace importexport {
              * 双线
              */
             DOUBLE = 3
+        }
+        enum emDataUpdateMethod {
+            /**
+             * 跳过
+             */
+            SKIP = 0,
+            /**
+             * 替换（旧数据删除）
+             */
+            REPLACE = 1,
+            /**
+             * 修改（修改旧数据）
+             */
+            MODIFY = 2
         }
         /** 数据导出调用者 */
         interface IDataExportCaller<T> extends ibas.IMethodCaller<T> {
@@ -2103,6 +2114,25 @@ declare namespace importexport {
  */
 declare namespace importexport {
     namespace app {
+        class FileItem extends ibas.Bindable {
+            constructor(file: File);
+            get status(): "pending" | "processing" | "completed" | "failed";
+            set status(value: "pending" | "processing" | "completed" | "failed");
+            get file(): File;
+            /** 顺序 */
+            order: number;
+            /** 识别的数据 */
+            identified: number;
+            /** 保存的数据 */
+            saved: number;
+            /** 解析错误 */
+            error: Error;
+        }
+        class FileItems extends ibas.ArrayList<FileItem> {
+            add(item: FileItem): void;
+            add(items: FileItem[]): void;
+            protected afterAdd(item: FileItem): void;
+        }
         /** 数据导入 */
         class DataImportApp extends ibas.Application<IDataImportView> {
             /** 应用标识 */
@@ -2114,17 +2144,26 @@ declare namespace importexport {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            /** 运行,覆盖原方法 */
-            run(): void;
+            private files;
             /** 导入 */
-            import(data: FormData): void;
+            protected import(method?: bo.emDataUpdateMethod): void;
+            /** 选择文件 */
+            protected addFiles(): void;
+            /** 移除文件 */
+            protected removeFiles(file?: FileItem | FileItem[]): void;
         }
         /** 数据导入-视图 */
         interface IDataImportView extends ibas.IView {
             /** 导入 */
             importEvent: Function;
+            /** 选择文件 */
+            addFilesEvent: Function;
+            /** 移除文件 */
+            removeFilesEvent: Function;
+            /** 显示文件 */
+            showFiles(datas: FileItem[]): void;
             /** 显示结果 */
-            showResults(results: any[] | Error): void;
+            showResults(file: FileItem, results: string[]): void;
         }
     }
 }

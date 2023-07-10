@@ -35,6 +35,7 @@ namespace purchase {
                 this.view.choosePurchaseRequestItemMaterialEvent = this.choosePurchaseRequestItemMaterial;
                 this.view.showPurchaseRequestItemExtraEvent = this.showPurchaseRequestItemExtra;
                 this.view.choosePurchaseRequestItemUnitEvent = this.choosePurchaseRequestItemUnit;
+                this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -451,6 +452,30 @@ namespace purchase {
                     }
                 });
             }
+            /** 预留物料订购 */
+            private reserveMaterialsOrdered(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty) {
+                    throw new Error(ibas.i18n.prop("shell_data_saved_first"));
+                }
+                let contract: materials.app.IMaterialOrderedReservationSource = {
+                    sourceType: this.editData.objectCode,
+                    sourceEntry: this.editData.docEntry,
+                    items: []
+                };
+                for (let item of this.editData.purchaseRequestItems) {
+                    contract.items.push({
+                        sourceLineId: item.lineId,
+                        itemCode: item.itemCode,
+                        itemDescription: item.itemDescription,
+                        quantity: item.quantity,
+                        uom: item.uom,
+                        deliveryDate: item.requestDate,
+                    });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource>({
+                    proxy: new materials.app.MaterialOrderedReservationServiceProxy(contract)
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -474,6 +499,8 @@ namespace purchase {
             showPurchaseRequestItemExtraEvent: Function;
             /** 显示数据-采购申请-行 */
             showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void;
+            /** 预留物料订购 */
+            reserveMaterialsOrderedEvent: Function;
         }
         /** 采购申请编辑服务映射 */
         export class PurchaseRequestEditServiceMapping extends ibas.BOEditServiceMapping {

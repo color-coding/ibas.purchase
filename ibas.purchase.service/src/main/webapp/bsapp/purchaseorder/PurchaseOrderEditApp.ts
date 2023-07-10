@@ -47,6 +47,7 @@ namespace purchase {
                 this.view.turnToPurchaseDeliveryEvent = this.turnToPurchaseDelivery;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
                 this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
+                this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -1038,6 +1039,31 @@ namespace purchase {
                     }
                 });
             }
+            /** 预留物料订购 */
+            private reserveMaterialsOrdered(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty) {
+                    throw new Error(ibas.i18n.prop("shell_data_saved_first"));
+                }
+                let contract: materials.app.IMaterialOrderedReservationSource = {
+                    sourceType: this.editData.objectCode,
+                    sourceEntry: this.editData.docEntry,
+                    items: []
+                };
+                for (let item of this.editData.purchaseOrderItems) {
+                    contract.items.push({
+                        sourceLineId: item.lineId,
+                        itemCode: item.itemCode,
+                        itemDescription: item.itemDescription,
+                        quantity: item.quantity,
+                        warehouse: item.warehouse,
+                        deliveryDate: item.deliveryDate,
+                        uom: item.uom
+                    });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource>({
+                    proxy: new materials.app.MaterialOrderedReservationServiceProxy(contract)
+                });
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseOrderEditView extends ibas.IBOEditView {
@@ -1085,6 +1111,8 @@ namespace purchase {
             turnToPurchaseReturnEvent: Function;
             /** 转为采购发票事件 */
             turnToPurchaseInvoiceEvent: Function;
+            /** 预留物料订购 */
+            reserveMaterialsOrderedEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

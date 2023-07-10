@@ -26,6 +26,8 @@ namespace purchase {
                 choosePurchaseRequestItemUnitEvent: Function;
                 /** 显示采购申请额外信息事件 */
                 showPurchaseRequestItemExtraEvent: Function;
+                /** 预留物料订购 */
+                reserveMaterialsOrderedEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

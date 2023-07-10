@@ -52,6 +52,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseInvoiceEvent: Function;
+                /** 预留物料订购 */
+                reserveMaterialsOrderedEvent: Function;
                 defaultWarehouse: string;
                 defaultTaxGroup: string;
                 /** 绘制视图 */
