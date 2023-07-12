@@ -222,13 +222,21 @@ namespace purchase {
                                                         text: ibas.i18n.prop("bo_purchaserequest"),
                                                         press: function (): void {
                                                             that.fireViewEvents(that.choosePurchaseQuotePurchaseRequestEvent);
-                                                        }
+                                                        },
+                                                        visible: shell.app.privileges.canRun({
+                                                            id: app.PurchaseRequestChooseApp.APPLICATION_ID,
+                                                            name: app.PurchaseRequestChooseApp.APPLICATION_NAME,
+                                                        })
                                                     }),
                                                     new sap.m.MenuItem("", {
                                                         text: ibas.i18n.prop("bo_blanketagreement"),
                                                         press: function (): void {
                                                             that.fireViewEvents(that.choosePurchaseQuoteBlanketAgreementEvent);
-                                                        }
+                                                        },
+                                                        visible: shell.app.privileges.canRun({
+                                                            id: app.BlanketAgreementChooseApp.APPLICATION_ID,
+                                                            name: app.BlanketAgreementChooseApp.APPLICATION_NAME,
+                                                        })
                                                     }),
                                                 ]
                                             })
@@ -248,7 +256,11 @@ namespace purchase {
                                             icon: "sap-icon://sap-box",
                                             press: function (): void {
                                                 that.fireViewEvents(that.showPurchaseQuoteItemExtraEvent, that.tablePurchaseQuoteItem.getSelecteds().firstOrDefault());
-                                            }
+                                            },
+                                            visible: shell.app.privileges.canRun({
+                                                id: app.ELEMENT_PURCHASE_QUOTE_EXTRA.id,
+                                                name: app.ELEMENT_PURCHASE_QUOTE_EXTRA.name,
+                                            })
                                         }),
                                     ]
                                 }),
@@ -596,7 +608,8 @@ namespace purchase {
                                     })
                                 }),
                                 new sap.m.ToolbarSeparator(""),
-                                new sap.m.MenuButton("", {
+                                new sap.extension.m.MenuButton("", {
+                                    autoHide: true,
                                     text: ibas.i18n.prop("shell_quick_to"),
                                     icon: "sap-icon://generate-shortcut",
                                     type: sap.m.ButtonType.Transparent,
@@ -611,8 +624,6 @@ namespace purchase {
                                                 visible: shell.app.privileges.canRun({
                                                     id: purchase.app.PurchaseOrderFunc.FUNCTION_ID,
                                                     name: purchase.app.PurchaseOrderFunc.FUNCTION_NAME,
-                                                    category: undefined,
-                                                    description: undefined
                                                 })
                                             }),
                                         ],

@@ -337,7 +337,7 @@ declare namespace materials {
             mixingBatches?: ibas.emYesNo;
         }
         /** 物料库存预留服务代理 */
-        class MaterialInventoryReservationServiceProxy extends ibas.ServiceProxy<IMaterialInventoryReservationTarget> {
+        class MaterialInventoryReservationServiceProxy extends ibas.ServiceProxy<IMaterialInventoryReservationTarget | IMaterialInventoryReservationTarget[]> {
         }
         /** 物料订购预留服务契约 */
         interface IMaterialOrderedReservationSource extends ibas.IServiceContract {
@@ -358,7 +358,7 @@ declare namespace materials {
             targetLineId?: number;
         }
         /** 物料订购预留服务代理 */
-        class MaterialOrderedReservationServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationSource> {
+        class MaterialOrderedReservationServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationSource | IMaterialOrderedReservationSource[]> {
         }
         interface IMaterialOrderedReservationTarget {
             itemCode: string;
@@ -2835,6 +2835,8 @@ declare namespace materials {
             symbol: string;
             /** 是否激活 */
             activated: ibas.emYesNo;
+            /** 小数位数 */
+            decimalPlaces: number;
             /** 备注 */
             remarks: string;
         }
@@ -8907,6 +8909,12 @@ declare namespace materials {
             get activated(): ibas.emYesNo;
             /** 设置-是否激活 */
             set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-小数位数 */
+            static PROPERTY_DECIMALPLACES_NAME: string;
+            /** 获取-小数位数 */
+            get decimalPlaces(): number;
+            /** 设置-小数位数 */
+            set decimalPlaces(value: number);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -11645,7 +11653,7 @@ declare namespace materials {
             total(): number;
         }
         /** 应用-物料库存预留 */
-        class MaterialInventoryReservationService extends ibas.ServiceApplication<IMaterialInventoryReservationView, IMaterialInventoryReservationTarget> {
+        class MaterialInventoryReservationService extends ibas.ServiceApplication<IMaterialInventoryReservationView, IMaterialInventoryReservationTarget | IMaterialInventoryReservationTarget[]> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -11656,8 +11664,8 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            private workingData;
-            protected runService(contract: IMaterialInventoryReservationTarget): void;
+            private workingDatas;
+            protected runService(contract: IMaterialInventoryReservationTarget | IMaterialInventoryReservationTarget[]): void;
             private warehouses;
             private currentWorkingItem;
             /** 切换工作数据 */
@@ -11668,6 +11676,8 @@ declare namespace materials {
             private releaseReservation;
             /** 保存预留库存 */
             private saveReservation;
+            /** 关闭视图 */
+            close(): void;
         }
         /** 视图-物料库存预留 */
         interface IMaterialInventoryReservationView extends ibas.IView {
@@ -11678,7 +11688,7 @@ declare namespace materials {
             /** 释放预留库存 */
             releaseReservationEvent: Function;
             /** 显示工作顺序 */
-            showWorkingData(data: ReservationWorking): void;
+            showWorkingDatas(datas: ReservationWorking[]): void;
             /** 显示物料库存 */
             showInventories(datas: bo.MaterialInventory[] | bo.MaterialBatch[] | bo.MaterialSerial[]): void;
             /** 显示预留 */
@@ -11754,7 +11764,7 @@ declare namespace materials {
             total(): number;
         }
         /** 应用- 物料订购预留 */
-        class MaterialOrderedReservationService extends ibas.ServiceApplication<IMaterialOrderedReservationView, IMaterialOrderedReservationSource> {
+        class MaterialOrderedReservationService extends ibas.ServiceApplication<IMaterialOrderedReservationView, IMaterialOrderedReservationSource | IMaterialOrderedReservationSource[]> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -11765,8 +11775,8 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            private workingData;
-            protected runService(contract: IMaterialOrderedReservationSource): void;
+            private workingDatas;
+            protected runService(contract: IMaterialOrderedReservationSource | IMaterialOrderedReservationSource[]): void;
             private currentWorkingItem;
             /** 切换工作数据 */
             private changeWorkingItem;
@@ -11774,6 +11784,8 @@ declare namespace materials {
             private saveReservation;
             private addTargetDocument;
             private removeTargetDocument;
+            /** 关闭视图 */
+            close(): void;
         }
         /** 视图- 物料订购预留 */
         interface IMaterialOrderedReservationView extends ibas.IView {
@@ -11786,7 +11798,7 @@ declare namespace materials {
             /** 显示可用目标单据 */
             showTargetDocuments(datas: ibas.IServiceAgent[]): void;
             /** 显示工作顺序 */
-            showWorkingData(data: OrderedReservationWorking): void;
+            showWorkingDatas(data: OrderedReservationWorking[]): void;
             /** 显示预留 */
             showReservations(datas: bo.MaterialOrderedReservation[]): void;
             /** 保存预留库存 */
@@ -13077,6 +13089,8 @@ declare namespace materials {
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
         }
+        /** 权限元素-单据仓库 */
+        const ELEMENT_DOCUMENT_WAREHOUSE: ibas.IElement;
     }
 }
 /**

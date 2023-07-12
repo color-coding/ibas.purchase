@@ -102,5 +102,10 @@ namespace purchase {
             /** 显示数据 */
             showShippingAddress(data: bo.ShippingAddress): void;
         }
+        /** 权限元素-单据地址 */
+        export const ELEMENT_SHIPPING_ADDRESSES: ibas.IElement = {
+            id: ShippingAddressesEditApp.APPLICATION_ID,
+            name: ShippingAddressesEditApp.APPLICATION_NAME,
+        };
     }
 }

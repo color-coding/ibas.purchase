@@ -58,7 +58,8 @@ namespace purchase {
                             && sap.ui.getCore().getConfiguration().getVersion().getMinor() >= 73 ? false : true,
                         footer: new sap.m.Toolbar("", {
                             content: [
-                                new sap.m.MenuButton("", {
+                                new sap.extension.m.MenuButton("", {
+                                    autoHide: true,
                                     icon: "sap-icon://tags",
                                     menu: new sap.m.Menu("", {
                                         items: [
@@ -66,13 +67,21 @@ namespace purchase {
                                                 text: ibas.i18n.prop("purchase_material_batch"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseReturnItemMaterialBatchEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: materials.app.MaterialBatchIssueService.APPLICATION_ID,
+                                                    name: materials.app.MaterialBatchIssueService.APPLICATION_NAME,
+                                                })
                                             }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("purchase_material_serial"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseReturnItemMaterialSerialEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: materials.app.MaterialSerialIssueService.APPLICATION_ID,
+                                                    name: materials.app.MaterialSerialIssueService.APPLICATION_NAME,
+                                                })
                                             }),
                                         ]
                                     })
@@ -95,13 +104,21 @@ namespace purchase {
                                                 text: ibas.i18n.prop("bo_purchaseorder"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseReturnPurchaseOrderEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.PurchaseOrderChooseApp.APPLICATION_ID,
+                                                    name: app.PurchaseOrderChooseApp.APPLICATION_NAME,
+                                                })
                                             }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchasedelivery"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseReturnPurchaseDeliveryEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.PurchaseDeliveryChooseApp.APPLICATION_ID,
+                                                    name: app.PurchaseDeliveryChooseApp.APPLICATION_NAME,
+                                                })
                                             }),
                                         ]
                                     })
@@ -193,8 +210,6 @@ namespace purchase {
                                                     visible: shell.app.privileges.canRun({
                                                         id: purchase.app.PurchaseCreditNoteFunc.FUNCTION_ID,
                                                         name: purchase.app.PurchaseCreditNoteFunc.FUNCTION_NAME,
-                                                        category: undefined,
-                                                        description: undefined
                                                     })
                                                 }),
                                             ]
@@ -700,6 +715,10 @@ namespace purchase {
                             }),
                             new sap.uxap.ObjectPageSection("", {
                                 title: ibas.i18n.prop("bo_shippingaddress"),
+                                visible: shell.app.privileges.canRun({
+                                    id: app.ELEMENT_SHIPPING_ADDRESSES.id,
+                                    name: app.ELEMENT_SHIPPING_ADDRESSES.name
+                                }),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [

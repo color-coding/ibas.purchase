@@ -472,7 +472,7 @@ namespace purchase {
                         deliveryDate: item.requestDate,
                     });
                 }
-                ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource>({
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource | materials.app.IMaterialOrderedReservationSource[]>({
                     proxy: new materials.app.MaterialOrderedReservationServiceProxy(contract)
                 });
             }

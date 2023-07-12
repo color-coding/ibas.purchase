@@ -508,7 +508,8 @@ namespace purchase {
                                     })
                                 }),
                                 new sap.m.ToolbarSeparator(""),
-                                new sap.m.MenuButton("", {
+                                new sap.extension.m.MenuButton("", {
+                                    autoHide: true,
                                     text: ibas.i18n.prop("shell_quick_to"),
                                     icon: "sap-icon://generate-shortcut",
                                     type: sap.m.ButtonType.Transparent,
@@ -519,7 +520,11 @@ namespace purchase {
                                                 icon: "sap-icon://blank-tag",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.reserveMaterialsOrderedEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: materials.app.MaterialOrderedReservationService.APPLICATION_ID,
+                                                    name: materials.app.MaterialOrderedReservationService.APPLICATION_NAME,
+                                                })
                                             }),
                                         ],
                                     })

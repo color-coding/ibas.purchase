@@ -470,6 +470,10 @@ namespace purchase {
                             }),
                             new sap.uxap.ObjectPageSection("", {
                                 title: ibas.i18n.prop("bo_shippingaddress"),
+                                visible: shell.app.privileges.canRun({
+                                    id: app.ELEMENT_SHIPPING_ADDRESSES.id,
+                                    name: app.ELEMENT_SHIPPING_ADDRESSES.name
+                                }),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [

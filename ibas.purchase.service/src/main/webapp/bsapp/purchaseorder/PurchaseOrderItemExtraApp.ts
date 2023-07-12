@@ -274,5 +274,10 @@ namespace purchase {
             /** 查看采购订单-行额外 事件 */
             viewPurchaseOrderItemExtraEvent: Function;
         }
+        /** 权限元素-采购订单扩展 */
+        export const ELEMENT_PURCHASE_ORDER_EXTRA: ibas.IElement = {
+            id: PurchaseOrderItemExtraApp.APPLICATION_ID,
+            name: PurchaseOrderItemExtraApp.APPLICATION_NAME,
+        };
     }
 }

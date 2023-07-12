@@ -9180,6 +9180,8 @@ declare namespace sales {
             protected editData(data: bo.SalesOrder): void;
             /** 删除数据，参数：目标数据集合 */
             protected deleteData(data: bo.SalesOrder | bo.SalesOrder[]): void;
+            /** 预留物料库存 */
+            private reserveMaterialsInventory;
         }
         /** 视图-销售订单 */
         interface ISalesOrderListView extends ibas.IBOListView {
@@ -9189,6 +9191,8 @@ declare namespace sales {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.SalesOrder[]): void;
+            /** 预留物料库存 */
+            reserveMaterialsInventoryEvent: Function;
         }
     }
 }
@@ -9285,6 +9289,8 @@ declare namespace sales {
             /** 查看销售订单-行额外 事件 */
             viewSalesOrderItemExtraEvent: Function;
         }
+        /** 权限元素-销售订单扩展 */
+        const ELEMENT_SALES_ORDER_EXTRA: ibas.IElement;
     }
 }
 /**
@@ -9872,6 +9878,8 @@ declare namespace sales {
             /** 查看销售报价-行额外 事件 */
             viewSalesQuoteItemExtraEvent: Function;
         }
+        /** 权限元素-销售报价扩展 */
+        const ELEMENT_SALES_QUOTE_EXTRA: ibas.IElement;
     }
 }
 /**
@@ -10484,6 +10492,8 @@ declare namespace sales {
             /** 显示数据 */
             showShippingAddress(data: bo.ShippingAddress): void;
         }
+        /** 权限元素-单据地址 */
+        const ELEMENT_SHIPPING_ADDRESSES: ibas.IElement;
     }
 }
 /**

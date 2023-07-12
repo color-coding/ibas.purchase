@@ -77,7 +77,10 @@ namespace purchase {
                 this.register(new PurchaseReturnReceiptServiceMapping());
                 this.register(new PurchaseDeliveryPaymentServiceMapping());
                 this.register(new PurchaseOrderPaymentServiceMapping());
-
+                // 权限元素
+                this.register(ELEMENT_PURCHASE_ORDER_EXTRA);
+                this.register(ELEMENT_PURCHASE_QUOTE_EXTRA);
+                this.register(ELEMENT_SHIPPING_ADDRESSES);
             }
             /** 运行 */
             run(): void {

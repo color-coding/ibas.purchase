@@ -70,13 +70,21 @@ namespace purchase {
                                                 text: ibas.i18n.prop("bo_purchaserequest"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseQuotePurchaseRequestEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.PurchaseRequestChooseApp.APPLICATION_ID,
+                                                    name: app.PurchaseRequestChooseApp.APPLICATION_NAME,
+                                                })
                                             }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_blanketagreement"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseQuoteBlanketAgreementEvent);
-                                                }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.BlanketAgreementChooseApp.APPLICATION_ID,
+                                                    name: app.BlanketAgreementChooseApp.APPLICATION_NAME,
+                                                })
                                             }),
                                         ]
                                     })
@@ -168,8 +176,6 @@ namespace purchase {
                                                     visible: shell.app.privileges.canRun({
                                                         id: purchase.app.PurchaseOrderFunc.FUNCTION_ID,
                                                         name: purchase.app.PurchaseOrderFunc.FUNCTION_NAME,
-                                                        category: undefined,
-                                                        description: undefined
                                                     })
                                                 }),
                                             ]
@@ -465,7 +471,11 @@ namespace purchase {
                                                                     press(oEvent: any): void {
                                                                         that.fireViewEvents(that.showPurchaseQuoteItemExtraEvent,
                                                                             that.listPurchaseQuoteItem.getSelecteds().firstOrDefault());
-                                                                    }
+                                                                    },
+                                                                    visible: shell.app.privileges.canRun({
+                                                                        id: app.ELEMENT_PURCHASE_QUOTE_EXTRA.id,
+                                                                        name: app.ELEMENT_PURCHASE_QUOTE_EXTRA.name,
+                                                                    })
                                                                 }),
                                                                 new sap.m.SegmentedButtonItem("", {
                                                                     width: "3rem",

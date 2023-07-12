@@ -275,5 +275,10 @@ namespace purchase {
             /** 查看采购报价-行额外 事件 */
             viewPurchaseQuoteItemExtraEvent: Function;
         }
+        /** 权限元素-采购报价扩展 */
+        export const ELEMENT_PURCHASE_QUOTE_EXTRA: ibas.IElement = {
+            id: PurchaseQuoteItemExtraApp.APPLICATION_ID,
+            name: PurchaseQuoteItemExtraApp.APPLICATION_NAME,
+        };
     }
 }

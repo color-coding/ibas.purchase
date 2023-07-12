@@ -2550,6 +2550,8 @@ declare namespace receiptpayment {
             private chooseReceiptItemModeTradeId;
             /** 选择收款联系人 */
             private chooseReceiptContactPerson;
+            /** 转为付款事件 */
+            private turnToPayment;
         }
         /** 视图-收款 */
         interface IReceiptEditView extends ibas.IBOEditView {
@@ -2573,6 +2575,8 @@ declare namespace receiptpayment {
             chooseReceiptItemModeTradeIdEvent: Function;
             /** 显示显示收款单据 */
             showReceiptDocuments(datas: ibas.IServiceAgent[]): void;
+            /** 转为付款事件 */
+            turnToPaymentEvent: Function;
         }
         /** 收款编辑服务映射 */
         class ReceiptEditServiceMapping extends ibas.BOEditServiceMapping {
