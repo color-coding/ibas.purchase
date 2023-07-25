@@ -367,10 +367,13 @@ declare namespace materials {
             uom: string;
             warehouse?: string;
             deliveryDate?: Date;
-            onReserved: (documentType: string, docEntry: number, lineId: number, quantity: number) => void;
+            onReserved: (documentType: string, docEntry: number, lineId: number, quantity: number, deliveryDate?: Date) => void;
         }
         /** 物料订购预留目标单据服务代理 */
         class MaterialOrderedReservationTargetServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationTarget> {
+        }
+        /** 物料订购预留源单据服务代理 */
+        class MaterialOrderedReservationSourceServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationTarget> {
         }
         /** 查询条件 */
         namespace conditions {
@@ -11601,9 +11604,10 @@ declare namespace materials {
             get targetEntry(): number;
             get businessPartner(): string;
             get items(): ibas.IList<ReservationWorkingItem>;
+            fireProcessing(): void;
         }
         class ReservationWorkingItem extends ibas.Bindable {
-            constructor(data: IMaterialInventoryReservationTargetLine);
+            constructor(data: IMaterialInventoryReservationTargetLine, parent: ReservationWorking);
             get data(): IMaterialInventoryReservationTargetLine;
             /** 行号 */
             get lineId(): number;
@@ -11643,14 +11647,55 @@ declare namespace materials {
             get results(): ReservationWorkingItemResults;
             fireProcessing(): void;
         }
-        class ReservationWorkingItemResults extends ibas.ArrayList<bo.MaterialInventoryReservation> {
+        class ReservationWorkingItemResults extends ibas.ArrayList<ReservationWorkingItemResult> {
             constructor(parent: ReservationWorkingItem);
             protected get parent(): ReservationWorkingItem;
-            add(item: bo.MaterialInventoryReservation | bo.MaterialInventoryReservation[]): void;
+            add(item: ReservationWorkingItemResult | ReservationWorkingItemResult[]): void;
             private listener;
-            remove(item: bo.MaterialInventoryReservation): boolean;
-            filterDeleted(): bo.MaterialInventoryReservation[];
+            remove(item: ReservationWorkingItemResult): boolean;
+            filterDeleted(): ReservationWorkingItemResult[];
             total(): number;
+        }
+        class ReservationWorkingItemResult extends ibas.Bindable {
+            constructor(data: bo.MaterialInventoryReservation | bo.MaterialOrderedReservation);
+            get data(): bo.MaterialInventoryReservation | bo.MaterialOrderedReservation;
+            /** 来源 */
+            get source(): string;
+            /** 可保存的 */
+            get isSavable(): boolean;
+            /** 交货日期 */
+            get deliveryDate(): Date;
+            /** 删除的 */
+            get isDeleted(): boolean;
+            set isDeleted(value: boolean);
+            delete(): void;
+            /** 新的 */
+            get isNew(): boolean;
+            set isNew(value: boolean);
+            /** 修改的 */
+            get isDirty(): boolean;
+            set isDirty(value: boolean);
+            /** 物料号 */
+            get itemCode(): string;
+            set itemCode(value: string);
+            /** 批次号 */
+            get batchCode(): string;
+            set batchCode(value: string);
+            /** 序列号 */
+            get serialCode(): string;
+            set serialCode(value: string);
+            /** 数量 */
+            get quantity(): number;
+            set quantity(value: number);
+            /** 备注 */
+            get remarks(): string;
+            set remarks(value: string);
+            get targetDocumentType(): string;
+            set targetDocumentType(value: string);
+            get targetDocumentEntry(): number;
+            set targetDocumentEntry(value: number);
+            get targetDocumentLineId(): number;
+            set targetDocumentLineId(value: number);
         }
         /** 应用-物料库存预留 */
         class MaterialInventoryReservationService extends ibas.ServiceApplication<IMaterialInventoryReservationView, IMaterialInventoryReservationTarget | IMaterialInventoryReservationTarget[]> {
@@ -11676,6 +11721,7 @@ declare namespace materials {
             private releaseReservation;
             /** 保存预留库存 */
             private saveReservation;
+            private reserveOrdered;
             /** 关闭视图 */
             close(): void;
         }
@@ -11685,6 +11731,8 @@ declare namespace materials {
             changeWorkingItemEvent: Function;
             /** 预留库存 */
             reserveInventoryEvent: Function;
+            /** 预留订购 */
+            reserveOrderedEvent: Function;
             /** 释放预留库存 */
             releaseReservationEvent: Function;
             /** 显示工作顺序 */
@@ -11692,9 +11740,11 @@ declare namespace materials {
             /** 显示物料库存 */
             showInventories(datas: bo.MaterialInventory[] | bo.MaterialBatch[] | bo.MaterialSerial[]): void;
             /** 显示预留 */
-            showReservations(datas: bo.MaterialInventoryReservation[]): void;
+            showReservations(datas: ReservationWorkingItemResult[]): void;
             /** 保存预留库存 */
             saveReservationEvent: Function;
+            /** 显示订购可用源单据 */
+            showOrderedSourceDocuments(datas: ibas.IServiceAgent[]): void;
         }
         /** 物料库存预留服务映射 */
         class MaterialInventoryReservationServiceMapping extends ibas.ServiceMapping {
@@ -11720,9 +11770,10 @@ declare namespace materials {
             get sourceType(): string;
             get sourceEntry(): number;
             get items(): ibas.IList<OrderedReservationWorkingItem>;
+            fireProcessing(): void;
         }
         class OrderedReservationWorkingItem extends ibas.Bindable {
-            constructor(data: IMaterialOrderedReservationSourceLine);
+            constructor(data: IMaterialOrderedReservationSourceLine, parent: OrderedReservationWorking);
             get data(): IMaterialOrderedReservationSourceLine;
             /** 行号 */
             get lineId(): number;

@@ -1061,7 +1061,7 @@ namespace purchase {
                         itemDescription: item.itemDescription,
                         quantity: item.quantity,
                         warehouse: item.warehouse,
-                        deliveryDate: item.deliveryDate,
+                        deliveryDate: item.deliveryDate instanceof Date ? item.deliveryDate : this.editData.deliveryDate,
                         uom: item.uom
                     });
                 }
@@ -1136,6 +1136,99 @@ namespace purchase {
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PurchaseOrder>> {
                 return new PurchaseOrderEditApp();
+            }
+        }
+
+        export class MaterialOrderedReservationSourcePurchaseOrderService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialOrderedReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string = "b22e069f-2337-4a4e-8046-1001bd55f722";
+            /** 应用名称 */
+            static APPLICATION_NAME: string = "purchase_app_materialorderedreservation_purchaseorder";
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = MaterialOrderedReservationSourcePurchaseOrderService.APPLICATION_ID;
+                this.name = MaterialOrderedReservationSourcePurchaseOrderService.APPLICATION_NAME;
+                this.description = ibas.i18n.prop(this.name);
+            }
+            /** 注册视图 */
+            protected registerView(): void {
+                super.registerView();
+            }
+            protected runService(contract: materials.app.IMaterialOrderedReservationTarget): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                // 未取消的
+                condition.alias = bo.PurchaseOrder.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 未删除的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_DELETED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 仅下达的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_DOCUMENTSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emDocumentStatus.RELEASED.toString();
+                // 审批通过的或未进审批
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.APPROVED.toString();
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                // 物料
+                let cCrteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCrteria.propertyPath = bo.PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME;
+                cCrteria.onlyHasChilds = true;
+                condition = cCrteria.conditions.create();
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_ITEMCODE_NAME;
+                condition.value = contract.itemCode;
+                condition = cCrteria.conditions.create();
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDQUANTITY_NAME;
+                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_QUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.LESS_THAN;
+                // 调用选择服务
+                let that: this = this;
+                ibas.servicesManager.runChooseService<bo.PurchaseOrder>({
+                    boCode: bo.PurchaseOrder.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    criteria: criteria,
+                    onCompleted(selecteds: ibas.IList<bo.PurchaseOrder>): void {
+                        for (let selected of selecteds) {
+                            for (let item of selected.purchaseOrderItems) {
+                                contract.onReserved(selected.objectCode, selected.docEntry, item.lineId, item.quantity,
+                                    item.deliveryDate instanceof Date ? item.deliveryDate : selected.deliveryDate
+                                );
+                            }
+                        }
+                        that.destroy();
+                    }
+                });
+            }
+            protected viewShowed(): void {
+            }
+
+        }
+        export class MaterialOrderedReservationSourcePurchaseOrderServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = MaterialOrderedReservationSourcePurchaseOrderService.APPLICATION_ID;
+                this.name = MaterialOrderedReservationSourcePurchaseOrderService.APPLICATION_NAME;
+                this.description = ibas.i18n.prop(this.name);
+                this.proxy = materials.app.MaterialOrderedReservationSourceServiceProxy;
+            }
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract> {
+                return new MaterialOrderedReservationSourcePurchaseOrderService();
             }
         }
     }

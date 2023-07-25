@@ -18,6 +18,8 @@ namespace purchase {
                 editDataEvent: Function;
                 /** 删除数据事件，参数：删除对象集合 */
                 deleteDataEvent: Function;
+                /** 预留物料订购 */
+                reserveMaterialsOrderedEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -202,6 +204,28 @@ namespace purchase {
                                     press: function (): void {
                                         that.fireViewEvents(that.deleteDataEvent, that.table.getSelecteds());
                                     }
+                                }),
+                                new sap.m.ToolbarSeparator(""),
+                                new sap.extension.m.MenuButton("", {
+                                    autoHide: true,
+                                    text: ibas.i18n.prop("shell_quick_to"),
+                                    icon: "sap-icon://generate-shortcut",
+                                    type: sap.m.ButtonType.Transparent,
+                                    menu: new sap.m.Menu("", {
+                                        items: [
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("purchase_orderer_reservation"),
+                                                icon: "sap-icon://blank-tag",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.reserveMaterialsOrderedEvent, that.table.getSelecteds());
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: materials.app.MaterialOrderedReservationService.APPLICATION_ID,
+                                                    name: materials.app.MaterialOrderedReservationService.APPLICATION_NAME,
+                                                })
+                                            }),
+                                        ],
+                                    })
                                 }),
                                 new sap.m.ToolbarSpacer(""),
                                 new sap.m.Button("", {

@@ -469,7 +469,7 @@ namespace purchase {
                         itemDescription: item.itemDescription,
                         quantity: item.quantity,
                         uom: item.uom,
-                        deliveryDate: item.requestDate,
+                        deliveryDate: item.requestDate instanceof Date ? item.requestDate : this.editData.deliveryDate,
                     });
                 }
                 ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource | materials.app.IMaterialOrderedReservationSource[]>({
@@ -515,6 +515,99 @@ namespace purchase {
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PurchaseRequest>> {
                 return new PurchaseRequestEditApp();
+            }
+        }
+
+        export class MaterialOrderedReservationSourcePurchaseRequestService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialOrderedReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string = "06e25259-a3c0-471b-846f-d4a7195e79a6";
+            /** 应用名称 */
+            static APPLICATION_NAME: string = "purchase_app_materialorderedreservation_purchaserequest";
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = MaterialOrderedReservationSourcePurchaseRequestService.APPLICATION_ID;
+                this.name = MaterialOrderedReservationSourcePurchaseRequestService.APPLICATION_NAME;
+                this.description = ibas.i18n.prop(this.name);
+            }
+            /** 注册视图 */
+            protected registerView(): void {
+                super.registerView();
+            }
+            protected runService(contract: materials.app.IMaterialOrderedReservationTarget): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                // 未取消的
+                condition.alias = bo.PurchaseRequest.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 未删除的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseRequest.PROPERTY_DELETED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 仅下达的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseRequest.PROPERTY_DOCUMENTSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emDocumentStatus.RELEASED.toString();
+                // 审批通过的或未进审批
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseRequest.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.APPROVED.toString();
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseRequest.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                // 物料
+                let cCrteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCrteria.propertyPath = bo.PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME;
+                cCrteria.onlyHasChilds = true;
+                condition = cCrteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_ITEMCODE_NAME;
+                condition.value = contract.itemCode;
+                condition = cCrteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_CLOSEDQUANTITY_NAME;
+                condition.comparedAlias = bo.PurchaseRequestItem.PROPERTY_QUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.LESS_THAN;
+                // 调用选择服务
+                let that: this = this;
+                ibas.servicesManager.runChooseService<bo.PurchaseRequest>({
+                    boCode: bo.PurchaseRequest.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    criteria: criteria,
+                    onCompleted(selecteds: ibas.IList<bo.PurchaseRequest>): void {
+                        for (let selected of selecteds) {
+                            for (let item of selected.purchaseRequestItems) {
+                                contract.onReserved(selected.objectCode, selected.docEntry, item.lineId, item.quantity,
+                                    item.requestDate instanceof Date ? item.requestDate : selected.deliveryDate
+                                );
+                            }
+                        }
+                        that.destroy();
+                    }
+                });
+            }
+            protected viewShowed(): void {
+            }
+
+        }
+        export class MaterialOrderedReservationSourcePurchaseRequestServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = MaterialOrderedReservationSourcePurchaseRequestService.APPLICATION_ID;
+                this.name = MaterialOrderedReservationSourcePurchaseRequestService.APPLICATION_NAME;
+                this.description = ibas.i18n.prop(this.name);
+                this.proxy = materials.app.MaterialOrderedReservationSourceServiceProxy;
+            }
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract> {
+                return new MaterialOrderedReservationSourcePurchaseRequestService();
             }
         }
     }

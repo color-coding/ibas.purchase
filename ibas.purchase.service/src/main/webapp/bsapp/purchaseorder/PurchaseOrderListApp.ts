@@ -29,6 +29,7 @@ namespace purchase {
                 // 其他事件
                 this.view.editDataEvent = this.editData;
                 this.view.deleteDataEvent = this.deleteData;
+                this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -150,6 +151,66 @@ namespace purchase {
                     }
                 });
             }
+            /** 预留物料订购 */
+            private reserveMaterialsOrdered(datas: bo.PurchaseOrder[]): void {
+                let criteria: ibas.Criteria = new ibas.Criteria();
+                for (let data of datas) {
+                    if (data.documentStatus > ibas.emDocumentStatus.RELEASED
+                        || data.canceled === ibas.emYesNo.YES
+                        || data.approvalStatus === ibas.emApprovalStatus.REJECTED
+                    ) {
+                        continue;
+                    }
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseOrder.PROPERTY_DOCENTRY_NAME;
+                    condition.value = data.docEntry.toString();
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                }
+                if (criteria.conditions.length > 0) {
+                    let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                    boRepository.fetchPurchaseOrder({
+                        criteria: criteria,
+                        onCompleted: (opRslt) => {
+                            try {
+                                if (opRslt.resultCode !== 0) {
+                                    throw new Error(opRslt.message);
+                                }
+                                let contracts: ibas.IList<materials.app.IMaterialOrderedReservationSource> = new ibas.ArrayList<materials.app.IMaterialOrderedReservationSource>();
+                                for (let data of opRslt.resultObjects) {
+                                    let contract: materials.app.IMaterialOrderedReservationSource = {
+                                        sourceType: data.objectCode,
+                                        sourceEntry: data.docEntry,
+                                        items: []
+                                    };
+                                    for (let item of data.purchaseOrderItems) {
+                                        contract.items.push({
+                                            sourceLineId: item.lineId,
+                                            itemCode: item.itemCode,
+                                            itemDescription: item.itemDescription,
+                                            quantity: item.quantity,
+                                            warehouse: item.warehouse,
+                                            deliveryDate: item.deliveryDate instanceof Date ? item.deliveryDate : data.deliveryDate,
+                                            uom: item.uom
+                                        });
+                                    }
+                                    contracts.add(contract);
+                                }
+                                if (contracts.length > 0) {
+                                    ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource | materials.app.IMaterialOrderedReservationSource[]>({
+                                        proxy: new materials.app.MaterialOrderedReservationServiceProxy(contracts)
+                                    });
+                                } else {
+                                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_fetched_none"));
+                                }
+                            } catch (error) {
+                                this.messages(error);
+                            }
+                        }
+                    });
+                } else {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_fetched_none"));
+                }
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseOrderListView extends ibas.IBOListView {
@@ -159,6 +220,8 @@ namespace purchase {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.PurchaseOrder[]): void;
+            /** 预留物料订购 */
+            reserveMaterialsOrderedEvent: Function;
         }
     }
 }

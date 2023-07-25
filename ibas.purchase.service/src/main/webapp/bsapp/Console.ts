@@ -77,6 +77,9 @@ namespace purchase {
                 this.register(new PurchaseReturnReceiptServiceMapping());
                 this.register(new PurchaseDeliveryPaymentServiceMapping());
                 this.register(new PurchaseOrderPaymentServiceMapping());
+                // 订购服务
+                this.register(new MaterialOrderedReservationSourcePurchaseOrderServiceMapping());
+                this.register(new MaterialOrderedReservationSourcePurchaseRequestServiceMapping());
                 // 权限元素
                 this.register(ELEMENT_PURCHASE_ORDER_EXTRA);
                 this.register(ELEMENT_PURCHASE_QUOTE_EXTRA);
