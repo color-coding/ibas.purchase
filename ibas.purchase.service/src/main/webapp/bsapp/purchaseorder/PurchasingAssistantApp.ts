@@ -362,6 +362,10 @@ namespace purchase {
                         purchaseItem.serialManagement = item.serialManagement;
                         purchaseItem.reference1 = item.reference1;
                         purchaseItem.reference2 = item.reference2;
+                        if (!ibas.strings.isEmpty(item.agreements)) {
+                            purchaseItem.agreements = ibas.strings.isEmpty(purchaseItem.agreements) ? "" : purchaseItem.agreements + ","
+                                + item.agreements;
+                        }
                         purchaseItems.add(purchaseItem);
                     }
                     // 统一到库存单位

@@ -466,6 +466,17 @@ namespace purchase {
                 this.setProperty(PurchaseRequest.PROPERTY_ORDERTYPE_NAME, value);
             }
 
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string = "Agreements";
+            /** 获取-合同 */
+            get agreements(): string {
+                return this.getProperty<string>(PurchaseRequest.PROPERTY_AGREEMENTS_NAME);
+            }
+            /** 设置-合同 */
+            set agreements(value: string) {
+                this.setProperty(PurchaseQuote.PROPERTY_AGREEMENTS_NAME, value);
+            }
+
 
 
             /** 映射的属性名称-采购申请-行集合 */
@@ -551,6 +562,29 @@ namespace purchase {
                 let item: PurchaseRequestItem = new PurchaseRequestItem();
                 this.add(item);
                 return item;
+            }
+            protected afterAdd(item: PurchaseRequestItem): void {
+                super.afterAdd(item);
+                if (!this.parent.isLoading) {
+                    if (item.isNew && !item.isLoading) {
+                        item.agreements = this.parent.agreements;
+                    }
+                }
+            }
+
+            protected onParentPropertyChanged(name: string): void {
+                super.onParentPropertyChanged(name);
+                if (!this.parent.isLoading) {
+                    if (ibas.strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_AGREEMENTS_NAME)) {
+                        let argument: string = this.parent.agreements;
+                        for (let item of this) {
+                            if (item.isLoading) {
+                                continue;
+                            }
+                            item.agreements = argument;
+                        }
+                    }
+                }
             }
         }
 
@@ -1184,6 +1218,17 @@ namespace purchase {
             /** 设置-分配规则5 */
             set distributionRule5(value: string) {
                 this.setProperty(PurchaseRequestItem.PROPERTY_DISTRIBUTIONRULE5_NAME, value);
+            }
+
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string = "Agreements";
+            /** 获取-合同 */
+            get agreements(): string {
+                return this.getProperty<string>(PurchaseRequestItem.PROPERTY_AGREEMENTS_NAME);
+            }
+            /** 设置-合同 */
+            set agreements(value: string) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_AGREEMENTS_NAME, value);
             }
 
             /** 映射的属性名称-采购申请-行-额外信息集合 */

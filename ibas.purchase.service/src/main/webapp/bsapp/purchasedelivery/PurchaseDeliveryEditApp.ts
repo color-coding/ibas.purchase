@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseDeliveryItemMaterialSerialEvent = this.choosePurchaseDeliveryItemMaterialSerial;
                 this.view.choosePurchaseDeliveryPurchaseOrderEvent = this.choosePurchaseDeliveryPurchaseOrder;
                 this.view.choosePurchaseDeliveryBlanketAgreementEvent = this.choosePurchaseDeliveryBlanketAgreement;
+                this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
                 this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
@@ -1056,6 +1057,40 @@ namespace purchase {
                     }
                 });
             }
+            private chooseSupplierAgreements(): void {
+                if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("bo_purchasecreditnote_suppliercode")
+                    ));
+                    return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERTYPE_NAME;
+                condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                condition.value = this.editData.supplierCode;
+                ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
+                    boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    criteria: criteria,
+                    onCompleted: (selecteds) => {
+                        let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                        for (let selected of selecteds) {
+                            if (builder.length > 0) {
+                                builder.append(ibas.DATA_SEPARATOR);
+                                builder.append(" ");
+                            }
+                            builder.append(selected.code);
+                        }
+                        this.editData.agreements = builder.toString();
+                    }
+                });
+            }
         }
         /** 视图-采购收货 */
         export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
@@ -1091,6 +1126,8 @@ namespace purchase {
             choosePurchaseDeliveryPurchaseOrderEvent: Function;
             /** 选择采购收货-一揽子协议事件 */
             choosePurchaseDeliveryBlanketAgreementEvent: Function;
+            /** 选择供应商合同 */
+            chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为采购退货事件 */

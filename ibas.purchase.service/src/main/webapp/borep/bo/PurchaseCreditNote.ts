@@ -521,6 +521,17 @@ namespace purchase {
                 this.setProperty(PurchaseCreditNote.PROPERTY_ORDERTYPE_NAME, value);
             }
 
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string = "Agreements";
+            /** 获取-合同 */
+            get agreements(): string {
+                return this.getProperty<string>(PurchaseCreditNote.PROPERTY_AGREEMENTS_NAME);
+            }
+            /** 设置-合同 */
+            set agreements(value: string) {
+                this.setProperty(PurchaseCreditNote.PROPERTY_AGREEMENTS_NAME, value);
+            }
+
             /** 映射的属性名称-采购贷项-行集合 */
             static PROPERTY_PURCHASECREDITNOTEITEMS_NAME: string = "PurchaseCreditNoteItems";
             /** 获取-采购贷项-行集合 */
@@ -755,9 +766,29 @@ namespace purchase {
                 item.lineStatus = this.parent.documentStatus;
                 return item;
             }
-            /** 移出项目之后 */
-            protected afterRemove(item: PurchaseCreditNoteItem): void {
-                super.afterRemove(item);
+
+            protected afterAdd(item: PurchaseCreditNoteItem): void {
+                super.afterAdd(item);
+                if (!this.parent.isLoading) {
+                    if (item.isNew && !item.isLoading) {
+                        item.agreements = this.parent.agreements;
+                    }
+                }
+            }
+
+            protected onParentPropertyChanged(name: string): void {
+                super.onParentPropertyChanged(name);
+                if (!this.parent.isLoading) {
+                    if (ibas.strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_AGREEMENTS_NAME)) {
+                        let argument: string = this.parent.agreements;
+                        for (let item of this) {
+                            if (item.isLoading) {
+                                continue;
+                            }
+                            item.agreements = argument;
+                        }
+                    }
+                }
             }
         }
 
@@ -1408,6 +1439,17 @@ namespace purchase {
             /** 设置-分配规则5 */
             set distributionRule5(value: string) {
                 this.setProperty(PurchaseCreditNoteItem.PROPERTY_DISTRIBUTIONRULE5_NAME, value);
+            }
+
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string = "Agreements";
+            /** 获取-合同 */
+            get agreements(): string {
+                return this.getProperty<string>(PurchaseCreditNoteItem.PROPERTY_AGREEMENTS_NAME);
+            }
+            /** 设置-合同 */
+            set agreements(value: string) {
+                this.setProperty(PurchaseCreditNoteItem.PROPERTY_AGREEMENTS_NAME, value);
             }
 
             /** 映射的属性名称-物料批次集合 */

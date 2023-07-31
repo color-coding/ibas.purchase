@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseReturnItemMaterialSerialEvent = this.choosePurchaseReturnItemMaterialSerial;
                 this.view.choosePurchaseReturnPurchaseOrderEvent = this.choosePurchaseReturnPurchaseOrder;
                 this.view.choosePurchaseReturnPurchaseDeliveryEvent = this.choosePurchaseReturnPurchaseDelivery;
+                this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseCreditNoteEvent = this.turnToPurchaseCreditNote;
             }
@@ -750,6 +751,40 @@ namespace purchase {
                     }
                 });
             }
+            private chooseSupplierAgreements(): void {
+                if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("bo_purchasecreditnote_suppliercode")
+                    ));
+                    return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERTYPE_NAME;
+                condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                condition.value = this.editData.supplierCode;
+                ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
+                    boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    criteria: criteria,
+                    onCompleted: (selecteds) => {
+                        let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                        for (let selected of selecteds) {
+                            if (builder.length > 0) {
+                                builder.append(ibas.DATA_SEPARATOR);
+                                builder.append(" ");
+                            }
+                            builder.append(selected.code);
+                        }
+                        this.editData.agreements = builder.toString();
+                    }
+                });
+            }
         }
         /** 视图-采购退货 */
         export interface IPurchaseReturnEditView extends ibas.IBOEditView {
@@ -785,6 +820,8 @@ namespace purchase {
             choosePurchaseReturnPurchaseOrderEvent: Function;
             /** 选择采购退货项目-采购交货事件 */
             choosePurchaseReturnPurchaseDeliveryEvent: Function;
+            /** 选择供应商合同 */
+            chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为采购贷项事件 */

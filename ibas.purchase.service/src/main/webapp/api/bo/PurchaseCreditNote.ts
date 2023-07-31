@@ -101,6 +101,8 @@ namespace purchase {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 采购贷项-行集合 */
             purchaseCreditNoteItems: IPurchaseCreditNoteItems;
             /** 送货地址集合 */
@@ -235,6 +237,8 @@ namespace purchase {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }

@@ -1670,6 +1670,37 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 	}
 
 	/**
+	 * 属性名称-合同/协议
+	 */
+	private static final String PROPERTY_AGREEMENTS_NAME = "Agreements";
+
+	/**
+	 * 合同 属性
+	 */
+	@DbField(name = "Agreements", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<String> PROPERTY_AGREEMENTS = registerProperty(PROPERTY_AGREEMENTS_NAME,
+			String.class, MY_CLASS);
+
+	/**
+	 * 获取-合同/协议
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_AGREEMENTS_NAME)
+	public final String getAgreements() {
+		return this.getProperty(PROPERTY_AGREEMENTS);
+	}
+
+	/**
+	 * 设置-合同/协议
+	 * 
+	 * @param value 值
+	 */
+	public final void setAgreements(String value) {
+		this.setProperty(PROPERTY_AGREEMENTS, value);
+	}
+
+	/**
 	 * 属性名称-采购发票-行
 	 */
 	private static final String PROPERTY_PURCHASEINVOICEITEMS_NAME = "PurchaseInvoiceItems";

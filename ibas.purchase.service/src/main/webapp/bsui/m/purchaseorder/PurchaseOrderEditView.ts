@@ -42,6 +42,8 @@ namespace purchase {
                 choosePurchaseOrderPurchaseRequestEvent: Function;
                 /** 选择采购订单-一揽子协议事件 */
                 choosePurchaseOrderBlanketAgreementEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 付款采购订单 */
                 paymentPurchaseOrderEvent: Function;
                 /** 编辑地址事件 */
@@ -54,7 +56,9 @@ namespace purchase {
                 turnToPurchaseInvoiceEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 默认仓库 */
                 defaultWarehouse: string;
+                /** 默认税组 */
                 defaultTaxGroup: string;
                 /** 绘制视图 */
                 draw(): any {
@@ -508,6 +512,19 @@ namespace purchase {
                                                         type: new sap.extension.data.Alphanumeric({
                                                             maxLength: 8
                                                         })
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_agreements") }),
+                                                    new sap.extension.m.Input("", {
+                                                        showValueHelp: true,
+                                                        valueHelpOnly: false,
+                                                        valueHelpRequest: function (): void {
+                                                            that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                                        },
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreements",
+                                                        type: new sap.extension.data.Alphanumeric({
+                                                            maxLength: 110
+                                                        }),
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_consumer") }),
                                                     new sap.extension.m.Input("", {

@@ -38,6 +38,8 @@ namespace purchase {
                 choosePurchaseQuotePurchaseRequestEvent: Function;
                 /** 选择采购报价-一揽子协议事件 */
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 转为采购订单事件 */
                 turnToPurchaseOrderEvent: Function;
                 /** 绘制视图 */
@@ -176,6 +178,19 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "deliveryDate",
                                 type: new sap.extension.data.Date()
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_agreements") }),
+                            new sap.extension.m.Input("", {
+                                showValueHelp: true,
+                                valueHelpOnly: false,
+                                valueHelpRequest: function (): void {
+                                    that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                },
+                            }).bindProperty("bindingValue", {
+                                path: "agreements",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 110
+                                }),
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_consumer") }),
                             new sap.extension.m.Input("", {

@@ -267,6 +267,12 @@ namespace purchase {
                                                         path: "orderType",
                                                         type: new sap.extension.data.Alphanumeric()
                                                     }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_agreements") }),
+                                                    new sap.extension.m.Text("", {
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreements",
+                                                        type: new sap.extension.data.Alphanumeric(),
+                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_consumer") }),
                                                     new sap.extension.m.Text("", {
                                                     }).bindProperty("bindingValue", {

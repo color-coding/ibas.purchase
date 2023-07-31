@@ -26,6 +26,8 @@ namespace purchase {
                 choosePurchaseRequestItemMaterialEvent: Function;
                 /** 选择采购申请-行物料单位 */
                 choosePurchaseRequestItemUnitEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 显示采购申请额外信息事件 */
                 showPurchaseRequestItemExtraEvent: Function;
                 /** 预留物料订购 */
@@ -139,6 +141,19 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "requestDate",
                                 type: new sap.extension.data.Date()
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_agreements") }),
+                            new sap.extension.m.Input("", {
+                                showValueHelp: true,
+                                valueHelpOnly: false,
+                                valueHelpRequest: function (): void {
+                                    that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                },
+                            }).bindProperty("bindingValue", {
+                                path: "agreements",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 110
+                                }),
                             }),
                         ]
                     });

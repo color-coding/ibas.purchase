@@ -788,6 +788,20 @@ public interface IPurchaseDelivery extends IBODocument, IShippingAddressParent {
 	void setOrderType(String value);
 
 	/**
+	 * 获取-合同/协议
+	 * 
+	 * @return 值
+	 */
+	String getAgreements();
+
+	/**
+	 * 设置-合同/协议
+	 * 
+	 * @param value 值
+	 */
+	void setAgreements(String value);
+
+	/**
 	 * 获取-采购收货-行集合
 	 * 
 	 * @return 值

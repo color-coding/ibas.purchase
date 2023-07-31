@@ -649,6 +649,20 @@ public interface IBlanketAgreement extends IBODocument {
 	void setSettlementProbability(BigDecimal value);
 
 	/**
+	 * 获取-合同
+	 * 
+	 * @return 值
+	 */
+	String getAgreements();
+
+	/**
+	 * 设置-合同
+	 * 
+	 * @param value 值
+	 */
+	void setAgreements(String value);
+
+	/**
 	 * 获取-一揽子协议-项目集合
 	 * 
 	 * @return 值

@@ -38,6 +38,8 @@ namespace purchase {
                 choosePurchaseDeliveryPurchaseOrderEvent: Function;
                 /** 选择采购交货-一揽子协议事件 */
                 choosePurchaseDeliveryBlanketAgreementEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 收款采购交货 */
                 receiptPurchaseDeliveryEvent: Function;
                 /** 编辑地址事件 */
@@ -48,7 +50,9 @@ namespace purchase {
                 turnToPurchaseInvoiceEvent: Function;
                 /** 转为销售交货 */
                 turnToSalesDeliveryEvent: Function;
+                /** 默认仓库 */
                 defaultWarehouse: string;
+                /** 默认税组 */
                 defaultTaxGroup: string;
                 /** 绘制视图 */
                 draw(): any {
@@ -492,6 +496,19 @@ namespace purchase {
                                                         type: new sap.extension.data.Alphanumeric({
                                                             maxLength: 8
                                                         })
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_agreements") }),
+                                                    new sap.extension.m.Input("", {
+                                                        showValueHelp: true,
+                                                        valueHelpOnly: false,
+                                                        valueHelpRequest: function (): void {
+                                                            that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                                        },
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreements",
+                                                        type: new sap.extension.data.Alphanumeric({
+                                                            maxLength: 110
+                                                        }),
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasedelivery_consumer") }),
                                                     new sap.extension.m.Input("", {

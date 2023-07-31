@@ -312,6 +312,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售交货-行集合 */
             salesDeliveryItems: ISalesDeliveryItems;
             /** 送货地址集合 */
@@ -452,6 +454,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -560,6 +564,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售订单-行集合 */
             salesOrderItems: ISalesOrderItems;
             /** 送货地址集合 */
@@ -700,6 +706,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 已订购数量 */
             orderedQuantity: number;
             /** 销售订单-行-额外信息集合 */
@@ -868,6 +876,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售退货-行集合 */
             salesReturnItems: ISalesReturnItems;
             /** 送货地址集合 */
@@ -1008,6 +1018,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1118,6 +1130,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售报价-行集合 */
             salesQuoteItems: ISalesQuoteItems;
         }
@@ -1252,6 +1266,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 销售报价-行-额外信息集合 */
             salesQuoteItemExtras: ISalesQuoteItemExtras;
             /** 赋值产品 */
@@ -1418,6 +1434,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售贷项-行集合 */
             salesCreditNoteItems: ISalesCreditNoteItems;
             /** 送货地址集合 */
@@ -1560,6 +1578,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1668,6 +1688,8 @@ declare namespace sales {
             consumer: string;
             /** 单据类型 */
             orderType: string;
+            /** 合同 */
+            agreements: string;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
             /** 送货地址集合 */
@@ -1810,6 +1832,8 @@ declare namespace sales {
             distributionRule4: string;
             /** 分配规则5 */
             distributionRule5: string;
+            /** 合同 */
+            agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2011,6 +2035,8 @@ declare namespace sales {
             priceMode: emPriceMode;
             /** 结算概率 */
             settlementProbability: number;
+            /** 合同 */
+            agreements: string;
             /** 一揽子协议-项目集合 */
             blanketAgreementItems: IBlanketAgreementItems;
         }
@@ -2841,6 +2867,12 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售交货-行集合 */
             static PROPERTY_SALESDELIVERYITEMS_NAME: string;
             /** 获取-销售交货-行集合 */
@@ -2905,6 +2937,8 @@ declare namespace sales {
             protected afterRemove(item: SalesDeliveryItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesDeliveryItem, name: string): void;
+            protected afterAdd(item: SalesDeliveryItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售交货-行 */
         class SalesDeliveryItem extends ibas.BODocumentLine<SalesDeliveryItem> implements ISalesDeliveryItem {
@@ -3282,6 +3316,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -3596,6 +3636,12 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESORDERITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -3660,6 +3706,8 @@ declare namespace sales {
             protected afterRemove(item: SalesOrderItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesOrderItem, name: string): void;
+            protected afterAdd(item: SalesOrderItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售订单-行 */
         class SalesOrderItem extends ibas.BODocumentLine<SalesOrderItem> implements ISalesOrderItem {
@@ -4037,6 +4085,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-已订购数量 */
             static PROPERTY_ORDEREDQUANTITY_NAME: string;
             /** 获取-已订购数量 */
@@ -4525,6 +4579,12 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESQUOTEITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -4567,6 +4627,8 @@ declare namespace sales {
             protected afterRemove(item: SalesQuoteItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesQuoteItem, name: string): void;
+            protected afterAdd(item: SalesQuoteItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售订单-行 */
         class SalesQuoteItem extends ibas.BODocumentLine<SalesQuoteItem> implements ISalesQuoteItem {
@@ -4944,6 +5006,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售报价-行-额外信息集合 */
             static PROPERTY_SALESQUOTEITEMEXTRAS_NAME: string;
             /** 获取-销售报价-行-额外信息集合 */
@@ -5407,6 +5475,16 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
+            /** 映射的属性名称-销售订单-行集合 */
+            static PROPERTY_SALESQUOTEITEMS_NAME: string;
+            /** 获取-销售订单-行集合 */
+            get salesQuoteItems(): SalesQuoteItems;
             /** 映射的属性名称-销售退货-行集合 */
             static PROPERTY_SALESRETURNITEMS_NAME: string;
             /** 获取-销售退货-行集合 */
@@ -5471,6 +5549,8 @@ declare namespace sales {
             protected afterRemove(item: SalesReturnItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesReturnItem, name: string): void;
+            protected afterAdd(item: SalesReturnItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售退货-行 */
         class SalesReturnItem extends ibas.BODocumentLine<SalesReturnItem> implements ISalesReturnItem {
@@ -5848,6 +5928,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -6162,6 +6248,12 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售贷项-行集合 */
             static PROPERTY_SALESCREDITNOTEITEMS_NAME: string;
             /** 获取-销售贷项-行集合 */
@@ -6226,6 +6318,8 @@ declare namespace sales {
             protected afterRemove(item: SalesCreditNoteItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesCreditNoteItem, name: string): void;
+            protected afterAdd(item: SalesCreditNoteItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售贷项-行 */
         class SalesCreditNoteItem extends ibas.BODocumentLine<SalesCreditNoteItem> implements ISalesCreditNoteItem {
@@ -6603,6 +6697,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -6917,6 +7017,12 @@ declare namespace sales {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-销售发票-行集合 */
             static PROPERTY_SALESINVOICEITEMS_NAME: string;
             /** 获取-销售发票-行集合 */
@@ -6981,6 +7087,8 @@ declare namespace sales {
             protected afterRemove(item: SalesInvoiceItem): void;
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: SalesInvoiceItem, name: string): void;
+            protected afterAdd(item: SalesInvoiceItem): void;
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 销售发票-行 */
         class SalesInvoiceItem extends ibas.BODocumentLine<SalesInvoiceItem> implements ISalesInvoiceItem {
@@ -7358,6 +7466,12 @@ declare namespace sales {
             get distributionRule5(): string;
             /** 设置-分配规则5 */
             set distributionRule5(value: string);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -7920,6 +8034,12 @@ declare namespace sales {
             get settlementProbability(): number;
             /** 设置-结算概率 */
             set settlementProbability(value: number);
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string;
+            /** 获取-合同 */
+            get agreements(): string;
+            /** 设置-合同 */
+            set agreements(value: string);
             /** 映射的属性名称-一揽子协议-项目集合 */
             static PROPERTY_BLANKETAGREEMENTITEMS_NAME: string;
             /** 获取-一揽子协议-项目集合 */
@@ -8752,6 +8872,7 @@ declare namespace sales {
             private chooseSalesDeliveryBlanketAgreement;
             private chooseSalesDeliveryItemUnit;
             private chooseSalesDeliveryItemMaterialVersion;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -8789,6 +8910,8 @@ declare namespace sales {
             chooseSalesDeliverySalesOrderEvent: Function;
             /** 选择销售交货-一揽子协议事件 */
             chooseSalesDeliveryBlanketAgreementEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 销售交货收款事件 */
             receiptSalesDeliveryEvent: Function;
             /** 编辑地址事件 */
@@ -9043,6 +9166,7 @@ declare namespace sales {
             private chooseSalesOrderItemMaterialVersion;
             /** 预留物料库存 */
             private reserveMaterialsInventory;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -9082,6 +9206,8 @@ declare namespace sales {
             chooseSalesOrderSalesQuoteEvent: Function;
             /** 选择销售订单-一揽子协议事件 */
             chooseSalesOrderBlanketAgreementEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 销售订单收款事件 */
             receiptSalesOrderEvent: Function;
             /** 编辑地址事件 */
@@ -9404,6 +9530,7 @@ declare namespace sales {
             protected turnToSalesCreditNote(): void;
             private chooseSalesReturnItemUnit;
             private chooseSalesReturnItemMaterialVersion;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -9441,6 +9568,8 @@ declare namespace sales {
             chooseSalesReturnSalesOrderEvent: Function;
             /** 选择销售退货项目-销售交货事件 */
             chooseSalesReturnSalesDeliveryEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为销售贷项事件 */
@@ -9673,6 +9802,7 @@ declare namespace sales {
             private chooseSalesQuoteBlanketAgreement;
             private chooseSalesQuoteItemUnit;
             private chooseSalesQuoteItemMaterialVersion;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -9704,6 +9834,8 @@ declare namespace sales {
             chooseSalesQuoteItemWarehouseEvent: Function;
             /** 选择销售报价单位事件 */
             chooseSalesQuoteItemUnitEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 显示销售报价额外信息事件 */
             showSalesQuoteItemExtraEvent: Function;
             /** 转为销售订单事件 */
@@ -9994,6 +10126,7 @@ declare namespace sales {
             private chooseSalesInvoiceBlanketAgreement;
             private chooseSalesInvoiceItemUnit;
             private chooseSalesInvoiceItemMaterialVersion;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -10033,6 +10166,8 @@ declare namespace sales {
             chooseSalesInvoiceSalesDeliveryEvent: Function;
             /** 选择销售发票-一揽子协议事件 */
             chooseSalesInvoiceBlanketAgreementEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 销售发票收款事件 */
             receiptSalesInvoiceEvent: Function;
             /** 编辑地址事件 */
@@ -10273,6 +10408,7 @@ declare namespace sales {
             private editShippingAddresses;
             private chooseSalesCreditNoteItemUnit;
             private chooseSalesCreditNoteItemMaterialVersion;
+            private chooseCustomerAgreements;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -10310,6 +10446,8 @@ declare namespace sales {
             chooseSalesCreditNoteSalesReturnEvent: Function;
             /** 选择销售贷项-销售发票事件 */
             chooseSalesCreditNoteSalesInvoiceEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 默认仓库 */

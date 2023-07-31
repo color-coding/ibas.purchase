@@ -510,6 +510,17 @@ namespace purchase {
                 this.setProperty(BlanketAgreement.PROPERTY_SETTLEMENTPROBABILITY_NAME, value);
             }
 
+            /** 映射的属性名称-合同 */
+            static PROPERTY_AGREEMENTS_NAME: string = "Agreements";
+            /** 获取-合同 */
+            get agreements(): string {
+                return this.getProperty<string>(BlanketAgreement.PROPERTY_AGREEMENTS_NAME);
+            }
+            /** 设置-合同 */
+            set agreements(value: string) {
+                this.setProperty(BlanketAgreement.PROPERTY_AGREEMENTS_NAME, value);
+            }
+
 
             /** 映射的属性名称-一揽子协议-项目集合 */
             static PROPERTY_BLANKETAGREEMENTITEMS_NAME: string = "BlanketAgreementItems";

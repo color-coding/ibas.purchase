@@ -40,6 +40,8 @@ namespace purchase {
                 choosePurchaseCreditNotePurchaseInvoiceEvent: Function;
                 /** 选择采购贷项项目-采购贷项事件 */
                 choosePurchaseCreditNotePurchaseReturnEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 编辑地址事件 */
                 editShippingAddressesEvent: Function;
 
@@ -179,6 +181,19 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "deliveryDate",
                                 type: new sap.extension.data.Date()
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnote_agreements") }),
+                            new sap.extension.m.Input("", {
+                                showValueHelp: true,
+                                valueHelpOnly: false,
+                                valueHelpRequest: function (): void {
+                                    that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                },
+                            }).bindProperty("bindingValue", {
+                                path: "agreements",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 110
+                                }),
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnote_consumer") }),
                             new sap.extension.m.Input("", {

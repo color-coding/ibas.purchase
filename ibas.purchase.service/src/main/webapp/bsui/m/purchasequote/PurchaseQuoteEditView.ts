@@ -32,13 +32,17 @@ namespace purchase {
                 choosePurchaseQuoteItemUnitEvent: Function;
                 /** 选择采购报价-一揽子协议事件 */
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 显示采购报价额外信息事件 */
                 showPurchaseQuoteItemExtraEvent: Function;
                 /** 选择采购报价-采购申请事件 */
                 choosePurchaseQuotePurchaseRequestEvent: Function;
                 /** 转为采购订单事件 */
                 turnToPurchaseOrderEvent: Function;
+                /** 默认仓库 */
                 defaultWarehouse: string;
+                /** 默认税组 */
                 defaultTaxGroup: string;
                 /** 绘制视图 */
                 draw(): any {
@@ -430,6 +434,19 @@ namespace purchase {
                                                         type: new sap.extension.data.Alphanumeric({
                                                             maxLength: 8
                                                         })
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_agreements") }),
+                                                    new sap.extension.m.Input("", {
+                                                        showValueHelp: true,
+                                                        valueHelpOnly: false,
+                                                        valueHelpRequest: function (): void {
+                                                            that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                                        },
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreements",
+                                                        type: new sap.extension.data.Alphanumeric({
+                                                            maxLength: 110
+                                                        }),
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_consumer") }),
                                                     new sap.extension.m.Input("", {

@@ -48,6 +48,7 @@
     <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Project"/>
     <Property Name="Consumer" Description="终端客户" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Consumer"/>
     <Property Name="OrderType" Description="单据类型" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OrderType"/>
+    <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
   </Model>
   <Model Name="PurchaseReturnItem" Description="采购退货-行" ModelType="DocumentLine" Mapped="${Company}_PH_RPD1">
     <Property Name="DocEntry" Description="编码" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -108,6 +109,7 @@
     <Property Name="DistributionRule3" Description="分配规则3" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode3"/>
     <Property Name="DistributionRule4" Description="分配规则4" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode4"/>
     <Property Name="DistributionRule5" Description="分配规则5" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode5"/>
+    <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
   </Model>
   <BusinessObject MappedModel="PurchaseReturn" ShortName="${Company}_PH_PURCHRETURN">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseReturnItem"/>

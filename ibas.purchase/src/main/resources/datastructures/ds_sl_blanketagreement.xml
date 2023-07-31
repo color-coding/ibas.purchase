@@ -47,6 +47,7 @@
     <Property Name="AgreementType" Description="协议类型" DataType="Alphanumeric" DataSubType="Default" EditSize="2" DeclaredType="emAgreementType" Mapped="AgrtType"/>
     <Property Name="PriceMode" Description="价格方式" DataType="Alphanumeric" DataSubType="Default" EditSize="2" DeclaredType="emPriceMode" Mapped="PriceMode"/>
     <Property Name="SettlementProbability" Description="结算概率" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="SettPrbly"/>
+    <Property Name="Agreements" Description="合同" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Agreements"/>
   </Model>
   <Model Name="BlanketAgreementItem" Description="一揽子协议-项目" ModelType="DocumentLine" Mapped="${Company}_PH_BKA1">
     <Property Name="DocEntry" Description="编码" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>

@@ -149,6 +149,9 @@ namespace purchase {
             /** 单据类型 */
             orderType: string;
 
+            /** 合同 */
+            agreements: string;
+
             /** 采购收货-行集合 */
             purchaseDeliveryItems: IPurchaseDeliveryItems;
 
@@ -342,6 +345,9 @@ namespace purchase {
 
             /** 分配规则5 */
             distributionRule5: string;
+
+            /** 合同 */
+            agreements: string;
 
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
