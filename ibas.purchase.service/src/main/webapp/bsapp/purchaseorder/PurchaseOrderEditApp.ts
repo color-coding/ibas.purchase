@@ -1045,11 +1045,6 @@ namespace purchase {
                 if (ibas.objects.isNull(this.editData) || this.editData.isDirty) {
                     throw new Error(ibas.i18n.prop("shell_data_saved_first"));
                 }
-                if (this.editData.documentStatus > ibas.emDocumentStatus.RELEASED
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.approvalStatus === ibas.emApprovalStatus.REJECTED) {
-                    throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                }
                 let contract: materials.app.IMaterialOrderedReservationSource = {
                     sourceType: this.editData.objectCode,
                     sourceEntry: this.editData.docEntry,

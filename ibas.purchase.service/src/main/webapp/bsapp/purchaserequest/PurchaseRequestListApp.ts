@@ -159,12 +159,6 @@ namespace purchase {
             private reserveMaterialsOrdered(datas: bo.PurchaseRequest[]): void {
                 let criteria: ibas.Criteria = new ibas.Criteria();
                 for (let data of datas) {
-                    if (data.documentStatus > ibas.emDocumentStatus.RELEASED
-                        || data.canceled === ibas.emYesNo.YES
-                        || data.approvalStatus === ibas.emApprovalStatus.REJECTED
-                    ) {
-                        continue;
-                    }
                     let condition: ibas.ICondition = criteria.conditions.create();
                     condition.alias = bo.PurchaseRequest.PROPERTY_DOCENTRY_NAME;
                     condition.value = data.docEntry.toString();
@@ -192,7 +186,7 @@ namespace purchase {
                                             itemCode: item.itemCode,
                                             itemDescription: item.itemDescription,
                                             quantity: item.quantity,
-                                            warehouse: undefined,
+                                            warehouse: undefined, // 不提供仓库信息，不触发占用逻辑
                                             deliveryDate: item.requestDate instanceof Date ? item.requestDate : data.deliveryDate,
                                             uom: item.uom
                                         });

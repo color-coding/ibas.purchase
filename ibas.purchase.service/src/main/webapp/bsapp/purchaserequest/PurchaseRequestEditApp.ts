@@ -470,6 +470,7 @@ namespace purchase {
                         itemDescription: item.itemDescription,
                         quantity: item.quantity,
                         uom: item.uom,
+                        warehouse: undefined, // 不提供仓库信息，不触发占用逻辑
                         deliveryDate: item.requestDate instanceof Date ? item.requestDate : this.editData.deliveryDate,
                     });
                 }

@@ -33,10 +33,10 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.logic.IMaterialOrderedJournalContract;
-import org.colorcoding.ibas.materials.logic.IMaterialOrderedReservationCreateContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
+import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReservationCreateContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseRequestClosingContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2498,8 +2498,8 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 			}
 
 		});
-		// 物料订购预留创建
-		contracts.add(new IMaterialOrderedReservationCreateContract() {
+		// 订购预留创建，复制从采购申请
+		contracts.add(new IPurchaseOrderReservationCreateContract() {
 
 			@Override
 			public String getIdentifiers() {
