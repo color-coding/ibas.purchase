@@ -512,7 +512,7 @@ namespace purchase {
                             content: [
                                 new sap.extension.m.ObjectAttribute("", {
                                     title: ibas.i18n.prop("bo_shippingaddress_consignee"),
-                                    bindingValue: value.consignee
+                                    text: ibas.strings.format("{0} {1}", value.consignee, value.mobilePhone)
                                 }),
                                 new sap.extension.m.ObjectAttribute("", {
                                     title: ibas.i18n.prop("bo_shippingaddress"),

@@ -16,7 +16,6 @@ import org.colorcoding.ibas.bobas.message.Logger;
 import org.colorcoding.ibas.bobas.message.MessageLevel;
 import org.colorcoding.ibas.materials.bo.materialinventory.IMaterialOrderedReservation;
 import org.colorcoding.ibas.materials.bo.materialinventory.IMaterialOrderedReservationGroup;
-import org.colorcoding.ibas.materials.bo.materialinventory.MaterialInventoryReservation;
 import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReservation;
 import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReservationGroup;
 import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
@@ -45,10 +44,17 @@ public class PurchaseOrderReservationCreateService
 	protected IMaterialOrderedReservationGroup fetchBeAffected(IPurchaseOrderReservationCreateContract contract) {
 		ICriteria criteria = new Criteria();
 		ICondition condition = criteria.getConditions().create();
-		condition.setAlias(MaterialInventoryReservation.PROPERTY_CAUSES.getName());
+		condition.setAlias(MaterialOrderedReservationGroup.PROPERTY_SOURCEDOCUMENTTYPE.getName());
 		condition.setOperation(ConditionOperation.EQUAL);
-		condition.setValue(String.format("FROM:%s-%s-%s", contract.getBaseDocumentType(),
-				contract.getBaseDocumentEntry(), contract.getBaseDocumentLineId()));
+		condition.setValue(contract.getDocumentType());
+		condition = criteria.getConditions().create();
+		condition.setAlias(MaterialOrderedReservationGroup.PROPERTY_SOURCEDOCUMENTENTRY.getName());
+		condition.setOperation(ConditionOperation.EQUAL);
+		condition.setValue(contract.getDocumentEntry());
+		condition = criteria.getConditions().create();
+		condition.setAlias(MaterialOrderedReservationGroup.PROPERTY_SOURCEDOCUMENTLINEID.getName());
+		condition.setOperation(ConditionOperation.EQUAL);
+		condition.setValue(contract.getDocumentLineId());
 
 		IMaterialOrderedReservationGroup reservationGroup = this.fetchBeAffected(criteria,
 				IMaterialOrderedReservationGroup.class);
@@ -61,8 +67,9 @@ public class PurchaseOrderReservationCreateService
 				throw new BusinessLogicException(operationResult.getError());
 			}
 			reservationGroup = new MaterialOrderedReservationGroup();
-			reservationGroup.setCauses(String.format("FROM:%s-%s-%s", contract.getBaseDocumentType(),
-					contract.getBaseDocumentEntry(), contract.getBaseDocumentLineId()));
+			reservationGroup.setSourceDocumentType(contract.getDocumentType());
+			reservationGroup.setSourceDocumentEntry(contract.getDocumentEntry());
+			reservationGroup.setSourceDocumentLineId(contract.getDocumentLineId());
 			reservationGroup.getItems().addAll(operationResult.getResultObjects());
 			// 加载原因数据
 			criteria = new Criteria();
@@ -94,9 +101,8 @@ public class PurchaseOrderReservationCreateService
 		IMaterialOrderedReservationGroup reservationGroup = this.getBeAffected();
 		String causes = String.format("FROM:%s-%s-%s", contract.getBaseDocumentType(), contract.getBaseDocumentEntry(),
 				contract.getBaseDocumentLineId());
-		BigDecimal remQuantity;
 		IMaterialOrderedReservation gItem;
-		BigDecimal avaQuantity = contract.getQuantity();
+		BigDecimal remQuantity, avaQuantity = contract.getQuantity();
 		for (IMaterialOrderedReservation item : reservationGroup.getCausalDatas()) {
 			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
 				break;
@@ -119,6 +125,7 @@ public class PurchaseOrderReservationCreateService
 				gItem.setTargetDocumentType(item.getTargetDocumentType());
 				gItem.setTargetDocumentEntry(item.getTargetDocumentEntry());
 				gItem.setTargetDocumentLineId(item.getTargetDocumentLineId());
+				gItem.setQuantity(Decimal.ZERO);
 				reservationGroup.getItems().add(gItem);
 			} else {
 				if (gItem.isDeleted()) {
@@ -135,12 +142,14 @@ public class PurchaseOrderReservationCreateService
 			gItem.setInvalidTime(item.getInvalidTime());
 			gItem.setRemarks(item.getRemarks());
 			if (remQuantity.compareTo(avaQuantity) >= 0) {
-				gItem.setQuantity(avaQuantity);
+				gItem.setQuantity(gItem.getQuantity().add(avaQuantity));
+				item.setClosedQuantity(item.getClosedQuantity().add(avaQuantity));
+				avaQuantity = avaQuantity.subtract(avaQuantity);
 			} else {
-				gItem.setQuantity(remQuantity);
+				gItem.setQuantity(gItem.getQuantity().add(remQuantity));
+				item.setClosedQuantity(item.getClosedQuantity().add(remQuantity));
+				avaQuantity = avaQuantity.subtract(remQuantity);
 			}
-			item.setClosedQuantity(item.getClosedQuantity().add(gItem.getQuantity()));
-			avaQuantity = avaQuantity.subtract(gItem.getQuantity());
 			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
 				// 无可用量
 				break;
@@ -151,10 +160,19 @@ public class PurchaseOrderReservationCreateService
 	@Override
 	protected void revoke(IPurchaseOrderReservationCreateContract contract) {
 		IMaterialOrderedReservation item;
-		BigDecimal avaQuantity = contract.getQuantity();
+		BigDecimal remQuantity, avaQuantity = contract.getQuantity();
 		IMaterialOrderedReservationGroup reservationGroup = this.getBeAffected();
 		for (int i = reservationGroup.getItems().size() - 1; i >= 0; i--) {
 			item = reservationGroup.getItems().get(i);
+			if (item.getQuantity().compareTo(avaQuantity) >= 0) {
+				remQuantity = Decimal.ZERO.add(avaQuantity);
+				item.setQuantity(item.getQuantity().subtract(avaQuantity));
+				avaQuantity = Decimal.ZERO;
+			} else {
+				remQuantity = Decimal.ZERO.add(item.getQuantity());
+				avaQuantity = avaQuantity.subtract(item.getQuantity());
+				item.setQuantity(Decimal.ZERO);
+			}
 			for (IMaterialOrderedReservation oItem : reservationGroup.getCausalDatas()) {
 				if (!String.format("FROM:%s-%s-%s", oItem.getSourceDocumentType(), oItem.getSourceDocumentEntry(),
 						oItem.getSourceDocumentLineId()).equals(item.getCauses())) {
@@ -169,18 +187,19 @@ public class PurchaseOrderReservationCreateService
 				if (oItem.getTargetDocumentLineId().compareTo(item.getTargetDocumentLineId()) != 0) {
 					continue;
 				}
-				if (item.getQuantity().compareTo(avaQuantity) >= 0) {
-					oItem.setClosedQuantity(oItem.getClosedQuantity().subtract(avaQuantity));
-				} else {
-					oItem.setClosedQuantity(oItem.getClosedQuantity().subtract(item.getQuantity()));
+				if (oItem.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
+					continue;
 				}
-			}
-			if (item.getQuantity().compareTo(avaQuantity) >= 0) {
-				item.setQuantity(item.getQuantity().subtract(avaQuantity));
-				avaQuantity = Decimal.ZERO;
-			} else {
-				avaQuantity = avaQuantity.subtract(item.getQuantity());
-				item.setQuantity(Decimal.ZERO);
+				if (oItem.getClosedQuantity().compareTo(remQuantity) >= 0) {
+					oItem.setClosedQuantity(oItem.getClosedQuantity().subtract(remQuantity));
+					remQuantity = Decimal.ZERO;
+				} else {
+					remQuantity = remQuantity.subtract(oItem.getClosedQuantity());
+					oItem.setClosedQuantity(Decimal.ZERO);
+				}
+				if (remQuantity.compareTo(Decimal.ZERO) <= 0) {
+					break;
+				}
 			}
 			if (item.getQuantity().compareTo(Decimal.ZERO) <= 0) {
 				item.delete();
