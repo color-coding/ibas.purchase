@@ -36,6 +36,7 @@ import org.colorcoding.ibas.materials.logic.IMaterialOrderedJournalContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
+import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReservationCreateContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseRequestClosingContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
@@ -51,7 +52,7 @@ import org.colorcoding.ibas.sales.logic.ISalesOrderOrderContract;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseOrderItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
-		implements IPurchaseOrderItem, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOUserFields {
+		implements IPurchaseOrderItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -2405,105 +2406,47 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(4);
-		if (this.getLineStatus() == emDocumentStatus.RELEASED) {
-			// 物料已订购数量
-			contracts.add(new IMaterialOrderedJournalContract() {
-
-				@Override
-				public String getIdentifiers() {
-					return PurchaseOrderItem.this.getIdentifiers();
-				}
-
-				@Override
-				public String getItemCode() {
-					return PurchaseOrderItem.this.getItemCode();
-				}
-
-				@Override
-				public String getWarehouse() {
-					return PurchaseOrderItem.this.getWarehouse();
-				}
-
-				@Override
-				public BigDecimal getQuantity() {
-					// 订购数量 = 订单数量 - 已收货数量
-					// 需要转为库存单位数量
-					return PurchaseOrderItem.this.getQuantity().subtract(PurchaseOrderItem.this.getClosedQuantity())
-							.multiply(PurchaseOrderItem.this.getUOMRate());
-				}
-
-				@Override
-				public String getUOM() {
-					return PurchaseOrderItem.this.getInventoryUOM();
-				}
-
-				@Override
-				public String getDocumentType() {
-					return PurchaseOrderItem.this.getObjectCode();
-				}
-
-				@Override
-				public Integer getDocumentEntry() {
-					return PurchaseOrderItem.this.getDocEntry();
-				}
-
-				@Override
-				public Integer getDocumentLineId() {
-					return PurchaseOrderItem.this.getLineId();
-				}
-
-				@Override
-				public String getBaseDocumentType() {
-					return PurchaseOrderItem.this.getBaseDocumentType();
-				}
-
-				@Override
-				public Integer getBaseDocumentEntry() {
-					return PurchaseOrderItem.this.getBaseDocumentEntry();
-				}
-
-				@Override
-				public Integer getBaseDocumentLineId() {
-					return PurchaseOrderItem.this.getBaseDocumentLineId();
-				}
-			});
-		}
-		// 采购请求完成
-		contracts.add(new IPurchaseRequestClosingContract() {
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(6);
+		// 物料已订购数量
+		contracts.add(new IMaterialOrderedJournalContract() {
 
 			@Override
 			public String getIdentifiers() {
 				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getItemCode() {
+				return PurchaseOrderItem.this.getItemCode();
+			}
+
+			@Override
+			public String getWarehouse() {
+				return PurchaseOrderItem.this.getWarehouse();
 			}
 
 			@Override
 			public BigDecimal getQuantity() {
-				return PurchaseOrderItem.this.getQuantity();
+				return PurchaseOrderItem.this.getQuantity().multiply(PurchaseOrderItem.this.getUOMRate());
 			}
 
 			@Override
-			public String getBaseDocumentType() {
-				return PurchaseOrderItem.this.getBaseDocumentType();
+			public BigDecimal getClosedQuantity() {
+				return PurchaseOrderItem.this.getClosedQuantity().multiply(PurchaseOrderItem.this.getUOMRate());
 			}
 
 			@Override
-			public Integer getBaseDocumentEntry() {
-				return PurchaseOrderItem.this.getBaseDocumentEntry();
+			public emBOStatus getStatus() {
+				if (PurchaseOrderItem.this.getLineStatus() == emDocumentStatus.PLANNED
+						|| PurchaseOrderItem.this.getLineStatus() == emDocumentStatus.RELEASED) {
+					return emBOStatus.OPEN;
+				}
+				return emBOStatus.CLOSED;
 			}
 
 			@Override
-			public Integer getBaseDocumentLineId() {
-				return PurchaseOrderItem.this.getBaseDocumentLineId();
-			}
-
-		});
-		// 订购预留创建，复制从采购申请
-		contracts.add(new IPurchaseOrderReservationCreateContract() {
-
-			@Override
-			public String getIdentifiers() {
-				return PurchaseOrderItem.this.getIdentifiers();
+			public String getUOM() {
+				return PurchaseOrderItem.this.getInventoryUOM();
 			}
 
 			@Override
@@ -2536,14 +2479,33 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				return PurchaseOrderItem.this.getBaseDocumentLineId();
 			}
 
+		});
+		// 采购请求完成
+		contracts.add(new IPurchaseRequestClosingContract() {
+
 			@Override
-			public String getWarehouse() {
-				return PurchaseOrderItem.this.getWarehouse();
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
 			}
 
 			@Override
 			public BigDecimal getQuantity() {
-				return PurchaseOrderItem.this.getInventoryQuantity();
+				return PurchaseOrderItem.this.getQuantity();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseOrderItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseOrderItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseOrderItem.this.getBaseDocumentLineId();
 			}
 
 		});
@@ -2613,6 +2575,85 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				}
 			});
 		}
+		// 订购预留关闭
+		contracts.add(new IMaterialOrderedReservationStatusContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getSourceDocumentType() {
+				return PurchaseOrderItem.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getSourceDocumentEntry() {
+				return PurchaseOrderItem.this.getDocEntry();
+			}
+
+			@Override
+			public Integer getSourceDocumentLineId() {
+				return PurchaseOrderItem.this.getLineId();
+			}
+
+			@Override
+			public emDocumentStatus getSourceDocumentStatus() {
+				return PurchaseOrderItem.this.getLineStatus();
+			}
+
+		});
+		// 订购预留创建，复制从采购申请
+		contracts.add(new IPurchaseOrderReservationCreateContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getDocumentType() {
+				return PurchaseOrderItem.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getDocumentEntry() {
+				return PurchaseOrderItem.this.getDocEntry();
+			}
+
+			@Override
+			public Integer getDocumentLineId() {
+				return PurchaseOrderItem.this.getLineId();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseOrderItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseOrderItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseOrderItem.this.getBaseDocumentLineId();
+			}
+
+			@Override
+			public String getWarehouse() {
+				return PurchaseOrderItem.this.getWarehouse();
+			}
+
+			@Override
+			public BigDecimal getQuantity() {
+				return PurchaseOrderItem.this.getInventoryQuantity();
+			}
+
+		});
+
 		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 }

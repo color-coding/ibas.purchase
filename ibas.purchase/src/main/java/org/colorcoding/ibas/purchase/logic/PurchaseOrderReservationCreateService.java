@@ -15,9 +15,7 @@ import org.colorcoding.ibas.bobas.mapping.LogicContract;
 import org.colorcoding.ibas.bobas.message.Logger;
 import org.colorcoding.ibas.bobas.message.MessageLevel;
 import org.colorcoding.ibas.materials.bo.materialinventory.IMaterialOrderedReservation;
-import org.colorcoding.ibas.materials.bo.materialinventory.IMaterialOrderedReservationGroup;
 import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReservation;
-import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReservationGroup;
 import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
@@ -66,11 +64,22 @@ public class PurchaseOrderReservationCreateService
 			if (operationResult.getError() != null) {
 				throw new BusinessLogicException(operationResult.getError());
 			}
+			IMaterialOrderedReservation reservation;
 			reservationGroup = new MaterialOrderedReservationGroup();
 			reservationGroup.setSourceDocumentType(contract.getDocumentType());
 			reservationGroup.setSourceDocumentEntry(contract.getDocumentEntry());
 			reservationGroup.setSourceDocumentLineId(contract.getDocumentLineId());
-			reservationGroup.getItems().addAll(operationResult.getResultObjects());
+			for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
+				// 判断内存中是否已有
+				reservation = this.fetchBeAffected(item.getCriteria(), IMaterialOrderedReservation.class);
+				if (reservation == null) {
+					// 使用数据库的
+					reservationGroup.getItems().add(item);
+				} else {
+					// 使用内存的
+					reservationGroup.getItems().add(reservation);
+				}
+			}
 			// 加载原因数据
 			criteria = new Criteria();
 			condition = criteria.getConditions().create();
@@ -91,7 +100,17 @@ public class PurchaseOrderReservationCreateService
 			if (operationResult.getError() != null) {
 				throw new BusinessLogicException(operationResult.getError());
 			}
-			reservationGroup.getCausalDatas().addAll(operationResult.getResultObjects());
+			for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
+				// 判断内存中是否已有
+				reservation = this.fetchBeAffected(item.getCriteria(), IMaterialOrderedReservation.class);
+				if (reservation == null) {
+					// 使用数据库的
+					reservationGroup.getCausalDatas().add(item);
+				} else {
+					// 使用内存的
+					reservationGroup.getCausalDatas().add(reservation);
+				}
+			}
 		}
 		return reservationGroup;
 	}
@@ -201,7 +220,8 @@ public class PurchaseOrderReservationCreateService
 					break;
 				}
 			}
-			if (item.getQuantity().compareTo(Decimal.ZERO) <= 0) {
+			if (item.getQuantity().compareTo(Decimal.ZERO) <= 0
+					&& item.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
 				item.delete();
 			}
 			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {

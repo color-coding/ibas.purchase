@@ -11,11 +11,14 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
+import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
@@ -23,6 +26,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 
@@ -33,7 +37,7 @@ import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
-		implements IPurchaseRequestItem, IBOUserFields {
+		implements IPurchaseRequestItem, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -2183,4 +2187,39 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	 * 父项
 	 */
 	IPurchaseRequest parent;
+
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(2);
+		// 订购预留关闭
+		contracts.add(new IMaterialOrderedReservationStatusContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseRequestItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getSourceDocumentType() {
+				return PurchaseRequestItem.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getSourceDocumentEntry() {
+				return PurchaseRequestItem.this.getDocEntry();
+			}
+
+			@Override
+			public Integer getSourceDocumentLineId() {
+				return PurchaseRequestItem.this.getLineId();
+			}
+
+			@Override
+			public emDocumentStatus getSourceDocumentStatus() {
+				return PurchaseRequestItem.this.getLineStatus();
+			}
+
+		});
+		return contracts.toArray(new IBusinessLogicContract[] {});
+	}
 }
