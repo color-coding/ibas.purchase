@@ -26,7 +26,8 @@ namespace purchase {
                 chooseBlanketAgreementItemMaterialEvent: Function;
                 /** 选择一揽子协议行单位事件 */
                 chooseBlanketAgreementItemUnitEvent: Function;
-
+                /** 选择供应商合同 */
+                chooseSupplierAgreementsEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -144,15 +145,6 @@ namespace purchase {
                                     } return true;
                                 }
                             }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementmethod") }),
-                            new sap.extension.m.EnumSelect("", {
-                                enumType: bo.emAgreementMethod
-                            }).bindProperty("bindingValue", {
-                                path: "agreementMethod",
-                                type: new sap.extension.data.Enum({
-                                    enumType: bo.emAgreementMethod
-                                }),
-                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_signdate") }),
                             new sap.extension.m.DatePicker("", {
                             }).bindProperty("bindingValue", {
@@ -176,6 +168,19 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "terminationDate",
                                 type: new sap.extension.data.Date(),
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreements") }),
+                            new sap.extension.m.Input("", {
+                                showValueHelp: true,
+                                valueHelpOnly: false,
+                                valueHelpRequest: function (): void {
+                                    that.fireViewEvents(that.chooseSupplierAgreementsEvent);
+                                },
+                            }).bindProperty("bindingValue", {
+                                path: "agreements",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 110
+                                }),
                             }),
                         ]
                     });
@@ -420,12 +425,14 @@ namespace purchase {
                                 type: new sap.extension.data.Alphanumeric()
                             }),
                             new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_title_clauses") }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_settlementprobability") }),
-                            new sap.extension.m.Input("", {
-                                type: sap.m.InputType.Text
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementmethod") }),
+                            new sap.extension.m.EnumSelect("", {
+                                enumType: bo.emAgreementMethod
                             }).bindProperty("bindingValue", {
-                                path: "settlementProbability",
-                                type: new sap.extension.data.Percentage(),
+                                path: "agreementMethod",
+                                type: new sap.extension.data.Enum({
+                                    enumType: bo.emAgreementMethod
+                                }),
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementtype") }),
                             new sap.extension.m.EnumSelect("", {
@@ -462,6 +469,13 @@ namespace purchase {
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 8
                                 }),
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_settlementprobability") }),
+                            new sap.extension.m.Input("", {
+                                type: sap.m.InputType.Text
+                            }).bindProperty("bindingValue", {
+                                path: "settlementProbability",
+                                type: new sap.extension.data.Percentage(),
                             }),
                         ]
                     });

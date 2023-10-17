@@ -255,15 +255,6 @@ namespace purchase {
                                                             },
                                                         ]
                                                     }),
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementmethod") }),
-                                                    new sap.extension.m.Text("", {
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "agreementMethod",
-                                                        type: new sap.extension.data.Enum({
-                                                            enumType: bo.emAgreementMethod,
-                                                            describe: true,
-                                                        }),
-                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_signdate") }),
                                                     new sap.extension.m.Text("", {
                                                     }).bindProperty("bindingValue", {
@@ -287,6 +278,12 @@ namespace purchase {
                                                     }).bindProperty("bindingValue", {
                                                         path: "terminationDate",
                                                         type: new sap.extension.data.Date(),
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreements") }),
+                                                    new sap.extension.m.Text("", {
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreements",
+                                                        type: new sap.extension.data.Alphanumeric(),
                                                     }),
                                                 ]
                                             }).addStyleClass("sapUxAPObjectPageSubSectionAlignContent")
@@ -404,6 +401,15 @@ namespace purchase {
                                                 editable: true,
                                                 width: "auto",
                                                 content: [
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementmethod") }),
+                                                    new sap.extension.m.Text("", {
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "agreementMethod",
+                                                        type: new sap.extension.data.Enum({
+                                                            enumType: bo.emAgreementMethod,
+                                                            describe: true,
+                                                        }),
+                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_agreementtype") }),
                                                     new sap.extension.m.Text("", {
                                                     }).bindProperty("bindingValue", {

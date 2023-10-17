@@ -314,14 +314,11 @@ namespace purchase {
                                         propertyName: "orderType",
                                     }),
                                     new sap.extension.m.ObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_blanketagreement_agreementmethod"),
+                                        title: ibas.i18n.prop("bo_blanketagreement_agreements"),
                                         bindingValue: {
-                                            path: "agreementMethod",
-                                            type: new sap.extension.data.Enum({
-                                                enumType: bo.emAgreementMethod,
-                                                describe: true
-                                            }),
-                                        },
+                                            path: "agreements",
+                                            type: new sap.extension.data.Alphanumeric(),
+                                        }
                                     }),
                                 ],
                             }),
@@ -361,6 +358,16 @@ namespace purchase {
                             new sap.ui.layout.VerticalLayout("", {
                                 width: "30%",
                                 content: [
+                                    new sap.extension.m.ObjectAttribute("", {
+                                        title: ibas.i18n.prop("bo_blanketagreement_agreementmethod"),
+                                        bindingValue: {
+                                            path: "agreementMethod",
+                                            type: new sap.extension.data.Enum({
+                                                enumType: bo.emAgreementMethod,
+                                                describe: true
+                                            }),
+                                        },
+                                    }),
                                     new sap.extension.m.ObjectAttribute("", {
                                         title: ibas.i18n.prop("bo_blanketagreement_agreementtype"),
                                         bindingValue: {
