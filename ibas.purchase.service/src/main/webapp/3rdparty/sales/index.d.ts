@@ -222,8 +222,8 @@ declare namespace sales {
         interface ISalesDelivery extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -474,8 +474,8 @@ declare namespace sales {
         interface ISalesOrder extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -786,8 +786,8 @@ declare namespace sales {
         interface ISalesReturn extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -1038,8 +1038,8 @@ declare namespace sales {
         interface ISalesQuote extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -1344,8 +1344,8 @@ declare namespace sales {
         interface ISalesCreditNote extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -1598,8 +1598,8 @@ declare namespace sales {
         interface ISalesInvoice extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -1947,8 +1947,8 @@ declare namespace sales {
         interface IBlanketAgreement extends ibas.IBODocument {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -2597,12 +2597,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -3366,12 +3366,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -4303,12 +4303,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -5205,12 +5205,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -5978,12 +5978,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -6747,12 +6747,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -7770,12 +7770,12 @@ declare namespace sales {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -10837,6 +10837,7 @@ declare namespace sales {
             /** 选择一揽子协议物料事件 */
             private chooseBlanketAgreementItemMaterial;
             private chooseBlanketAgreementItemUnit;
+            private chooseCustomerAgreements;
         }
         /** 视图-一揽子协议 */
         interface IBlanketAgreementEditView extends ibas.IBOEditView {
@@ -10860,6 +10861,8 @@ declare namespace sales {
             chooseBlanketAgreementItemMaterialEvent: Function;
             /** 选择一揽子协议行单位事件 */
             chooseBlanketAgreementItemUnitEvent: Function;
+            /** 选择客户合同 */
+            chooseCustomerAgreementsEvent: Function;
         }
     }
 }

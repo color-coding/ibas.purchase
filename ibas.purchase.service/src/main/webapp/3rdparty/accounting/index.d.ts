@@ -8,8 +8,12 @@
 declare namespace accounting {
     /** 模块-标识 */
     const CONSOLE_ID: string;
+    /** 模块-标识 */
+    const CONSOLE_DATA_ID: string;
     /** 模块-名称 */
     const CONSOLE_NAME: string;
+    /** 模块-名称 */
+    const CONSOLE_DATA_NAME: string;
     /** 模块-版本 */
     const CONSOLE_VERSION: string;
     namespace config {
@@ -41,6 +45,16 @@ declare namespace accounting {
         const BO_CODE_COSTSTRUCTURE_NODE: string;
         /** 业务对象编码-货币 */
         const BO_CODE_CURRENCY: string;
+        /** 业务对象编码-科目 */
+        const BO_CODE_ACCOUNT: string;
+        /** 业务对象编码-分支 */
+        const BO_CODE_BRANCH: string;
+        /** 业务对象编码-日记账分录 */
+        const BO_CODE_JOURNALENTRY: string;
+        /** 业务对象编码-分类账 */
+        const BO_CODE_LEDGERACCOUNT: string;
+        /** 业务对象编码-期间-分类账 */
+        const BO_CODE_PERIODLEDGERACCOUNT: string;
         /**
          * 期间状态
          */
@@ -734,6 +748,10 @@ declare namespace accounting {
             name: string;
             /** 激活 */
             activated: ibas.emYesNo;
+            /** 系统币 */
+            system: ibas.emYesNo;
+            /** 本币 */
+            local: ibas.emYesNo;
             /** ISO代码 */
             iso: string;
             /** 外文名称 */
@@ -756,6 +774,438 @@ declare namespace accounting {
             logInst: number;
             /** 服务系列 */
             series: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 科目 */
+        interface IAccount extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 外文名称 */
+            foreignName: string;
+            /** 上级科目 */
+            parent: string;
+            /** 层级 */
+            level: number;
+            /** 外部编码 */
+            external: string;
+            /** 机密 */
+            protected: ibas.emYesNo;
+            /** 活动科目 */
+            active: ibas.emYesNo;
+            /** 控制科目 */
+            control: ibas.emYesNo;
+            /** 现金科目 */
+            cash: ibas.emYesNo;
+            /** 现金流相关 */
+            cashFlowRelevant: ibas.emYesNo;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 余额 */
+            balance: number;
+            /** 币种 */
+            currency: string;
+            /** 分支 */
+            branch: string;
+            /** 对象编号 */
+            docEntry: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 分支 */
+        interface IBranch extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 外文名称 */
+            foreignName: string;
+            /** 激活 */
+            activated: ibas.emYesNo;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 主要的 */
+            main: ibas.emYesNo;
+            /** 客户 */
+            customer: string;
+            /** 供应商 */
+            supplier: string;
+            /** 仓库 */
+            warehouse: string;
+            /** 街道 */
+            street: string;
+            /** 县/区 */
+            district: string;
+            /** 市 */
+            city: string;
+            /** 省 */
+            province: string;
+            /** 国 */
+            country: string;
+            /** 邮编 */
+            zipCode: string;
+            /** 对象编号 */
+            docEntry: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 日记账分录 */
+        interface IJournalEntry extends ibas.IBODocument {
+            /** 凭证编号 */
+            docEntry: number;
+            /** 单据编码 */
+            docNum: string;
+            /** 期间 */
+            period: number;
+            /** 取消 */
+            canceled: ibas.emYesNo;
+            /** 状态 */
+            status: ibas.emBOStatus;
+            /** 审批状态 */
+            approvalStatus: ibas.emApprovalStatus;
+            /** 单据状态 */
+            documentStatus: ibas.emDocumentStatus;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 团队成员 */
+            teamMembers: string;
+            /** 数据所属组织 */
+            organization: string;
+            /** 过账日期 */
+            postingDate: Date;
+            /** 到期日 */
+            deliveryDate: Date;
+            /** 凭证日期 */
+            documentDate: Date;
+            /** 分支 */
+            branch: string;
+            /** 项目代码 */
+            project: string;
+            /** 基于类型 */
+            baseDocumentType: string;
+            /** 基于标识 */
+            baseDocumentEntry: number;
+            /** 基于行号 */
+            baseDocumentLineId: number;
+            /** 单据货币 */
+            documentCurrency: string;
+            /** 单据总计 */
+            documentTotal: number;
+            /** 参考1 */
+            reference1: string;
+            /** 参考2 */
+            reference2: string;
+            /** 参考3 */
+            reference3: string;
+            /** 备注 */
+            remarks: string;
+            /** 日记账分录-行集合 */
+            journalEntryLines: IJournalEntryLines;
+        }
+        /** 日记账分录-行 集合 */
+        interface IJournalEntryLines extends ibas.IBusinessObjects<IJournalEntryLine> {
+            /** 创建并添加子项 */
+            create(): IJournalEntryLine;
+        }
+        /** 日记账分录-行 */
+        interface IJournalEntryLine extends ibas.IBODocumentLine {
+            /** 编码 */
+            docEntry: number;
+            /** 行号 */
+            lineId: number;
+            /** 显示顺序 */
+            visOrder: number;
+            /** 取消 */
+            canceled: ibas.emYesNo;
+            /** 状态 */
+            status: ibas.emBOStatus;
+            /** 单据状态 */
+            lineStatus: ibas.emDocumentStatus;
+            /** 类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 科目 */
+            account: string;
+            /** 业务伙伴/科目代码 */
+            shortName: string;
+            /** 借方金额 */
+            debit: number;
+            /** 贷方金额 */
+            credit: number;
+            /** 货币 */
+            currency: string;
+            /** 借方金额（系统） */
+            systemDebit: number;
+            /** 贷方金额（系统） */
+            systemCredit: number;
+            /** 系统币 */
+            systemCurrency: string;
+            /** 系统币汇率 */
+            systemRate: number;
+            /** 借方金额（本币） */
+            localDebit: number;
+            /** 贷方金额（本币） */
+            localCredit: number;
+            /** 本币 */
+            localCurrency: string;
+            /** 本币汇率 */
+            localRate: number;
+            /** 税码 */
+            tax: string;
+            /** 税率 */
+            taxRate: number;
+            /** 基础总额 */
+            baseTotal: number;
+            /** 分支 */
+            branch: string;
+            /** 项目代码 */
+            project: string;
+            /** 分配规则1 */
+            distributionRule1: string;
+            /** 分配规则2 */
+            distributionRule2: string;
+            /** 分配规则3 */
+            distributionRule3: string;
+            /** 分配规则4 */
+            distributionRule4: string;
+            /** 分配规则5 */
+            distributionRule5: string;
+            /** 参考1 */
+            reference1: string;
+            /** 参考2 */
+            reference2: string;
+            /** 参考3 */
+            reference3: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 期间-分类账 */
+        interface IPeriodLedgerAccount extends ibas.IBOSimple {
+            /** 期间 */
+            period: number;
+            /** 分类 */
+            ledger: string;
+            /** 科目 */
+            account: string;
+            /** 设置 */
+            settings: string;
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 分类账 */
+        interface ILedgerAccount extends ibas.IBOSimple {
+            /** 标识 */
+            sign: string;
+            /** 组 */
+            group: string;
+            /** 描述 */
+            description: string;
+            /** 设置 */
+            settings: string;
+            /** 编号 */
+            objectKey: number;
+            /** 类型 */
+            objectCode: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 编号系列 */
+            series: number;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
             /** 创建用户 */
             createUserSign: number;
             /** 修改用户 */
@@ -870,6 +1320,41 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveCurrency(saver: ibas.ISaveCaller<bo.ICurrency>): void;
+            /**
+             * 查询 科目
+             * @param fetcher 查询者
+             */
+            fetchAccount(fetcher: ibas.IFetchCaller<bo.IAccount>): void;
+            /**
+             * 保存 科目
+             * @param saver 保存者
+             */
+            saveAccount(saver: ibas.ISaveCaller<bo.IAccount>): void;
+            /**
+             * 查询 分支
+             * @param fetcher 查询者
+             */
+            fetchBranch(fetcher: ibas.IFetchCaller<bo.IBranch>): void;
+            /**
+             * 保存 分支
+             * @param saver 保存者
+             */
+            saveBranch(saver: ibas.ISaveCaller<bo.IBranch>): void;
+            /**
+             * 查询 分类账
+             * @param fetcher 查询者
+             */
+            fetchLedgerAccount(fetcher: ibas.IFetchCaller<bo.ILedgerAccount>): void;
+            /**
+             * 查询 期间-分类账
+             * @param fetcher 查询者
+             */
+            fetchPeriodLedgerAccount(fetcher: ibas.IFetchCaller<bo.IPeriodLedgerAccount>): void;
+            /**
+             * 保存 期间-分类账
+             * @param saver 保存者
+             */
+            savePeriodLedgerAccount(saver: ibas.ISaveCaller<bo.IPeriodLedgerAccount>): void;
         }
     }
 }
@@ -2523,6 +3008,18 @@ declare namespace accounting {
             get activated(): ibas.emYesNo;
             /** 设置-激活 */
             set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-系统币 */
+            static PROPERTY_SYSTEM_NAME: string;
+            /** 获取-系统币 */
+            get system(): ibas.emYesNo;
+            /** 设置-系统币 */
+            set system(value: ibas.emYesNo);
+            /** 映射的属性名称-本币 */
+            static PROPERTY_LOCAL_NAME: string;
+            /** 获取-本币 */
+            get local(): ibas.emYesNo;
+            /** 设置-本币 */
+            set local(value: ibas.emYesNo);
             /** 映射的属性名称-ISO代码 */
             static PROPERTY_ISO_NAME: string;
             /** 获取-ISO代码 */
@@ -2589,6 +3086,1183 @@ declare namespace accounting {
             get series(): number;
             /** 设置-服务系列 */
             set series(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 科目 */
+        class Account extends ibas.BOMasterData<Account> implements IAccount {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-外文名称 */
+            static PROPERTY_FOREIGNNAME_NAME: string;
+            /** 获取-外文名称 */
+            get foreignName(): string;
+            /** 设置-外文名称 */
+            set foreignName(value: string);
+            /** 映射的属性名称-上级科目 */
+            static PROPERTY_PARENT_NAME: string;
+            /** 获取-上级科目 */
+            get parent(): string;
+            /** 设置-上级科目 */
+            set parent(value: string);
+            /** 映射的属性名称-层级 */
+            static PROPERTY_LEVEL_NAME: string;
+            /** 获取-层级 */
+            get level(): number;
+            /** 设置-层级 */
+            set level(value: number);
+            /** 映射的属性名称-外部编码 */
+            static PROPERTY_EXTERNAL_NAME: string;
+            /** 获取-外部编码 */
+            get external(): string;
+            /** 设置-外部编码 */
+            set external(value: string);
+            /** 映射的属性名称-机密 */
+            static PROPERTY_PROTECTED_NAME: string;
+            /** 获取-机密 */
+            get protected(): ibas.emYesNo;
+            /** 设置-机密 */
+            set protected(value: ibas.emYesNo);
+            /** 映射的属性名称-活动科目 */
+            static PROPERTY_ACTIVE_NAME: string;
+            /** 获取-活动科目 */
+            get active(): ibas.emYesNo;
+            /** 设置-活动科目 */
+            set active(value: ibas.emYesNo);
+            /** 映射的属性名称-控制科目 */
+            static PROPERTY_CONTROL_NAME: string;
+            /** 获取-控制科目 */
+            get control(): ibas.emYesNo;
+            /** 设置-控制科目 */
+            set control(value: ibas.emYesNo);
+            /** 映射的属性名称-现金科目 */
+            static PROPERTY_CASH_NAME: string;
+            /** 获取-现金科目 */
+            get cash(): ibas.emYesNo;
+            /** 设置-现金科目 */
+            set cash(value: ibas.emYesNo);
+            /** 映射的属性名称-现金流相关 */
+            static PROPERTY_CASHFLOWRELEVANT_NAME: string;
+            /** 获取-现金流相关 */
+            get cashFlowRelevant(): ibas.emYesNo;
+            /** 设置-现金流相关 */
+            set cashFlowRelevant(value: ibas.emYesNo);
+            /** 映射的属性名称-生效日期 */
+            static PROPERTY_VALIDDATE_NAME: string;
+            /** 获取-生效日期 */
+            get validDate(): Date;
+            /** 设置-生效日期 */
+            set validDate(value: Date);
+            /** 映射的属性名称-失效日期 */
+            static PROPERTY_INVALIDDATE_NAME: string;
+            /** 获取-失效日期 */
+            get invalidDate(): Date;
+            /** 设置-失效日期 */
+            set invalidDate(value: Date);
+            /** 映射的属性名称-余额 */
+            static PROPERTY_BALANCE_NAME: string;
+            /** 获取-余额 */
+            get balance(): number;
+            /** 设置-余额 */
+            set balance(value: number);
+            /** 映射的属性名称-币种 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-币种 */
+            get currency(): string;
+            /** 设置-币种 */
+            set currency(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-对象编号 */
+            get docEntry(): number;
+            /** 设置-对象编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 分支 */
+        class Branch extends ibas.BOMasterData<Branch> implements IBranch {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-外文名称 */
+            static PROPERTY_FOREIGNNAME_NAME: string;
+            /** 获取-外文名称 */
+            get foreignName(): string;
+            /** 设置-外文名称 */
+            set foreignName(value: string);
+            /** 映射的属性名称-激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-激活 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-生效日期 */
+            static PROPERTY_VALIDDATE_NAME: string;
+            /** 获取-生效日期 */
+            get validDate(): Date;
+            /** 设置-生效日期 */
+            set validDate(value: Date);
+            /** 映射的属性名称-失效日期 */
+            static PROPERTY_INVALIDDATE_NAME: string;
+            /** 获取-失效日期 */
+            get invalidDate(): Date;
+            /** 设置-失效日期 */
+            set invalidDate(value: Date);
+            /** 映射的属性名称-主要的 */
+            static PROPERTY_MAIN_NAME: string;
+            /** 获取-主要的 */
+            get main(): ibas.emYesNo;
+            /** 设置-主要的 */
+            set main(value: ibas.emYesNo);
+            /** 映射的属性名称-客户 */
+            static PROPERTY_CUSTOMER_NAME: string;
+            /** 获取-客户 */
+            get customer(): string;
+            /** 设置-客户 */
+            set customer(value: string);
+            /** 映射的属性名称-供应商 */
+            static PROPERTY_SUPPLIER_NAME: string;
+            /** 获取-供应商 */
+            get supplier(): string;
+            /** 设置-供应商 */
+            set supplier(value: string);
+            /** 映射的属性名称-仓库 */
+            static PROPERTY_WAREHOUSE_NAME: string;
+            /** 获取-仓库 */
+            get warehouse(): string;
+            /** 设置-仓库 */
+            set warehouse(value: string);
+            /** 映射的属性名称-街道 */
+            static PROPERTY_STREET_NAME: string;
+            /** 获取-街道 */
+            get street(): string;
+            /** 设置-街道 */
+            set street(value: string);
+            /** 映射的属性名称-县/区 */
+            static PROPERTY_DISTRICT_NAME: string;
+            /** 获取-县/区 */
+            get district(): string;
+            /** 设置-县/区 */
+            set district(value: string);
+            /** 映射的属性名称-市 */
+            static PROPERTY_CITY_NAME: string;
+            /** 获取-市 */
+            get city(): string;
+            /** 设置-市 */
+            set city(value: string);
+            /** 映射的属性名称-省 */
+            static PROPERTY_PROVINCE_NAME: string;
+            /** 获取-省 */
+            get province(): string;
+            /** 设置-省 */
+            set province(value: string);
+            /** 映射的属性名称-国 */
+            static PROPERTY_COUNTRY_NAME: string;
+            /** 获取-国 */
+            get country(): string;
+            /** 设置-国 */
+            set country(value: string);
+            /** 映射的属性名称-邮编 */
+            static PROPERTY_ZIPCODE_NAME: string;
+            /** 获取-邮编 */
+            get zipCode(): string;
+            /** 设置-邮编 */
+            set zipCode(value: string);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-对象编号 */
+            get docEntry(): number;
+            /** 设置-对象编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 日记账分录 */
+        class JournalEntry extends ibas.BODocument<JournalEntry> implements IJournalEntry {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-凭证编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-凭证编号 */
+            get docEntry(): number;
+            /** 设置-凭证编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-单据编码 */
+            static PROPERTY_DOCNUM_NAME: string;
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
+            /** 映射的属性名称-期间 */
+            static PROPERTY_PERIOD_NAME: string;
+            /** 获取-期间 */
+            get period(): number;
+            /** 设置-期间 */
+            set period(value: number);
+            /** 映射的属性名称-取消 */
+            static PROPERTY_CANCELED_NAME: string;
+            /** 获取-取消 */
+            get canceled(): ibas.emYesNo;
+            /** 设置-取消 */
+            set canceled(value: ibas.emYesNo);
+            /** 映射的属性名称-状态 */
+            static PROPERTY_STATUS_NAME: string;
+            /** 获取-状态 */
+            get status(): ibas.emBOStatus;
+            /** 设置-状态 */
+            set status(value: ibas.emBOStatus);
+            /** 映射的属性名称-审批状态 */
+            static PROPERTY_APPROVALSTATUS_NAME: string;
+            /** 获取-审批状态 */
+            get approvalStatus(): ibas.emApprovalStatus;
+            /** 设置-审批状态 */
+            set approvalStatus(value: ibas.emApprovalStatus);
+            /** 映射的属性名称-单据状态 */
+            static PROPERTY_DOCUMENTSTATUS_NAME: string;
+            /** 获取-单据状态 */
+            get documentStatus(): ibas.emDocumentStatus;
+            /** 设置-单据状态 */
+            set documentStatus(value: ibas.emDocumentStatus);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-团队成员 */
+            static PROPERTY_TEAMMEMBERS_NAME: string;
+            /** 获取-团队成员 */
+            get teamMembers(): string;
+            /** 设置-团队成员 */
+            set teamMembers(value: string);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-过账日期 */
+            static PROPERTY_POSTINGDATE_NAME: string;
+            /** 获取-过账日期 */
+            get postingDate(): Date;
+            /** 设置-过账日期 */
+            set postingDate(value: Date);
+            /** 映射的属性名称-到期日 */
+            static PROPERTY_DELIVERYDATE_NAME: string;
+            /** 获取-到期日 */
+            get deliveryDate(): Date;
+            /** 设置-到期日 */
+            set deliveryDate(value: Date);
+            /** 映射的属性名称-凭证日期 */
+            static PROPERTY_DOCUMENTDATE_NAME: string;
+            /** 获取-凭证日期 */
+            get documentDate(): Date;
+            /** 设置-凭证日期 */
+            set documentDate(value: Date);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
+            /** 映射的属性名称-项目代码 */
+            static PROPERTY_PROJECT_NAME: string;
+            /** 获取-项目代码 */
+            get project(): string;
+            /** 设置-项目代码 */
+            set project(value: string);
+            /** 映射的属性名称-基于类型 */
+            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
+            /** 获取-基于类型 */
+            get baseDocumentType(): string;
+            /** 设置-基于类型 */
+            set baseDocumentType(value: string);
+            /** 映射的属性名称-基于标识 */
+            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
+            /** 获取-基于标识 */
+            get baseDocumentEntry(): number;
+            /** 设置-基于标识 */
+            set baseDocumentEntry(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
+            /** 获取-基于行号 */
+            get baseDocumentLineId(): number;
+            /** 设置-基于行号 */
+            set baseDocumentLineId(value: number);
+            /** 映射的属性名称-单据货币 */
+            static PROPERTY_DOCUMENTCURRENCY_NAME: string;
+            /** 获取-单据货币 */
+            get documentCurrency(): string;
+            /** 设置-单据货币 */
+            set documentCurrency(value: string);
+            /** 映射的属性名称-单据总计 */
+            static PROPERTY_DOCUMENTTOTAL_NAME: string;
+            /** 获取-单据总计 */
+            get documentTotal(): number;
+            /** 设置-单据总计 */
+            set documentTotal(value: number);
+            /** 映射的属性名称-参考1 */
+            static PROPERTY_REFERENCE1_NAME: string;
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 映射的属性名称-参考2 */
+            static PROPERTY_REFERENCE2_NAME: string;
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
+            /** 映射的属性名称-参考3 */
+            static PROPERTY_REFERENCE3_NAME: string;
+            /** 获取-参考3 */
+            get reference3(): string;
+            /** 设置-参考3 */
+            set reference3(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-日记账分录-行集合 */
+            static PROPERTY_JOURNALENTRYLINES_NAME: string;
+            /** 获取-日记账分录-行集合 */
+            get journalEntryLines(): JournalEntryLines;
+            /** 设置-日记账分录-行集合 */
+            set journalEntryLines(value: JournalEntryLines);
+            /** 初始化数据 */
+            protected init(): void;
+            /** 重置 */
+            reset(): void;
+            protected registerRules(): ibas.IBusinessRule[];
+        }
+        /** 日记账分录-行 集合 */
+        class JournalEntryLines extends ibas.BusinessObjects<JournalEntryLine, JournalEntry> implements IJournalEntryLines {
+            /** 创建并添加子项 */
+            create(): JournalEntryLine;
+        }
+        /** 日记账分录-行 */
+        class JournalEntryLine extends ibas.BODocumentLine<JournalEntryLine> implements IJournalEntryLine {
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-编码 */
+            get docEntry(): number;
+            /** 设置-编码 */
+            set docEntry(value: number);
+            /** 映射的属性名称-行号 */
+            static PROPERTY_LINEID_NAME: string;
+            /** 获取-行号 */
+            get lineId(): number;
+            /** 设置-行号 */
+            set lineId(value: number);
+            /** 映射的属性名称-显示顺序 */
+            static PROPERTY_VISORDER_NAME: string;
+            /** 获取-显示顺序 */
+            get visOrder(): number;
+            /** 设置-显示顺序 */
+            set visOrder(value: number);
+            /** 映射的属性名称-取消 */
+            static PROPERTY_CANCELED_NAME: string;
+            /** 获取-取消 */
+            get canceled(): ibas.emYesNo;
+            /** 设置-取消 */
+            set canceled(value: ibas.emYesNo);
+            /** 映射的属性名称-状态 */
+            static PROPERTY_STATUS_NAME: string;
+            /** 获取-状态 */
+            get status(): ibas.emBOStatus;
+            /** 设置-状态 */
+            set status(value: ibas.emBOStatus);
+            /** 映射的属性名称-单据状态 */
+            static PROPERTY_LINESTATUS_NAME: string;
+            /** 获取-单据状态 */
+            get lineStatus(): ibas.emDocumentStatus;
+            /** 设置-单据状态 */
+            set lineStatus(value: ibas.emDocumentStatus);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-科目 */
+            static PROPERTY_ACCOUNT_NAME: string;
+            /** 获取-科目 */
+            get account(): string;
+            /** 设置-科目 */
+            set account(value: string);
+            /** 映射的属性名称-业务伙伴/科目代码 */
+            static PROPERTY_SHORTNAME_NAME: string;
+            /** 获取-业务伙伴/科目代码 */
+            get shortName(): string;
+            /** 设置-业务伙伴/科目代码 */
+            set shortName(value: string);
+            /** 映射的属性名称-借方金额 */
+            static PROPERTY_DEBIT_NAME: string;
+            /** 获取-借方金额 */
+            get debit(): number;
+            /** 设置-借方金额 */
+            set debit(value: number);
+            /** 映射的属性名称-贷方金额 */
+            static PROPERTY_CREDIT_NAME: string;
+            /** 获取-贷方金额 */
+            get credit(): number;
+            /** 设置-贷方金额 */
+            set credit(value: number);
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
+            /** 映射的属性名称-借方金额（系统） */
+            static PROPERTY_SYSTEMDEBIT_NAME: string;
+            /** 获取-借方金额（系统） */
+            get systemDebit(): number;
+            /** 设置-借方金额（系统） */
+            set systemDebit(value: number);
+            /** 映射的属性名称-贷方金额（系统） */
+            static PROPERTY_SYSTEMCREDIT_NAME: string;
+            /** 获取-贷方金额（系统） */
+            get systemCredit(): number;
+            /** 设置-贷方金额（系统） */
+            set systemCredit(value: number);
+            /** 映射的属性名称-系统币 */
+            static PROPERTY_SYSTEMCURRENCY_NAME: string;
+            /** 获取-系统币 */
+            get systemCurrency(): string;
+            /** 设置-系统币 */
+            set systemCurrency(value: string);
+            /** 映射的属性名称-系统币汇率 */
+            static PROPERTY_SYSTEMRATE_NAME: string;
+            /** 获取-系统币汇率 */
+            get systemRate(): number;
+            /** 设置-系统币汇率 */
+            set systemRate(value: number);
+            /** 映射的属性名称-借方金额（本币） */
+            static PROPERTY_LOCALDEBIT_NAME: string;
+            /** 获取-借方金额（本币） */
+            get localDebit(): number;
+            /** 设置-借方金额（本币） */
+            set localDebit(value: number);
+            /** 映射的属性名称-贷方金额（本币） */
+            static PROPERTY_LOCALCREDIT_NAME: string;
+            /** 获取-贷方金额（本币） */
+            get localCredit(): number;
+            /** 设置-贷方金额（本币） */
+            set localCredit(value: number);
+            /** 映射的属性名称-本币 */
+            static PROPERTY_LOCALCURRENCY_NAME: string;
+            /** 获取-本币 */
+            get localCurrency(): string;
+            /** 设置-本币 */
+            set localCurrency(value: string);
+            /** 映射的属性名称-本币汇率 */
+            static PROPERTY_LOCALRATE_NAME: string;
+            /** 获取-本币汇率 */
+            get localRate(): number;
+            /** 设置-本币汇率 */
+            set localRate(value: number);
+            /** 映射的属性名称-税码 */
+            static PROPERTY_TAX_NAME: string;
+            /** 获取-税码 */
+            get tax(): string;
+            /** 设置-税码 */
+            set tax(value: string);
+            /** 映射的属性名称-税率 */
+            static PROPERTY_TAXRATE_NAME: string;
+            /** 获取-税率 */
+            get taxRate(): number;
+            /** 设置-税率 */
+            set taxRate(value: number);
+            /** 映射的属性名称-基础总额 */
+            static PROPERTY_BASETOTAL_NAME: string;
+            /** 获取-基础总额 */
+            get baseTotal(): number;
+            /** 设置-基础总额 */
+            set baseTotal(value: number);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
+            /** 映射的属性名称-项目代码 */
+            static PROPERTY_PROJECT_NAME: string;
+            /** 获取-项目代码 */
+            get project(): string;
+            /** 设置-项目代码 */
+            set project(value: string);
+            /** 映射的属性名称-分配规则1 */
+            static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
+            /** 获取-分配规则1 */
+            get distributionRule1(): string;
+            /** 设置-分配规则1 */
+            set distributionRule1(value: string);
+            /** 映射的属性名称-分配规则2 */
+            static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
+            /** 获取-分配规则2 */
+            get distributionRule2(): string;
+            /** 设置-分配规则2 */
+            set distributionRule2(value: string);
+            /** 映射的属性名称-分配规则3 */
+            static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
+            /** 获取-分配规则3 */
+            get distributionRule3(): string;
+            /** 设置-分配规则3 */
+            set distributionRule3(value: string);
+            /** 映射的属性名称-分配规则4 */
+            static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
+            /** 获取-分配规则4 */
+            get distributionRule4(): string;
+            /** 设置-分配规则4 */
+            set distributionRule4(value: string);
+            /** 映射的属性名称-分配规则5 */
+            static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
+            /** 获取-分配规则5 */
+            get distributionRule5(): string;
+            /** 设置-分配规则5 */
+            set distributionRule5(value: string);
+            /** 映射的属性名称-参考1 */
+            static PROPERTY_REFERENCE1_NAME: string;
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 映射的属性名称-参考2 */
+            static PROPERTY_REFERENCE2_NAME: string;
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
+            /** 映射的属性名称-参考3 */
+            static PROPERTY_REFERENCE3_NAME: string;
+            /** 获取-参考3 */
+            get reference3(): string;
+            /** 设置-参考3 */
+            set reference3(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 期间-分类账 */
+        class PeriodLedgerAccount extends ibas.BOSimple<PeriodLedgerAccount> implements IPeriodLedgerAccount {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-期间 */
+            static PROPERTY_PERIOD_NAME: string;
+            /** 获取-期间 */
+            get period(): number;
+            /** 设置-期间 */
+            set period(value: number);
+            /** 映射的属性名称-分类 */
+            static PROPERTY_LEDGER_NAME: string;
+            /** 获取-分类 */
+            get ledger(): string;
+            /** 设置-分类 */
+            set ledger(value: string);
+            /** 映射的属性名称-科目 */
+            static PROPERTY_ACCOUNT_NAME: string;
+            /** 获取-科目 */
+            get account(): string;
+            /** 设置-科目 */
+            set account(value: string);
+            /** 映射的属性名称-设置 */
+            static PROPERTY_SETTINGS_NAME: string;
+            /** 获取-设置 */
+            get settings(): string;
+            /** 设置-设置 */
+            set settings(value: string);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 分类账 */
+        class LedgerAccount extends ibas.BOSimple<LedgerAccount> implements ILedgerAccount {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-标识 */
+            static PROPERTY_SIGN_NAME: string;
+            /** 获取-标识 */
+            get sign(): string;
+            /** 设置-标识 */
+            set sign(value: string);
+            /** 映射的属性名称-组 */
+            static PROPERTY_GROUP_NAME: string;
+            /** 获取-组 */
+            get group(): string;
+            /** 设置-组 */
+            set group(value: string);
+            /** 映射的属性名称-描述 */
+            static PROPERTY_DESCRIPTION_NAME: string;
+            /** 获取-描述 */
+            get description(): string;
+            /** 设置-描述 */
+            set description(value: string);
+            /** 映射的属性名称-设置 */
+            static PROPERTY_SETTINGS_NAME: string;
+            /** 获取-设置 */
+            get settings(): string;
+            /** 设置-设置 */
+            set settings(value: string);
+            /** 映射的属性名称-编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-编号 */
+            get objectKey(): number;
+            /** 设置-编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-编号系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-编号系列 */
+            get series(): number;
+            /** 设置-编号系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
             /** 映射的属性名称-创建用户 */
             static PROPERTY_CREATEUSERSIGN_NAME: string;
             /** 获取-创建用户 */
@@ -2750,6 +4424,51 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveCurrency(saver: ibas.ISaveCaller<bo.Currency>): void;
+            /**
+             * 查询 科目
+             * @param fetcher 查询者
+             */
+            fetchAccount(fetcher: ibas.IFetchCaller<bo.Account>): void;
+            /**
+             * 保存 科目
+             * @param saver 保存者
+             */
+            saveAccount(saver: ibas.ISaveCaller<bo.Account>): void;
+            /**
+             * 查询 分支
+             * @param fetcher 查询者
+             */
+            fetchBranch(fetcher: ibas.IFetchCaller<bo.Branch>): void;
+            /**
+             * 保存 分支
+             * @param saver 保存者
+             */
+            saveBranch(saver: ibas.ISaveCaller<bo.Branch>): void;
+            /**
+             * 查询 日记账分录
+             * @param fetcher 查询者
+             */
+            fetchJournalEntry(fetcher: ibas.IFetchCaller<bo.JournalEntry>): void;
+            /**
+             * 保存 日记账分录
+             * @param saver 保存者
+             */
+            saveJournalEntry(saver: ibas.ISaveCaller<bo.JournalEntry>): void;
+            /**
+             * 查询 分类账
+             * @param fetcher 查询者
+             */
+            fetchLedgerAccount(fetcher: ibas.IFetchCaller<bo.LedgerAccount>): void;
+            /**
+             * 查询 期间-分类账
+             * @param fetcher 查询者
+             */
+            fetchPeriodLedgerAccount(fetcher: ibas.IFetchCaller<bo.PeriodLedgerAccount>): void;
+            /**
+             * 保存 期间-分类账
+             * @param saver 保存者
+             */
+            savePeriodLedgerAccount(saver: ibas.ISaveCaller<bo.PeriodLedgerAccount>): void;
         }
         /**
          * 费用结束者
@@ -4180,6 +5899,756 @@ declare namespace accounting {
  */
 declare namespace accounting {
     namespace app {
+        class AccountFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 列表应用-科目 */
+        class AccountListApp extends ibas.BOListApplication<IAccountListView, bo.Account> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.Account): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.Account): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.Account | bo.Account[]): void;
+        }
+        /** 视图-科目 */
+        interface IAccountListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.Account[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 选择应用-科目 */
+        class AccountChooseApp extends ibas.BOChooseService<IAccountChooseView, bo.Account> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-科目 */
+        interface IAccountChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.Account[]): void;
+        }
+        /** 科目选择服务映射 */
+        class AccountChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.Account>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 查看应用-科目 */
+        class AccountViewApp extends ibas.BOViewService<IAccountViewView, bo.Account> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.Account): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-科目 */
+        interface IAccountViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showAccount(data: bo.Account): void;
+        }
+        /** 科目连接服务映射 */
+        class AccountLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 编辑应用-科目 */
+        class AccountEditApp extends ibas.BOEditApplication<IAccountEditView, bo.Account> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.Account): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-科目 */
+        interface IAccountEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showAccount(data: bo.Account): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class AccountNode extends ibas.Bindable {
+            constructor(data: bo.Account);
+            get data(): bo.Account;
+            set data(value: bo.Account);
+            get logInst(): number;
+            set logInst(value: number);
+            get code(): string;
+            set code(value: string);
+            get name(): string;
+            set name(value: string);
+            get active(): ibas.emYesNo;
+            set active(value: ibas.emYesNo);
+            get nodes(): AccountNode[];
+        }
+        class AccountNodes extends ibas.ArrayList<AccountNode> {
+            constructor(parent: AccountNode);
+            filling(datas: bo.Account[]): void;
+        }
+        /** 应用-科目 */
+        class AccountTreeApp extends ibas.Application<IAccountTreeView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private viewGroup;
+        }
+        /** 视图-科目 */
+        interface IAccountTreeView extends ibas.IView {
+            /** 显示分组 */
+            showGroups(datas: AccountNode[]): void;
+            /** 显示组 */
+            viewGroupEvent: Function;
+            /** 显示科目 */
+            showAccount(data: bo.Account): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class BranchFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 列表应用-分支 */
+        class BranchListApp extends ibas.BOListApplication<IBranchListView, bo.Branch> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.Branch): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.Branch): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.Branch | bo.Branch[]): void;
+        }
+        /** 视图-分支 */
+        interface IBranchListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.Branch[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 选择应用-分支 */
+        class BranchChooseApp extends ibas.BOChooseService<IBranchChooseView, bo.Branch> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-分支 */
+        interface IBranchChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.Branch[]): void;
+        }
+        /** 分支选择服务映射 */
+        class BranchChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.Branch>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 查看应用-分支 */
+        class BranchViewApp extends ibas.BOViewService<IBranchViewView, bo.Branch> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.Branch): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-分支 */
+        interface IBranchViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showBranch(data: bo.Branch): void;
+        }
+        /** 分支连接服务映射 */
+        class BranchLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 编辑应用-分支 */
+        class BranchEditApp extends ibas.BOEditApplication<IBranchEditView, bo.Branch> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.Branch): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-分支 */
+        interface IBranchEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showBranch(data: bo.Branch): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class JournalEntryFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 列表应用-日记账分录 */
+        class JournalEntryListApp extends ibas.BOListApplication<IJournalEntryListView, bo.JournalEntry> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.JournalEntry): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.JournalEntry): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.JournalEntry | bo.JournalEntry[]): void;
+        }
+        /** 视图-日记账分录 */
+        interface IJournalEntryListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.JournalEntry[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 选择应用-日记账分录 */
+        class JournalEntryChooseApp extends ibas.BOChooseService<IJournalEntryChooseView, bo.JournalEntry> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-日记账分录 */
+        interface IJournalEntryChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.JournalEntry[]): void;
+        }
+        /** 日记账分录选择服务映射 */
+        class JournalEntryChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.JournalEntry>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 查看应用-日记账分录 */
+        class JournalEntryViewApp extends ibas.BOViewService<IJournalEntryViewView, bo.JournalEntry> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.JournalEntry): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-日记账分录 */
+        interface IJournalEntryViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showJournalEntry(data: bo.JournalEntry): void;
+            /** 显示数据-日记账分录-行 */
+            showJournalEntryLines(datas: bo.JournalEntryLine[]): void;
+        }
+        /** 日记账分录连接服务映射 */
+        class JournalEntryLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 编辑应用-日记账分录 */
+        class JournalEntryEditApp extends ibas.BOEditApplication<IJournalEntryEditView, bo.JournalEntry> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.JournalEntry): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+            /** 添加日记账分录-行事件 */
+            protected addJournalEntryLine(): void;
+            /** 删除日记账分录-行事件 */
+            protected removeJournalEntryLine(items: bo.JournalEntryLine[]): void;
+            /** 选择日记账分录-行科目 */
+            protected chooseJournalEntryLineAccount(caller: bo.JournalEntryLine): void;
+            /** 选择日记账分录-行业务伙伴/科目 */
+            protected chooseJournalEntryLineShortName(caller: bo.JournalEntryLine): void;
+        }
+        /** 视图-日记账分录 */
+        interface IJournalEntryEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showJournalEntry(data: bo.JournalEntry): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+            /** 添加日记账分录-行事件 */
+            addJournalEntryLineEvent: Function;
+            /** 删除日记账分录-行事件 */
+            removeJournalEntryLineEvent: Function;
+            /** 显示数据-日记账分录-行 */
+            showJournalEntryLines(datas: bo.JournalEntryLine[]): void;
+            /** 选择日记账分录-行科目事件 */
+            chooseJournalEntryLineAccountEvent: Function;
+            /** 选择日记账分录-行业务伙伴/科目事件 */
+            chooseJournalEntryLineShortNameEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class LedgerAccountDeterminationFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class PLAccount extends ibas.Bindable {
+            ledger: bo.LedgerAccount;
+            data: bo.PeriodLedgerAccount;
+        }
+        /** 编辑应用-分类账 */
+        class LedgerAccountDeterminationApp extends ibas.Application<ILedgerAccountDeterminationView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected ledgerAccountMap: Map<string, bo.LedgerAccount[]>;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 选中过账期间 */
+            protected selectPostingPeriod(period: bo.PostingPeriod, group?: string): void;
+            /** 保存过账期间总账科目事件 */
+            protected savePostingPeriodAccount(datas: bo.PeriodLedgerAccount[]): void;
+        }
+        /** 视图-分类账 */
+        interface ILedgerAccountDeterminationView extends ibas.IView {
+            /** 显示过账期间 */
+            showPostingPeriods(datas: bo.PostingPeriod[]): void;
+            /** 选中过账期间事件 */
+            selectPostingPeriodEvent: Function;
+            /** 显示过账期间总账科目 */
+            showPostingPeriodAccounts(datas: PLAccount[]): void;
+            /** 保存过账期间总账科目事件 */
+            savePostingPeriodAccountEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
         /** 模块控制台 */
         class Console extends ibas.ModuleConsole {
             /** 构造函数 */
@@ -4190,6 +6659,13 @@ declare namespace accounting {
             protected registers(): void;
             /** 运行 */
             run(): void;
+        }
+        /** 模块控制台 */
+        class ConsoleData extends Console {
+            /** 构造函数 */
+            constructor();
+            /** 初始化 */
+            protected registers(): void;
         }
         /** 模块控制台 */
         class ConsolePhone extends Console {

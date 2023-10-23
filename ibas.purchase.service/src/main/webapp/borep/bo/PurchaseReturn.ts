@@ -28,14 +28,14 @@ namespace purchase {
                 this.setProperty(PurchaseReturn.PROPERTY_DOCENTRY_NAME, value);
             }
 
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string = "DocNum";
-            /** 获取-期间编号 */
-            get docNum(): number {
-                return this.getProperty<number>(PurchaseReturn.PROPERTY_DOCNUM_NAME);
+            /** 获取-单据编码 */
+            get docNum(): string {
+                return this.getProperty<string>(PurchaseReturn.PROPERTY_DOCNUM_NAME);
             }
-            /** 设置-期间编号 */
-            set docNum(value: number) {
+            /** 设置-单据编码 */
+            set docNum(value: string) {
                 this.setProperty(PurchaseReturn.PROPERTY_DOCNUM_NAME, value);
             }
 

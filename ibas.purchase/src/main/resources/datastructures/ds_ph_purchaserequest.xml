@@ -3,7 +3,7 @@
 <Domain Name="Purchase" ShortName="PH">
   <Model Name="PurchaseRequest" Description="采购申请" ModelType="Document" Mapped="${Company}_PH_OPRQ">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
-    <Property Name="DocNum" Description="期间编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocNum"/>
+    <Property Name="DocNum" Description="单据编码" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="DocNum"/>
     <Property Name="Period" Description="期间" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="Period"/>
     <Property Name="Canceled" Description="取消" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Canceled"/>
     <Property Name="Status" Description="状态" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emBOStatus" Mapped="Status"/>

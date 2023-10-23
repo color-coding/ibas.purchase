@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
@@ -54,7 +55,7 @@ import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
 @BusinessObjectUnit(code = PurchaseInvoice.BUSINESS_OBJECT_CODE)
 public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 		implements IPurchaseInvoice, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBusinessLogicsHost, IBOUserFields, IDocumentPaidTotalOperator {
+		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator {
 
 	/**
 	 * 序列化版本标记
@@ -113,33 +114,33 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 	}
 
 	/**
-	 * 属性名称-期间编号
+	 * 属性名称-单据编码
 	 */
 	private static final String PROPERTY_DOCNUM_NAME = "DocNum";
 
 	/**
 	 * 期间编号 属性
 	 */
-	@DbField(name = "DocNum", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
-	public static final IPropertyInfo<Integer> PROPERTY_DOCNUM = registerProperty(PROPERTY_DOCNUM_NAME, Integer.class,
+	@DbField(name = "DocNum", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	public static final IPropertyInfo<String> PROPERTY_DOCNUM = registerProperty(PROPERTY_DOCNUM_NAME, String.class,
 			MY_CLASS);
 
 	/**
-	 * 获取-期间编号
+	 * 获取-单据编码
 	 * 
 	 * @return 值
 	 */
 	@XmlElement(name = PROPERTY_DOCNUM_NAME)
-	public final Integer getDocNum() {
+	public final String getDocNum() {
 		return this.getProperty(PROPERTY_DOCNUM);
 	}
 
 	/**
-	 * 设置-期间编号
+	 * 设置-单据编码
 	 * 
 	 * @param value 值
 	 */
-	public final void setDocNum(Integer value) {
+	public final void setDocNum(String value) {
 		this.setProperty(PROPERTY_DOCNUM, value);
 	}
 
@@ -1937,6 +1938,11 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 		this.setPaidTotal(Decimal.ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getPurchaseInvoiceItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
+	}
+
+	@Override
+	public void setSeriesValue(Object value) {
+		this.setDocNum(String.valueOf(value));
 	}
 
 	@Override

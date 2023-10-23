@@ -754,7 +754,7 @@ namespace purchase {
             private chooseSupplierAgreements(): void {
                 if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
-                        ibas.i18n.prop("bo_purchasecreditnote_suppliercode")
+                        ibas.i18n.prop("bo_purchasereturn_suppliercode")
                     ));
                     return;
                 }
@@ -765,9 +765,20 @@ namespace purchase {
                 condition = criteria.conditions.create();
                 condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERTYPE_NAME;
                 condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                condition.bracketOpen = 2;
                 condition = criteria.conditions.create();
                 condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERCODE_NAME;
                 condition.value = this.editData.supplierCode;
+                condition.bracketClose = 1;
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                condition.value = "";
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition = criteria.conditions.create();
+                condition.alias = businesspartner.bo.Agreement.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
                 ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
                     boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.MULTIPLE,

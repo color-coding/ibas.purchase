@@ -33,18 +33,18 @@ public interface IBlanketAgreement extends IBODocument {
 	void setDocEntry(Integer value);
 
 	/**
-	 * 获取-期间编号
+	 * 获取-单据编码
 	 * 
 	 * @return 值
 	 */
-	Integer getDocNum();
+	String getDocNum();
 
 	/**
-	 * 设置-期间编号
+	 * 设置-单据编码
 	 * 
 	 * @param value 值
 	 */
-	void setDocNum(Integer value);
+	void setDocNum(String value);
 
 	/**
 	 * 获取-期间

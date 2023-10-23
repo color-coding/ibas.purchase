@@ -184,8 +184,8 @@ declare namespace receiptpayment {
         interface IPayment extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -352,8 +352,8 @@ declare namespace receiptpayment {
         interface IReceipt extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -520,8 +520,8 @@ declare namespace receiptpayment {
         interface IAssetRecharge extends ibas.IBODocument, ibas.IBOUserFields {
             /** 凭证编号 */
             docEntry: number;
-            /** 期间编号 */
-            docNum: number;
+            /** 单据编码 */
+            docNum: string;
             /** 期间 */
             period: number;
             /** 取消 */
@@ -741,12 +741,12 @@ declare namespace receiptpayment {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -1220,12 +1220,12 @@ declare namespace receiptpayment {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */
@@ -1699,12 +1699,12 @@ declare namespace receiptpayment {
             get docEntry(): number;
             /** 设置-凭证编号 */
             set docEntry(value: number);
-            /** 映射的属性名称-期间编号 */
+            /** 映射的属性名称-单据编码 */
             static PROPERTY_DOCNUM_NAME: string;
-            /** 获取-期间编号 */
-            get docNum(): number;
-            /** 设置-期间编号 */
-            set docNum(value: number);
+            /** 获取-单据编码 */
+            get docNum(): string;
+            /** 设置-单据编码 */
+            set docNum(value: string);
             /** 映射的属性名称-期间 */
             static PROPERTY_PERIOD_NAME: string;
             /** 获取-期间 */

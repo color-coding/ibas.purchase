@@ -69,10 +69,26 @@ namespace purchase {
                         },
                         headerTitle: new sap.uxap.ObjectPageHeader("", {
                             objectTitle: {
-                                path: "docEntry",
-                                type: new sap.extension.data.Numeric(),
-                                formatter(data: string): any {
-                                    return ibas.strings.format("# {0}", data ? data : "0");
+                                parts: [
+                                    {
+                                        path: "docEntry",
+                                        type: new sap.extension.data.Numeric(),
+                                    },
+                                    {
+                                        path: "docNum",
+                                        type: new sap.extension.data.Alphanumeric(),
+                                    }
+                                ],
+                                formatter(docEntry: number, docNum: string): any {
+                                    let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                                    builder.append("# ");
+                                    builder.append(docEntry ? docEntry : 0);
+                                    if (!ibas.strings.isEmpty(docNum)) {
+                                        builder.append(" (");
+                                        builder.append(docNum);
+                                        builder.append(")");
+                                    }
+                                    return builder.toString();
                                 }
                             },
                             objectSubtitle: {
@@ -341,6 +357,30 @@ namespace purchase {
                                                             if (data === ibas.emApprovalStatus.PROCESSING) {
                                                                 return false;
                                                             } return true;
+                                                        }
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_docnum") }),
+                                                    new sap.extension.m.Input("", {
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "docNum",
+                                                        type: new sap.extension.data.Alphanumeric({
+                                                            maxLength: 20
+                                                        })
+                                                    }).bindProperty("editable", {
+                                                        path: "series",
+                                                        formatter(data: any): any {
+                                                            return data > 0 ? false : true;
+                                                        }
+                                                    }),
+                                                    new sap.extension.m.SeriesSelect("", {
+                                                        objectCode: bo.BO_CODE_BLANKETAGREEMENT,
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "series",
+                                                        type: new sap.extension.data.Numeric()
+                                                    }).bindProperty("editable", {
+                                                        path: "isNew",
+                                                        formatter(data: any): any {
+                                                            return data === false ? false : true;
                                                         }
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_signdate") }),

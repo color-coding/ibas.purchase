@@ -2,7 +2,7 @@
     {
         "bo_purchasecreditnote": "采购贷项",
         "bo_purchasecreditnote_docentry": "凭证编号",
-        "bo_purchasecreditnote_docnum": "期间编号",
+        "bo_purchasecreditnote_docnum": "单据编码",
         "bo_purchasecreditnote_period": "期间",
         "bo_purchasecreditnote_canceled": "取消",
         "bo_purchasecreditnote_status": "状态",
@@ -122,7 +122,7 @@
     {
         "bo_purchaserequest": "采购申请",
         "bo_purchaserequest_docentry": "凭证编号",
-        "bo_purchaserequest_docnum": "期间编号",
+        "bo_purchaserequest_docnum": "单据编码",
         "bo_purchaserequest_period": "期间",
         "bo_purchaserequest_canceled": "取消",
         "bo_purchaserequest_status": "状态",
@@ -262,7 +262,7 @@
     {
         "bo_purchasedelivery": "采购收货",
         "bo_purchasedelivery_docentry": "凭证编号",
-        "bo_purchasedelivery_docnum": "期间编号",
+        "bo_purchasedelivery_docnum": "单据编码",
         "bo_purchasedelivery_period": "期间",
         "bo_purchasedelivery_canceled": "取消",
         "bo_purchasedelivery_status": "状态",
@@ -382,7 +382,7 @@
     {
         "bo_purchaseorder": "采购订单",
         "bo_purchaseorder_docentry": "凭证编号",
-        "bo_purchaseorder_docnum": "期间编号",
+        "bo_purchaseorder_docnum": "单据编码",
         "bo_purchaseorder_period": "期间",
         "bo_purchaseorder_canceled": "取消",
         "bo_purchaseorder_status": "状态",
@@ -529,7 +529,7 @@
     {
         "bo_purchasereturn": "采购退货",
         "bo_purchasereturn_docentry": "凭证编号",
-        "bo_purchasereturn_docnum": "期间编号",
+        "bo_purchasereturn_docnum": "单据编码",
         "bo_purchasereturn_period": "期间",
         "bo_purchasereturn_canceled": "取消",
         "bo_purchasereturn_status": "状态",
@@ -649,7 +649,7 @@
     {
         "bo_purchasequote": "采购报价",
         "bo_purchasequote_docentry": "凭证编号",
-        "bo_purchasequote_docnum": "期间编号",
+        "bo_purchasequote_docnum": "单据编码",
         "bo_purchasequote_period": "期间",
         "bo_purchasequote_canceled": "取消",
         "bo_purchasequote_status": "状态",
@@ -836,7 +836,7 @@
     {
         "bo_purchaseinvoice": "采购发票",
         "bo_purchaseinvoice_docentry": "凭证编号",
-        "bo_purchaseinvoice_docnum": "期间编号",
+        "bo_purchaseinvoice_docnum": "单据编码",
         "bo_purchaseinvoice_period": "期间",
         "bo_purchaseinvoice_canceled": "取消",
         "bo_purchaseinvoice_status": "状态",
@@ -956,7 +956,7 @@
     {
         "bo_blanketagreement": "一揽子协议",
         "bo_blanketagreement_docentry": "凭证编号",
-        "bo_blanketagreement_docnum": "期间编号",
+        "bo_blanketagreement_docnum": "单据编码",
         "bo_blanketagreement_period": "期间",
         "bo_blanketagreement_canceled": "取消",
         "bo_blanketagreement_status": "状态",

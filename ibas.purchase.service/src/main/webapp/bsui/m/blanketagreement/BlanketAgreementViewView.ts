@@ -21,10 +21,26 @@ namespace purchase {
                         showFooter: false,
                         headerTitle: new sap.uxap.ObjectPageHeader("", {
                             objectTitle: {
-                                path: "docEntry",
-                                type: new sap.extension.data.Numeric(),
-                                formatter(data: string): any {
-                                    return ibas.strings.format("# {0}", data ? data : "0");
+                                parts: [
+                                    {
+                                        path: "docEntry",
+                                        type: new sap.extension.data.Numeric(),
+                                    },
+                                    {
+                                        path: "docNum",
+                                        type: new sap.extension.data.Alphanumeric(),
+                                    }
+                                ],
+                                formatter(docEntry: number, docNum: string): any {
+                                    let builder: ibas.StringBuilder = new ibas.StringBuilder();
+                                    builder.append("# ");
+                                    builder.append(docEntry ? docEntry : 0);
+                                    if (!ibas.strings.isEmpty(docNum)) {
+                                        builder.append(" (");
+                                        builder.append(docNum);
+                                        builder.append(")");
+                                    }
+                                    return builder.toString();
                                 }
                             },
                             objectSubtitle: {

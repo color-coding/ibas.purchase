@@ -6040,7 +6040,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-协议/合同 */
-        class AgreementEditApp extends ibas.BOEditApplication<IAgreementEditView, bo.Agreement> {
+        class AgreementEditApp extends ibas.BOEditService<IAgreementEditView, bo.Agreement> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6073,6 +6073,13 @@ declare namespace businesspartner {
             createDataEvent: Function;
             /*** 选择业务伙伴事件 */
             chooseBusinessPartnerEvent: Function;
+        }
+        /** 协议/合同编辑服务映射 */
+        class AgreementEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Agreement>>;
         }
     }
 }
