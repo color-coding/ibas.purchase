@@ -8,7 +8,7 @@
 namespace purchase {
     export namespace app {
         /** 编辑应用-一揽子协议 */
-        export class BlanketAgreementEditApp extends ibas.BOEditApplication<IBlanketAgreementEditView, bo.BlanketAgreement> {
+        export class BlanketAgreementEditApp extends ibas.BOEditService<IBlanketAgreementEditView, bo.BlanketAgreement> {
             /** 应用标识 */
             static APPLICATION_ID: string = "41d8e88c-4b51-4a7f-8fc2-70fc257d336a";
             /** 应用名称 */
@@ -383,6 +383,21 @@ namespace purchase {
             chooseBlanketAgreementItemUnitEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
+        }
+        /** 一揽子协议辑服务映射 */
+        export class BlanketAgreementEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = BlanketAgreementEditApp.APPLICATION_ID;
+                this.name = BlanketAgreementEditApp.APPLICATION_NAME;
+                this.boCode = BlanketAgreementEditApp.BUSINESS_OBJECT_CODE;
+                this.description = ibas.i18n.prop(this.name);
+            }
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.BlanketAgreement>> {
+                return new BlanketAgreementEditApp();
+            }
         }
     }
 }

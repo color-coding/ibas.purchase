@@ -72,6 +72,7 @@ namespace purchase {
                 this.register(new PurchaseCreditNoteEditServiceMapping());
                 this.register(new BlanketAgreementChooseServiceMapping());
                 this.register(new BlanketAgreementLinkServiceMapping());
+                this.register(new BlanketAgreementEditServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 this.register(new PurchaseReturnReceiptServiceMapping());
