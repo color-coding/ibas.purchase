@@ -442,6 +442,25 @@ namespace purchase {
                                     maxLength: 8
                                 })
                             }),
+                            new sap.extension.m.SelectionInput("", {
+                                placeholder: ibas.i18n.prop("bo_branch"),
+                                showValueHelp: true,
+                                repository: accounting.bo.BORepositoryAccounting,
+                                dataInfo: {
+                                    type: accounting.bo.Branch,
+                                    key: accounting.bo.Branch.PROPERTY_CODE_NAME,
+                                    text: accounting.bo.Branch.PROPERTY_NAME_NAME
+                                },
+                                criteria: [
+                                    new ibas.Condition(accounting.bo.Branch.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                ],
+                                visible: accounting.config.isEnableBranch(),
+                            }).bindProperty("bindingValue", {
+                                path: "branch",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 8
+                                })
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_remarks") }),
                             new sap.extension.m.TextArea("", {
                                 rows: 3,

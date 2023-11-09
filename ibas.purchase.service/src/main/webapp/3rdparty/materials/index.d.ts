@@ -170,6 +170,13 @@ declare namespace materials {
              */
             MAKE = 1
         }
+        /** 评估方法 */
+        enum emValuationMethod {
+            /**
+             * 移动平均
+             */
+            MOVING_AVERAGE = 0
+        }
     }
     namespace app {
         /** 服务额外结果 */
@@ -582,6 +589,8 @@ declare namespace materials {
             project: string;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 库存发货-行集合 */
             goodsIssueLines: IGoodsIssueLines;
         }
@@ -750,6 +759,8 @@ declare namespace materials {
             project: string;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 库存收货-行集合 */
             goodsReceiptLines: IGoodsReceiptLines;
         }
@@ -920,6 +931,8 @@ declare namespace materials {
             orderType: string;
             /** 从仓库 */
             fromWarehouse: string;
+            /** 分支 */
+            branch: string;
             /** 库存转储-行集合 */
             inventoryTransferLines: IInventoryTransferLines;
         }
@@ -1056,6 +1069,8 @@ declare namespace materials {
             inventoryUOM: string;
             /** 价格 */
             avgPrice: number;
+            /** 获取-评估方法 */
+            valuationMethod: emValuationMethod;
             /** 库存 */
             onHand: number;
             /** 已承诺 */
@@ -1064,8 +1079,12 @@ declare namespace materials {
             onOrdered: number;
             /** 已预留 */
             onReserved: number;
+            /** 按仓库管理 */
+            manageByWarehouse: ibas.emYesNo;
             /** 最低库存量 */
             minimumInventory: number;
+            /** 最高库存量 */
+            maximumInventory: number;
             /** 最低订购数量 */
             minimumOrderQuantity: number;
             /** 提前期（天） */
@@ -2324,6 +2343,8 @@ declare namespace materials {
             remarks: string;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 库存盘点-行集合 */
             inventoryCountingLines: IInventoryCountingLines;
         }
@@ -2472,6 +2493,8 @@ declare namespace materials {
             dataOwner: number;
             /** 数据所属组织 */
             organization: string;
+            /** 分支 */
+            branch: string;
             /** 备注 */
             remarks: string;
         }
@@ -3332,6 +3355,12 @@ declare namespace materials {
             originalDocumentEntry: number;
             /** 原始行号 */
             originalDocumentLineId: number;
+            /** 过账日期 */
+            postingDate: Date;
+            /** 到期日 */
+            deliveryDate: Date;
+            /** 凭证日期 */
+            documentDate: Date;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -3861,6 +3890,12 @@ declare namespace materials {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-库存发货-行集合 */
             static PROPERTY_GOODSISSUELINES_NAME: string;
             /** 获取-库存发货-行集合 */
@@ -4344,6 +4379,12 @@ declare namespace materials {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-库存收货-行集合 */
             static PROPERTY_GOODSRECEIPTLINES_NAME: string;
             /** 获取-库存收货-行集合 */
@@ -4833,6 +4874,12 @@ declare namespace materials {
             get fromWarehouse(): string;
             /** 设置-从仓库 */
             set fromWarehouse(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-库存转储-行集合 */
             static PROPERTY_INVENTORYTRANSFERLINES_NAME: string;
             /** 获取-库存转储-行集合 */
@@ -5220,6 +5267,12 @@ declare namespace materials {
             get avgPrice(): number;
             /** 设置-价格 */
             set avgPrice(value: number);
+            /** 映射的属性名称-评估方法 */
+            static PROPERTY_VALUATIONMETHOD_NAME: string;
+            /** 获取-评估方法 */
+            get valuationMethod(): emValuationMethod;
+            /** 设置-评估方法 */
+            set valuationMethod(value: emValuationMethod);
             /** 映射的属性名称-库存 */
             static PROPERTY_ONHAND_NAME: string;
             /** 获取-库存 */
@@ -5244,12 +5297,24 @@ declare namespace materials {
             get onReserved(): number;
             /** 设置-已预留 */
             set onReserved(value: number);
+            /** 映射的属性名称-按仓库管理 */
+            static PROPERTY_MANAGEBYWAREHOUSE_NAME: string;
+            /** 获取-按仓库管理 */
+            get manageByWarehouse(): ibas.emYesNo;
+            /** 设置-按仓库管理 */
+            set manageByWarehouse(value: ibas.emYesNo);
             /** 映射的属性名称-最低库存量 */
             static PROPERTY_MINIMUMINVENTORY_NAME: string;
             /** 获取-最低库存量 */
             get minimumInventory(): number;
             /** 设置-最低库存量 */
             set minimumInventory(value: number);
+            /** 映射的属性名称-最高库存量 */
+            static PROPERTY_MAXIMUMINVENTORY_NAME: string;
+            /** 获取-最高库存量 */
+            get maximumInventory(): number;
+            /** 设置-最高库存量 */
+            set maximumInventory(value: number);
             /** 映射的属性名称-最低订购数量 */
             static PROPERTY_MINIMUMORDERQUANTITY_NAME: string;
             /** 获取-最低订购数量 */
@@ -6183,6 +6248,12 @@ declare namespace materials {
             get onReserved(): number;
             /** 设置-已预留 */
             set onReserved(value: number);
+            /** 映射的属性名称-库存价值 */
+            static PROPERTY_INVENTORYVALUE_NAME: string;
+            /** 获取-库存价值 */
+            get inventoryValue(): number;
+            /** 设置-库存价值 */
+            set inventoryValue(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -6369,6 +6440,18 @@ declare namespace materials {
             get rate(): number;
             /** 设置-汇率 */
             set rate(value: number);
+            /** 映射的属性名称-计算价格 */
+            static PROPERTY_CALCULATEDPRICE_NAME: string;
+            /** 获取-计算价格 */
+            get calculatedPrice(): number;
+            /** 设置-计算价格 */
+            set calculatedPrice(value: number);
+            /** 映射的属性名称-交易值 */
+            static PROPERTY_TRANSACTIONVALUE_NAME: string;
+            /** 获取-交易值 */
+            get transactionValue(): number;
+            /** 设置-交易值 */
+            set transactionValue(value: number);
             /** 映射的属性名称-过账日期 */
             static PROPERTY_POSTINGDATE_NAME: string;
             /** 获取-过账日期 */
@@ -7628,6 +7711,12 @@ declare namespace materials {
             get organization(): string;
             /** 设置-数据所属组织 */
             set organization(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -7846,6 +7935,12 @@ declare namespace materials {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-库存盘点-行集合 */
             static PROPERTY_INVENTORYCOUNTINGLINES_NAME: string;
             /** 获取-库存盘点-行集合 */
@@ -10257,7 +10352,24 @@ declare namespace materials {
             /** 获取-原始行号 */
             get originalDocumentLineId(): number;
             /** 设置-原始行号 */
-            set originalDocumentLineId(value: number);
+            set originalDocumentLineId(value: number); /** 映射的属性名称-过账日期 */
+            static PROPERTY_POSTINGDATE_NAME: string;
+            /** 获取-过账日期 */
+            get postingDate(): Date;
+            /** 设置-过账日期 */
+            set postingDate(value: Date);
+            /** 映射的属性名称-到期日 */
+            static PROPERTY_DELIVERYDATE_NAME: string;
+            /** 获取-到期日 */
+            get deliveryDate(): Date;
+            /** 设置-到期日 */
+            set deliveryDate(value: Date);
+            /** 映射的属性名称-凭证日期 */
+            static PROPERTY_DOCUMENTDATE_NAME: string;
+            /** 获取-凭证日期 */
+            get documentDate(): Date;
+            /** 设置-凭证日期 */
+            set documentDate(value: Date);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -11541,6 +11653,8 @@ declare namespace materials {
             private chooseScheduler;
             /** 编辑物料替代事件 */
             private editMaterialSubstitute;
+            /** 选择总账科目事件 */
+            private chooseLedgerAccount;
         }
         /** 视图-物料 */
         interface IMaterialEditView extends ibas.IBOEditView {
@@ -11566,6 +11680,8 @@ declare namespace materials {
             chooseSchedulerEvent: Function;
             /** 编辑物料替代事件 */
             editMaterialSubstituteEvent: Function;
+            /** 选择总账科目事件 */
+            chooseLedgerAccountEvent: Function;
         }
     }
 }
@@ -11619,39 +11735,49 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace app {
+        class MaterialsWarehouse {
+            constructor(material: bo.IMaterial, warehouses?: bo.IWarehouse[]);
+            get code(): string;
+            get name(): number;
+            warehouses: ibas.IList<bo.IWarehouse>;
+        }
         /** 列表应用-物料库存 */
-        class MaterialInventoryListApp extends ibas.BOListApplication<IMaterialInventoryListView, bo.MaterialInventory> {
+        class MaterialInventoryListApp extends ibas.Application<IMaterialInventoryListView> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
             static APPLICATION_NAME: string;
-            /** 业务对象编码 */
-            static BUSINESS_OBJECT_CODE: string;
             /** 构造函数 */
             constructor();
             /** 注册视图 */
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria): void;
-            /** 新建数据 */
-            protected newData(): void;
-            /** 查看数据，参数：目标数据 */
-            protected viewData(data: bo.MaterialInventory): void;
-            /** 编辑数据，参数：目标数据 */
-            protected editData(data: bo.MaterialInventory): void;
-            /** 查询物料批次交易记录 */
-            protected fetchInventoryJournal(criteria: ibas.ICriteria): void;
+            private warehouses;
+            run(type?: "ONHAND" | "ONORDERED" | "ONCOMMITED", itemCode?: string, warehouse?: string): void;
+            private fetchMaterial;
+            private fetchInventoryJournal;
+            private fetchOrderedJournal;
+            private fetchCommitedJournal;
         }
         /** 视图-物料库存 */
-        interface IMaterialInventoryListView extends ibas.IBOListView {
-            /** 显示物料库存数据 */
-            showInventories(datas: bo.MaterialInventory[]): void;
+        interface IMaterialInventoryListView extends ibas.IView {
+            /** 显示数据 */
+            showMaterials(datas: MaterialsWarehouse[], type?: string): void;
             /** 查询物料库存交易记录 */
             fetchInventoryJournalEvent: Function;
+            /** 查询物料 */
+            fetchMaterialEvent: Function;
             /** 显示物料库存交易数据 */
             showInventoryJournals(datas: bo.MaterialInventoryJournal[]): void;
+            /** 查询物料订购交易记录 */
+            fetchOrderedJournalEvent: Function;
+            /** 显示物料订购交易数据 */
+            showOrderedJournals(datas: bo.MaterialEstimateJournal[]): void;
+            /** 查询物料承诺交易记录 */
+            fetchCommitedJournalEvent: Function;
+            /** 显示物料承诺交易数据 */
+            showCommitedJournals(datas: bo.MaterialEstimateJournal[]): void;
         }
     }
 }
@@ -11747,6 +11873,9 @@ declare namespace materials {
             private releaseMaterialReservation;
             private fetchMaterialOrdered;
             private fetchMaterialCommited;
+            private viewMaterialInventory;
+            private viewMaterialOrdered;
+            private viewMaterialCommited;
         }
         /** 视图-物料 */
         interface IMaterialOverviewView extends ibas.IBOListView {
@@ -11760,6 +11889,8 @@ declare namespace materials {
             fetchMaterialInventoryEvent: Function;
             /** 显示物料库存 */
             showMaterialInventory(datas: bo.IMaterialInventory[]): void;
+            /** 查看库存明细事件 */
+            viewMaterialInventoryEvent: Function;
             /** 查询批次信息 */
             fetchMaterialBatchEvent: Function;
             /** 编辑批次信息 */
@@ -11782,10 +11913,14 @@ declare namespace materials {
             fetchMaterialOrderedEvent: Function;
             /** 显示订购信息 */
             showMaterialOrdered(datas: bo.IMaterialEstimateJournal[]): void;
+            /** 查看订购事件 */
+            viewMaterialOrderedEvent: Function;
             /** 查询承诺信息 */
             fetchMaterialCommitedEvent: Function;
             /** 显示承诺信息 */
             showMaterialCommited(datas: bo.IMaterialEstimateJournal[]): void;
+            /** 查看承诺事件 */
+            viewMaterialCommitedEvent: Function;
         }
     }
 }
@@ -12664,6 +12799,8 @@ declare namespace materials {
             protected createData(clone: boolean): void;
             /** 选择父项 */
             protected chooseParents(): void;
+            /** 选择总账科目事件 */
+            private chooseLedgerAccount;
         }
         /** 视图-物料组 */
         interface IMaterialGroupEditView extends ibas.IBOEditView {
@@ -12675,6 +12812,8 @@ declare namespace materials {
             createDataEvent: Function;
             /** 选择父项 */
             chooseParentsEvent: Function;
+            /** 选择总账科目事件 */
+            chooseLedgerAccountEvent: Function;
         }
     }
 }
@@ -13426,6 +13565,8 @@ declare namespace materials {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 */
             protected createData(clone: boolean): void;
+            /** 选择总账科目事件 */
+            private chooseLedgerAccount;
         }
         /** 视图-仓库 */
         interface IWarehouseEditView extends ibas.IBOEditView {
@@ -13435,6 +13576,8 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+            /** 选择总账科目事件 */
+            chooseLedgerAccountEvent: Function;
         }
         /** 权限元素-单据仓库 */
         const ELEMENT_DOCUMENT_WAREHOUSE: ibas.IElement;

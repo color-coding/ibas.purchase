@@ -2463,6 +2463,21 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem>
 					public Integer getBaseDocumentLineId() {
 						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
 					}
+
+					@Override
+					public BigDecimal getPrice() {
+						return PurchaseDeliveryItem.this.getPrice();
+					}
+
+					@Override
+					public String getCurrency() {
+						return PurchaseDeliveryItem.this.getCurrency();
+					}
+
+					@Override
+					public BigDecimal getRate() {
+						return PurchaseDeliveryItem.this.getRate();
+					}
 				},
 				// 采购订单收货
 				new IPurchaseOrderReceiptContract() {

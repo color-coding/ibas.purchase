@@ -2464,6 +2464,21 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem>
 					public Integer getBaseDocumentLineId() {
 						return PurchaseReturnItem.this.getBaseDocumentLineId();
 					}
+
+					@Override
+					public BigDecimal getPrice() {
+						return PurchaseReturnItem.this.getPrice();
+					}
+
+					@Override
+					public String getCurrency() {
+						return PurchaseReturnItem.this.getCurrency();
+					}
+
+					@Override
+					public BigDecimal getRate() {
+						return PurchaseReturnItem.this.getRate();
+					}
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

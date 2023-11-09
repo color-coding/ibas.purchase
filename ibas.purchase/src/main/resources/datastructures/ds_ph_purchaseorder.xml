@@ -49,6 +49,7 @@
     <Property Name="Consumer" Description="终端客户" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Consumer"/>
     <Property Name="OrderType" Description="单据类型" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OrderType"/>
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
+    <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
   </Model>
   <Model Name="PurchaseOrderItem" Description="采购订单-行" ModelType="DocumentLine" Mapped="${Company}_PH_POR1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>

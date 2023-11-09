@@ -4556,6 +4556,8 @@ declare namespace businesspartner {
             private chooseCustomerWarehouse;
             private createContactPerson;
             private createAddress;
+            /** 选择总账科目事件 */
+            private chooseLedgerAccount;
         }
         /** 视图-客户 */
         interface ICustomerEditView extends ibas.IBOEditView {
@@ -4585,6 +4587,8 @@ declare namespace businesspartner {
             createContactPersonEvent: Function;
             /** 创建地址 */
             createAddressEvent: Function;
+            /** 选择总账科目事件 */
+            chooseLedgerAccountEvent: Function;
         }
     }
 }
@@ -4792,6 +4796,8 @@ declare namespace businesspartner {
             private chooseSupplierFloorList;
             private createContactPerson;
             private createAddress;
+            /** 选择总账科目事件 */
+            private chooseLedgerAccount;
         }
         /** 视图-供应商 */
         interface ISupplierEditView extends ibas.IBOEditView {
@@ -4821,6 +4827,8 @@ declare namespace businesspartner {
             createContactPersonEvent: Function;
             /** 创建地址 */
             createAddressEvent: Function;
+            /** 选择总账科目事件 */
+            chooseLedgerAccountEvent: Function;
         }
     }
 }

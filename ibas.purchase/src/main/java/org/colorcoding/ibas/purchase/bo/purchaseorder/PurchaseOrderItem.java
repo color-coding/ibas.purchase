@@ -2479,6 +2479,21 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				return PurchaseOrderItem.this.getBaseDocumentLineId();
 			}
 
+			@Override
+			public DateTime getDeliveryDate() {
+				return PurchaseOrderItem.this.parent.getDeliveryDate();
+			}
+
+			@Override
+			public DateTime getDocumentDate() {
+				return PurchaseOrderItem.this.parent.getDocumentDate();
+			}
+
+			@Override
+			public DateTime getPostingDate() {
+				return PurchaseOrderItem.this.parent.getPostingDate();
+			}
+
 		});
 		// 采购请求完成
 		contracts.add(new IPurchaseRequestClosingContract() {

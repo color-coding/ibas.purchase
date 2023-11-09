@@ -10805,7 +10805,7 @@ declare namespace sales {
 declare namespace sales {
     namespace app {
         /** 编辑应用-一揽子协议 */
-        class BlanketAgreementEditApp extends ibas.BOEditApplication<IBlanketAgreementEditView, bo.BlanketAgreement> {
+        class BlanketAgreementEditApp extends ibas.BOEditService<IBlanketAgreementEditView, bo.BlanketAgreement> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -10863,6 +10863,13 @@ declare namespace sales {
             chooseBlanketAgreementItemUnitEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
+        }
+        /** 一揽子协议编辑服务映射 */
+        class BlanketAgreementEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.BlanketAgreement>>;
         }
     }
 }

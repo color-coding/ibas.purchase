@@ -2506,6 +2506,21 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 						return PurchaseCreditNoteItem.this.getBaseDocumentLineId();
 					}
 
+					@Override
+					public BigDecimal getPrice() {
+						return PurchaseCreditNoteItem.this.getPrice();
+					}
+
+					@Override
+					public String getCurrency() {
+						return PurchaseCreditNoteItem.this.getCurrency();
+					}
+
+					@Override
+					public BigDecimal getRate() {
+						return PurchaseCreditNoteItem.this.getRate();
+					}
+
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

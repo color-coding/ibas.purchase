@@ -2505,6 +2505,22 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem>
 					public Integer getBaseDocumentLineId() {
 						return PurchaseInvoiceItem.this.getBaseDocumentLineId();
 					}
+
+					@Override
+					public BigDecimal getPrice() {
+						return PurchaseInvoiceItem.this.getPrice();
+					}
+
+					@Override
+					public String getCurrency() {
+						return PurchaseInvoiceItem.this.getCurrency();
+					}
+
+					@Override
+					public BigDecimal getRate() {
+						return PurchaseInvoiceItem.this.getRate();
+					}
+
 				},
 
 				// 采购订单发货

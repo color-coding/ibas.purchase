@@ -143,8 +143,8 @@ public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 			if (Decimal.ZERO.compareTo(quantity) >= 0) {
 				return;
 			}
-			BigDecimal rPrice = total.divide(quantity);
-			BigDecimal rPreTotal = total.divide(Decimal.ONE.add(taxRate));
+			BigDecimal rPrice = Decimal.divide(total, quantity);
+			BigDecimal rPreTotal = Decimal.divide(total, Decimal.ONE.add(taxRate));
 			BigDecimal rTaxTotal = total.subtract(rPreTotal);
 			context.getOutputValues().put(this.getPrice(), Decimal.round(rPrice, Decimal.DECIMAL_PLACES_RUNNING));
 			if (Decimal.ONE.compareTo(rPreTotal.subtract(preTotal).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
@@ -161,7 +161,7 @@ public class BusinessRuleDeductionPriceTaxTotal extends BusinessRuleCommon {
 		} else if (this.getPrice().getName().equalsIgnoreCase(context.getTrigger())
 				|| this.getQuantity().getName().equalsIgnoreCase(context.getTrigger())) {
 			BigDecimal rTotal = price.multiply(quantity);
-			BigDecimal rPreTotal = rTotal.divide(Decimal.ONE.add(taxRate));
+			BigDecimal rPreTotal = Decimal.divide(rTotal, Decimal.ONE.add(taxRate));
 			BigDecimal rTaxTotal = rTotal.subtract(rPreTotal);
 			if (Decimal.ONE.compareTo(rTotal.subtract(total).abs().multiply(Decimal.ONE.add(Decimal.ONE))) <= 0) {
 				// 与原总计差值，小于0.5就忽略
