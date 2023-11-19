@@ -77,6 +77,8 @@ declare namespace materials {
         const BO_CODE_MATERIALORDEREDRESERVATION: string;
         /** 业务对象编码-仓库预估日记账 */
         const BO_CODE_MATERIALESTIMATEJOURNAL: string;
+        /** 业务对象编码-拣配清单 */
+        const BO_CODE_PICKLISTS: string;
         /** 物料类型 */
         enum emItemType {
             /** 物料 */
@@ -176,6 +178,31 @@ declare namespace materials {
              * 移动平均
              */
             MOVING_AVERAGE = 0
+        }
+        /**
+         * 拣配状态
+         */
+        enum emPickStatus {
+            /**
+             * 已审批
+             */
+            RELEASED = 0,
+            /**
+             * 已拣配
+             */
+            PICKED = 1,
+            /**
+             * 已部分拣配
+             */
+            PARTIALLYPICKED = 2,
+            /**
+             * 已部分交货
+             */
+            PARTIALLYDELIVERED = 3,
+            /**
+             * 已结算
+             */
+            CLOSED = 4
         }
     }
     namespace app {
@@ -395,6 +422,74 @@ declare namespace materials {
         }
         /** 物料订购预留源单据服务代理 */
         class MaterialOrderedReservationSourceServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationTarget> {
+        }
+        /** 拣配目标 */
+        interface IPickListsTarget {
+            /** 基于类型 */
+            baseDocumentType: string;
+            /** 基于标识 */
+            baseDocumentEntry: number;
+            /** 基于行号 */
+            baseDocumentLineId: number;
+            /** 单据日期 */
+            documentDate: Date;
+            /** 交货/到期日期 */
+            deliveryDate: Date;
+            /** 物料编码 */
+            itemCode: string;
+            /** 未清数量 */
+            unclosedQuantity: number;
+            /** 下达数量 */
+            releasedQuantity?: number;
+            /** 单位 */
+            uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
+            /** 仓库 */
+            warehouse: string;
+            /** 业务伙伴编码 */
+            cardCode?: string;
+            /** 业务伙伴名称 */
+            cardName?: string;
+            /** 物料/服务描述 */
+            itemDescription?: string;
+            /** 物料标识 */
+            itemSign?: string;
+            /** 序号管理 */
+            serialManagement?: ibas.emYesNo;
+            /** 批号管理 */
+            batchManagement?: ibas.emYesNo;
+            /** 备注 */
+            remarks?: string;
+        }
+        interface IMaterialPackingTarget extends ibas.IServiceContract {
+            /** 是否查询全部 */
+            isFetchAll?: boolean;
+            /** 查询条件 */
+            criteria?: ibas.ICriteria | ibas.ICondition[];
+            /** 选中拣配内容后 */
+            onPicked?(targets: IPickListsTarget[]): void;
+            /** 交货内容 */
+            toDelivery?: bo.IPickListsLine[];
+            /** 交货后 */
+            onDelivered?(targets: bo.IPickListsLine[] | Error): void;
+        }
+        /** 物料拣配目标单据服务代理 */
+        class MaterialPackingTargetServiceProxy extends ibas.ServiceProxy<IMaterialPackingTarget> {
+        }
+        interface IInventoryTransferTarget extends ibas.IServiceContract {
+            /** 从仓库 */
+            fromWarehouse?: string;
+            /** 到仓库 */
+            toWarehouse?: string;
+            onAdded?(targets: bo.IInventoryTransferLine[]): void;
+        }
+        /** 物料库存转储添加服务代理 */
+        class MaterialInventoryTransAddServiceProxy extends ibas.ServiceProxy<IInventoryTransferTarget> {
         }
         /** 查询条件 */
         namespace conditions {
@@ -3399,6 +3494,140 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 拣配清单 */
+        interface IPickLists extends ibas.IBOSimple {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 实例号 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 更新日期 */
+            updateDate: Date;
+            /** 更新时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 更新用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 参考1 */
+            reference1: string;
+            /** 参考2 */
+            reference2: string;
+            /** 备注 */
+            remarks: string;
+            /** 拣配员 */
+            picker: string;
+            /** 拣配日期 */
+            pickDate: Date;
+            /** 拣配状态 */
+            pickStatus: emPickStatus;
+            /** 拣配清单-行集合 */
+            pickListsLines: IPickListsLines;
+        }
+        /** 拣配清单-行 集合 */
+        interface IPickListsLines extends ibas.IBusinessObjects<IPickListsLine> {
+            /** 创建并添加子项 */
+            create(): IPickListsLine;
+        }
+        /** 拣配清单-行 */
+        interface IPickListsLine extends ibas.IBOSimpleLine {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象行号 */
+            lineId: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 实例号 */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 更新日期 */
+            updateDate: Date;
+            /** 更新时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 更新用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+            /** 基于类型 */
+            baseDocumentType: string;
+            /** 基于标识 */
+            baseDocumentEntry: number;
+            /** 基于行号 */
+            baseDocumentLineId: number;
+            /** 交货/到期日期 */
+            deliveryDate: Date;
+            /** 物料编码 */
+            itemCode: string;
+            /** 物料/服务描述 */
+            itemDescription: string;
+            /** 物料标识 */
+            itemSign: string;
+            /** 序号管理 */
+            serialManagement: ibas.emYesNo;
+            /** 批号管理 */
+            batchManagement: ibas.emYesNo;
+            /** 数量 */
+            quantity: number;
+            /** 单位 */
+            uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
+            /** 拣配状态 */
+            pickStatus: emPickStatus;
+            /** 拣配数量 */
+            pickQuantity: number;
+            /** 已清数量 */
+            closedQuantity: number;
+            /** 仓库 */
+            warehouse: string;
+            /** 物料批次 */
+            materialBatches: IMaterialBatchItems;
+            /** 物料序列 */
+            materialSerials: IMaterialSerialItems;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryMaterials extends ibas.IBORepositoryApplication {
             /**
@@ -3651,6 +3880,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialOrderedReservation(saver: ibas.ISaveCaller<bo.IMaterialOrderedReservation>): void;
+            /**
+             * 查询 拣配清单
+             * @param fetcher 查询者
+             */
+            fetchPickLists(fetcher: ibas.IFetchCaller<bo.IPickLists>): void;
+            /**
+             * 保存 拣配清单
+             * @param saver 保存者
+             */
+            savePickLists(saver: ibas.ISaveCaller<bo.IPickLists>): void;
         }
         interface ICloseCaller<T> extends ibas.IMethodCaller<string> {
             /** 查询条件 */
@@ -10464,6 +10703,389 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 拣配清单 */
+        class PickLists extends ibas.BOSimple<PickLists> implements IPickLists {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号 */
+            get logInst(): number;
+            /** 设置-实例号 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-更新日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-更新日期 */
+            get updateDate(): Date;
+            /** 设置-更新日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-更新时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-更新时间 */
+            get updateTime(): number;
+            /** 设置-更新时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-更新用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-更新用户 */
+            get updateUserSign(): number;
+            /** 设置-更新用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-参考1 */
+            static PROPERTY_REFERENCE1_NAME: string;
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 映射的属性名称-参考2 */
+            static PROPERTY_REFERENCE2_NAME: string;
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-拣配员 */
+            static PROPERTY_PICKER_NAME: string;
+            /** 获取-拣配员 */
+            get picker(): string;
+            /** 设置-拣配员 */
+            set picker(value: string);
+            /** 映射的属性名称-拣配日期 */
+            static PROPERTY_PICKDATE_NAME: string;
+            /** 获取-拣配日期 */
+            get pickDate(): Date;
+            /** 设置-拣配日期 */
+            set pickDate(value: Date);
+            /** 映射的属性名称-拣配状态 */
+            static PROPERTY_PICKSTATUS_NAME: string;
+            /** 获取-拣配状态 */
+            get pickStatus(): emPickStatus;
+            /** 设置-拣配状态 */
+            set pickStatus(value: emPickStatus);
+            /** 映射的属性名称-拣配清单-行集合 */
+            static PROPERTY_PICKLISTSLINES_NAME: string;
+            /** 获取-拣配清单-行集合 */
+            get pickListsLines(): PickListsLines;
+            /** 设置-拣配清单-行集合 */
+            set pickListsLines(value: PickListsLines);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+        /** 拣配清单-行 集合 */
+        class PickListsLines extends ibas.BusinessObjects<PickListsLine, PickLists> implements IPickListsLines {
+            /** 创建并添加子项 */
+            create(): PickListsLine;
+            afterAdd(item: PickListsLine): void;
+            afterRemove(item: PickListsLine): void;
+            protected onItemPropertyChanged(item: PickListsLine, name: string): void;
+            protected updatePickStatus(): void;
+            useInventoryReservationToPick(): Promise<void>;
+            protected resetAll(): void;
+            /**
+             * 获取物料库存预留
+             */
+            private fetchMaterialInventoryReservationAsync;
+        }
+        /** 拣配清单-行 */
+        class PickListsLine extends ibas.BOSimpleLine<PickListsLine> implements IPickListsLine {
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象行号 */
+            static PROPERTY_LINEID_NAME: string;
+            /** 获取-对象行号 */
+            get lineId(): number;
+            /** 设置-对象行号 */
+            set lineId(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号 */
+            get logInst(): number;
+            /** 设置-实例号 */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-更新日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-更新日期 */
+            get updateDate(): Date;
+            /** 设置-更新日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-更新时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-更新时间 */
+            get updateTime(): number;
+            /** 设置-更新时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-更新用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-更新用户 */
+            get updateUserSign(): number;
+            /** 设置-更新用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-基于类型 */
+            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
+            /** 获取-基于类型 */
+            get baseDocumentType(): string;
+            /** 设置-基于类型 */
+            set baseDocumentType(value: string);
+            /** 映射的属性名称-基于标识 */
+            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
+            /** 获取-基于标识 */
+            get baseDocumentEntry(): number;
+            /** 设置-基于标识 */
+            set baseDocumentEntry(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
+            /** 获取-基于行号 */
+            get baseDocumentLineId(): number;
+            /** 设置-基于行号 */
+            set baseDocumentLineId(value: number);
+            /** 映射的属性名称-交货/到期日期 */
+            static PROPERTY_DELIVERYDATE_NAME: string;
+            /** 获取-交货/到期日期 */
+            get deliveryDate(): Date;
+            /** 设置-交货/到期日期 */
+            set deliveryDate(value: Date);
+            /** 映射的属性名称-物料编码 */
+            static PROPERTY_ITEMCODE_NAME: string;
+            /** 获取-物料编码 */
+            get itemCode(): string;
+            /** 设置-物料编码 */
+            set itemCode(value: string);
+            /** 映射的属性名称-物料/服务描述 */
+            static PROPERTY_ITEMDESCRIPTION_NAME: string;
+            /** 获取-物料/服务描述 */
+            get itemDescription(): string;
+            /** 设置-物料/服务描述 */
+            set itemDescription(value: string);
+            /** 映射的属性名称-物料标识 */
+            static PROPERTY_ITEMSIGN_NAME: string;
+            /** 获取-物料标识 */
+            get itemSign(): string;
+            /** 设置-物料标识 */
+            set itemSign(value: string);
+            /** 映射的属性名称-序号管理 */
+            static PROPERTY_SERIALMANAGEMENT_NAME: string;
+            /** 获取-序号管理 */
+            get serialManagement(): ibas.emYesNo;
+            /** 设置-序号管理 */
+            set serialManagement(value: ibas.emYesNo);
+            /** 映射的属性名称-批号管理 */
+            static PROPERTY_BATCHMANAGEMENT_NAME: string;
+            /** 获取-批号管理 */
+            get batchManagement(): ibas.emYesNo;
+            /** 设置-批号管理 */
+            set batchManagement(value: ibas.emYesNo);
+            /** 映射的属性名称-数量 */
+            static PROPERTY_QUANTITY_NAME: string;
+            /** 获取-数量 */
+            get quantity(): number;
+            /** 设置-数量 */
+            set quantity(value: number);
+            /** 映射的属性名称-单位 */
+            static PROPERTY_UOM_NAME: string;
+            /** 获取-单位 */
+            get uom(): string;
+            /** 设置-单位 */
+            set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
+            /** 映射的属性名称-拣配状态 */
+            static PROPERTY_PICKSTATUS_NAME: string;
+            /** 获取-拣配状态 */
+            get pickStatus(): emPickStatus;
+            /** 设置-拣配状态 */
+            set pickStatus(value: emPickStatus);
+            /** 映射的属性名称-拣配数量 */
+            static PROPERTY_PICKQUANTITY_NAME: string;
+            /** 获取-拣配数量 */
+            get pickQuantity(): number;
+            /** 设置-拣配数量 */
+            set pickQuantity(value: number);
+            /** 映射的属性名称-已清数量 */
+            static PROPERTY_CLOSEDQUANTITY_NAME: string;
+            /** 获取-已清数量 */
+            get closedQuantity(): number;
+            /** 设置-已清数量 */
+            set closedQuantity(value: number);
+            /** 映射的属性名称-仓库 */
+            static PROPERTY_WAREHOUSE_NAME: string;
+            /** 获取-仓库 */
+            get warehouse(): string;
+            /** 设置-仓库 */
+            set warehouse(value: string);
+            /** 映射的属性名称-物料批次集合 */
+            static PROPERTY_MATERIALBATCHES_NAME: string;
+            /** 获取-物料批次集合 */
+            get materialBatches(): bo.MaterialBatchItems;
+            /** 设置-物料批次集合 */
+            set materialBatches(value: bo.MaterialBatchItems);
+            /** 映射的属性名称-物料序列集合 */
+            static PROPERTY_MATERIALSERIALS_NAME: string;
+            /** 获取-物料序列集合 */
+            get materialSerials(): bo.MaterialSerialItems;
+            /** 设置-物料序列集合 */
+            set materialSerials(value: bo.MaterialSerialItems);
+            get docEntry(): number;
+            get targetQuantity(): number;
+            /** 初始化数据 */
+            protected init(): void;
+            protected registerRules(): ibas.IBusinessRule[];
+            protected onPropertyChanged(name: string): void;
+            baseBusinessObject(data: app.IPickListsTarget | Material): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -10812,6 +11434,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialOrderedReservation(saver: ibas.ISaveCaller<bo.MaterialOrderedReservation>): void;
+            /**
+             * 查询 拣配清单
+             * @param fetcher 查询者
+             */
+            fetchPickLists(fetcher: ibas.IFetchCaller<bo.PickLists>): void;
+            /**
+             * 保存 拣配清单
+             * @param saver 保存者
+             */
+            savePickLists(saver: ibas.ISaveCaller<bo.PickLists>): void;
         }
     }
 }
@@ -11395,6 +12027,8 @@ declare namespace materials {
             private addInventoryTransferLine;
             /** 删除库存转储-行事件 */
             private removeInventoryTransferLine;
+            /** 调用库存转储添加服务 */
+            private callInventoryTransferAddService;
             /** 选择库存转储订单行物料事件 */
             private chooseInventoryTransferWarehouse;
             /** 选择库存转储订单行物料事件 */
@@ -11432,6 +12066,10 @@ declare namespace materials {
             chooseInventoryTransferLineMaterialBatchEvent: Function;
             /** 选择库存转储单行物料序列事件 */
             chooseInventoryTransferLineMaterialSerialEvent: Function;
+            /** 调用库存转储添加服务 */
+            callInventoryTransferAddServiceEvent: Function;
+            /** 显示库存转储添加服务 */
+            showServiceAgent(datas: ibas.IServiceAgent[]): void;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -15071,6 +15709,410 @@ declare namespace materials {
             createDataEvent: Function;
             /** 选择物料事件 */
             chooseMaterialEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        class PickListsFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-拣配清单 */
+        class PickListsListApp extends ibas.BOListApplication<IPickListsListView, bo.PickLists> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.PickLists): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.PickLists): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.PickLists | bo.PickLists[]): void;
+            /** 拣配 */
+            pick(): void;
+        }
+        /** 视图-拣配清单 */
+        interface IPickListsListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.PickLists[]): void;
+            /** 拣配事件 */
+            pickEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 选择应用-拣配清单 */
+        class PickListsChooseApp extends ibas.BOChooseService<IPickListsChooseView, bo.PickLists> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-拣配清单 */
+        interface IPickListsChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.PickLists[]): void;
+        }
+        /** 拣配清单选择服务映射 */
+        class PickListsChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.PickLists>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 查看应用-拣配清单 */
+        class PickListsViewApp extends ibas.BOViewService<IPickListsViewView, bo.PickLists> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.PickLists): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-拣配清单 */
+        interface IPickListsViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showPickLists(data: bo.PickLists): void;
+            /** 显示数据-拣配清单-行 */
+            showPickListsLines(datas: bo.PickListsLine[]): void;
+        }
+        /** 拣配清单连接服务映射 */
+        class PickListsLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 编辑应用-拣配清单 */
+        class PickListsEditApp extends ibas.BOEditService<IPickListsEditView, bo.PickLists> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.PickLists): void;
+            /** 保存数据 */
+            protected saveData(showProceeding?: boolean): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void; /** 添加拣配清单-行事件 */
+            protected addPickListsLine(agent: ibas.IServiceAgent): void;
+            /** 删除拣配清单-行事件 */
+            protected removePickListsLine(items: bo.PickListsLine[]): void;
+            /** 选择拣配清单行批次事件 */
+            private choosePickListsLineMaterialBatch;
+            /** 选择拣配清单序列事件 */
+            private choosePickListsLineMaterialSerial;
+            /** 转为交货 */
+            protected turnToDelivery(agent: ibas.IServiceAgent): void;
+            /** 使用预留拣配 */
+            protected useInventoryReservationToPick(): Promise<void>;
+            /**
+             * 获取物料主数据
+             * @param itemCode 物料编码
+             * @returns 物料主数据
+             */
+            private fetchMaterialsAsync;
+        }
+        /** 视图-拣配清单 */
+        interface IPickListsEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showPickLists(data: bo.PickLists): void;
+            /** 显示拣配者 */
+            showPickers(datas: ibas.IServiceAgent[]): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+            /** 添加拣配清单-行事件 */
+            addPickListsLineEvent: Function;
+            /** 删除拣配清单-行事件 */
+            removePickListsLineEvent: Function;
+            /** 选择拣配清单行物料批次事件 */
+            choosePickListsLineMaterialBatchEvent: Function;
+            /** 选择拣配清单行物料序列事件 */
+            choosePickListsLineMaterialSerialEvent: Function;
+            /** 转为交货事件 */
+            turnToDeliveryEvent: Function;
+            /** 显示数据-拣配清单-行 */
+            showPickListsLines(datas: bo.PickListsLine[]): void;
+            /** 使用预留拣配事件 */
+            useInventoryReservationToPickEvent: Function;
+        }
+        /** 拣配清单编辑服务映射 */
+        class PickListsEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PickLists>>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        enum emPickViewStatus {
+            /** 处理中 */
+            PROCESSING = 0,
+            /** 已审批 */
+            RELEASED = 1,
+            /** 已拣配 */
+            PICKED = 2
+        }
+        enum emPickViewDimension {
+            /** 明细 */
+            DETAILS = 0,
+            /** 汇总 */
+            TOTAL = 1
+        }
+        class PickListsWorking extends ibas.BusinessObject<PickListsWorking> {
+            constructor();
+            /** 映射的属性名称-状态 */
+            static PROPERTY_STATUS_NAME: string;
+            /** 获取-状态 */
+            get status(): emPickViewStatus;
+            /** 设置-状态 */
+            set status(value: emPickViewStatus);
+            /** 映射的属性名称-显示维度 */
+            static PROPERTY_VIEWDIMENSION_NAME: string;
+            /** 获取-显示维度 */
+            get viewDimension(): emPickViewDimension;
+            /** 设置-显示维度 */
+            set viewDimension(value: emPickViewDimension);
+            /** 映射的属性名称-未选择的仓库 */
+            static PROPERTY_UNSELECTEDWAREHOUSES_NAME: string;
+            /** 获取-未选择的仓库 */
+            get unSelectedWarehouses(): string;
+            /** 设置-未选择的仓库 */
+            set unSelectedWarehouses(value: string);
+            get items(): ibas.IList<PickListsWorkingItem>;
+            criteria(): ibas.ICriteria;
+            toString(): string;
+            protected init(): void;
+        }
+        class PickListsWorkingItem extends ibas.BusinessObject<PickListsWorkingItem> {
+            constructor(serviceAgent: ibas.IServiceAgent, parent: PickListsWorking);
+            get id(): string;
+            get name(): string;
+            /** 映射的属性名称-是否启用 */
+            static PROPERTY_ENABLE_NAME: string;
+            /** 获取-是否启用 */
+            get enable(): ibas.emYesNo;
+            /** 设置-是否启用 */
+            set enable(value: ibas.emYesNo);
+            get serviceAgent(): ibas.IServiceAgent;
+            get parent(): PickListsWorking;
+            criteria(): ibas.ICriteria;
+            toString(): string;
+            protected init(): void;
+            fetch(criteria?: ibas.ICriteria): Promise<IPickListsTarget[]>;
+        }
+        /** 应用-拣配清单 */
+        class PickListsApp extends ibas.Application<IPickListsView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            protected workingData: PickListsWorking;
+            protected pickListsDatas: ibas.ArrayList<bo.PickLists>;
+            run(data?: PickListsWorking): void;
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchPickLists(criteria?: ibas.ICriteria): void;
+            /** 查询处理中数据事件 */
+            protected fetchProcessingData(): Promise<void>;
+            /** 下达拣配清单事件 */
+            protected releasePickLists(pickLists: bo.PickLists, targets: IPickListsTarget[], callback: (error?: any) => void): Promise<void>;
+            /** 转为交货事件 */
+            protected processingTurnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<app.IPickListsTarget>, callback: (closedTargets: Array<IPickListsTarget>) => void): Promise<void>;
+            /** 转为交货事件 */
+            protected releasedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickListsLine | bo.PickLists>): Promise<void>;
+            /** 转为交货事件 */
+            protected pickedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickListsLine | bo.PickLists>): Promise<void>;
+            protected turnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<bo.PickListsLine>, autoSave?: boolean): Promise<Array<bo.IPickListsLine>>;
+            protected saveDatas(): Promise<void>;
+            /** 保存数据 */
+            protected saveData(pickLists: bo.PickLists): Promise<bo.PickLists>;
+            /**
+             * 获取物料主数据
+             * @param itemCode 物料编码
+             * @returns 物料主数据
+             */
+            private fetchMaterialsAsync;
+        }
+        /** 应用-拣配清单 */
+        interface IPickListsView extends ibas.IView {
+            /** 保存数据事件 */
+            saveDatasEvent: Function;
+            /** 显示数据 */
+            showWorkingData(data: PickListsWorking): void;
+            /** 显示拣配者 */
+            showPickers(datas: ibas.IServiceAgent[]): void;
+            /** 查询处理中数据事件 */
+            fetchProcessingDataEvent: Function;
+            /** 显示处理中数据 */
+            showProcessingData(datas: IPickListsTarget[]): void;
+            /** 显示拣配清单 */
+            showPickListsData(data: bo.PickLists[]): void;
+            /** 下达拣配清单事件 */
+            releasePickListsEvent: Function;
+            /** 转为交货事件 */
+            processingTurnToDeliveryEvent: Function;
+            /** 转为交货事件 */
+            releasedTurnToDeliveryEvent: Function;
+            /** 转为交货事件 */
+            pickedTurnToDeliveryEvent: Function;
+        }
+        /** 应用-拣配清单 设置 */
+        class PickListsSettingApp extends ibas.Application<IPickListsSettingView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected workingData: PickListsWorking;
+            protected warehouses: ibas.IList<materials.bo.Warehouse>;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 确认 */
+            protected confirm(datas: ibas.IList<materials.bo.Warehouse>): void;
+            /** 查询仓库 */
+            protected fetchWarehouse(isNew?: boolean): void;
+        }
+        /** 应用-拣配清单 设置 */
+        interface IPickListsSettingView extends ibas.IView {
+            /** 确认事件 */
+            confirmEvent: Function;
+            /** 显示数据 */
+            showWorkingData(data: PickListsWorking): void;
+            /** 显示仓库 */
+            showWarehouse(datas: materials.bo.Warehouse[]): void;
         }
     }
 }

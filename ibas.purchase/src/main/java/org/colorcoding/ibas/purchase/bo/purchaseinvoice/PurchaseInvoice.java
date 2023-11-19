@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -17,8 +20,10 @@ import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
+import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.data.List;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
@@ -39,9 +44,11 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPriceDiff;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -1979,7 +1986,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
-
+				// 供应商检查
 				new ISupplierCheckContract() {
 					@Override
 					public String getIdentifiers() {
@@ -1989,6 +1996,99 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 					@Override
 					public String getSupplierCode() {
 						return PurchaseInvoice.this.getSupplierCode();
+					}
+				},
+				// 创建分录
+				new IJournalEntryCreationContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseInvoice.this.toString();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseInvoice.this.getObjectCode();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseInvoice.this.getDocEntry();
+					}
+
+					@Override
+					public DateTime getDocumentDate() {
+						return PurchaseInvoice.this.getDocumentDate();
+					}
+
+					@Override
+					public String getReference1() {
+						return PurchaseInvoice.this.getReference1();
+					}
+
+					@Override
+					public String getReference2() {
+						return PurchaseInvoice.this.getReference2();
+					}
+
+					@Override
+					public JournalEntryContent[] getContents() {
+						JournalEntryContent jeContent;
+						List<JournalEntryContent> jeContents = new ArrayList<>();
+						String PurchaseDeliveryCode = MyConfiguration
+								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+						for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+								/** 基于交货 **/
+								// 分配科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-BP-P5");
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+								// 库存科目
+								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-MM-01");
+								jeContent.setAmount(Decimal.ZERO);// 待计算
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+								// 税科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-AC-06");
+								jeContent.setAmount(line.getTaxTotal());// 税总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+							} else {
+								/** 不基于单据 **/
+								// 库存科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-MM-01");
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+								// 税科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-AC-06");
+								jeContent.setAmount(line.getTaxTotal());// 税总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+
+							}
+						}
+						// 应付账款
+						jeContent = new JournalEntryContent(PurchaseInvoice.this);
+						jeContent.setCategory(Category.Credit);
+						jeContent.setLedger("GL-BP-P1");
+						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
+						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
+						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+						jeContents.add(jeContent);
+						return jeContents.toArray(new JournalEntryContent[] {});
 					}
 				}
 

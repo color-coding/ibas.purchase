@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -17,8 +20,10 @@ import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
+import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.data.List;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
@@ -39,9 +44,11 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseReturnDeliveryPreTaxPrice;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -1979,7 +1986,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
-
+				// 检查供应商
 				new ISupplierCheckContract() {
 					@Override
 					public String getIdentifiers() {
@@ -1989,6 +1996,83 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 					@Override
 					public String getSupplierCode() {
 						return PurchaseReturn.this.getSupplierCode();
+					}
+				},
+				// 创建分录
+				new IJournalEntryCreationContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseReturn.this.toString();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseReturn.this.getObjectCode();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseReturn.this.getDocEntry();
+					}
+
+					@Override
+					public DateTime getDocumentDate() {
+						return PurchaseReturn.this.getDocumentDate();
+					}
+
+					@Override
+					public String getReference1() {
+						return PurchaseReturn.this.getReference1();
+					}
+
+					@Override
+					public String getReference2() {
+						return PurchaseReturn.this.getReference2();
+					}
+
+					@Override
+					public JournalEntryContent[] getContents() {
+						JournalEntryContent jeContent;
+						List<JournalEntryContent> jeContents = new ArrayList<>();
+						String PurchaseDeliveryCode = MyConfiguration
+								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+						for (IPurchaseReturnItem line : PurchaseReturn.this.getPurchaseReturnItems()) {
+							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+								/** 基于交货 **/
+								// 库存科目
+								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-MM-01");
+								jeContent.setAmount(Decimal.ZERO);// 待计算
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+								// 分配科目
+								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line);
+								jeContent.setCategory(Category.Credit);
+								jeContent.setLedger("GL-BP-P5");
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+							} else {
+								/** 不基于单据 **/
+								// 库存科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger("GL-MM-01");
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+								// 分配科目
+								jeContent = new JournalEntryContent(line);
+								jeContent.setCategory(Category.Credit);
+								jeContent.setLedger("GL-BP-P5");
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContents.add(jeContent);
+							}
+						}
+						return jeContents.toArray(new JournalEntryContent[] {});
 					}
 				}
 

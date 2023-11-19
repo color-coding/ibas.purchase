@@ -10972,6 +10972,37 @@ declare namespace sales {
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+declare namespace sales {
+    namespace app {
+        class SalesOrderPackingService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialPackingTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected runService(contract: materials.app.IMaterialPackingTarget): void;
+            protected viewShowed(): void;
+            protected toDeliveryOrder(pickLines: materials.bo.IPickListsLine[], onDelivered?: (targets: materials.bo.IPickListsLine[] | Error) => void): void;
+            protected onPicked(selecteds: ibas.IList<bo.SalesOrder>, onPicked?: (targets: materials.app.IPickListsTarget[]) => void): void;
+        }
+        class SalesOrderPackingServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.

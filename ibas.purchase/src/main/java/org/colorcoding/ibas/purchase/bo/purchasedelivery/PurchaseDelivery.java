@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
+import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -17,8 +20,10 @@ import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
+import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.data.List;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
@@ -1979,7 +1984,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
-
+				// 检查供应商
 				new ISupplierCheckContract() {
 					@Override
 					public String getIdentifiers() {
@@ -1989,6 +1994,62 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 					@Override
 					public String getSupplierCode() {
 						return PurchaseDelivery.this.getSupplierCode();
+					}
+				},
+				// 创建分录
+				new IJournalEntryCreationContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseDelivery.this.toString();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseDelivery.this.getObjectCode();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseDelivery.this.getDocEntry();
+					}
+
+					@Override
+					public DateTime getDocumentDate() {
+						return PurchaseDelivery.this.getDocumentDate();
+					}
+
+					@Override
+					public String getReference1() {
+						return PurchaseDelivery.this.getReference1();
+					}
+
+					@Override
+					public String getReference2() {
+						return PurchaseDelivery.this.getReference2();
+					}
+
+					@Override
+					public JournalEntryContent[] getContents() {
+						JournalEntryContent jeContent;
+						List<JournalEntryContent> jeContents = new ArrayList<>();
+						for (IPurchaseDeliveryItem line : PurchaseDelivery.this.getPurchaseDeliveryItems()) {
+							// 库存科目
+							jeContent = new JournalEntryContent(line);
+							jeContent.setCategory(Category.Debit);
+							jeContent.setLedger("GL-MM-01");
+							jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+							jeContent.setCurrency(line.getCurrency());
+							jeContents.add(jeContent);
+							// 分配科目
+							jeContent = new JournalEntryContent(line);
+							jeContent.setCategory(Category.Credit);
+							jeContent.setLedger("GL-BP-P5");
+							jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+							jeContent.setCurrency(line.getCurrency());
+							jeContents.add(jeContent);
+						}
+						return jeContents.toArray(new JournalEntryContent[] {});
 					}
 				}
 
