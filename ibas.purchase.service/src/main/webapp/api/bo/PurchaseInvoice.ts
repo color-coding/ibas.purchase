@@ -103,6 +103,8 @@ namespace purchase {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 采购发票-行集合 */
             purchaseInvoiceItems: IPurchaseInvoiceItems;
             /** 送货地址集合 */

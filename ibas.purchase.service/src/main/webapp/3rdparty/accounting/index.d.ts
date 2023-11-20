@@ -6827,6 +6827,7 @@ declare namespace accounting {
             protected chooseJournalEntryLineAccount(caller: bo.JournalEntryLine): void;
             /** 选择日记账分录-行业务伙伴/科目 */
             protected chooseJournalEntryLineShortName(caller: bo.JournalEntryLine): void;
+            private chooseJournalEntryLineDistributionRule;
         }
         /** 视图-日记账分录 */
         interface IJournalEntryEditView extends ibas.IBOEditView {
@@ -6846,6 +6847,8 @@ declare namespace accounting {
             chooseJournalEntryLineAccountEvent: Function;
             /** 选择日记账分录-行业务伙伴/科目事件 */
             chooseJournalEntryLineShortNameEvent: Function;
+            /** 选择日记账分录-行分配中心事件 */
+            chooseJournalEntryLineDistributionRuleEvent: Function;
         }
     }
 }

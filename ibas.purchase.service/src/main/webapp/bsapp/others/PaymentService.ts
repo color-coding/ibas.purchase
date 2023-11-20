@@ -61,6 +61,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 未指定的分支
+                condition = criteria.conditions.create();
+                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = "";
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                if (!ibas.strings.isEmpty(contract.payment.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = contract.payment.branch;
+                }
                 // 当前供应商的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseOrder.PROPERTY_SUPPLIERCODE_NAME;
@@ -167,6 +184,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 未指定的分支
+                condition = criteria.conditions.create();
+                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = "";
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                if (!ibas.strings.isEmpty(contract.payment.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = contract.payment.branch;
+                }
                 // 当前供应商的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseDelivery.PROPERTY_SUPPLIERCODE_NAME;

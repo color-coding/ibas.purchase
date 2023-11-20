@@ -521,6 +521,16 @@ namespace purchase {
                 this.setProperty(BlanketAgreement.PROPERTY_AGREEMENTS_NAME, value);
             }
 
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string = "Branch";
+            /** 获取-分支 */
+            get branch(): string {
+                return this.getProperty<string>(BlanketAgreement.PROPERTY_BRANCH_NAME);
+            }
+            /** 设置-分支 */
+            set branch(value: string) {
+                this.setProperty(BlanketAgreement.PROPERTY_BRANCH_NAME, value);
+            }
 
             /** 映射的属性名称-一揽子协议-项目集合 */
             static PROPERTY_BLANKETAGREEMENTITEMS_NAME: string = "BlanketAgreementItems";

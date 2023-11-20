@@ -538,32 +538,41 @@ namespace purchase {
                                 })
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_organization") }),
-                            new sap.extension.m.DataOrganizationInput("", {
-                                showValueHelp: true,
-                            }).bindProperty("bindingValue", {
-                                path: "organization",
-                                type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 8
-                                })
-                            }),
-                            new sap.extension.m.SelectionInput("", {
-                                placeholder: ibas.i18n.prop("bo_branch"),
-                                showValueHelp: true,
-                                repository: accounting.bo.BORepositoryAccounting,
-                                dataInfo: {
-                                    type: accounting.bo.Branch,
-                                    key: accounting.bo.Branch.PROPERTY_CODE_NAME,
-                                    text: accounting.bo.Branch.PROPERTY_NAME_NAME
-                                },
-                                criteria: [
-                                    new ibas.Condition(accounting.bo.Branch.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
-                                ],
-                                visible: accounting.config.isEnableBranch(),
-                            }).bindProperty("bindingValue", {
-                                path: "branch",
-                                type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 8
-                                })
+                            new sap.m.FlexBox("", {
+                                width: "100%",
+                                justifyContent: sap.m.FlexJustifyContent.Start,
+                                renderType: sap.m.FlexRendertype.Bare,
+                                items: [
+                                    new sap.extension.m.DataOrganizationInput("", {
+                                        width: "100%",
+                                        showValueHelp: true,
+                                    }).bindProperty("bindingValue", {
+                                        path: "organization",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 8
+                                        })
+                                    }),
+                                    new sap.extension.m.SelectionInput("", {
+                                        width: "100%",
+                                        placeholder: ibas.i18n.prop("bo_branch"),
+                                        showValueHelp: true,
+                                        repository: accounting.bo.BORepositoryAccounting,
+                                        dataInfo: {
+                                            type: accounting.bo.Branch,
+                                            key: accounting.bo.Branch.PROPERTY_CODE_NAME,
+                                            text: accounting.bo.Branch.PROPERTY_NAME_NAME
+                                        },
+                                        criteria: [
+                                            new ibas.Condition(accounting.bo.Branch.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                        ],
+                                        visible: accounting.config.isEnableBranch(),
+                                    }).bindProperty("bindingValue", {
+                                        path: "branch",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 8
+                                        })
+                                    }).addStyleClass("sapUiTinyMarginBegin"),
+                                ]
                             }),
                             new sap.m.Label("", {
                                 text: ibas.i18n.prop("bo_shippingaddress"),
@@ -771,6 +780,26 @@ namespace purchase {
                                     type: sap.m.ButtonType.Transparent,
                                     menu: new sap.m.Menu("", {
                                         items: [
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_journalentry"),
+                                                icon: "sap-icon://credit-card",
+                                                press: function (): void {
+                                                    let data: any = this.getBindingContext().getObject();
+                                                    if (data instanceof bo.PurchaseReturn) {
+                                                        ibas.servicesManager.runLinkService({
+                                                            boCode: accounting.bo.JournalEntry.BUSINESS_OBJECT_CODE,
+                                                            linkValue: [
+                                                                new ibas.Condition(accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTTYPE_NAME, ibas.emConditionOperation.EQUAL, data.objectCode),
+                                                                new ibas.Condition(accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTENTRY_NAME, ibas.emConditionOperation.EQUAL, data.docEntry)
+                                                            ]
+                                                        });
+                                                    }
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: accounting.app.JournalEntryViewApp.APPLICATION_ID,
+                                                    name: accounting.app.JournalEntryViewApp.APPLICATION_NAME,
+                                                })
+                                            }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchasecreditnote"),
                                                 icon: "sap-icon://doc-attachment",

@@ -314,6 +314,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售交货-行集合 */
             salesDeliveryItems: ISalesDeliveryItems;
             /** 送货地址集合 */
@@ -566,6 +568,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售订单-行集合 */
             salesOrderItems: ISalesOrderItems;
             /** 送货地址集合 */
@@ -878,6 +882,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售退货-行集合 */
             salesReturnItems: ISalesReturnItems;
             /** 送货地址集合 */
@@ -1132,6 +1138,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售报价-行集合 */
             salesQuoteItems: ISalesQuoteItems;
         }
@@ -1436,6 +1444,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售贷项-行集合 */
             salesCreditNoteItems: ISalesCreditNoteItems;
             /** 送货地址集合 */
@@ -1690,6 +1700,8 @@ declare namespace sales {
             orderType: string;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
             /** 送货地址集合 */
@@ -2037,6 +2049,8 @@ declare namespace sales {
             settlementProbability: number;
             /** 合同 */
             agreements: string;
+            /** 分支 */
+            branch: string;
             /** 一揽子协议-项目集合 */
             blanketAgreementItems: IBlanketAgreementItems;
         }
@@ -2873,6 +2887,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售交货-行集合 */
             static PROPERTY_SALESDELIVERYITEMS_NAME: string;
             /** 获取-销售交货-行集合 */
@@ -3642,6 +3662,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESORDERITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -4585,6 +4611,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESQUOTEITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -5481,6 +5513,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESQUOTEITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -6254,6 +6292,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售贷项-行集合 */
             static PROPERTY_SALESCREDITNOTEITEMS_NAME: string;
             /** 获取-销售贷项-行集合 */
@@ -7023,6 +7067,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-销售发票-行集合 */
             static PROPERTY_SALESINVOICEITEMS_NAME: string;
             /** 获取-销售发票-行集合 */
@@ -8040,6 +8090,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-一揽子协议-项目集合 */
             static PROPERTY_BLANKETAGREEMENTITEMS_NAME: string;
             /** 获取-一揽子协议-项目集合 */

@@ -326,7 +326,7 @@ namespace purchase {
                 ibas.servicesManager.runChooseService<materials.bo.IWarehouse>({
                     boCode: materials.bo.BO_CODE_WAREHOUSE,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: materials.app.conditions.warehouse.create(),
+                    criteria: materials.app.conditions.warehouse.create(this.editData.branch),
                     onCompleted(selecteds: ibas.IList<materials.bo.IWarehouse>): void {
                         let index: number = that.editData.purchaseQuoteItems.indexOf(caller);
                         let item: bo.PurchaseQuoteItem = that.editData.purchaseQuoteItems[index];
@@ -566,6 +566,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 未指定的分支
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = "";
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseQuote.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseQuote.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                }
                 // 此供应商或未指定供应商
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.onlyHasChilds = true;

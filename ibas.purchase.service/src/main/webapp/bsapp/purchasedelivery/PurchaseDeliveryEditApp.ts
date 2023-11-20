@@ -484,7 +484,7 @@ namespace purchase {
                 ibas.servicesManager.runChooseService<materials.bo.IWarehouse>({
                     boCode: materials.bo.BO_CODE_WAREHOUSE,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: materials.app.conditions.warehouse.create(),
+                    criteria: materials.app.conditions.warehouse.create(this.editData.branch),
                     onCompleted(selecteds: ibas.IList<materials.bo.IWarehouse>): void {
                         let index: number = that.editData.purchaseDeliveryItems.indexOf(caller);
                         let item: bo.PurchaseDeliveryItem = that.editData.purchaseDeliveryItems[index];
@@ -637,6 +637,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 未指定的分支
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = "";
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                }
                 // 当前供应商的
                 condition = criteria.conditions.create();
                 condition.alias = bo.PurchaseOrder.PROPERTY_SUPPLIERCODE_NAME;

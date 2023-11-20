@@ -260,6 +260,8 @@ declare namespace receiptpayment {
             project: string;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 付款-项目集合 */
             paymentItems: IPaymentItems;
         }
@@ -428,6 +430,8 @@ declare namespace receiptpayment {
             project: string;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 收款-项目集合 */
             receiptItems: IReceiptItems;
         }
@@ -594,6 +598,8 @@ declare namespace receiptpayment {
             times: number;
             /** 单据类型 */
             orderType: string;
+            /** 分支 */
+            branch: string;
             /** 资产充值-项目集合 */
             assetRechargeItems: IAssetRechargeItems;
         }
@@ -969,6 +975,12 @@ declare namespace receiptpayment {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-付款-项目集合 */
             static PROPERTY_PAYMENTITEMS_NAME: string;
             /** 获取-付款-项目集合 */
@@ -1448,6 +1460,12 @@ declare namespace receiptpayment {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-收款-项目集合 */
             static PROPERTY_RECEIPTITEMS_NAME: string;
             /** 获取-收款-项目集合 */
@@ -1921,6 +1939,12 @@ declare namespace receiptpayment {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
             /** 映射的属性名称-资产充值-项目集合 */
             static PROPERTY_ASSETRECHARGEITEMS_NAME: string;
             /** 获取-资产充值-项目集合 */

@@ -527,7 +527,7 @@ declare namespace materials {
             }
             namespace warehouse {
                 /** 默认查询条件 */
-                function create(): ibas.IList<ibas.ICondition>;
+                function create(branch?: string): ibas.IList<ibas.ICondition>;
             }
             namespace materialpricelist {
                 /** 默认查询条件 */

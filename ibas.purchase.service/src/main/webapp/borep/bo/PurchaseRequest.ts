@@ -474,7 +474,18 @@ namespace purchase {
             }
             /** 设置-合同 */
             set agreements(value: string) {
-                this.setProperty(PurchaseQuote.PROPERTY_AGREEMENTS_NAME, value);
+                this.setProperty(PurchaseRequest.PROPERTY_AGREEMENTS_NAME, value);
+            }
+
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string = "Branch";
+            /** 获取-分支 */
+            get branch(): string {
+                return this.getProperty<string>(PurchaseRequest.PROPERTY_BRANCH_NAME);
+            }
+            /** 设置-分支 */
+            set branch(value: string) {
+                this.setProperty(PurchaseRequest.PROPERTY_BRANCH_NAME, value);
             }
 
 

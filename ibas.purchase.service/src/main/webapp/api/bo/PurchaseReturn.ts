@@ -151,6 +151,9 @@ namespace purchase {
             /** 合同 */
             agreements: string;
 
+            /** 分支 */
+            branch: string;
+
             /** 采购退货-行集合 */
             purchaseReturnItems: IPurchaseReturnItems;
 

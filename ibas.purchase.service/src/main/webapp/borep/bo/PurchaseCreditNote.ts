@@ -532,6 +532,17 @@ namespace purchase {
                 this.setProperty(PurchaseCreditNote.PROPERTY_AGREEMENTS_NAME, value);
             }
 
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string = "Branch";
+            /** 获取-分支 */
+            get branch(): string {
+                return this.getProperty<string>(PurchaseCreditNote.PROPERTY_BRANCH_NAME);
+            }
+            /** 设置-分支 */
+            set branch(value: string) {
+                this.setProperty(PurchaseCreditNote.PROPERTY_BRANCH_NAME, value);
+            }
+
             /** 映射的属性名称-采购贷项-行集合 */
             static PROPERTY_PURCHASECREDITNOTEITEMS_NAME: string = "PurchaseCreditNoteItems";
             /** 获取-采购贷项-行集合 */

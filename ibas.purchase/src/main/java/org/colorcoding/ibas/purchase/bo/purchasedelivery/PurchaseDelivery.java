@@ -43,6 +43,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
@@ -2005,6 +2006,11 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 					}
 
 					@Override
+					public String getBranch() {
+						return PurchaseDelivery.this.getBranch();
+					}
+
+					@Override
 					public String getBaseDocumentType() {
 						return PurchaseDelivery.this.getObjectCode();
 					}
@@ -2037,14 +2043,14 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 							// 库存科目
 							jeContent = new JournalEntryContent(line);
 							jeContent.setCategory(Category.Debit);
-							jeContent.setLedger("GL-MM-01");
+							jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 							jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 							jeContent.setCurrency(line.getCurrency());
 							jeContents.add(jeContent);
 							// 分配科目
 							jeContent = new JournalEntryContent(line);
 							jeContent.setCategory(Category.Credit);
-							jeContent.setLedger("GL-BP-P5");
+							jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 							jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 							jeContent.setCurrency(line.getCurrency());
 							jeContents.add(jeContent);

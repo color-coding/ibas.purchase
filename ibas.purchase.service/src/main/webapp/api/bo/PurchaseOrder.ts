@@ -152,6 +152,9 @@ namespace purchase {
             /** 合同 */
             agreements: string;
 
+            /** 分支 */
+            branch: string;
+
             /** 采购订单-行集合 */
             purchaseOrderItems: IPurchaseOrderItems;
 

@@ -43,12 +43,14 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseReturnDeliveryPreTaxPrice;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseReturnMaterialsCost;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2007,6 +2009,11 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 					}
 
 					@Override
+					public String getBranch() {
+						return PurchaseReturn.this.getBranch();
+					}
+
+					@Override
 					public String getBaseDocumentType() {
 						return PurchaseReturn.this.getObjectCode();
 					}
@@ -2043,37 +2050,38 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 								// 库存科目
 								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-MM-01");
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 分配科目
 								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line);
 								jeContent.setCategory(Category.Credit);
-								jeContent.setLedger("GL-BP-P5");
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 							} else {
 								/** 不基于单据 **/
 								// 库存科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new PurchaseReturnMaterialsCost(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-MM-01");
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 分配科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new PurchaseReturnMaterialsCost(line);
 								jeContent.setCategory(Category.Credit);
-								jeContent.setLedger("GL-BP-P5");
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 							}
 						}
 						return jeContents.toArray(new JournalEntryContent[] {});
 					}
+
 				}
 
 		};

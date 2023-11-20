@@ -43,6 +43,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
@@ -2007,6 +2008,11 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 					}
 
 					@Override
+					public String getBranch() {
+						return PurchaseInvoice.this.getBranch();
+					}
+
+					@Override
 					public String getBaseDocumentType() {
 						return PurchaseInvoice.this.getObjectCode();
 					}
@@ -2043,21 +2049,21 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								// 分配科目
 								jeContent = new JournalEntryContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-BP-P5");
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 库存科目
 								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-MM-01");
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 税科目
 								jeContent = new JournalEntryContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-AC-06");
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
@@ -2066,14 +2072,14 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								// 库存科目
 								jeContent = new JournalEntryContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-MM-01");
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 税科目
 								jeContent = new JournalEntryContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger("GL-AC-06");
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
@@ -2083,7 +2089,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						// 应付账款
 						jeContent = new JournalEntryContent(PurchaseInvoice.this);
 						jeContent.setCategory(Category.Credit);
-						jeContent.setLedger("GL-BP-P1");
+						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
 						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
