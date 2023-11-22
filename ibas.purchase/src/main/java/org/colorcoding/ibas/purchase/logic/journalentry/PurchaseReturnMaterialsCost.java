@@ -22,7 +22,7 @@ public class PurchaseReturnMaterialsCost extends MaterialsCost {
 				avaPrice = this.getAvgPrice(item.getItemCode(), item.getWarehouse());
 			} else {
 				avaPrice = this.getAvgPrice(item.getObjectCode(), item.getDocEntry(), item.getLineId(),
-						item.getItemCode());
+						item.getItemCode(), item.getWarehouse());
 				if (avaPrice == null) {
 					// 库存记录没有
 					avaPrice = this.getAvgPrice(item.getItemCode(), item.getWarehouse());

@@ -1,14 +1,12 @@
-package org.colorcoding.ibas.purchase.bo.purchasereturn;
+package org.colorcoding.ibas.purchase.bo.downpaymentrequest;
 
 import java.math.BigDecimal;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
-import org.colorcoding.ibas.accounting.logic.IPropertyValueGetter;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
@@ -19,78 +17,65 @@ import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
-import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
-import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItems;
-import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItem;
-import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItems;
-import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
-import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
-import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
-import org.colorcoding.ibas.materials.data.Ledgers;
-import org.colorcoding.ibas.materials.logic.IMaterialIssueContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.logic.IPurchaseDeliveryReturnContract;
-import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReturnContract;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
- * 获取-采购退货-行
+ * 预付款申请-行
  * 
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = PurchaseReturnItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
-public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> implements IPurchaseReturnItem,
-		IBusinessLogicsHost, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IPropertyValueGetter {
+@XmlType(name = DownPaymentRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
+public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestItem>
+		implements IDownPaymentRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields {
 
 	/**
 	 * 序列化版本标记
 	 */
-	private static final long serialVersionUID = 7144247005023514468L;
+	private static final long serialVersionUID = -6388215392658421368L;
 
 	/**
 	 * 当前类型
 	 */
-	private static final Class<?> MY_CLASS = PurchaseReturnItem.class;
+	private static final Class<?> MY_CLASS = DownPaymentRequestItem.class;
 
 	/**
 	 * 数据库表
 	 */
-	public static final String DB_TABLE_NAME = "${Company}_PH_RPD1";
+	public static final String DB_TABLE_NAME = "${Company}_PH_DPO1";
 
 	/**
 	 * 业务对象编码
 	 */
-	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PURCHRETURN";
+	public static final String BUSINESS_OBJECT_CODE = "${Company}_PH_PAYREQUEST";
 
 	/**
 	 * 业务对象名称
 	 */
-	public static final String BUSINESS_OBJECT_NAME = "PurchaseReturnItem";
+	public static final String BUSINESS_OBJECT_NAME = "DownPaymentRequestItem";
 
 	/**
-	 * 属性名称-编码
+	 * 属性名称-凭证编号
 	 */
 	private static final String PROPERTY_DOCENTRY_NAME = "DocEntry";
 
 	/**
-	 * 编码 属性
+	 * 凭证编号 属性
 	 */
 	@DbField(name = "DocEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_DOCENTRY = registerProperty(PROPERTY_DOCENTRY_NAME,
 			Integer.class, MY_CLASS);
 
 	/**
-	 * 获取-编码
+	 * 获取-凭证编号
 	 * 
 	 * @return 值
 	 */
@@ -100,7 +85,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-编码
+	 * 设置-凭证编号
 	 * 
 	 * @param value 值
 	 */
@@ -147,7 +132,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 显示顺序 属性
 	 */
-	@DbField(name = "VisOrder", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "VisOrder", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_VISORDER = registerProperty(PROPERTY_VISORDER_NAME,
 			Integer.class, MY_CLASS);
 
@@ -178,7 +163,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 类型 属性
 	 */
-	@DbField(name = "Object", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Object", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_OBJECTCODE = registerProperty(PROPERTY_OBJECTCODE_NAME,
 			String.class, MY_CLASS);
 
@@ -209,7 +194,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 实例号（版本） 属性
 	 */
-	@DbField(name = "LogInst", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "LogInst", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_LOGINST = registerProperty(PROPERTY_LOGINST_NAME, Integer.class,
 			MY_CLASS);
 
@@ -240,7 +225,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 数据源 属性
 	 */
-	@DbField(name = "DataSource", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "DataSource", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DATASOURCE = registerProperty(PROPERTY_DATASOURCE_NAME,
 			String.class, MY_CLASS);
 
@@ -271,7 +256,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 取消 属性
 	 */
-	@DbField(name = "Canceled", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Canceled", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_CANCELED = registerProperty(PROPERTY_CANCELED_NAME,
 			emYesNo.class, MY_CLASS);
 
@@ -302,7 +287,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 状态 属性
 	 */
-	@DbField(name = "Status", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Status", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emBOStatus> PROPERTY_STATUS = registerProperty(PROPERTY_STATUS_NAME,
 			emBOStatus.class, MY_CLASS);
 
@@ -333,7 +318,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 单据状态 属性
 	 */
-	@DbField(name = "LineStatus", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "LineStatus", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emDocumentStatus> PROPERTY_LINESTATUS = registerProperty(PROPERTY_LINESTATUS_NAME,
 			emDocumentStatus.class, MY_CLASS);
 
@@ -364,7 +349,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 创建日期 属性
 	 */
-	@DbField(name = "CreateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "CreateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_CREATEDATE = registerProperty(PROPERTY_CREATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -395,7 +380,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 创建时间 属性
 	 */
-	@DbField(name = "CreateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "CreateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_CREATETIME = registerProperty(PROPERTY_CREATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -426,7 +411,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 修改日期 属性
 	 */
-	@DbField(name = "UpdateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "UpdateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_UPDATEDATE = registerProperty(PROPERTY_UPDATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -457,7 +442,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 修改时间 属性
 	 */
-	@DbField(name = "UpdateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "UpdateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_UPDATETIME = registerProperty(PROPERTY_UPDATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -488,7 +473,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 创建用户 属性
 	 */
-	@DbField(name = "Creator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Creator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_CREATEUSERSIGN = registerProperty(PROPERTY_CREATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -519,7 +504,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 修改用户 属性
 	 */
-	@DbField(name = "Updator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Updator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_UPDATEUSERSIGN = registerProperty(PROPERTY_UPDATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -550,7 +535,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 创建动作标识 属性
 	 */
-	@DbField(name = "CreateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "CreateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CREATEACTIONID = registerProperty(PROPERTY_CREATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -581,7 +566,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 更新动作标识 属性
 	 */
-	@DbField(name = "UpdateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "UpdateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UPDATEACTIONID = registerProperty(PROPERTY_UPDATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -612,7 +597,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 参考1 属性
 	 */
-	@DbField(name = "Ref1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Ref1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE1 = registerProperty(PROPERTY_REFERENCE1_NAME,
 			String.class, MY_CLASS);
 
@@ -643,7 +628,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 参考2 属性
 	 */
-	@DbField(name = "Ref2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Ref2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE2 = registerProperty(PROPERTY_REFERENCE2_NAME,
 			String.class, MY_CLASS);
 
@@ -674,7 +659,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 已引用 属性
 	 */
-	@DbField(name = "Refed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Refed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_REFERENCED = registerProperty(PROPERTY_REFERENCED_NAME,
 			emYesNo.class, MY_CLASS);
 
@@ -705,7 +690,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 已删除 属性
 	 */
-	@DbField(name = "Deleted", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Deleted", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_DELETED = registerProperty(PROPERTY_DELETED_NAME, emYesNo.class,
 			MY_CLASS);
 
@@ -736,7 +721,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 基于类型 属性
 	 */
-	@DbField(name = "BaseType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "BaseType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_BASEDOCUMENTTYPE = registerProperty(
 			PROPERTY_BASEDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -767,7 +752,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 基于标识 属性
 	 */
-	@DbField(name = "BaseEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "BaseEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTENTRY = registerProperty(
 			PROPERTY_BASEDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -798,7 +783,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 基于行号 属性
 	 */
-	@DbField(name = "BaseLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "BaseLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTLINEID = registerProperty(
 			PROPERTY_BASEDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 
@@ -829,7 +814,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 原始类型 属性
 	 */
-	@DbField(name = "OrgnlType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OrgnlType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ORIGINALDOCUMENTTYPE = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -860,7 +845,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 原始标识 属性
 	 */
-	@DbField(name = "OrgnlEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OrgnlEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTENTRY = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -891,7 +876,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 原始行号 属性
 	 */
-	@DbField(name = "OrgnlLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OrgnlLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTLINEID = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 
@@ -922,7 +907,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 物料编码 属性
 	 */
-	@DbField(name = "ItemCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "ItemCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMCODE = registerProperty(PROPERTY_ITEMCODE_NAME, String.class,
 			MY_CLASS);
 
@@ -953,7 +938,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 物料/服务描述 属性
 	 */
-	@DbField(name = "Dscription", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Dscription", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMDESCRIPTION = registerProperty(PROPERTY_ITEMDESCRIPTION_NAME,
 			String.class, MY_CLASS);
 
@@ -984,7 +969,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 物料标识 属性
 	 */
-	@DbField(name = "ItemSign", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "ItemSign", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMSIGN = registerProperty(PROPERTY_ITEMSIGN_NAME, String.class,
 			MY_CLASS);
 
@@ -1015,7 +1000,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 序号管理 属性
 	 */
-	@DbField(name = "SerialMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "SerialMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_SERIALMANAGEMENT = registerProperty(
 			PROPERTY_SERIALMANAGEMENT_NAME, emYesNo.class, MY_CLASS);
 
@@ -1046,7 +1031,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 批号管理 属性
 	 */
-	@DbField(name = "BatchMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "BatchMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_BATCHMANAGEMENT = registerProperty(
 			PROPERTY_BATCHMANAGEMENT_NAME, emYesNo.class, MY_CLASS);
 
@@ -1077,7 +1062,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 数量 属性
 	 */
-	@DbField(name = "Quantity", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Quantity", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_QUANTITY = registerProperty(PROPERTY_QUANTITY_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1101,33 +1086,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setQuantity(String value) {
-		this.setQuantity(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setQuantity(int value) {
-		this.setQuantity(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setQuantity(double value) {
-		this.setQuantity(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-单位
 	 */
 	private static final String PROPERTY_UOM_NAME = "UOM";
@@ -1135,7 +1093,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 单位 属性
 	 */
-	@DbField(name = "UOM", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "UOM", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UOM = registerProperty(PROPERTY_UOM_NAME, String.class,
 			MY_CLASS);
 
@@ -1259,7 +1217,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 仓库 属性
 	 */
-	@DbField(name = "WhsCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "WhsCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_WAREHOUSE = registerProperty(PROPERTY_WAREHOUSE_NAME,
 			String.class, MY_CLASS);
 
@@ -1290,7 +1248,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 价格 属性
 	 */
-	@DbField(name = "Price", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Price", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICE = registerProperty(PROPERTY_PRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1314,33 +1272,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPrice(String value) {
-		this.setPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPrice(int value) {
-		this.setPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPrice(double value) {
-		this.setPrice(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-货币
 	 */
 	private static final String PROPERTY_CURRENCY_NAME = "Currency";
@@ -1348,7 +1279,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 货币 属性
 	 */
-	@DbField(name = "Currency", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Currency", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CURRENCY = registerProperty(PROPERTY_CURRENCY_NAME, String.class,
 			MY_CLASS);
 
@@ -1379,7 +1310,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 汇率 属性
 	 */
-	@DbField(name = "Rate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Rate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_RATE = registerProperty(PROPERTY_RATE_NAME, BigDecimal.class,
 			MY_CLASS);
 
@@ -1403,33 +1334,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-汇率
-	 * 
-	 * @param value 值
-	 */
-	public final void setRate(String value) {
-		this.setRate(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-汇率
-	 * 
-	 * @param value 值
-	 */
-	public final void setRate(int value) {
-		this.setRate(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-汇率
-	 * 
-	 * @param value 值
-	 */
-	public final void setRate(double value) {
-		this.setRate(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-行总计
 	 */
 	private static final String PROPERTY_LINETOTAL_NAME = "LineTotal";
@@ -1437,7 +1341,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 行总计 属性
 	 */
-	@DbField(name = "LineTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "LineTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_LINETOTAL = registerProperty(PROPERTY_LINETOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1461,33 +1365,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setLineTotal(String value) {
-		this.setLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setLineTotal(int value) {
-		this.setLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setLineTotal(double value) {
-		this.setLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-行交货日期
 	 */
 	private static final String PROPERTY_DELIVERYDATE_NAME = "DeliveryDate";
@@ -1495,7 +1372,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 行交货日期 属性
 	 */
-	@DbField(name = "ShipDate", type = DbFieldType.DATE, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "ShipDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_DELIVERYDATE = registerProperty(PROPERTY_DELIVERYDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -1526,7 +1403,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 已清数量 属性
 	 */
-	@DbField(name = "ClosedQty", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "ClosedQty", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_CLOSEDQUANTITY = registerProperty(
 			PROPERTY_CLOSEDQUANTITY_NAME, BigDecimal.class, MY_CLASS);
 
@@ -1550,33 +1427,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-已清数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedQuantity(String value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-已清数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedQuantity(int value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-已清数量
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedQuantity(double value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-行折扣
 	 */
 	private static final String PROPERTY_DISCOUNT_NAME = "Discount";
@@ -1584,7 +1434,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 行折扣 属性
 	 */
-	@DbField(name = "DiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "DiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_DISCOUNT = registerProperty(PROPERTY_DISCOUNT_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1608,33 +1458,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-行折扣
-	 * 
-	 * @param value 值
-	 */
-	public final void setDiscount(String value) {
-		this.setDiscount(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-行折扣
-	 * 
-	 * @param value 值
-	 */
-	public final void setDiscount(int value) {
-		this.setDiscount(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-行折扣
-	 * 
-	 * @param value 值
-	 */
-	public final void setDiscount(double value) {
-		this.setDiscount(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-已清金额
 	 */
 	private static final String PROPERTY_CLOSEDAMOUNT_NAME = "ClosedAmount";
@@ -1642,7 +1465,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 已清金额 属性
 	 */
-	@DbField(name = "ClosedAmt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "ClosedAmt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_CLOSEDAMOUNT = registerProperty(PROPERTY_CLOSEDAMOUNT_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1666,33 +1489,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-已清金额
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedAmount(String value) {
-		this.setClosedAmount(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-已清金额
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedAmount(int value) {
-		this.setClosedAmount(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-已清金额
-	 * 
-	 * @param value 值
-	 */
-	public final void setClosedAmount(double value) {
-		this.setClosedAmount(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-折扣前价格
 	 */
 	private static final String PROPERTY_UNITPRICE_NAME = "UnitPrice";
@@ -1700,7 +1496,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 折扣前价格 属性
 	 */
-	@DbField(name = "UnitPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "UnitPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITPRICE = registerProperty(PROPERTY_UNITPRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1721,33 +1517,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	 */
 	public final void setUnitPrice(BigDecimal value) {
 		this.setProperty(PROPERTY_UNITPRICE, value);
-	}
-
-	/**
-	 * 设置-折扣前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setUnitPrice(String value) {
-		this.setUnitPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-折扣前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setUnitPrice(int value) {
-		this.setUnitPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-折扣前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setUnitPrice(double value) {
-		this.setUnitPrice(Decimal.valueOf(value));
 	}
 
 	/**
@@ -1789,7 +1558,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 税定义 属性
 	 */
-	@DbField(name = "Tax", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Tax", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_TAX = registerProperty(PROPERTY_TAX_NAME, String.class,
 			MY_CLASS);
 
@@ -1820,7 +1589,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 税率 属性
 	 */
-	@DbField(name = "TaxRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "TaxRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXRATE = registerProperty(PROPERTY_TAXRATE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1844,33 +1613,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-税率
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxRate(String value) {
-		this.setTaxRate(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税率
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxRate(int value) {
-		this.setTaxRate(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税率
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxRate(double value) {
-		this.setTaxRate(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-税总额
 	 */
 	private static final String PROPERTY_TAXTOTAL_NAME = "TaxTotal";
@@ -1878,7 +1620,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 税总额 属性
 	 */
-	@DbField(name = "TaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "TaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXTOTAL = registerProperty(PROPERTY_TAXTOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1902,33 +1644,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-税总额
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxTotal(String value) {
-		this.setTaxTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税总额
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxTotal(int value) {
-		this.setTaxTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税总额
-	 * 
-	 * @param value 值
-	 */
-	public final void setTaxTotal(double value) {
-		this.setTaxTotal(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-税前价格
 	 */
 	private static final String PROPERTY_PRETAXPRICE_NAME = "PreTaxPrice";
@@ -1936,7 +1651,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 税前价格 属性
 	 */
-	@DbField(name = "PreTaxPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "PreTaxPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICE = registerProperty(PROPERTY_PRETAXPRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1960,33 +1675,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-税前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxPrice(String value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxPrice(int value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税前价格
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxPrice(double value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-税前行总计
 	 */
 	private static final String PROPERTY_PRETAXLINETOTAL_NAME = "PreTaxLineTotal";
@@ -1994,7 +1682,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 税前行总计 属性
 	 */
-	@DbField(name = "PreTaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "PreTaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXLINETOTAL = registerProperty(
 			PROPERTY_PRETAXLINETOTAL_NAME, BigDecimal.class, MY_CLASS);
 
@@ -2018,33 +1706,6 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 设置-税前行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxLineTotal(String value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税前行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxLineTotal(int value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
-	 * 设置-税前行总计
-	 * 
-	 * @param value 值
-	 */
-	public final void setPreTaxLineTotal(double value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
-	}
-
-	/**
 	 * 属性名称-分配规则1
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE1_NAME = "DistributionRule1";
@@ -2052,7 +1713,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 分配规则1 属性
 	 */
-	@DbField(name = "OcrCode1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OcrCode1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE1 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE1_NAME, String.class, MY_CLASS);
 
@@ -2083,7 +1744,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 分配规则2 属性
 	 */
-	@DbField(name = "OcrCode2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OcrCode2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE2 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE2_NAME, String.class, MY_CLASS);
 
@@ -2114,7 +1775,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 分配规则3 属性
 	 */
-	@DbField(name = "OcrCode3", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OcrCode3", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE3 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE3_NAME, String.class, MY_CLASS);
 
@@ -2145,7 +1806,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 分配规则4 属性
 	 */
-	@DbField(name = "OcrCode4", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OcrCode4", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE4 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE4_NAME, String.class, MY_CLASS);
 
@@ -2176,7 +1837,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	/**
 	 * 分配规则5 属性
 	 */
-	@DbField(name = "OcrCode5", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "OcrCode5", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE5 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE5_NAME, String.class, MY_CLASS);
 
@@ -2205,7 +1866,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	private static final String PROPERTY_AGREEMENTS_NAME = "Agreements";
 
 	/**
-	 * 合同 属性
+	 * 合同/协议 属性
 	 */
 	@DbField(name = "Agreements", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_AGREEMENTS = registerProperty(PROPERTY_AGREEMENTS_NAME,
@@ -2231,93 +1892,22 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	/**
-	 * 属性名称-物料批次
-	 */
-	private static final String PROPERTY_MATERIALBATCHES_NAME = "MaterialBatches";
-
-	/**
-	 * 物料批次的集合属性
-	 *
-	 */
-	public static final IPropertyInfo<IMaterialBatchItems> PROPERTY_MATERIALBATCHES = registerProperty(
-			PROPERTY_MATERIALBATCHES_NAME, IMaterialBatchItems.class, MY_CLASS);
-
-	/**
-	 * 获取-物料批次集合
-	 *
-	 * @return 值
-	 */
-	@XmlElementWrapper(name = PROPERTY_MATERIALBATCHES_NAME)
-	@XmlElement(name = MaterialBatchItem.BUSINESS_OBJECT_NAME, type = MaterialBatchItem.class)
-	public final IMaterialBatchItems getMaterialBatches() {
-		return this.getProperty(PROPERTY_MATERIALBATCHES);
-	}
-
-	/**
-	 * 设置-物料批次集合
-	 *
-	 * @param value 值
-	 */
-	public final void setMaterialBatches(IMaterialBatchItems value) {
-		this.setProperty(PROPERTY_MATERIALBATCHES, value);
-	}
-
-	/**
-	 * 属性名称-物料序列
-	 */
-	private static final String PROPERTY_MATERIALSERIALS_NAME = "MaterialSerials";
-
-	/**
-	 * 物料序列的集合属性
-	 *
-	 */
-	public static final IPropertyInfo<IMaterialSerialItems> PROPERTY_MATERIALSERIALS = registerProperty(
-			PROPERTY_MATERIALSERIALS_NAME, IMaterialSerialItems.class, MY_CLASS);
-
-	/**
-	 * 获取-物料序列集合
-	 *
-	 * @return 值
-	 */
-	@XmlElementWrapper(name = PROPERTY_MATERIALSERIALS_NAME)
-	@XmlElement(name = MaterialSerialItem.BUSINESS_OBJECT_NAME, type = MaterialSerialItem.class)
-	public final IMaterialSerialItems getMaterialSerials() {
-		return this.getProperty(PROPERTY_MATERIALSERIALS);
-	}
-
-	/**
-	 * 设置-物料序列集合
-	 *
-	 * @param value 值
-	 */
-	public final void setMaterialSerials(IMaterialSerialItems value) {
-		this.setProperty(PROPERTY_MATERIALSERIALS, value);
-	}
-
-	@Override
-	public BigDecimal getTargetQuantity() {
-		return this.getInventoryQuantity();
-	}
-
-	@Override
-	public String getTargetUOM() {
-		return this.getInventoryUOM();
-	}
-
-	/**
 	 * 初始化数据
 	 */
 	@Override
 	protected void initialize() {
 		super.initialize();// 基类初始化，不可去除
-		this.setMaterialBatches(new MaterialBatchItems(this));
-		this.setMaterialSerials(new MaterialSerialItems(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
 		this.setDiscount(Decimal.ONE);
 		this.setTaxRate(Decimal.ZERO);
 		this.setUOMRate(Decimal.ONE);
 
 	}
+
+	/**
+	 * 父项
+	 */
+	IDownPaymentRequest parent;
 
 	@Override
 	protected IBusinessRule[] registerRules() {
@@ -2358,245 +1948,10 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	}
 
 	@Override
-	public void check() throws BusinessRuleException {
-		// 批次检查
-		this.getMaterialBatches().check();
-		// 序列检查
-		this.getMaterialSerials().check();
-	}
-
-	@Override
 	public void reset() {
 		super.reset();
 		this.setClosedAmount(Decimal.ZERO);
 		this.setClosedQuantity(Decimal.ZERO);
 	}
 
-	/**
-	 * 父项
-	 */
-	IPurchaseReturn parent;
-
-	@Override
-	public IBusinessLogicContract[] getContracts() {
-		return new IBusinessLogicContract[] {
-				// 物料发货
-				new IMaterialIssueContract() {
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public String getItemCode() {
-						return PurchaseReturnItem.this.getItemCode();
-					}
-
-					@Override
-					public String getItemName() {
-						return PurchaseReturnItem.this.getItemDescription();
-					}
-
-					@Override
-					public String getWarehouse() {
-						return PurchaseReturnItem.this.getWarehouse();
-					}
-
-					@Override
-					public String getDocumentType() {
-						return PurchaseReturnItem.this.getObjectCode();
-					}
-
-					@Override
-					public Integer getDocumentEntry() {
-						return PurchaseReturnItem.this.getDocEntry();
-					}
-
-					@Override
-					public Integer getDocumentLineId() {
-						return PurchaseReturnItem.this.getLineId();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getInventoryQuantity();
-					}
-
-					@Override
-					public String getUOM() {
-						return PurchaseReturnItem.this.getInventoryUOM();
-					}
-
-					@Override
-					public DateTime getPostingDate() {
-						return PurchaseReturnItem.this.parent.getPostingDate();
-					}
-
-					@Override
-					public DateTime getDeliveryDate() {
-						return PurchaseReturnItem.this.parent.getDeliveryDate();
-					}
-
-					@Override
-					public DateTime getDocumentDate() {
-						return PurchaseReturnItem.this.parent.getDocumentDate();
-					}
-
-					@Override
-					public emYesNo getBatchManagement() {
-						return PurchaseReturnItem.this.getBatchManagement();
-					}
-
-					@Override
-					public emYesNo getSerialManagement() {
-						return PurchaseReturnItem.this.getSerialManagement();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
-					}
-
-					@Override
-					public BigDecimal getPrice() {
-						return PurchaseReturnItem.this.getPrice();
-					}
-
-					@Override
-					public String getCurrency() {
-						return PurchaseReturnItem.this.getCurrency();
-					}
-
-					@Override
-					public BigDecimal getRate() {
-						return PurchaseReturnItem.this.getRate();
-					}
-				},
-				// 基础单据为采购订单
-				new IPurchaseOrderReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
-					}
-
-				},
-				// 原始单据为采购订单
-				new IPurchaseOrderReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getOriginalDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getOriginalDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getOriginalDocumentLineId();
-					}
-
-				},
-				// 采购交货的退货
-				new IPurchaseDeliveryReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
-					}
-				}
-
-		};
-	}
-
-	@Override
-	public Object getValue(String property) {
-		switch (property) {
-		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
-			return this.parent.getObjectCode();
-		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
-			return this.parent.getDataOwner();
-		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
-			return this.parent.getOrganization();
-		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
-			return this.parent.getOrderType();
-		case Ledgers.CONDITION_PROPERTY_PROJECT:
-			return this.parent.getProject();
-		case Ledgers.CONDITION_PROPERTY_BRANCH:
-			return this.parent.getBranch();
-		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
-			return this.parent.getSupplierCode();
-		case Ledgers.CONDITION_PROPERTY_MATERIAL:
-			return this.getItemCode();
-		case Ledgers.CONDITION_PROPERTY_WAREHOUSE:
-			return this.getWarehouse();
-		case Ledgers.CONDITION_PROPERTY_TAX:
-			return this.getTax();
-		default:
-			return null;
-		}
-	}
 }

@@ -10,6 +10,7 @@ import org.colorcoding.ibas.bobas.bo.UserFieldProxy;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.purchase.bo.blanketagreement.BlanketAgreement;
+import org.colorcoding.ibas.purchase.bo.downpaymentrequest.DownPaymentRequest;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
@@ -32,7 +33,8 @@ public class Resolver implements ContextResolver<JAXBContext> {
 			if (jaxbContext == null) {
 				jaxbContext = JAXBContext.newInstance(Criteria.class, OperationResult.class, UserFieldProxy.class,
 						PurchaseDelivery.class, PurchaseOrder.class, PurchaseReturn.class, PurchaseQuote.class,
-						ShippingAddress.class, PurchaseCreditNote.class, PurchaseInvoice.class, BlanketAgreement.class);
+						ShippingAddress.class, PurchaseCreditNote.class, PurchaseInvoice.class, BlanketAgreement.class,
+						DownPaymentRequest.class);
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();

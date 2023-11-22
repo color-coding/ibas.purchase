@@ -108,6 +108,16 @@ namespace purchase {
              * @param saver 保存者
              */
             saveBlanketAgreement(saver: ibas.ISaveCaller<bo.IBlanketAgreement>): void;
+            /**
+             * 查询 预付款申请
+             * @param fetcher 查询者
+             */
+            fetchDownPaymentRequest(fetcher: ibas.IFetchCaller<bo.IDownPaymentRequest>): void;
+            /**
+             * 保存 预付款申请
+             * @param saver 保存者
+             */
+            saveDownPaymentRequest(saver: ibas.ISaveCaller<bo.IDownPaymentRequest>): void;
 
         }
     }

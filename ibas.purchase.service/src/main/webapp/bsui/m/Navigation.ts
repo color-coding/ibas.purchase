@@ -17,6 +17,7 @@
 /// <reference path="./purchaseinvoice/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
 /// <reference path="./blanketagreement/index.ts" />
+/// <reference path="./downpaymentrequest/index.ts" />
 namespace purchase {
     export namespace ui {
         /**
@@ -137,6 +138,18 @@ namespace purchase {
                         break;
                     case app.BlanketAgreementEditApp.APPLICATION_ID:
                         view = new m.BlanketAgreementEditView();
+                        break;
+                    case app.DownPaymentRequestListApp.APPLICATION_ID:
+                        view = new m.DownPaymentRequestListView();
+                        break;
+                    case app.DownPaymentRequestChooseApp.APPLICATION_ID:
+                        view = new m.DownPaymentRequestChooseView();
+                        break;
+                    case app.DownPaymentRequestEditApp.APPLICATION_ID:
+                        view = new m.DownPaymentRequestEditView();
+                        break;
+                    case app.DownPaymentRequestEditApp.APPLICATION_ID:
+                        view = new m.DownPaymentRequestEditView();
                         break;
                     default:
                         break;

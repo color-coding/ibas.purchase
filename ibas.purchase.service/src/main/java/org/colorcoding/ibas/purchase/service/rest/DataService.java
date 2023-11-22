@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.purchase.bo.blanketagreement.BlanketAgreement;
+import org.colorcoding.ibas.purchase.bo.downpaymentrequest.DownPaymentRequest;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.PurchaseCreditNote;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
@@ -276,6 +277,39 @@ public class DataService extends BORepositoryPurchase {
 	public OperationResult<BlanketAgreement> saveBlanketAgreement(BlanketAgreement bo,
 			@QueryParam("token") String token) {
 		return super.saveBlanketAgreement(bo, token);
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-预付款申请
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("fetchDownPaymentRequest")
+	public OperationResult<DownPaymentRequest> fetchDownPaymentRequest(Criteria criteria,
+			@QueryParam("token") String token) {
+		return super.fetchDownPaymentRequest(criteria, token);
+	}
+
+	/**
+	 * 保存-预付款申请
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("saveDownPaymentRequest")
+	public OperationResult<DownPaymentRequest> saveDownPaymentRequest(DownPaymentRequest bo,
+			@QueryParam("token") String token) {
+		return super.saveDownPaymentRequest(bo, token);
 	}
 
 	// --------------------------------------------------------------------------------------------//

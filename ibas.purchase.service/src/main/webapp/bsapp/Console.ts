@@ -15,6 +15,7 @@
 /// <reference path="./purchasecreditnote/index.ts" />
 /// <reference path="./shippingaddress/index.ts" />
 /// <reference path="./blanketagreement/index.ts" />
+/// <reference path="./downpaymentrequest/index.ts" />
 /// <reference path="./others/index.ts" />
 namespace purchase {
     export namespace app {
@@ -47,6 +48,7 @@ namespace purchase {
                 this.register(new PurchaseReturnFunc());
                 this.register(new PurchaseInvoiceFunc());
                 this.register(new PurchaseCreditNoteFunc());
+                this.register(new DownPaymentRequestFunc());
                 this.register(new PurchasingAssistantFunc());
                 // 注册服务应用
                 this.register(new PurchaseDeliveryChooseServiceMapping());
@@ -73,11 +75,16 @@ namespace purchase {
                 this.register(new BlanketAgreementChooseServiceMapping());
                 this.register(new BlanketAgreementLinkServiceMapping());
                 this.register(new BlanketAgreementEditServiceMapping());
+                this.register(new DownPaymentRequestChooseServiceMapping());
+                this.register(new DownPaymentRequestLinkServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
-                this.register(new PurchaseReturnReceiptServiceMapping());
-                this.register(new PurchaseDeliveryPaymentServiceMapping());
+                // this.register(new PurchaseReturnReceiptServiceMapping()); 没这种情况
+                this.register(new PurchaseCreditNoteReceiptServiceMapping());
+                // this.register(new PurchaseDeliveryPaymentServiceMapping()); 没这种情况
                 this.register(new PurchaseOrderPaymentServiceMapping());
+                this.register(new PurchaseInvoicePaymentServiceMapping());
+                this.register(new DownPaymentRequestPaymentServiceMapping());
                 // 订购服务
                 this.register(new MaterialOrderedReservationSourcePurchaseOrderServiceMapping());
                 this.register(new MaterialOrderedReservationSourcePurchaseRequestServiceMapping());

@@ -15,4 +15,5 @@
 /// <reference path="./bo/PurchaseCreditNote.ts" />
 /// <reference path="./bo/ShippingAddress.ts" />
 /// <reference path="./bo/BlanketAgreement.ts" />
+/// <reference path="./bo/DownPaymentRequest.ts" />
 /// <reference path="./BORepository.ts" />

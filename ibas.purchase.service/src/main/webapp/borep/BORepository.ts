@@ -155,6 +155,20 @@ namespace purchase {
             saveBlanketAgreement(saver: ibas.ISaveCaller<bo.BlanketAgreement>): void {
                 super.save(bo.BlanketAgreement.name, saver);
             }
+            /**
+             * 查询 预付款申请
+             * @param fetcher 查询者
+             */
+            fetchDownPaymentRequest(fetcher: ibas.IFetchCaller<bo.DownPaymentRequest>): void {
+                super.fetch(bo.DownPaymentRequest.name, fetcher);
+            }
+            /**
+             * 保存 预付款申请
+             * @param saver 保存者
+             */
+            saveDownPaymentRequest(saver: ibas.ISaveCaller<bo.DownPaymentRequest>): void {
+                super.save(bo.DownPaymentRequest.name, saver);
+            }
 
         }
     }
