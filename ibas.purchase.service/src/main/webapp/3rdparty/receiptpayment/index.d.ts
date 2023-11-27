@@ -262,6 +262,8 @@ declare namespace receiptpayment {
             orderType: string;
             /** 分支 */
             branch: string;
+            /** 预付款 */
+            downPayment: ibas.emYesNo;
             /** 付款-项目集合 */
             paymentItems: IPaymentItems;
         }
@@ -432,6 +434,8 @@ declare namespace receiptpayment {
             orderType: string;
             /** 分支 */
             branch: string;
+            /** 预收款 */
+            downPayment: ibas.emYesNo;
             /** 收款-项目集合 */
             receiptItems: IReceiptItems;
         }
@@ -981,6 +985,12 @@ declare namespace receiptpayment {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-预付款 */
+            static PROPERTY_DOWNPAYMENT_NAME: string;
+            /** 获取-预付款 */
+            get downPayment(): ibas.emYesNo;
+            /** 设置-预付款 */
+            set downPayment(value: ibas.emYesNo);
             /** 映射的属性名称-付款-项目集合 */
             static PROPERTY_PAYMENTITEMS_NAME: string;
             /** 获取-付款-项目集合 */
@@ -1466,6 +1476,12 @@ declare namespace receiptpayment {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-预收款 */
+            static PROPERTY_DOWNPAYMENT_NAME: string;
+            /** 获取-预收款 */
+            get downPayment(): ibas.emYesNo;
+            /** 设置-预收款 */
+            set downPayment(value: ibas.emYesNo);
             /** 映射的属性名称-收款-项目集合 */
             static PROPERTY_RECEIPTITEMS_NAME: string;
             /** 获取-收款-项目集合 */

@@ -1,12 +1,12 @@
 package org.colorcoding.ibas.purchase.logic.journalentry;
 
-import org.colorcoding.ibas.accounting.logic.JournalEntrySmartContent;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.IChildCriteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
+import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDeliveryItem;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;

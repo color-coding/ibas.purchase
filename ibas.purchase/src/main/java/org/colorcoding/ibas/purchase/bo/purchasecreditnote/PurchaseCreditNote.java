@@ -44,6 +44,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
@@ -2050,14 +2051,14 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 							if (PurchaseReturnCode.equals(line.getBaseDocumentType())) {
 								/** 基于退货 **/
 								// 分配科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 税科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
@@ -2066,14 +2067,14 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 							} else if (PurchaseInvoiceCode.equals(line.getBaseDocumentType())) {
 								/** 基于发票 **/
 								// 库存科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
 								// 税科目
-								jeContent = new JournalEntryContent(line);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
@@ -2098,7 +2099,7 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 							}
 						}
 						// 应付账款
-						jeContent = new JournalEntryContent(PurchaseCreditNote.this);
+						jeContent = new JournalEntrySmartContent(PurchaseCreditNote.this);
 						jeContent.setCategory(Category.Credit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 						jeContent.setAmount(PurchaseCreditNote.this.getDocumentTotal().negate());

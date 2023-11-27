@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
-import org.colorcoding.ibas.accounting.logic.IPropertyValueGetter;
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
@@ -51,7 +51,7 @@ import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseCreditNoteItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteItem> implements IPurchaseCreditNoteItem,
-		IBusinessLogicsHost, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IPropertyValueGetter {
+		IBusinessLogicsHost, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IJECPropertyValueGetter {
 
 	/**
 	 * 序列化版本标记
