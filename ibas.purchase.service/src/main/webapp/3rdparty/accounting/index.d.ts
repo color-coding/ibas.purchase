@@ -36,6 +36,15 @@ declare namespace accounting {
          * @param dim 维度
          */
         function isEnableDimension(dim: app.emDimensionType): boolean;
+        /** 配置项目-本币 */
+        const CONFIG_ITEM_LOCAL_CURRENCY: string;
+        /** 配置项目-系统币 */
+        const CONFIG_ITEM_SYSTEM_CURRENCY: string;
+        /**
+         * 获取币种
+         * @param type 类型
+         */
+        function currency(type: "LOCAL" | "SYSTEM"): string;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -6174,7 +6183,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Currency): void;
             /** 保存数据 */
-            protected saveData(): void;
+            protected saveData(others?: bo.Currency[]): void;
             /** 删除数据 */
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 */

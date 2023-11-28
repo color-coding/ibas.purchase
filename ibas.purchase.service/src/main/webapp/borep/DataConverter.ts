@@ -253,6 +253,7 @@ namespace purchase {
             target.consumer = source.consumer;
             target.documentCurrency = source.documentCurrency;
             target.agreements = source.agreements;
+            target.branch = source.branch;
             if (!(target instanceof DownPaymentRequest)) {
                 target.priceList = source.priceList;
                 target.paymentCode = source.paymentCode;

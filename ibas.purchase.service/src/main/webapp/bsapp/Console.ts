@@ -77,6 +77,7 @@ namespace purchase {
                 this.register(new BlanketAgreementEditServiceMapping());
                 this.register(new DownPaymentRequestChooseServiceMapping());
                 this.register(new DownPaymentRequestLinkServiceMapping());
+                this.register(new DownPaymentRequestEditServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 // this.register(new PurchaseReturnReceiptServiceMapping()); 没这种情况

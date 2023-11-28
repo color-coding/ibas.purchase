@@ -61,22 +61,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
-                // 未指定的分支
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.EQUAL;
-                condition.value = "";
-                condition.bracketOpen = 1;
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.IS_NULL;
-                condition.relationship = ibas.emConditionRelationship.OR;
-                condition.bracketClose = 1;
+                // 是否指定分支
                 if (!ibas.strings.isEmpty(contract.payment.branch)) {
                     condition = criteria.conditions.create();
                     condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
                     condition.operation = ibas.emConditionOperation.EQUAL;
                     condition.value = contract.payment.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
                 }
                 // 当前供应商的
                 condition = criteria.conditions.create();
@@ -184,22 +185,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
-                // 未指定的分支
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.EQUAL;
-                condition.value = "";
-                condition.bracketOpen = 1;
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.IS_NULL;
-                condition.relationship = ibas.emConditionRelationship.OR;
-                condition.bracketClose = 1;
+                // 是否指定分支
                 if (!ibas.strings.isEmpty(contract.payment.branch)) {
                     condition = criteria.conditions.create();
                     condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
                     condition.operation = ibas.emConditionOperation.EQUAL;
                     condition.value = contract.payment.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
                 }
                 // 当前供应商的
                 condition = criteria.conditions.create();
@@ -308,22 +310,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
-                // 未指定的分支
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.EQUAL;
-                condition.value = "";
-                condition.bracketOpen = 1;
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.IS_NULL;
-                condition.relationship = ibas.emConditionRelationship.OR;
-                condition.bracketClose = 1;
+                // 是否指定分支
                 if (!ibas.strings.isEmpty(contract.payment.branch)) {
                     condition = criteria.conditions.create();
                     condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
                     condition.operation = ibas.emConditionOperation.EQUAL;
                     condition.value = contract.payment.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
                 }
                 // 当前供应商的
                 condition = criteria.conditions.create();
@@ -338,7 +341,7 @@ namespace purchase {
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<purchase.bo.IPurchaseInvoice>({
-                    boCode: purchase.bo.BO_CODE_PURCHASEDELIVERY,
+                    boCode: purchase.bo.BO_CODE_PURCHASEINVOICE,
                     chooseType: ibas.emChooseType.MULTIPLE,
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IPurchaseInvoice>): void {
@@ -432,22 +435,23 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
-                // 未指定的分支
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.EQUAL;
-                condition.value = "";
-                condition.bracketOpen = 1;
-                condition = criteria.conditions.create();
-                condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
-                condition.operation = ibas.emConditionOperation.IS_NULL;
-                condition.relationship = ibas.emConditionRelationship.OR;
-                condition.bracketClose = 1;
+                // 是否指定分支
                 if (!ibas.strings.isEmpty(contract.payment.branch)) {
                     condition = criteria.conditions.create();
                     condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
                     condition.operation = ibas.emConditionOperation.EQUAL;
                     condition.value = contract.payment.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = purchase.bo.PurchaseOrder.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
                 }
                 // 当前供应商的
                 condition = criteria.conditions.create();
@@ -462,7 +466,7 @@ namespace purchase {
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<purchase.bo.IDownPaymentRequest>({
-                    boCode: purchase.bo.BO_CODE_PURCHASEDELIVERY,
+                    boCode: purchase.bo.BO_CODE_DOWNPAYMNETREQUEST,
                     chooseType: ibas.emChooseType.MULTIPLE,
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IDownPaymentRequest>): void {

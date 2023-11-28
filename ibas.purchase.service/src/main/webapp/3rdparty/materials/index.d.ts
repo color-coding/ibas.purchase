@@ -768,6 +768,16 @@ declare namespace materials {
             rate: number;
             /** 行总计 */
             lineTotal: number;
+            /** 成本中心1 */
+            distributionRule1: string;
+            /** 成本中心2 */
+            distributionRule2: string;
+            /** 成本中心3 */
+            distributionRule3: string;
+            /** 成本中心4 */
+            distributionRule4: string;
+            /** 成本中心5 */
+            distributionRule5: string;
             /** 赋值物料 */
             baseMaterial(source: materials.bo.IMaterial): void;
         }
@@ -938,6 +948,16 @@ declare namespace materials {
             rate: number;
             /** 行总计 */
             lineTotal: number;
+            /** 成本中心1 */
+            distributionRule1: string;
+            /** 成本中心2 */
+            distributionRule2: string;
+            /** 成本中心3 */
+            distributionRule3: string;
+            /** 成本中心4 */
+            distributionRule4: string;
+            /** 成本中心5 */
+            distributionRule5: string;
             /** 赋值物料 */
             baseMaterial(source: materials.bo.IMaterial): void;
         }
@@ -1110,6 +1130,16 @@ declare namespace materials {
             rate: number;
             /** 行总计 */
             lineTotal: number;
+            /** 成本中心1 */
+            distributionRule1: string;
+            /** 成本中心2 */
+            distributionRule2: string;
+            /** 成本中心3 */
+            distributionRule3: string;
+            /** 成本中心4 */
+            distributionRule4: string;
+            /** 成本中心5 */
+            distributionRule5: string;
             /** 赋值物料 */
             baseMaterial(source: materials.bo.IMaterial): void;
         }
@@ -4372,6 +4402,36 @@ declare namespace materials {
             get lineTotal(): number;
             /** 设置-行总计 */
             set lineTotal(value: number);
+            /** 映射的属性名称-成本中心1 */
+            static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
+            /** 获取-成本中心1 */
+            get distributionRule1(): string;
+            /** 设置-成本中心1 */
+            set distributionRule1(value: string);
+            /** 映射的属性名称-成本中心2 */
+            static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
+            /** 获取-成本中心2 */
+            get distributionRule2(): string;
+            /** 设置-成本中心2 */
+            set distributionRule2(value: string);
+            /** 映射的属性名称-成本中心3 */
+            static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
+            /** 获取-成本中心3 */
+            get distributionRule3(): string;
+            /** 设置-成本中心3 */
+            set distributionRule3(value: string);
+            /** 映射的属性名称-成本中心4 */
+            static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
+            /** 获取-成本中心4 */
+            get distributionRule4(): string;
+            /** 设置-成本中心4 */
+            set distributionRule4(value: string);
+            /** 映射的属性名称-成本中心5 */
+            static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
+            /** 获取-成本中心5 */
+            get distributionRule5(): string;
+            /** 设置-成本中心5 */
+            set distributionRule5(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -4861,6 +4921,36 @@ declare namespace materials {
             get lineTotal(): number;
             /** 设置-行总计 */
             set lineTotal(value: number);
+            /** 映射的属性名称-成本中心1 */
+            static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
+            /** 获取-成本中心1 */
+            get distributionRule1(): string;
+            /** 设置-成本中心1 */
+            set distributionRule1(value: string);
+            /** 映射的属性名称-成本中心2 */
+            static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
+            /** 获取-成本中心2 */
+            get distributionRule2(): string;
+            /** 设置-成本中心2 */
+            set distributionRule2(value: string);
+            /** 映射的属性名称-成本中心3 */
+            static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
+            /** 获取-成本中心3 */
+            get distributionRule3(): string;
+            /** 设置-成本中心3 */
+            set distributionRule3(value: string);
+            /** 映射的属性名称-成本中心4 */
+            static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
+            /** 获取-成本中心4 */
+            get distributionRule4(): string;
+            /** 设置-成本中心4 */
+            set distributionRule4(value: string);
+            /** 映射的属性名称-成本中心5 */
+            static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
+            /** 获取-成本中心5 */
+            get distributionRule5(): string;
+            /** 设置-成本中心5 */
+            set distributionRule5(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -5356,6 +5446,36 @@ declare namespace materials {
             get lineTotal(): number;
             /** 设置-行总计 */
             set lineTotal(value: number);
+            /** 映射的属性名称-成本中心1 */
+            static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
+            /** 获取-成本中心1 */
+            get distributionRule1(): string;
+            /** 设置-成本中心1 */
+            set distributionRule1(value: string);
+            /** 映射的属性名称-成本中心2 */
+            static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
+            /** 获取-成本中心2 */
+            get distributionRule2(): string;
+            /** 设置-成本中心2 */
+            set distributionRule2(value: string);
+            /** 映射的属性名称-成本中心3 */
+            static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
+            /** 获取-成本中心3 */
+            get distributionRule3(): string;
+            /** 设置-成本中心3 */
+            set distributionRule3(value: string);
+            /** 映射的属性名称-成本中心4 */
+            static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
+            /** 获取-成本中心4 */
+            get distributionRule4(): string;
+            /** 设置-成本中心4 */
+            set distributionRule4(value: string);
+            /** 映射的属性名称-成本中心5 */
+            static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
+            /** 获取-成本中心5 */
+            get distributionRule5(): string;
+            /** 设置-成本中心5 */
+            set distributionRule5(value: string);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -11547,6 +11667,7 @@ declare namespace materials {
             private chooseGoodsIssueLineMaterialBatch;
             /** 选择库存发货序列事件 */
             private chooseGoodsIssueLineMaterialSerial;
+            private chooseGoodsIssueLineDistributionRule;
         }
         /** 视图-库存发货 */
         interface IGoodsIssueEditView extends ibas.IBOEditView {
@@ -11572,6 +11693,8 @@ declare namespace materials {
             chooseGoodsIssueLineMaterialBatchEvent: Function;
             /** 选择库存发货单行物料序列事件 */
             chooseGoodsIssueLineMaterialSerialEvent: Function;
+            /** 选择库存发货单行分配中心事件 */
+            chooseGoodsIssueLineDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -11793,6 +11916,7 @@ declare namespace materials {
             private serials;
             /** 选择物料序列信息 */
             private createGoodsReceiptLineMaterialSerial;
+            private chooseGoodsReceiptLineDistributionRule;
         }
         /** 视图-库存收货 */
         interface IGoodsReceiptEditView extends ibas.IBOEditView {
@@ -11818,6 +11942,8 @@ declare namespace materials {
             chooseGoodsReceiptLineMaterialBatchEvent: Function;
             /** 批次管理物料新建序列 */
             chooseGoodsReceiptLineMaterialSerialEvent: Function;
+            /** 选择库存收货单行分配中心事件 */
+            chooseGoodsReceiptLineDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -12039,6 +12165,7 @@ declare namespace materials {
             private chooseInventoryTransferLineWarehouse;
             private chooseInventoryTransferLineMaterialBatch;
             private chooseInventoryTransferLineMaterialSerial;
+            private chooseInventoryTransferLineDistributionRule;
         }
         /** 视图-库存转储 */
         interface IInventoryTransferEditView extends ibas.IBOEditView {
@@ -12066,6 +12193,8 @@ declare namespace materials {
             chooseInventoryTransferLineMaterialBatchEvent: Function;
             /** 选择库存转储单行物料序列事件 */
             chooseInventoryTransferLineMaterialSerialEvent: Function;
+            /** 选择库存转储单行分配中心事件 */
+            chooseInventoryTransferLineDistributionRuleEvent: Function;
             /** 调用库存转储添加服务 */
             callInventoryTransferAddServiceEvent: Function;
             /** 显示库存转储添加服务 */

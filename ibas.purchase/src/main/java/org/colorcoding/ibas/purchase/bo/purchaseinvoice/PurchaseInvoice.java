@@ -2064,7 +2064,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								// 税科目
 								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);
@@ -2080,7 +2080,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								// 税科目
 								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_TAX_ACCOUNT);
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContents.add(jeContent);

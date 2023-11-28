@@ -510,6 +510,17 @@ namespace purchase {
                 this.rounding = ibas.emYesNo.YES;
             }
 
+            /** 映射的属性名称-项目的行总计 */
+            static PROPERTY_ITEMSLINETOTAL_NAME: string = "ItemsLineTotal";
+            /** 获取-项目的行总计 */
+            get itemsLineTotal(): number {
+                return this.getProperty<number>(PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME);
+            }
+            /** 设置-项目的行总计 */
+            set itemsLineTotal(value: number) {
+                this.setProperty(PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, value);
+            }
+
             /** 映射的属性名称-项目的税总计 */
             static PROPERTY_ITEMSTAXTOTAL_NAME: string = "ItemsTaxTotal";
             /** 获取-项目的税总计 */
@@ -532,19 +543,19 @@ namespace purchase {
                 this.setProperty(PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
             }
 
-
-
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
                         PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
                         PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                    // 单据总计 = 总计（含税）
+                    new BusinessRuleDeductionDocumentTotal(PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, undefined),
                 ];
             }
             /** 重置 */
