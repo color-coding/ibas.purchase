@@ -42,6 +42,7 @@ namespace purchase {
                 this.view.choosePurchaseInvoicePurchaseOrderEvent = this.choosePurchaseInvoicePurchaseOrder;
                 this.view.choosePurchaseInvoicePurchaseDeliveryEvent = this.choosePurchaseInvoicePurchaseDelivery;
                 this.view.choosePurchaseInvoiceBlanketAgreementEvent = this.choosePurchaseInvoiceBlanketAgreement;
+                this.view.choosePurchaseInvoiceItemDistributionRuleEvent = this.choosePurchaseInvoiceItemDistributionRule;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.receiptPurchaseInvoiceEvent = this.receiptPurchaseInvoice;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
@@ -1030,6 +1031,30 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseInvoiceItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseInvoiceItem): void {
+                if (ibas.objects.isNull(type)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    return;
+                }
+                ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
+                    proxy: new accounting.app.DimensionDataServiceProxy({
+                        type: type,
+                    }),
+                    onCompleted(result: string): void {
+                        if (type === accounting.app.emDimensionType.DIMENSION_1) {
+                            caller.distributionRule1 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_2) {
+                            caller.distributionRule2 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_3) {
+                            caller.distributionRule3 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_4) {
+                            caller.distributionRule4 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_5) {
+                            caller.distributionRule5 = result;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购发票 */
         export interface IPurchaseInvoiceEditView extends ibas.IBOEditView {
@@ -1067,6 +1092,8 @@ namespace purchase {
             choosePurchaseInvoicePurchaseDeliveryEvent: Function;
             /** 选择采购发票-一揽子协议事件 */
             choosePurchaseInvoiceBlanketAgreementEvent: Function;
+            /** 选择采购发票-行分配中心事件 */
+            choosePurchaseInvoiceItemDistributionRuleEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 采购发票收款事件 */

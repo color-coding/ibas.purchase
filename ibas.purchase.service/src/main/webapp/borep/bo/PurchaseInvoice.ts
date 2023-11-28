@@ -1403,57 +1403,57 @@ namespace purchase {
             set preTaxLineTotal(value: number) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME, value);
             }
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string = "DistributionRule1";
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string {
                 return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE1_NAME);
             }
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE1_NAME, value);
             }
 
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string = "DistributionRule2";
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string {
                 return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE2_NAME);
             }
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE2_NAME, value);
             }
 
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string = "DistributionRule3";
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string {
                 return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE3_NAME);
             }
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE3_NAME, value);
             }
 
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string = "DistributionRule4";
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string {
                 return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE4_NAME);
             }
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE4_NAME, value);
             }
 
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string = "DistributionRule5";
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string {
                 return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE5_NAME);
             }
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_DISTRIBUTIONRULE5_NAME, value);
             }

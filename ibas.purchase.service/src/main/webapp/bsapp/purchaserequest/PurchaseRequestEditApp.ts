@@ -35,6 +35,7 @@ namespace purchase {
                 this.view.choosePurchaseRequestItemMaterialEvent = this.choosePurchaseRequestItemMaterial;
                 this.view.showPurchaseRequestItemExtraEvent = this.showPurchaseRequestItemExtra;
                 this.view.choosePurchaseRequestItemUnitEvent = this.choosePurchaseRequestItemUnit;
+                this.view.choosePurchaseRequestItemDistributionRuleEvent = this.choosePurchaseRequestItemDistributionRule;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
             }
@@ -513,6 +514,30 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseRequestItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseRequestItem): void {
+                if (ibas.objects.isNull(type)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    return;
+                }
+                ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
+                    proxy: new accounting.app.DimensionDataServiceProxy({
+                        type: type,
+                    }),
+                    onCompleted(result: string): void {
+                        if (type === accounting.app.emDimensionType.DIMENSION_1) {
+                            caller.distributionRule1 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_2) {
+                            caller.distributionRule2 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_3) {
+                            caller.distributionRule3 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_4) {
+                            caller.distributionRule4 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_5) {
+                            caller.distributionRule5 = result;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -536,6 +561,8 @@ namespace purchase {
             chooseSupplierAgreementsEvent: Function;
             /** 显示采购申请额外信息事件 */
             showPurchaseRequestItemExtraEvent: Function;
+            /** 选择采购申请-行分配中心事件 */
+            choosePurchaseRequestItemDistributionRuleEvent: Function;
             /** 显示数据-采购申请-行 */
             showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void;
             /** 预留物料订购 */

@@ -29,6 +29,13 @@ declare namespace accounting {
          * 是否启用分支
          */
         function isEnableBranch(): boolean;
+        /** 配置项目-启用维度 */
+        const CONFIG_ITEM_ENABLE_DIMENSION: string;
+        /**
+         * 是否启用维度
+         * @param dim 维度
+         */
+        function isEnableDimension(dim: app.emDimensionType): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -115,11 +122,11 @@ declare namespace accounting {
          * 维度类型
          */
         enum emDimensionType {
-            DIMENSION_1 = 0,
-            DIMENSION_2 = 1,
-            DIMENSION_3 = 2,
-            DIMENSION_4 = 3,
-            DIMENSION_5 = 4
+            DIMENSION_1 = "DIM01",
+            DIMENSION_2 = "DIM02",
+            DIMENSION_3 = "DIM03",
+            DIMENSION_4 = "DIM04",
+            DIMENSION_5 = "DIM05"
         }
         /**
          * 总账科目条件支持属性
@@ -1154,15 +1161,15 @@ declare namespace accounting {
             branch: string;
             /** 项目代码 */
             project: string;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 参考1 */
             reference1: string;
@@ -4154,35 +4161,35 @@ declare namespace accounting {
             get project(): string;
             /** 设置-项目代码 */
             set project(value: string);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-参考1 */
             static PROPERTY_REFERENCE1_NAME: string;

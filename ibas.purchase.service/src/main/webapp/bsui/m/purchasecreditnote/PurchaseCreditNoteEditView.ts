@@ -38,6 +38,8 @@ namespace purchase {
                 choosePurchaseCreditNotePurchaseInvoiceEvent: Function;
                 /** 选择采购贷项项目-采购贷项事件 */
                 choosePurchaseCreditNotePurchaseReturnEvent: Function;
+                /** 选择采购贷项-行 分配中心事件 */
+                choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 编辑地址事件 */

@@ -448,15 +448,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -702,15 +702,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -1016,15 +1016,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -1266,15 +1266,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -1580,15 +1580,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -1836,15 +1836,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同 */
             agreements: string;
@@ -2353,15 +2353,15 @@ declare namespace sales {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同/协议 */
             agreements: string;
@@ -3558,35 +3558,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -4333,35 +4333,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -5260,35 +5260,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -6188,35 +6188,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -6963,35 +6963,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -7738,35 +7738,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -9228,35 +9228,35 @@ declare namespace sales {
             get preTaxLineTotal(): number;
             /** 设置-税前行总计 */
             set preTaxLineTotal(value: number);
-            /** 映射的属性名称-分配规则1 */
+            /** 映射的属性名称-成本中心1 */
             static PROPERTY_DISTRIBUTIONRULE1_NAME: string;
-            /** 获取-分配规则1 */
+            /** 获取-成本中心1 */
             get distributionRule1(): string;
-            /** 设置-分配规则1 */
+            /** 设置-成本中心1 */
             set distributionRule1(value: string);
-            /** 映射的属性名称-分配规则2 */
+            /** 映射的属性名称-成本中心2 */
             static PROPERTY_DISTRIBUTIONRULE2_NAME: string;
-            /** 获取-分配规则2 */
+            /** 获取-成本中心2 */
             get distributionRule2(): string;
-            /** 设置-分配规则2 */
+            /** 设置-成本中心2 */
             set distributionRule2(value: string);
-            /** 映射的属性名称-分配规则3 */
+            /** 映射的属性名称-成本中心3 */
             static PROPERTY_DISTRIBUTIONRULE3_NAME: string;
-            /** 获取-分配规则3 */
+            /** 获取-成本中心3 */
             get distributionRule3(): string;
-            /** 设置-分配规则3 */
+            /** 设置-成本中心3 */
             set distributionRule3(value: string);
-            /** 映射的属性名称-分配规则4 */
+            /** 映射的属性名称-成本中心4 */
             static PROPERTY_DISTRIBUTIONRULE4_NAME: string;
-            /** 获取-分配规则4 */
+            /** 获取-成本中心4 */
             get distributionRule4(): string;
-            /** 设置-分配规则4 */
+            /** 设置-成本中心4 */
             set distributionRule4(value: string);
-            /** 映射的属性名称-分配规则5 */
+            /** 映射的属性名称-成本中心5 */
             static PROPERTY_DISTRIBUTIONRULE5_NAME: string;
-            /** 获取-分配规则5 */
+            /** 获取-成本中心5 */
             get distributionRule5(): string;
-            /** 设置-分配规则5 */
+            /** 设置-成本中心5 */
             set distributionRule5(value: string);
             /** 映射的属性名称-合同/协议 */
             static PROPERTY_AGREEMENTS_NAME: string;
@@ -9899,6 +9899,7 @@ declare namespace sales {
             private chooseSalesDeliveryItemUnit;
             private chooseSalesDeliveryItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseSalesDeliveryItemDistributionRule;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -9936,6 +9937,8 @@ declare namespace sales {
             chooseSalesDeliverySalesOrderEvent: Function;
             /** 选择销售交货-一揽子协议事件 */
             chooseSalesDeliveryBlanketAgreementEvent: Function;
+            /** 选择销售交货-行 分配中心事件 */
+            chooseSalesDeliveryItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 销售交货收款事件 */
@@ -10193,6 +10196,7 @@ declare namespace sales {
             /** 预留物料库存 */
             private reserveMaterialsInventory;
             private chooseCustomerAgreements;
+            private chooseSalesOrderItemDistributionRule;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -10226,6 +10230,8 @@ declare namespace sales {
             chooseSalesOrderItemMaterialBatchEvent: Function;
             /** 选择销售订单-行 物料版本 */
             chooseSalesOrderItemMaterialVersionEvent: Function;
+            /** 选择销售订单-行 分配中心事件 */
+            chooseSalesOrderItemDistributionRuleEvent: Function;
             /** 显示销售订单行额外信息事件 */
             showSalesOrderItemExtraEvent: Function;
             /** 选择销售订单-销售报价事件 */
@@ -10557,6 +10563,7 @@ declare namespace sales {
             private chooseSalesReturnItemUnit;
             private chooseSalesReturnItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseSalesReturnItemDistributionRule;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -10590,6 +10597,8 @@ declare namespace sales {
             chooseSalesReturnItemMaterialSerialEvent: Function;
             /** 选择销售退货-行 物料版本 */
             chooseSalesReturnItemMaterialVersionEvent: Function;
+            /** 选择销售退货-行 分配中心事件 */
+            chooseSalesReturnItemDistributionRuleEvent: Function;
             /** 选择销售退货项目-销售订单事件 */
             chooseSalesReturnSalesOrderEvent: Function;
             /** 选择销售退货项目-销售交货事件 */
@@ -10829,6 +10838,7 @@ declare namespace sales {
             private chooseSalesQuoteItemUnit;
             private chooseSalesQuoteItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseSalesQuoteItemDistributionRule;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -10856,6 +10866,8 @@ declare namespace sales {
             chooseSalesQuoteItemMaterialVersionEvent: Function;
             /** 选择销售报价一揽子协议事件 */
             chooseSalesQuoteBlanketAgreementEvent: Function;
+            /** 选择销售报价-行  分配中心事件 */
+            chooseSalesOrderItemDistributionRuleEvent: Function;
             /** 选择销售报价仓库事件 */
             chooseSalesQuoteItemWarehouseEvent: Function;
             /** 选择销售报价单位事件 */
@@ -11153,6 +11165,7 @@ declare namespace sales {
             private chooseSalesInvoiceItemUnit;
             private chooseSalesInvoiceItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseSalesInvoiceItemDistributionRule;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -11192,6 +11205,8 @@ declare namespace sales {
             chooseSalesInvoiceSalesDeliveryEvent: Function;
             /** 选择销售发票-一揽子协议事件 */
             chooseSalesInvoiceBlanketAgreementEvent: Function;
+            /** 选择销售发票-行分配中心事件 */
+            chooseSalesInvoiceItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 销售发票收款事件 */
@@ -11435,6 +11450,7 @@ declare namespace sales {
             private chooseSalesCreditNoteItemUnit;
             private chooseSalesCreditNoteItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseSalesCreditNoteItemDistributionRule;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -11472,6 +11488,8 @@ declare namespace sales {
             chooseSalesCreditNoteSalesReturnEvent: Function;
             /** 选择销售贷项-销售发票事件 */
             chooseSalesCreditNoteSalesInvoiceEvent: Function;
+            /** 选择销售贷项-行 分配中心事件 */
+            chooseSalesCreditNoteItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
@@ -12112,6 +12130,7 @@ declare namespace sales {
             private chooseDownPaymentRequestItemUnit;
             private chooseDownPaymentRequestItemMaterialVersion;
             private chooseCustomerAgreements;
+            private chooseDownPaymentRequestItemDistributionRule;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -12137,6 +12156,8 @@ declare namespace sales {
             chooseDownPaymentRequestItemWarehouseEvent: Function;
             /** 选择预收款申请-行 单位 */
             chooseDownPaymentRequestItemUnitEvent: Function;
+            /** 选择预收款申请-行 分配中心事件 */
+            chooseDownPaymentRequestItemDistributionRuleEvent: Function;
             /** 显示数据 */
             showDownPaymentRequestItems(datas: bo.DownPaymentRequestItem[]): void;
             /** 选择预收款申请-销售订单事件 */

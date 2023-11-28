@@ -223,15 +223,15 @@ namespace purchase {
             preTaxPrice: number;
             /** 税前行总计 */
             preTaxLineTotal: number;
-            /** 分配规则1 */
+            /** 成本中心1 */
             distributionRule1: string;
-            /** 分配规则2 */
+            /** 成本中心2 */
             distributionRule2: string;
-            /** 分配规则3 */
+            /** 成本中心3 */
             distributionRule3: string;
-            /** 分配规则4 */
+            /** 成本中心4 */
             distributionRule4: string;
-            /** 分配规则5 */
+            /** 成本中心5 */
             distributionRule5: string;
             /** 合同/协议 */
             agreements: string;

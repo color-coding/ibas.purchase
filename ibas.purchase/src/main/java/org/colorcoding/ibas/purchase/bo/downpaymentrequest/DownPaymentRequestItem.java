@@ -1706,19 +1706,19 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 属性名称-分配规则1
+	 * 属性名称-成本中心1
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE1_NAME = "DistributionRule1";
 
 	/**
-	 * 分配规则1 属性
+	 * 成本中心1 属性
 	 */
 	@DbField(name = "OcrCode1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE1 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE1_NAME, String.class, MY_CLASS);
 
 	/**
-	 * 获取-分配规则1
+	 * 获取-成本中心1
 	 * 
 	 * @return 值
 	 */
@@ -1728,7 +1728,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 设置-分配规则1
+	 * 设置-成本中心1
 	 * 
 	 * @param value 值
 	 */
@@ -1737,19 +1737,19 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 属性名称-分配规则2
+	 * 属性名称-成本中心2
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE2_NAME = "DistributionRule2";
 
 	/**
-	 * 分配规则2 属性
+	 * 成本中心2 属性
 	 */
 	@DbField(name = "OcrCode2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE2 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE2_NAME, String.class, MY_CLASS);
 
 	/**
-	 * 获取-分配规则2
+	 * 获取-成本中心2
 	 * 
 	 * @return 值
 	 */
@@ -1759,7 +1759,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 设置-分配规则2
+	 * 设置-成本中心2
 	 * 
 	 * @param value 值
 	 */
@@ -1768,19 +1768,19 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 属性名称-分配规则3
+	 * 属性名称-成本中心3
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE3_NAME = "DistributionRule3";
 
 	/**
-	 * 分配规则3 属性
+	 * 成本中心3 属性
 	 */
 	@DbField(name = "OcrCode3", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE3 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE3_NAME, String.class, MY_CLASS);
 
 	/**
-	 * 获取-分配规则3
+	 * 获取-成本中心3
 	 * 
 	 * @return 值
 	 */
@@ -1790,7 +1790,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 设置-分配规则3
+	 * 设置-成本中心3
 	 * 
 	 * @param value 值
 	 */
@@ -1799,19 +1799,19 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 属性名称-分配规则4
+	 * 属性名称-成本中心4
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE4_NAME = "DistributionRule4";
 
 	/**
-	 * 分配规则4 属性
+	 * 成本中心4 属性
 	 */
 	@DbField(name = "OcrCode4", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE4 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE4_NAME, String.class, MY_CLASS);
 
 	/**
-	 * 获取-分配规则4
+	 * 获取-成本中心4
 	 * 
 	 * @return 值
 	 */
@@ -1821,7 +1821,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 设置-分配规则4
+	 * 设置-成本中心4
 	 * 
 	 * @param value 值
 	 */
@@ -1830,19 +1830,19 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 属性名称-分配规则5
+	 * 属性名称-成本中心5
 	 */
 	private static final String PROPERTY_DISTRIBUTIONRULE5_NAME = "DistributionRule5";
 
 	/**
-	 * 分配规则5 属性
+	 * 成本中心5 属性
 	 */
 	@DbField(name = "OcrCode5", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE5 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE5_NAME, String.class, MY_CLASS);
 
 	/**
-	 * 获取-分配规则5
+	 * 获取-成本中心5
 	 * 
 	 * @return 值
 	 */
@@ -1852,7 +1852,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	/**
-	 * 设置-分配规则5
+	 * 设置-成本中心5
 	 * 
 	 * @param value 值
 	 */

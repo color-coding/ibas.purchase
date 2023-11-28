@@ -40,6 +40,8 @@ namespace purchase {
                 choosePurchaseInvoicePurchaseDeliveryEvent: Function;
                 /** 选择采购发票-一揽子协议事件 */
                 choosePurchaseInvoiceBlanketAgreementEvent: Function;
+                /** 选择采购发票-行分配中心事件 */
+                choosePurchaseInvoiceItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 收款采购发票 */

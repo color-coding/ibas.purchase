@@ -43,6 +43,7 @@ namespace purchase {
                 this.view.choosePurchaseCreditNotePurchaseInvoiceEvent = this.choosePurchaseCreditNotePurchaseInvoice;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
+                this.view.choosePurchaseCreditNoteItemDistributionRuleEvent = this.choosePurchaseCreditNoteItemDistributionRule;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -815,6 +816,30 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseCreditNoteItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseCreditNoteItem): void {
+                if (ibas.objects.isNull(type)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    return;
+                }
+                ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
+                    proxy: new accounting.app.DimensionDataServiceProxy({
+                        type: type,
+                    }),
+                    onCompleted(result: string): void {
+                        if (type === accounting.app.emDimensionType.DIMENSION_1) {
+                            caller.distributionRule1 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_2) {
+                            caller.distributionRule2 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_3) {
+                            caller.distributionRule3 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_4) {
+                            caller.distributionRule4 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_5) {
+                            caller.distributionRule5 = result;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购贷项 */
         export interface IPurchaseCreditNoteEditView extends ibas.IBOEditView {
@@ -850,6 +875,8 @@ namespace purchase {
             choosePurchaseCreditNotePurchaseReturnEvent: Function;
             /** 选择采购贷项-采购发票事件 */
             choosePurchaseCreditNotePurchaseInvoiceEvent: Function;
+            /** 选择采购贷项-行 分配中心事件 */
+            choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */

@@ -38,6 +38,8 @@ namespace purchase {
                 showPurchaseQuoteItemExtraEvent: Function;
                 /** 选择采购报价-采购申请事件 */
                 choosePurchaseQuotePurchaseRequestEvent: Function;
+                /** 选择采购订单-行 分配中心事件 */
+                choosePurchaseQuoteItemDistributionRuleEvent: Function;
                 /** 转为采购订单事件 */
                 turnToPurchaseOrderEvent: Function;
                 /** 默认仓库 */

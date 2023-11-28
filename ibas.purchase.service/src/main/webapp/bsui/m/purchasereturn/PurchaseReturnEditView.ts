@@ -38,6 +38,8 @@ namespace purchase {
                 choosePurchaseReturnPurchaseOrderEvent: Function;
                 /** 选择采购退货项目-采购交货事件 */
                 choosePurchaseReturnPurchaseDeliveryEvent: Function;
+                /** 选择采购退货-行 分配中心事件 */
+                choosePurchaseReturnItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 收款采购退货 */

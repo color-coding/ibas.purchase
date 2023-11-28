@@ -39,6 +39,7 @@ namespace purchase {
                 this.view.chooseDownPaymentRequestPurchaseOrderEvent = this.chooseDownPaymentRequestPurchaseOrder;
                 this.view.chooseDownPaymentRequestBlanketAgreementEvent = this.chooseDownPaymentRequestBlanketAgreement;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
+                this.view.chooseDownPaymentRequestItemDistributionRuleEvent = this.chooseDownPaymentRequestItemDistributionRule;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -770,6 +771,30 @@ namespace purchase {
                     }
                 });
             }
+            private chooseDownPaymentRequestItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.DownPaymentRequestItem): void {
+                if (ibas.objects.isNull(type)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    return;
+                }
+                ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
+                    proxy: new accounting.app.DimensionDataServiceProxy({
+                        type: type,
+                    }),
+                    onCompleted(result: string): void {
+                        if (type === accounting.app.emDimensionType.DIMENSION_1) {
+                            caller.distributionRule1 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_2) {
+                            caller.distributionRule2 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_3) {
+                            caller.distributionRule3 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_4) {
+                            caller.distributionRule4 = result;
+                        } else if (type === accounting.app.emDimensionType.DIMENSION_5) {
+                            caller.distributionRule5 = result;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-预付款申请 */
         export interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -801,6 +826,8 @@ namespace purchase {
             chooseDownPaymentRequestBlanketAgreementEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
+            /** 选择预付款申请-行分配中心事件 */
+            chooseDownPaymentRequestItemDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
