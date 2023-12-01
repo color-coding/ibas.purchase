@@ -78,4 +78,27 @@ namespace purchase {
             GROSS
         }
     }
+    export namespace app {
+
+        /** 采购申请目标单据服务契约 */
+        export interface IPurchaseRequestToContract extends ibas.IServiceContract {
+            /** 采购申请内容 */
+            content: bo.IPurchaseRequestItem,
+            /**
+             * 操作完成
+             * @param result 转换数量或错误
+             */
+            onDone(result?: {
+                documentType: string,
+                docmentEntry: number,
+                documentLineId?:
+                number, quantity: number,
+                warehouse?: string
+            } | Error): void,
+        }
+        /** 采购申请目标单据服务代理 */
+        export class PurchaseRequestToServiceProxy extends ibas.ServiceProxy<IPurchaseRequestToContract> {
+
+        }
+    }
 }

@@ -106,5 +106,6 @@
   "purchase_orderer_reservation": "订购预留",
   "purchase_app_materialorderedreservation_purchaseorder": "采购订单",
   "purchase_app_materialorderedreservation_purchaserequest": "采购申请",
+  "purchase_app_purchaserequest_to_": "转为",
   "purchase_closing_delimiter": "----结束----"
 }

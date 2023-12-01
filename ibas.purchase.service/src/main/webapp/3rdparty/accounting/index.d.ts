@@ -6809,7 +6809,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Branch): void;
             /** 保存数据 */
-            protected saveData(): void;
+            protected saveData(others?: bo.Branch[]): void;
             /** 删除数据 */
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 */

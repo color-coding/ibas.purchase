@@ -34,6 +34,8 @@ namespace purchase {
                 showPurchaseRequestItemExtraEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 采购申请转换事件 */
+                purchaseRequestToEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -209,6 +211,38 @@ namespace purchase {
                                             press: function (): void {
                                                 that.fireViewEvents(that.showPurchaseRequestItemExtraEvent, that.tablePurchaseRequestItem.getSelecteds().firstOrDefault());
                                             }
+                                        }),
+                                        new sap.m.ToolbarSpacer(""),
+                                        new sap.extension.m.MenuButton("", {
+                                            text: ibas.i18n.prop("purchase_app_purchaserequest_to_"),
+                                            type: sap.m.ButtonType.Transparent,
+                                            icon: "sap-icon://technical-object",
+                                            menu: this.quickToMenu = new sap.m.Menu("", {
+                                                items: {
+                                                    path: "/",
+                                                    template: new sap.m.MenuItem("", {
+                                                        text: {
+                                                            path: "description",
+                                                            type: new sap.extension.data.Alphanumeric()
+                                                        },
+                                                        press: function (this: sap.m.MenuItem): void {
+                                                            let serviceAgent: ibas.IServiceAgent = this.getBindingContext().getObject();
+                                                            that.fireViewEvents(that.purchaseRequestToEvent, serviceAgent, that.tablePurchaseRequestItem.getSelecteds().firstOrDefault());
+                                                        }
+                                                    })
+                                                }
+                                            }),
+                                            /*
+                                            beforeMenuOpen(): void {
+                                                let selected: any = that.tablePurchaseRequestItem.getSelecteds().firstOrDefault();
+                                                if (selected instanceof bo.PurchaseRequestItem) {
+                                                    that.quickToMenu.setModel(new sap.extension.model.JSONModel(ibas.servicesManager.getServices({
+                                                        proxy: new purchase.app.PurchaseRequestToServiceProxy({
+                                                        }),
+                                                    })));
+                                                }
+                                            }
+                                            */
                                         }),
                                     ]
                                 }),
@@ -714,6 +748,7 @@ namespace purchase {
                 }
                 private page: sap.extension.m.Page;
                 private tablePurchaseRequestItem: sap.extension.table.Table;
+                private quickToMenu: sap.m.Menu;
                 /** 默认税组 */
                 defaultTaxGroup: string;
                 /** 显示数据 */
@@ -725,6 +760,11 @@ namespace purchase {
                 /** 显示数据-采购收货-行 */
                 showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void {
                     this.tablePurchaseRequestItem.setModel(new sap.extension.model.JSONModel({ rows: datas }));
+                }
+
+                /** 显示采购请求目标 */
+                showPurchaseRequestTos(datas: ibas.IServiceAgent[]): void {
+                    this.quickToMenu.setModel(new sap.extension.model.JSONModel(datas));
                 }
             }
         }

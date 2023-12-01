@@ -32,6 +32,8 @@ namespace purchase {
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 采购申请转换事件 */
+                purchaseRequestToEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -621,6 +623,8 @@ namespace purchase {
                 /** 显示数据（采购报价-行） */
                 showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void {
                     this.listPurchaseRequestItem.setModel(new sap.extension.model.JSONModel({ rows: datas }));
+                }
+                showPurchaseRequestTos(datas: ibas.IServiceAgent[]): void {
                 }
                 /** 编辑数据（采购报价-行） */
                 editPurchaseRequestItem(data: bo.PurchaseRequestItem): void {

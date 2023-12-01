@@ -12491,6 +12491,16 @@ declare namespace materials {
             /** 默认功能 */
             default(): ibas.IApplication<ibas.IView>;
         }
+        class MaterialNumberChangeFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
     }
 }
 /**
@@ -13108,6 +13118,81 @@ declare namespace materials {
             showMaterials(data: bo.Material): void;
             /** 选择数据版本事件 */
             chooseSubstituteVersionEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        enum emNumberChangeStatus {
+            NOT = 0,
+            PROCESSING = 1,
+            DONE = 2
+        }
+        class MaterialNumberItem extends ibas.Bindable {
+            constructor(source: bo.MaterialBatch | bo.MaterialSerial);
+            get status(): emNumberChangeStatus;
+            set status(value: emNumberChangeStatus);
+            material: bo.Material;
+            source: bo.MaterialBatch | bo.MaterialSerial;
+            target: bo.MaterialBatch | bo.MaterialSerial;
+            get quantity(): number;
+            set quantity(value: number);
+            get sourceNumber(): string;
+            set sourceNumber(value: string);
+            get targetNumber(): string;
+            set targetNumber(value: string);
+            get sourceWarehouse(): string;
+            set sourceWarehouse(value: string);
+            get targetWarehouse(): string;
+            set targetWarehouse(value: string);
+        }
+        /** 应用-物料批次序列号变更 */
+        class MaterialNumberChangeApp extends ibas.Application<IMaterialNumberChangeView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private changeItems;
+            private addMaterialBatch;
+            private addMaterialSerial;
+            private removeItem;
+            private showItems;
+            private editMaterialSerial;
+            private editMaterialBatch;
+            private reset;
+            private changeTo;
+        }
+        /** 视图-物料批次序列号变更 */
+        interface IMaterialNumberChangeView extends ibas.IView {
+            /** 添加物料批次事件 */
+            addMaterialBatchEvent: Function;
+            /** 添加物料序列事件 */
+            addMaterialSerialEvent: Function;
+            /** 移除项目事件 */
+            removeItemEvent: Function;
+            /** 显示项目 */
+            showItems(datas: MaterialNumberItem[]): void;
+            /** 编辑批次信息 */
+            editMaterialBatchEvent: Function;
+            /** 编辑序列信息 */
+            editMaterialSerialEvent: Function;
+            /** 重置事件 */
+            resetEvent: Function;
+            /** 改变事件 */
+            changeToEvent: Function;
         }
     }
 }
