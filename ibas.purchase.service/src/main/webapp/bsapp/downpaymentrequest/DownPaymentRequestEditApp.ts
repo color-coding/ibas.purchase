@@ -755,6 +755,24 @@ namespace purchase {
                 condition.operation = ibas.emConditionOperation.IS_NULL;
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.DownPaymentRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.DownPaymentRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.DownPaymentRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
                 ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
                     boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.MULTIPLE,
@@ -827,7 +845,7 @@ namespace purchase {
             chooseDownPaymentRequestBlanketAgreementEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
-            /** 选择预付款申请-行分配中心事件 */
+            /** 选择预付款申请-行成本中心事件 */
             chooseDownPaymentRequestItemDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;

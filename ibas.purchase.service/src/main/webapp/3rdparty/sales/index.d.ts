@@ -9937,7 +9937,7 @@ declare namespace sales {
             chooseSalesDeliverySalesOrderEvent: Function;
             /** 选择销售交货-一揽子协议事件 */
             chooseSalesDeliveryBlanketAgreementEvent: Function;
-            /** 选择销售交货-行 分配中心事件 */
+            /** 选择销售交货-行 成本中心事件 */
             chooseSalesDeliveryItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
@@ -10230,7 +10230,7 @@ declare namespace sales {
             chooseSalesOrderItemMaterialBatchEvent: Function;
             /** 选择销售订单-行 物料版本 */
             chooseSalesOrderItemMaterialVersionEvent: Function;
-            /** 选择销售订单-行 分配中心事件 */
+            /** 选择销售订单-行 成本中心事件 */
             chooseSalesOrderItemDistributionRuleEvent: Function;
             /** 显示销售订单行额外信息事件 */
             showSalesOrderItemExtraEvent: Function;
@@ -10597,7 +10597,7 @@ declare namespace sales {
             chooseSalesReturnItemMaterialSerialEvent: Function;
             /** 选择销售退货-行 物料版本 */
             chooseSalesReturnItemMaterialVersionEvent: Function;
-            /** 选择销售退货-行 分配中心事件 */
+            /** 选择销售退货-行 成本中心事件 */
             chooseSalesReturnItemDistributionRuleEvent: Function;
             /** 选择销售退货项目-销售订单事件 */
             chooseSalesReturnSalesOrderEvent: Function;
@@ -10866,7 +10866,7 @@ declare namespace sales {
             chooseSalesQuoteItemMaterialVersionEvent: Function;
             /** 选择销售报价一揽子协议事件 */
             chooseSalesQuoteBlanketAgreementEvent: Function;
-            /** 选择销售报价-行  分配中心事件 */
+            /** 选择销售报价-行  成本中心事件 */
             chooseSalesOrderItemDistributionRuleEvent: Function;
             /** 选择销售报价仓库事件 */
             chooseSalesQuoteItemWarehouseEvent: Function;
@@ -11205,7 +11205,7 @@ declare namespace sales {
             chooseSalesInvoiceSalesDeliveryEvent: Function;
             /** 选择销售发票-一揽子协议事件 */
             chooseSalesInvoiceBlanketAgreementEvent: Function;
-            /** 选择销售发票-行分配中心事件 */
+            /** 选择销售发票-行成本中心事件 */
             chooseSalesInvoiceItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
@@ -11488,7 +11488,7 @@ declare namespace sales {
             chooseSalesCreditNoteSalesReturnEvent: Function;
             /** 选择销售贷项-销售发票事件 */
             chooseSalesCreditNoteSalesInvoiceEvent: Function;
-            /** 选择销售贷项-行 分配中心事件 */
+            /** 选择销售贷项-行 成本中心事件 */
             chooseSalesCreditNoteItemDistributionRuleEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
@@ -12156,7 +12156,7 @@ declare namespace sales {
             chooseDownPaymentRequestItemWarehouseEvent: Function;
             /** 选择预收款申请-行 单位 */
             chooseDownPaymentRequestItemUnitEvent: Function;
-            /** 选择预收款申请-行 分配中心事件 */
+            /** 选择预收款申请-行 成本中心事件 */
             chooseDownPaymentRequestItemDistributionRuleEvent: Function;
             /** 显示数据 */
             showDownPaymentRequestItems(datas: bo.DownPaymentRequestItem[]): void;

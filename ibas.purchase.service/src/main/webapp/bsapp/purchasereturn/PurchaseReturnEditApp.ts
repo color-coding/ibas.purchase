@@ -816,6 +816,24 @@ namespace purchase {
                 condition.operation = ibas.emConditionOperation.IS_NULL;
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseReturn.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseReturn.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
                 ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
                     boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.MULTIPLE,
@@ -894,7 +912,7 @@ namespace purchase {
             choosePurchaseReturnPurchaseDeliveryEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
-            /** 选择采购退货-行 分配中心事件 */
+            /** 选择采购退货-行 成本中心事件 */
             choosePurchaseReturnItemDistributionRuleEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;

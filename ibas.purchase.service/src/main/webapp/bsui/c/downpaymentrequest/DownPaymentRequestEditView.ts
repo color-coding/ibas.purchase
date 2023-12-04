@@ -36,7 +36,7 @@ namespace purchase {
                 chooseDownPaymentRequestBlanketAgreementEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
-                /** 选择预付款申请-行分配中心事件 */
+                /** 选择预付款申请-行成本中心事件 */
                 chooseDownPaymentRequestItemDistributionRuleEvent: Function;
                 /** 绘制视图 */
                 draw(): any {

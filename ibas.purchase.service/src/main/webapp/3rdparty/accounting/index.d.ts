@@ -7046,7 +7046,7 @@ declare namespace accounting {
             chooseJournalEntryLineAccountEvent: Function;
             /** 选择日记账分录-行业务伙伴/科目事件 */
             chooseJournalEntryLineShortNameEvent: Function;
-            /** 选择日记账分录-行分配中心事件 */
+            /** 选择日记账分录-行成本中心事件 */
             chooseJournalEntryLineDistributionRuleEvent: Function;
         }
     }

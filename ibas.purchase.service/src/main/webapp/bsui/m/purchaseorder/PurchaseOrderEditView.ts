@@ -42,7 +42,7 @@ namespace purchase {
                 choosePurchaseOrderPurchaseRequestEvent: Function;
                 /** 选择采购订单-一揽子协议事件 */
                 choosePurchaseOrderBlanketAgreementEvent: Function;
-                /** 选择采购订单-行 分配中心事件 */
+                /** 选择采购订单-行 成本中心事件 */
                 choosePurchaseOrderItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;

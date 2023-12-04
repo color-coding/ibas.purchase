@@ -38,7 +38,7 @@ namespace purchase {
                 choosePurchaseQuotePurchaseRequestEvent: Function;
                 /** 选择采购报价-一揽子协议事件 */
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
-                /** 选择采购订单-行 分配中心事件 */
+                /** 选择采购订单-行 成本中心事件 */
                 choosePurchaseQuoteItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;

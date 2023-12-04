@@ -504,6 +504,24 @@ namespace purchase {
                 condition.operation = ibas.emConditionOperation.IS_NULL;
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseRequest.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
                 ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
                     boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.MULTIPLE,
@@ -632,12 +650,12 @@ namespace purchase {
                                                                 beSaved: data,
                                                                 onCompleted: (opRslt) => {
                                                                     if (opRslt.resultCode !== 0) {
-                                                                        next(new Error(opRslt.message))
+                                                                        next(new Error(opRslt.message));
                                                                     } else {
                                                                         next();
                                                                     }
                                                                 }
-                                                            })
+                                                            });
                                                         }, (error) => {
                                                             if (error instanceof Error) {
                                                                 that.messages(error);
@@ -689,7 +707,7 @@ namespace purchase {
             chooseSupplierAgreementsEvent: Function;
             /** 显示采购申请额外信息事件 */
             showPurchaseRequestItemExtraEvent: Function;
-            /** 选择采购申请-行分配中心事件 */
+            /** 选择采购申请-行成本中心事件 */
             choosePurchaseRequestItemDistributionRuleEvent: Function;
             /** 显示数据-采购申请-行 */
             showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void;

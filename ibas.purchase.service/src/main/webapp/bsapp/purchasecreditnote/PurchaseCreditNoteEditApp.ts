@@ -801,6 +801,24 @@ namespace purchase {
                 condition.operation = ibas.emConditionOperation.IS_NULL;
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseCreditNote.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseCreditNote.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseCreditNote.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
                 ibas.servicesManager.runChooseService<businesspartner.bo.Agreement>({
                     boCode: businesspartner.bo.Agreement.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.MULTIPLE,
@@ -877,7 +895,7 @@ namespace purchase {
             choosePurchaseCreditNotePurchaseReturnEvent: Function;
             /** 选择采购贷项-采购发票事件 */
             choosePurchaseCreditNotePurchaseInvoiceEvent: Function;
-            /** 选择采购贷项-行 分配中心事件 */
+            /** 选择采购贷项-行 成本中心事件 */
             choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;

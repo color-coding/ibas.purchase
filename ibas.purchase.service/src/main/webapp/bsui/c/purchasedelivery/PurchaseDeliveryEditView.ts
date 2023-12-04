@@ -36,7 +36,7 @@ namespace purchase {
                 choosePurchaseDeliveryItemMaterialSerialEvent: Function;
                 /** 选择采购收货-行 物料批次事件 */
                 choosePurchaseDeliveryItemMaterialBatchEvent: Function;
-                /** 选择采购收货-行 分配中心事件 */
+                /** 选择采购收货-行 成本中心事件 */
                 choosePurchaseDeliveryItemDistributionRuleEvent: Function;
                 /** 选择采购收货项目-采购订单事件 */
                 choosePurchaseDeliveryPurchaseOrderEvent: Function;
@@ -516,7 +516,7 @@ namespace purchase {
                                         }),
                                     }),
                                     new sap.extension.table.DataColumn("", {
-                                        label: ibas.i18n.prop("bov_purchasedeliveryitem_distributionrule1"),
+                                        label: ibas.i18n.prop("bo_purchasedeliveryitem_distributionrule1"),
                                         template: new sap.extension.m.Input("", {
                                             showValueHelp: true,
                                             valueHelpRequest(): void {

@@ -36,7 +36,7 @@ namespace purchase {
                 choosePurchaseInvoiceItemMaterialSerialEvent: Function;
                 /** 选择采购发票-行 物料批次事件 */
                 choosePurchaseInvoiceItemMaterialBatchEvent: Function;
-                /** 选择采购发票-行分配中心事件 */
+                /** 选择采购发票-行成本中心事件 */
                 choosePurchaseInvoiceItemDistributionRuleEvent: Function;
                 /** 选择采购发票项目-采购订单事件 */
                 choosePurchaseInvoicePurchaseOrderEvent: Function;

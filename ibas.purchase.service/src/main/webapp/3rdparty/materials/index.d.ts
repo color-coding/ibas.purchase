@@ -11693,7 +11693,7 @@ declare namespace materials {
             chooseGoodsIssueLineMaterialBatchEvent: Function;
             /** 选择库存发货单行物料序列事件 */
             chooseGoodsIssueLineMaterialSerialEvent: Function;
-            /** 选择库存发货单行分配中心事件 */
+            /** 选择库存发货单行成本中心事件 */
             chooseGoodsIssueLineDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
@@ -11942,7 +11942,7 @@ declare namespace materials {
             chooseGoodsReceiptLineMaterialBatchEvent: Function;
             /** 批次管理物料新建序列 */
             chooseGoodsReceiptLineMaterialSerialEvent: Function;
-            /** 选择库存收货单行分配中心事件 */
+            /** 选择库存收货单行成本中心事件 */
             chooseGoodsReceiptLineDistributionRuleEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
@@ -12193,7 +12193,7 @@ declare namespace materials {
             chooseInventoryTransferLineMaterialBatchEvent: Function;
             /** 选择库存转储单行物料序列事件 */
             chooseInventoryTransferLineMaterialSerialEvent: Function;
-            /** 选择库存转储单行分配中心事件 */
+            /** 选择库存转储单行成本中心事件 */
             chooseInventoryTransferLineDistributionRuleEvent: Function;
             /** 调用库存转储添加服务 */
             callInventoryTransferAddServiceEvent: Function;

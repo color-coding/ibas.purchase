@@ -36,7 +36,7 @@ namespace purchase {
                 choosePurchaseReturnItemMaterialSerialEvent: Function;
                 /** 选择采购退货-行 物料批次事件 */
                 choosePurchaseReturnItemMaterialBatchEvent: Function;
-                /** 选择采购退货-行 分配中心事件 */
+                /** 选择采购退货-行 成本中心事件 */
                 choosePurchaseReturnItemDistributionRuleEvent: Function;
                 /** 选择采购退货项目-采购订单事件 */
                 choosePurchaseReturnPurchaseOrderEvent: Function;

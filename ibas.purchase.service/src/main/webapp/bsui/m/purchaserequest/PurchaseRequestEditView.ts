@@ -28,7 +28,7 @@ namespace purchase {
                 chooseSupplierAgreementsEvent: Function;
                 /** 显示采购申请额外信息事件 */
                 showPurchaseRequestItemExtraEvent: Function;
-                /** 选择采购申请-行分配中心事件 */
+                /** 选择采购申请-行成本中心事件 */
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;

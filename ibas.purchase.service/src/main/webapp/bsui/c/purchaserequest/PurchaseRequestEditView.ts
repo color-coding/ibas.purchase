@@ -26,7 +26,7 @@ namespace purchase {
                 choosePurchaseRequestItemMaterialEvent: Function;
                 /** 选择采购申请-行物料单位 */
                 choosePurchaseRequestItemUnitEvent: Function;
-                /** 选择采购申请-行分配中心事件 */
+                /** 选择采购申请-行成本中心事件 */
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;

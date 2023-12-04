@@ -82,7 +82,7 @@ namespace purchase {
                 // 收付款服务
                 // this.register(new PurchaseReturnReceiptServiceMapping()); 没这种情况
                 this.register(new PurchaseCreditNoteReceiptServiceMapping());
-                // this.register(new PurchaseDeliveryPaymentServiceMapping()); 没这种情况
+                this.register(new PurchaseDeliveryPaymentServiceMapping());
                 this.register(new PurchaseOrderPaymentServiceMapping());
                 this.register(new PurchaseInvoicePaymentServiceMapping());
                 this.register(new DownPaymentRequestPaymentServiceMapping());
