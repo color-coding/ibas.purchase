@@ -824,24 +824,41 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseDelivery = new bo.PurchaseDelivery();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseOrder({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseOrder(this.editData);
+                            this.view.showPurchaseOrderItems(this.editData.purchaseOrderItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseDelivery = new bo.PurchaseDelivery();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
-
+                            let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
             }
             /** 转为采购退货 */
             protected turnToPurchaseReturn(): void {
@@ -849,24 +866,42 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseReturn = new bo.PurchaseReturn();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseOrder({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseOrder(this.editData);
+                            this.view.showPurchaseOrderItems(this.editData.purchaseOrderItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseReturn = new bo.PurchaseReturn();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
+                            let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
 
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
             }
             /** 转为采购发票 */
             protected turnToPurchaseInvoice(): void {
@@ -874,23 +909,42 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseOrder({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseOrder(this.editData);
+                            this.view.showPurchaseOrderItems(this.editData.purchaseOrderItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
+                            let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
 
             }
             /** 选择一揽子协议事件 */

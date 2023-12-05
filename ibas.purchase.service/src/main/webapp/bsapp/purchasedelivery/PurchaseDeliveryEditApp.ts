@@ -720,23 +720,41 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseReturn = new bo.PurchaseReturn();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseDelivery({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseDelivery(this.editData);
+                            this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseReturn = new bo.PurchaseReturn();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
+                            let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
             }
             /** 转为采购发票 */
             protected turnToPurchaseInvoice(): void {
@@ -744,23 +762,41 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseDelivery({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseDelivery(this.editData);
+                            this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
+                            let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
 
             }
             /** 转为销售交货 */
@@ -769,129 +805,147 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                if (salesOrders instanceof Array) {
-                    let target: sales.bo.SalesDelivery = new sales.bo.SalesDelivery();
-
-                    for (let item of this.editData.purchaseDeliveryItems) {
-                        let sItem: sales.bo.SalesDeliveryItem = target.salesDeliveryItems.create();
-                        sItem.itemCode = item.itemCode;
-                        sItem.itemDescription = item.itemDescription;
-                        sItem.itemSign = item.itemSign;
-                        sItem.quantity = item.quantity;
-                        sItem.warehouse = item.warehouse;
-                        sItem.uom = item.uom;
-                        let order: sales.bo.SalesOrder = salesOrders.firstOrDefault(
-                            c => !ibas.strings.isEmpty(item.originalDocumentType)
-                                && ibas.strings.equalsIgnoreCase(item.originalDocumentType, c.objectCode)
-                                && c.docEntry === item.originalDocumentEntry);
-                        if (!ibas.objects.isNull(order)) {
-                            if (ibas.strings.isEmpty(target.customerCode)) {
-                                target.customerCode = order.customerCode;
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseDelivery({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
                             }
-                            if (ibas.strings.isEmpty(target.customerName)) {
-                                target.customerName = order.customerName;
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
                             }
-                            if (!(target.contactPerson > 0)) {
-                                target.contactPerson = order.contactPerson;
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseDelivery(this.editData);
+                            this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
                             }
-                            sItem.baseDocumentType = item.originalDocumentType;
-                            sItem.baseDocumentEntry = item.originalDocumentEntry;
-                            sItem.baseDocumentLineId = item.originalDocumentLineId;
+                            if (salesOrders instanceof Array) {
+                                let target: sales.bo.SalesDelivery = new sales.bo.SalesDelivery();
 
-                            let orderItem: sales.bo.SalesOrderItem = order.salesOrderItems.firstOrDefault(
-                                c => c.lineId === item.originalDocumentLineId);
-                            if (!ibas.objects.isNull(orderItem)) {
-                                sItem.originalDocumentType = orderItem.baseDocumentType;
-                                sItem.originalDocumentEntry = orderItem.baseDocumentEntry;
-                                sItem.originalDocumentLineId = orderItem.baseDocumentLineId;
+                                for (let item of this.editData.purchaseDeliveryItems) {
+                                    let sItem: sales.bo.SalesDeliveryItem = target.salesDeliveryItems.create();
+                                    sItem.itemCode = item.itemCode;
+                                    sItem.itemDescription = item.itemDescription;
+                                    sItem.itemSign = item.itemSign;
+                                    sItem.quantity = item.quantity;
+                                    sItem.warehouse = item.warehouse;
+                                    sItem.uom = item.uom;
+                                    let order: sales.bo.SalesOrder = salesOrders.firstOrDefault(
+                                        c => !ibas.strings.isEmpty(item.originalDocumentType)
+                                            && ibas.strings.equalsIgnoreCase(item.originalDocumentType, c.objectCode)
+                                            && c.docEntry === item.originalDocumentEntry);
+                                    if (!ibas.objects.isNull(order)) {
+                                        if (ibas.strings.isEmpty(target.customerCode)) {
+                                            target.customerCode = order.customerCode;
+                                        }
+                                        if (ibas.strings.isEmpty(target.customerName)) {
+                                            target.customerName = order.customerName;
+                                        }
+                                        if (!(target.contactPerson > 0)) {
+                                            target.contactPerson = order.contactPerson;
+                                        }
+                                        sItem.baseDocumentType = item.originalDocumentType;
+                                        sItem.baseDocumentEntry = item.originalDocumentEntry;
+                                        sItem.baseDocumentLineId = item.originalDocumentLineId;
 
-                                sItem.unitPrice = orderItem.unitPrice;
-                                sItem.discount = orderItem.discount;
-                                sItem.tax = orderItem.tax;
-                                sItem.taxRate = orderItem.taxRate;
-                                sItem.price = orderItem.price;
-                                sItem.currency = orderItem.currency;
-                                if (!(orderItem.closedQuantity > 0)) {
-                                    sItem.preTaxLineTotal = orderItem.preTaxLineTotal;
-                                    sItem.taxTotal = orderItem.taxTotal;
-                                    sItem.lineTotal = orderItem.lineTotal;
-                                }
-                                sItem.reference1 = orderItem.reference1;
-                                sItem.reference2 = orderItem.reference2;
-                                // 复制自定义字段
-                                for (let uItem of orderItem.userFields.forEach()) {
-                                    let myItem: ibas.IUserField = sItem.userFields.get(uItem.name);
-                                    if (ibas.objects.isNull(myItem)) {
-                                        myItem = sItem.userFields.register(uItem.name, uItem.valueType);
-                                        // continue;
+                                        let orderItem: sales.bo.SalesOrderItem = order.salesOrderItems.firstOrDefault(
+                                            c => c.lineId === item.originalDocumentLineId);
+                                        if (!ibas.objects.isNull(orderItem)) {
+                                            sItem.originalDocumentType = orderItem.baseDocumentType;
+                                            sItem.originalDocumentEntry = orderItem.baseDocumentEntry;
+                                            sItem.originalDocumentLineId = orderItem.baseDocumentLineId;
+
+                                            sItem.unitPrice = orderItem.unitPrice;
+                                            sItem.discount = orderItem.discount;
+                                            sItem.tax = orderItem.tax;
+                                            sItem.taxRate = orderItem.taxRate;
+                                            sItem.price = orderItem.price;
+                                            sItem.currency = orderItem.currency;
+                                            if (!(orderItem.closedQuantity > 0)) {
+                                                sItem.preTaxLineTotal = orderItem.preTaxLineTotal;
+                                                sItem.taxTotal = orderItem.taxTotal;
+                                                sItem.lineTotal = orderItem.lineTotal;
+                                            }
+                                            sItem.reference1 = orderItem.reference1;
+                                            sItem.reference2 = orderItem.reference2;
+                                            // 复制自定义字段
+                                            for (let uItem of orderItem.userFields.forEach()) {
+                                                let myItem: ibas.IUserField = sItem.userFields.get(uItem.name);
+                                                if (ibas.objects.isNull(myItem)) {
+                                                    myItem = sItem.userFields.register(uItem.name, uItem.valueType);
+                                                    // continue;
+                                                }
+                                                if (myItem.valueType !== uItem.valueType) {
+                                                    continue;
+                                                }
+                                                myItem.value = uItem.value;
+                                            }
+                                            // 复制批次
+                                            for (let batch of orderItem.materialBatches) {
+                                                let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
+                                                myBatch.batchCode = batch.batchCode;
+                                                myBatch.quantity = batch.quantity;
+                                            }
+                                            // 复制序列
+                                            for (let serial of orderItem.materialSerials) {
+                                                let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
+                                                mySerial.serialCode = serial.serialCode;
+                                            }
+                                        }
                                     }
-                                    if (myItem.valueType !== uItem.valueType) {
+                                }
+                                ibas.servicesManager.runEditService({
+                                    boCode: target.objectCode,
+                                    editData: target,
+                                    onCompleted: (result) => {
+                                    }
+                                });
+                            } else {
+                                let condition: ibas.ICondition = null;
+                                let sCriteria: ibas.ICriteria = new ibas.Criteria();
+                                for (let item of this.editData.purchaseDeliveryItems) {
+                                    if (!ibas.strings.equalsIgnoreCase(
+                                        item.originalDocumentType, ibas.config.applyVariables(sales.bo.SalesOrder.BUSINESS_OBJECT_CODE))) {
                                         continue;
                                     }
-                                    myItem.value = uItem.value;
-                                }
-                                // 复制批次
-                                for (let batch of orderItem.materialBatches) {
-                                    let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
-                                    myBatch.batchCode = batch.batchCode;
-                                    myBatch.quantity = batch.quantity;
-                                }
-                                // 复制序列
-                                for (let serial of orderItem.materialSerials) {
-                                    let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
-                                    mySerial.serialCode = serial.serialCode;
-                                }
-                            }
-                        }
-                    }
-                    ibas.servicesManager.runEditService({
-                        boCode: target.objectCode,
-                        editData: target,
-                        onCompleted: (result) => {
-                        }
-                    });
-                } else {
-                    let condition: ibas.ICondition = null;
-                    let sCriteria: ibas.ICriteria = new ibas.Criteria();
-                    for (let item of this.editData.purchaseDeliveryItems) {
-                        if (!ibas.strings.equalsIgnoreCase(
-                            item.originalDocumentType, ibas.config.applyVariables(sales.bo.SalesOrder.BUSINESS_OBJECT_CODE))) {
-                            continue;
-                        }
-                        condition = sCriteria.conditions.create();
-                        condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
-                        condition.value = item.originalDocumentEntry.toString();
-                        if (sCriteria.conditions.length > 0) {
-                            condition.relationship = ibas.emConditionRelationship.OR;
-                        }
-                    }
-                    if (sCriteria.conditions.length === 0) {
-                        this.turnToSalesDelivery(new ibas.ArrayList<sales.bo.SalesOrder>());
-                    } else {
-                        let boRepository: sales.bo.BORepositorySales = new sales.bo.BORepositorySales();
-                        boRepository.fetchSalesOrder({
-                            criteria: sCriteria,
-                            onCompleted: (opRslt) => {
-                                try {
-                                    if (opRslt.resultCode !== 0) {
-                                        throw new Error(opRslt.message);
+                                    condition = sCriteria.conditions.create();
+                                    condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
+                                    condition.value = item.originalDocumentEntry.toString();
+                                    if (sCriteria.conditions.length > 0) {
+                                        condition.relationship = ibas.emConditionRelationship.OR;
                                     }
-                                    this.turnToSalesDelivery(opRslt.resultObjects);
-                                } catch (error) {
-                                    this.messages(error);
+                                }
+                                if (sCriteria.conditions.length === 0) {
+                                    this.turnToSalesDelivery(new ibas.ArrayList<sales.bo.SalesOrder>());
+                                } else {
+                                    let boRepository: sales.bo.BORepositorySales = new sales.bo.BORepositorySales();
+                                    boRepository.fetchSalesOrder({
+                                        criteria: sCriteria,
+                                        onCompleted: (opRslt) => {
+                                            try {
+                                                if (opRslt.resultCode !== 0) {
+                                                    throw new Error(opRslt.message);
+                                                }
+                                                this.turnToSalesDelivery(opRslt.resultObjects);
+                                            } catch (error) {
+                                                this.messages(error);
+                                            }
+                                        }
+                                    });
                                 }
                             }
-                        });
+                        } catch (error) {
+                            this.messages(error);
+                        }
                     }
-                }
+                });
             }
             /** 选择一揽子协议事件 */
             private choosePurchaseDeliveryBlanketAgreement(): void {

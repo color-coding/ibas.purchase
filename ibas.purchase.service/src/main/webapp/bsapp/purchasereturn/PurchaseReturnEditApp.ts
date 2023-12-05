@@ -732,23 +732,42 @@ namespace purchase {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
                     return;
                 }
-                if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
-                    || this.editData.deleted === ibas.emYesNo.YES
-                    || this.editData.canceled === ibas.emYesNo.YES
-                    || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
-                ) {
-                    this.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
-                    return;
-                }
-                let target: bo.PurchaseCreditNote = new bo.PurchaseCreditNote();
-                target.supplierCode = this.editData.supplierCode;
-                target.supplierName = this.editData.supplierName;
-                target.baseDocument(this.editData);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseReturn({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseReturn(this.editData);
+                            this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseCreditNote = new bo.PurchaseCreditNote();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
 
-                let app: PurchaseCreditNoteEditApp = new PurchaseCreditNoteEditApp();
-                app.navigation = this.navigation;
-                app.viewShower = this.viewShower;
-                app.run(target);
+                            let app: PurchaseCreditNoteEditApp = new PurchaseCreditNoteEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
 
             }
 

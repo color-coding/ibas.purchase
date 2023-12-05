@@ -497,7 +497,7 @@ namespace purchase {
                 super();
                 this.id = DownPaymentRequestPaymentService.APPLICATION_ID;
                 this.name = DownPaymentRequestPaymentService.APPLICATION_NAME;
-                this.description = ibas.i18n.prop("bo_downpaymentrequest_ar");
+                this.description = ibas.i18n.prop("bo_downpaymentrequest_ap");
                 this.proxy = receiptpayment.app.DocumentPaymentServiceProxy;
             }
             /** 创建服务实例 */
