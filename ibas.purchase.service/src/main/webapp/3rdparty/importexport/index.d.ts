@@ -1863,6 +1863,44 @@ declare namespace importexport {
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+declare namespace importexport {
+    namespace app {
+        /** 应用-审批流程 */
+        class ViewExportApp extends ibas.ResidentApplication<IViewExportView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 运行,覆盖原方法 */
+            run(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private export;
+        }
+        /** 视图-审批流程 */
+        interface IViewExportView extends ibas.IResidentView {
+            exportEvent: Function;
+            /** 显示表格 */
+            showTables(): void;
+        }
+        class ViewExportApplicationMapping extends ibas.ResidentApplicationMapping {
+            /** 构造函数 */
+            constructor();
+            create(): ibas.ResidentApplication<ibas.IResidentView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.

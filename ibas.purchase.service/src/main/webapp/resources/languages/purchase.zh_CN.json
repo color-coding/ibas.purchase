@@ -97,6 +97,7 @@
   "purchase_assistant_choose_all": "选择全部",
   "purchase_assistant_order_saved": "保存成功并添加到[编辑详情]选项，单据编号[{0}]。",
   "purchase_assistant_order_info": "单号{0}：{1} - 行{2}个",
+  "purchase_assistant_order_branch_mismatching": "销售订单[{0}]的分支不匹配",
   "purchase_unrecognized_extra_information": "不能识别的信息[{0}]",
   "purchase_remove_base_items_continue": "此操作会移出基于的行项目，是否继续？",
   "purchase_change_item_warehouse_continue": "是否更改单据行的仓库为[{0}]？",

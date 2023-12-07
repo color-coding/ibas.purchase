@@ -2615,6 +2615,12 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 			@Override
 			public emDocumentStatus getSourceDocumentStatus() {
+				if (PurchaseOrderItem.this.getCanceled() == emYesNo.YES) {
+					return emDocumentStatus.CLOSED;
+				}
+				if (PurchaseOrderItem.this.getDeleted() == emYesNo.YES) {
+					return emDocumentStatus.CLOSED;
+				}
 				return PurchaseOrderItem.this.getLineStatus();
 			}
 

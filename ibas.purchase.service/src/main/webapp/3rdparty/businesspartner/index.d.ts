@@ -1023,7 +1023,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace bo {
         /** 协议/合同 */
-        interface IAgreement extends ibas.IBOMasterData {
+        interface IAgreement extends ibas.IBOMasterData, ibas.IBOUserFields {
             /** 编码 */
             code: string;
             /** 名称 */

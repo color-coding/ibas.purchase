@@ -620,6 +620,18 @@ namespace purchase {
                                                                                 detailIcon: "sap-icon://forward",
                                                                                 detailTooltip: ibas.i18n.prop("shell_data_choose"),
                                                                                 detailPress(this: sap.m.ListItemBase): void {
+                                                                                    if (accounting.config.isEnableBranch()) {
+                                                                                        let order: any = this.getParent().getBindingContext().getObject();
+                                                                                        if (order instanceof sales.bo.SalesOrder) {
+                                                                                            if (order.branch !== that.branchInput.getBindingValue()) {
+                                                                                                that.application.viewShower.messages({
+                                                                                                    type: ibas.emMessageType.WARNING,
+                                                                                                    message: ibas.i18n.prop("purchase_assistant_order_branch_mismatching", order.docEntry),
+                                                                                                    title: that.title,
+                                                                                                }); return;
+                                                                                            }
+                                                                                        }
+                                                                                    }
                                                                                     let orderItem: any = this.getBindingContext().getObject();
                                                                                     if (orderItem instanceof sales.bo.SalesOrderItem) {
                                                                                         that.fireViewEvents(
@@ -747,6 +759,30 @@ namespace purchase {
                                                         }
                                                     }
                                                 }),
+                                                new sap.m.ToolbarSeparator(),
+                                                new sap.m.Label("", {
+                                                    showColon: true,
+                                                    text: ibas.i18n.prop("bo_branch")
+                                                }),
+                                                this.branchInput = new sap.extension.m.SelectionInput("", {
+                                                    showValueHelp: true,
+                                                    width: "12rem",
+                                                    repository: accounting.bo.BORepositoryAccounting,
+                                                    dataInfo: {
+                                                        type: accounting.bo.Branch,
+                                                        key: accounting.bo.Branch.PROPERTY_CODE_NAME,
+                                                        text: accounting.bo.Branch.PROPERTY_NAME_NAME
+                                                    },
+                                                    criteria: [
+                                                        new ibas.Condition(accounting.bo.Branch.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
+                                                    ],
+                                                    visible: accounting.config.isEnableBranch(),
+                                                }).bindProperty("bindingValue", {
+                                                    path: "/branch",
+                                                    type: new sap.extension.data.Alphanumeric({
+                                                        maxLength: 8
+                                                    })
+                                                }).addStyleClass("sapUiTinyMarginBegin"),
                                                 new sap.m.ToolbarSpacer(),
                                                 that.checkMerge = new sap.m.CheckBox("", {
                                                     text: ibas.i18n.prop("purchase_assistant_merge_purchasing"),
@@ -780,10 +816,18 @@ namespace purchase {
                                                     type: sap.m.ButtonType.Accept,
                                                     press(this: sap.m.Button): void {
                                                         let datas: any = that.leftOrder.getModel()?.getData();
+
                                                         let items: ibas.ArrayList<sales.bo.SalesOrderItem> = new ibas.ArrayList<sales.bo.SalesOrderItem>();
                                                         if (datas instanceof Array) {
                                                             for (let data of datas) {
                                                                 if (data instanceof sales.bo.SalesOrder) {
+                                                                    if (data.branch !== that.branchInput.getBindingValue()) {
+                                                                        that.application.viewShower.messages({
+                                                                            type: ibas.emMessageType.WARNING,
+                                                                            message: ibas.i18n.prop("purchase_assistant_order_branch_mismatching", data.docEntry),
+                                                                            title: that.title,
+                                                                        }); return;
+                                                                    }
                                                                     items.add(data.salesOrderItems.filterDeleted());
                                                                 }
                                                             }
@@ -1011,6 +1055,7 @@ namespace purchase {
                 private rightTop: sap.ui.layout.form.SimpleForm;
                 private rightOrder: sap.extension.m.Table;
                 private menuEditData: sap.m.MenuButton;
+                private branchInput: sap.extension.m.SelectionInput;
 
 
                 private selectWarehouse: component.WarehouseSelect;
@@ -1042,6 +1087,11 @@ namespace purchase {
                 /** 显示采购订单 */
                 showPurchaseOrder(data: bo.PurchaseOrder): void {
                     this.rightTop.setModel(new sap.extension.model.JSONModel(data));
+                    this.branchInput.setModel(new sap.extension.model.JSONModel(data));
+                    // 设置分支对象
+                    if (accounting.config.isEnableBranch()) {
+                        this.selectWarehouse.setBranchData(data);
+                    }
                 }
                 /** 显示采购订单 */
                 showPurchaseOrderItems(datas: bo.PurchaseOrderItem[]): void {

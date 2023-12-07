@@ -888,12 +888,14 @@ namespace purchase {
                                                 myItem.value = uItem.value;
                                             }
                                             // 复制批次
+                                            sItem.batchManagement = orderItem.batchManagement;
                                             for (let batch of orderItem.materialBatches) {
                                                 let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
                                                 myBatch.batchCode = batch.batchCode;
                                                 myBatch.quantity = batch.quantity;
                                             }
                                             // 复制序列
+                                            sItem.serialManagement = orderItem.serialManagement;
                                             for (let serial of orderItem.materialSerials) {
                                                 let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
                                                 mySerial.serialCode = serial.serialCode;

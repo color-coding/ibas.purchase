@@ -11,7 +11,11 @@ declare namespace purchase {
             /**
              * 仓库选择-选择框
              */
-            class WarehouseSelect extends sap.extension.m.RepositorySelect {
+            class WarehouseSelect extends sap.extension.m.Select {
+                /** 绑定分支数据对象 */
+                setBranchData(data: ibas.Bindable): WarehouseSelect;
+                /** 绑定分支数据对象 */
+                getBranchData(): ibas.Bindable;
             }
             /**
              * 送货地址-选择框

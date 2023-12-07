@@ -10230,6 +10230,8 @@ declare namespace materials {
             baseBusinessObject(data: IMaterialSerial): void;
             /** 初始化数据 */
             protected init(): void;
+            /** 重置 */
+            reset(): void;
         }
     }
 }
@@ -10610,6 +10612,8 @@ declare namespace materials {
             set updateActionId(value: string);
             /** 初始化数据 */
             protected init(): void;
+            /** 重置 */
+            reset(): void;
         }
     }
 }
@@ -11211,6 +11215,13 @@ declare namespace materials {
             /** 创建业务对象转换者 */
             protected createConverter(): ibas.BOConverter;
             /**
+             * 转换数据
+             * @param data 当前类型数据
+             * @param sign 操作标记
+             * @returns 转换的数据
+             */
+            convert(data: any, sign: string): any;
+            /**
              * 解析业务对象数据
              * @param data 目标类型
              * @param sign 特殊标记
@@ -11283,6 +11294,12 @@ declare namespace materials {
                 Description: string;
                 /** 关联 */
                 Associated: string;
+            }
+            /** 物料编码改变 */
+            interface IMaterialNumberChange extends IDataDeclaration {
+                Issue: GoodsIssue;
+                Receipt: GoodsReceipt;
+                Reservations: MaterialInventoryReservation[];
             }
         }
     }
@@ -11564,6 +11581,19 @@ declare namespace materials {
              * @param saver 保存者
              */
             savePickLists(saver: ibas.ISaveCaller<bo.PickLists>): void;
+            /**
+             * 改变物料批次/序列号
+             * @param changer 改变者
+             */
+            changeMaterialNumbers(changer: IChangeCaller): void;
+        }
+        interface IChangeCaller extends ibas.IMethodCaller<string> {
+            /** 改变内容 */
+            changes: {
+                issue: GoodsIssue;
+                receipt: GoodsReceipt;
+                reservations: MaterialInventoryReservation[];
+            };
         }
     }
 }
@@ -13152,6 +13182,16 @@ declare namespace materials {
             set sourceWarehouse(value: string);
             get targetWarehouse(): string;
             set targetWarehouse(value: string);
+            reservations: ibas.IList<MaterialNumberReservation>;
+            get reservationQuantity(): number;
+            get transferQuantity(): number;
+            check(): void;
+        }
+        class MaterialNumberReservation extends ibas.Bindable {
+            constructor(data: bo.MaterialInventoryReservation);
+            source: bo.MaterialInventoryReservation;
+            sourceQuantity: number;
+            target: bo.MaterialInventoryReservation;
         }
         /** 应用-物料批次序列号变更 */
         class MaterialNumberChangeApp extends ibas.Application<IMaterialNumberChangeView> {
@@ -13274,11 +13314,13 @@ declare namespace materials {
             private chooseSpecification;
             /** 选择物料版本 */
             private chooseVersion;
+            /** 视图状态 */
+            viewMode: ibas.emViewMode;
         }
         /** 视图-物料批次 */
         interface IMaterialBatchEditView extends ibas.IBOEditView {
             /** 显示数据 */
-            showMaterialBatch(data: bo.MaterialBatch): void;
+            showMaterialBatch(data: bo.MaterialBatch, viewMode?: ibas.emViewMode): void;
             /** 选择物料规格 */
             chooseSpecificationEvent: Function;
             /** 选择物料版本 */
@@ -14031,11 +14073,13 @@ declare namespace materials {
             private chooseSpecification;
             /** 选择物料版本 */
             private chooseVersion;
+            /** 视图状态 */
+            viewMode: ibas.emViewMode;
         }
         /** 视图-物料序列 */
         interface IMaterialSerialEditView extends ibas.IBOEditView {
             /** 显示数据 */
-            showMaterialSerial(data: bo.MaterialSerial): void;
+            showMaterialSerial(data: bo.MaterialSerial, viewMode?: ibas.emViewMode): void;
             /** 选择物料规格 */
             chooseSpecificationEvent: Function;
             /** 选择物料版本 */

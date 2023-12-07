@@ -141,17 +141,38 @@ declare namespace accounting {
          * 总账科目条件支持属性
          */
         enum emLedgerAccountConditionProperty {
+            /** 业务对象编码 */
             ObjectCode = "ObjectCode",
-            OrderType = "OrderType",
-            Project = "Project",
+            /** 数据所有者 */
             DataOwner = "DataOwner",
+            /** 数据所属组织 */
             Organization = "Organization",
+            /** 单据类型 */
+            OrderType = "OrderType",
+            /** 项目 */
+            Project = "Project",
+            /** 税 */
+            Tax = "Tax",
+            /** 分支 */
+            Branch = "Branch",
+            /** 客户 */
             Customer = "Customer",
+            /** 供应商 */
             Supplier = "Supplier",
-            Item = "Item",
-            ItemGroup = "ItemGroup",
+            /** 客户组 */
+            CustomerGroup = "CustomerGroup",
+            /** 供应商组 */
+            SupplierGroup = "SupplierGroup",
+            /** 物料 */
+            Material = "Material",
+            /** 物料组 */
+            MaterialGroup = "MaterialGroup",
+            /** 仓库 */
             Warehouse = "Warehouse",
-            Tax = "Tax"
+            /** 收付款方式 */
+            PaymentMethod = "PaymentMethod",
+            /** 交易识别码 */
+            TradeId = "TradeId"
         }
         /** 维度服务契约 */
         interface IDimensionDataServiceContract extends ibas.IServiceContract {

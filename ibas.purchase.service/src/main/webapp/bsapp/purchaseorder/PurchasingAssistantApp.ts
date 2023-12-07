@@ -29,7 +29,7 @@ namespace purchase {
                 }
             }
             export namespace salesorder {
-                export function create(): ibas.ICondition[] {
+                export function create(branch?: string): ibas.ICondition[] {
                     let condition: ibas.ICondition;
                     let conditions: ibas.ICondition[] = new ibas.ArrayList<ibas.ICondition>();
                     // 未取消的
@@ -64,6 +64,27 @@ namespace purchase {
                     condition.relationship = ibas.emConditionRelationship.OR;
                     condition.bracketClose = 1;
                     conditions.push(condition);
+                    // 是否指定分支
+                    if (!ibas.strings.isEmpty(branch)) {
+                        condition = new ibas.Condition();
+                        condition.alias = sales.bo.SalesOrder.PROPERTY_BRANCH_NAME;
+                        condition.operation = ibas.emConditionOperation.EQUAL;
+                        condition.value = branch;
+                        conditions.push(condition);
+                    } else {
+                        condition = new ibas.Condition();
+                        condition.alias = sales.bo.SalesOrder.PROPERTY_BRANCH_NAME;
+                        condition.operation = ibas.emConditionOperation.EQUAL;
+                        condition.value = "";
+                        condition.bracketOpen = 1;
+                        conditions.push(condition);
+                        condition = new ibas.Condition();
+                        condition.alias = sales.bo.SalesOrder.PROPERTY_BRANCH_NAME;
+                        condition.operation = ibas.emConditionOperation.IS_NULL;
+                        condition.relationship = ibas.emConditionRelationship.OR;
+                        condition.bracketClose = 1;
+                        conditions.push(condition);
+                    }
                     return conditions;
                 }
             }
@@ -183,7 +204,7 @@ namespace purchase {
                     criteria.conditions.firstOrDefault().bracketOpen += 1;
                     criteria.conditions.lastOrDefault().bracketClose += 1;
                 }
-                criteria.conditions.add(conditions.salesorder.create());
+                criteria.conditions.add(conditions.salesorder.create(this.purchaseOrder.branch));
                 this.busy(true);
                 let boRepository: sales.bo.BORepositorySales = new sales.bo.BORepositorySales();
                 boRepository.fetchSalesOrder({

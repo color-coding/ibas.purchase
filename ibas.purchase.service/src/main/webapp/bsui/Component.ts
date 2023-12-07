@@ -36,84 +36,80 @@ namespace purchase {
             /**
              * 仓库选择-选择框
              */
-            sap.extension.m.RepositorySelect.extend("purchase.ui.component.WarehouseSelect", {
+            sap.extension.m.Select.extend("purchase.ui.component.WarehouseSelect", {
                 metadata: {
                     properties: {
+                        branchData: { type: "any" },
                     },
                     events: {
                     },
                 },
                 renderer: {
                 },
-                /** 重构设置 */
-                applySettings(this: WarehouseSelect): WarehouseSelect {
-                    let boRepository: ibas.BORepositoryApplication = this.getRepository();
-                    if (ibas.objects.isNull(boRepository)) {
-                        boRepository = sap.extension.variables.get(WarehouseSelect, "repository");
-                        if (ibas.objects.isNull(boRepository)) {
-                            boRepository = new materials.bo.BORepositoryMaterials;
-                            sap.extension.variables.set(boRepository, WarehouseSelect, "repository");
-                        }
-                        this.setRepository(boRepository);
+                /** 绑定分支数据对象 */
+                setBranchData(this: WarehouseSelect, data: ibas.Bindable): WarehouseSelect {
+                    let old: ibas.Bindable = this.getBranchData();
+                    if (old instanceof ibas.Bindable) {
+                        old.removeListener(this.getId());
                     }
-                    let dataInfo: sap.extension.repository.IDataInfo = this.getDataInfo();
-                    if (ibas.objects.isNull(dataInfo)) {
-                        dataInfo = sap.extension.variables.get(WarehouseSelect, "dataInfo");
-                        if (ibas.objects.isNull(dataInfo)) {
-                            dataInfo = {
-                                type: materials.bo.Warehouse,
-                                key: "Code",
-                                text: "Name",
-                            };
-                            sap.extension.variables.set(dataInfo, WarehouseSelect, "dataInfo");
-                        }
-                        this.setDataInfo(dataInfo);
-                    } else {
-                        if (!dataInfo.type) {
-                            dataInfo.type = materials.bo.Warehouse;
-                        } else if (!dataInfo.key) {
-                            dataInfo.key = "Code";
-                        } else if (!dataInfo.text) {
-                            dataInfo.text = "Name";
-                        }
-                    }
-                    let criteria: ibas.ICriteria | ibas.ICondition[] = this.getCriteria();
-                    if (ibas.objects.isNull(criteria)) {
-                        criteria = sap.extension.variables.get(WarehouseSelect, "criteria");
-                        if (ibas.objects.isNull(criteria)) {
-                            criteria = new ibas.Criteria();
-                            let condition: ibas.ICondition = criteria.conditions.create();
-                            condition.alias = "Activated";
-                            condition.value = ibas.emYesNo.YES.toString();
-                            let sort: ibas.ISort = criteria.sorts.create();
-                            sort.alias = "DocEntry";
-                            sort.sortType = ibas.emSortType.DESCENDING;
-                            sap.extension.variables.set(criteria, WarehouseSelect, "criteria");
-                        }
-                        this.setCriteria(criteria);
-                    }
-                    if (WAREHOUSE_ITEM_CACHE.size > 0) {
-                        WAREHOUSE_ITEM_CACHE.forEach((value, key) => {
-                            sap.extension.m.RepositorySelect.prototype.addItem.call(this,
-                                new sap.ui.core.ListItem("", {
-                                    key: key,
-                                    text: value
-                                })
-                            );
+                    if (data instanceof ibas.Bindable) {
+                        let that: WarehouseSelect = this;
+                        data.registerListener({
+                            id: this.getId(),
+                            propertyChanged(property: string): void {
+                                if (ibas.strings.equalsIgnoreCase(property, "branch")) {
+                                    that.loadItems();
+                                }
+                            }
                         });
                     }
-                    sap.extension.m.RepositorySelect.prototype.applySettings.apply(this, arguments);
-                    return this;
+                    return this.setProperty("branchData", data);
+
                 },
-                addItem(this: WarehouseSelect, oItem: sap.ui.core.Item): WarehouseSelect {
-                    if (!WAREHOUSE_ITEM_CACHE.has(oItem.getKey())) {
-                        WAREHOUSE_ITEM_CACHE.set(oItem.getKey(), oItem.getText());
+                /** 绑定分支数据对象 */
+                getBranchData(): ibas.Bindable {
+                    return this.getProperty("branchData");
+                },
+                /**
+                 * 加载可选值
+                 */
+                loadItems(this: WarehouseSelect): WarehouseSelect {
+                    this.destroyItems();
+                    if (WAREHOUSE_CACHE.length > 0) {
+                        let branch: any = this.getBranchData();
+                        // tslint:disable-next-line: no-string-literal
+                        branch = branch ? branch["branch"] : null;
+                        for (let item of WAREHOUSE_CACHE) {
+                            if (branch === null || branch === undefined
+                                || (branch !== undefined && branch === item.branch)) {
+                                this.addItem(new sap.extension.m.SelectItem("", {
+                                    key: item.code,
+                                    text: item.name,
+                                    additionalText: item.branch,
+                                    tooltip: ibas.strings.format("{0} - {1}", item.code, item.name)
+                                }));
+                            }
+                        }
+                    } else {
+                        let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                        boRepository.fetchWarehouse({
+                            criteria: [
+                                new ibas.Condition(materials.bo.Warehouse.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                            ],
+                            onCompleted: (opRslt) => {
+                                if (opRslt.resultObjects.length > 0) {
+                                    for (let item of opRslt.resultObjects) {
+                                        WAREHOUSE_CACHE.add(item);
+                                    }
+                                    this.loadItems();
+                                }
+                            }
+                        });
                     }
-                    sap.extension.m.RepositorySelect.prototype.addItem.apply(this, arguments);
                     return this;
                 }
             });
-            const WAREHOUSE_ITEM_CACHE: Map<string, string> = new Map<string, string>();
+            const WAREHOUSE_CACHE: ibas.IList<materials.bo.Warehouse> = new ibas.ArrayList<materials.bo.Warehouse>();
             /**
              * 送货地址-选择框
              */
