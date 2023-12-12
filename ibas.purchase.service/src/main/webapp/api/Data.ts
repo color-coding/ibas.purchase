@@ -73,10 +73,6 @@ namespace purchase {
             ITEM,
             MONETARY
         }
-        export enum emPriceMode {
-            NET,
-            GROSS
-        }
     }
     export namespace app {
 

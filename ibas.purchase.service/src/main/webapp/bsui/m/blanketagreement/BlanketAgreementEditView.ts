@@ -572,15 +572,6 @@ namespace purchase {
                                                             enumType: bo.emAgreementType
                                                         }),
                                                     }),
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_pricemode") }),
-                                                    new sap.extension.m.EnumSelect("", {
-                                                        enumType: bo.emPriceMode
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "priceMode",
-                                                        type: new sap.extension.data.Enum({
-                                                            enumType: bo.emPriceMode
-                                                        }),
-                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_paymentcode") }),
                                                     new sap.extension.m.SelectionInput("", {
                                                         showValueHelp: true,
@@ -805,6 +796,17 @@ namespace purchase {
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 8
                                             }),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreementitem_tax") }),
+                                        new component.TaxGroupSelect("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "tax",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
+                                        }).bindProperty("rate", {
+                                            path: "taxRate",
+                                            type: new sap.extension.data.Rate()
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreementitem_linetotal") }),
                                         new sap.extension.m.Input("", {

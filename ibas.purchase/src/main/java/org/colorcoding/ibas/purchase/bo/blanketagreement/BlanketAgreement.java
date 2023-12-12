@@ -33,7 +33,6 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.data.emAgreementMethod;
 import org.colorcoding.ibas.purchase.data.emAgreementType;
-import org.colorcoding.ibas.purchase.data.emPriceMode;
 
 /**
  * 一揽子协议
@@ -1405,37 +1404,6 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement> implement
 	}
 
 	/**
-	 * 属性名称-价格方式
-	 */
-	private static final String PROPERTY_PRICEMODE_NAME = "PriceMode";
-
-	/**
-	 * 价格方式 属性
-	 */
-	@DbField(name = "PriceMode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
-	public static final IPropertyInfo<emPriceMode> PROPERTY_PRICEMODE = registerProperty(PROPERTY_PRICEMODE_NAME,
-			emPriceMode.class, MY_CLASS);
-
-	/**
-	 * 获取-价格方式
-	 * 
-	 * @return 值
-	 */
-	@XmlElement(name = PROPERTY_PRICEMODE_NAME)
-	public final emPriceMode getPriceMode() {
-		return this.getProperty(PROPERTY_PRICEMODE);
-	}
-
-	/**
-	 * 设置-价格方式
-	 * 
-	 * @param value 值
-	 */
-	public final void setPriceMode(emPriceMode value) {
-		this.setProperty(PROPERTY_PRICEMODE, value);
-	}
-
-	/**
 	 * 属性名称-结算概率
 	 */
 	private static final String PROPERTY_SETTLEMENTPROBABILITY_NAME = "SettlementProbability";
@@ -1576,7 +1544,6 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement> implement
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.setAgreementMethod(emAgreementMethod.ITEM);
 		this.setAgreementType(emAgreementType.GENERAL);
-		this.setPriceMode(emPriceMode.GROSS);
 	}
 
 	@Override

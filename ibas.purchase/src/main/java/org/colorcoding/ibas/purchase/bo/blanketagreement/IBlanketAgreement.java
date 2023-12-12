@@ -10,7 +10,6 @@ import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.purchase.data.emAgreementMethod;
 import org.colorcoding.ibas.purchase.data.emAgreementType;
-import org.colorcoding.ibas.purchase.data.emPriceMode;
 
 /**
  * 一揽子协议 接口
@@ -619,20 +618,6 @@ public interface IBlanketAgreement extends IBODocument {
 	 * @param value 值
 	 */
 	void setAgreementType(emAgreementType value);
-
-	/**
-	 * 获取-价格方式
-	 * 
-	 * @return 值
-	 */
-	emPriceMode getPriceMode();
-
-	/**
-	 * 设置-价格方式
-	 * 
-	 * @param value 值
-	 */
-	void setPriceMode(emPriceMode value);
 
 	/**
 	 * 获取-结算概率

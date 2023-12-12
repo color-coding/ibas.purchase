@@ -52,8 +52,8 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseCreditNoteMaterialsCost;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
 /**
  * 获取-采购贷项

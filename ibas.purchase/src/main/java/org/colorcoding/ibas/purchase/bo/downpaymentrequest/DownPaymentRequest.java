@@ -37,8 +37,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrderItem;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
 /**
  * 预付款申请

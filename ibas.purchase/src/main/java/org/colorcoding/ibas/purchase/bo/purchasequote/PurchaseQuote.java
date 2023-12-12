@@ -38,8 +38,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.ISupplierAndFloorListCheckContract;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscountTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDocumentTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
 /**
  * 获取-采购报价

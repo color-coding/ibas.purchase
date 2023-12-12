@@ -1005,7 +1005,6 @@
         "bo_blanketagreement_terminationdate": "终止日期",
         "bo_blanketagreement_agreementmethod": "协议方法",
         "bo_blanketagreement_agreementtype": "协议类型",
-        "bo_blanketagreement_pricemode": "价格方式",
         "bo_blanketagreement_settlementprobability": "结算概率",
         "bo_blanketagreement_agreements": "合同/协议",
         "bo_blanketagreement_branch": "分支",
@@ -1042,6 +1041,11 @@
         "bo_blanketagreementitem_currency": "货币",
         "bo_blanketagreementitem_rate": "汇率",
         "bo_blanketagreementitem_linetotal": "行总计",
+        "bo_blanketagreementitem_tax": "税定义",
+        "bo_blanketagreementitem_taxrate": "税率",
+        "bo_blanketagreementitem_taxtotal": "税总额",
+        "bo_blanketagreementitem_pretaxprice": "税前价格",
+        "bo_blanketagreementitem_pretaxlinetotal": "税前行总计",
         "bo_blanketagreementitem_closedquantity": "已清数量",
         "bo_blanketagreementitem_closedamount": "已清金额",
         "bo_blanketagreementitem_openquantity": "未清数量",
@@ -1183,9 +1187,5 @@
     {
         "em_agreementmethod_item": "物料方法",
         "em_agreementmethod_monetary": "货币方法"
-    },
-    {
-        "em_pricemode_net": "未税",
-        "em_pricemode_gross": "含税"
     }
 ]

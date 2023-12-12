@@ -394,16 +394,6 @@ namespace purchase {
                                             }),
                                         },
                                     }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        title: ibas.i18n.prop("bo_blanketagreement_pricemode"),
-                                        bindingValue: {
-                                            path: "priceMode",
-                                            type: new sap.extension.data.Enum({
-                                                enumType: bo.emPriceMode,
-                                                describe: true
-                                            }),
-                                        },
-                                    }),
                                     new sap.extension.m.RepositoryObjectAttribute("", {
                                         repository: businesspartner.bo.BORepositoryBusinessPartner,
                                         dataInfo: {

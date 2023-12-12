@@ -488,17 +488,6 @@ namespace purchase {
                 this.setProperty(BlanketAgreement.PROPERTY_AGREEMENTTYPE_NAME, value);
             }
 
-            /** 映射的属性名称-价格方式 */
-            static PROPERTY_PRICEMODE_NAME: string = "PriceMode";
-            /** 获取-价格方式 */
-            get priceMode(): emPriceMode {
-                return this.getProperty<emPriceMode>(BlanketAgreement.PROPERTY_PRICEMODE_NAME);
-            }
-            /** 设置-价格方式 */
-            set priceMode(value: emPriceMode) {
-                this.setProperty(BlanketAgreement.PROPERTY_PRICEMODE_NAME, value);
-            }
-
             /** 映射的属性名称-结算概率 */
             static PROPERTY_SETTLEMENTPROBABILITY_NAME: string = "SettlementProbability";
             /** 获取-结算概率 */
@@ -549,7 +538,6 @@ namespace purchase {
                 this.objectCode = ibas.config.applyVariables(BlanketAgreement.BUSINESS_OBJECT_CODE);
                 this.agreementMethod = bo.emAgreementMethod.ITEM;
                 this.agreementType = bo.emAgreementType.GENERAL;
-                this.priceMode = bo.emPriceMode.GROSS;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
                 this.signDate = ibas.dates.today();
                 this.startDate = ibas.dates.today();
@@ -886,6 +874,61 @@ namespace purchase {
                 this.setProperty(BlanketAgreementItem.PROPERTY_LINETOTAL_NAME, value);
             }
 
+            /** 映射的属性名称-税定义 */
+            static PROPERTY_TAX_NAME: string = "Tax";
+            /** 获取-税定义 */
+            get tax(): string {
+                return this.getProperty<string>(BlanketAgreementItem.PROPERTY_TAX_NAME);
+            }
+            /** 设置-税定义 */
+            set tax(value: string) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_TAX_NAME, value);
+            }
+
+            /** 映射的属性名称-税率 */
+            static PROPERTY_TAXRATE_NAME: string = "TaxRate";
+            /** 获取-税率 */
+            get taxRate(): number {
+                return this.getProperty<number>(BlanketAgreementItem.PROPERTY_TAXRATE_NAME);
+            }
+            /** 设置-税率 */
+            set taxRate(value: number) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_TAXRATE_NAME, value);
+            }
+
+            /** 映射的属性名称-税总额 */
+            static PROPERTY_TAXTOTAL_NAME: string = "TaxTotal";
+            /** 获取-税总额 */
+            get taxTotal(): number {
+                return this.getProperty<number>(BlanketAgreementItem.PROPERTY_TAXTOTAL_NAME);
+            }
+            /** 设置-税总额 */
+            set taxTotal(value: number) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_TAXTOTAL_NAME, value);
+            }
+
+            /** 映射的属性名称-税前价格 */
+            static PROPERTY_PRETAXPRICE_NAME: string = "PreTaxPrice";
+            /** 获取-税前价格 */
+            get preTaxPrice(): number {
+                return this.getProperty<number>(BlanketAgreementItem.PROPERTY_PRETAXPRICE_NAME);
+            }
+            /** 设置-税前价格 */
+            set preTaxPrice(value: number) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_PRETAXPRICE_NAME, value);
+            }
+
+            /** 映射的属性名称-税前行总计 */
+            static PROPERTY_PRETAXLINETOTAL_NAME: string = "PreTaxLineTotal";
+            /** 获取-税前行总计 */
+            get preTaxLineTotal(): number {
+                return this.getProperty<number>(BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME);
+            }
+            /** 设置-税前行总计 */
+            set preTaxLineTotal(value: number) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME, value);
+            }
+
             /** 映射的属性名称-已清数量 */
             static PROPERTY_CLOSEDQUANTITY_NAME: string = "ClosedQuantity";
             /** 获取-已清数量 */
@@ -941,9 +984,13 @@ namespace purchase {
             }
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
-                    // 计算总计 = 数量 * 价格
+                    // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
+                    new BusinessRuleDeductionPriceTaxTotal(BlanketAgreementItem.PROPERTY_LINETOTAL_NAME, BlanketAgreementItem.PROPERTY_PRICE_NAME, BlanketAgreementItem.PROPERTY_QUANTITY_NAME
+                        , BlanketAgreementItem.PROPERTY_TAXRATE_NAME, BlanketAgreementItem.PROPERTY_TAXTOTAL_NAME, BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
+                    // 计算税前总计 = 数量 * 税前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        BlanketAgreementItem.PROPERTY_LINETOTAL_NAME, BlanketAgreementItem.PROPERTY_PRICE_NAME, BlanketAgreementItem.PROPERTY_QUANTITY_NAME
+                        BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME, BlanketAgreementItem.PROPERTY_PRETAXPRICE_NAME, BlanketAgreementItem.PROPERTY_QUANTITY_NAME
                     ),
                 ];
             }

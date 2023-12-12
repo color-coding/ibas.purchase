@@ -27,8 +27,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
  * 采购申请-行

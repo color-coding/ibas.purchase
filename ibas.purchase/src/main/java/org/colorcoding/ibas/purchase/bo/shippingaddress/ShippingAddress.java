@@ -21,7 +21,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSubtraction;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.data.emShippingStatus;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionTaxPrice;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionTaxPrice;
 
 /**
  * 送货地址

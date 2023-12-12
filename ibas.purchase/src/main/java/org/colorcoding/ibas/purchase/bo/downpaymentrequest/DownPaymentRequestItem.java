@@ -24,9 +24,9 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
  * 预付款申请-行

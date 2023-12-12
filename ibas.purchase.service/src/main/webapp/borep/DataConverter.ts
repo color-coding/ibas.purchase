@@ -122,8 +122,6 @@ namespace purchase {
                         return ibas.enums.toString(emAgreementMethod, value);
                     } else if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTTYPE_NAME) {
                         return ibas.enums.toString(emAgreementType, value);
-                    } else if (property === bo.BlanketAgreement.PROPERTY_PRICEMODE_NAME) {
-                        return ibas.enums.toString(emPriceMode, value);
                     }
                 } else if (boName === bo.DownPaymentRequest.name) {
                     if (property === bo.DownPaymentRequest.PROPERTY_ROUNDING_NAME) {
@@ -220,8 +218,6 @@ namespace purchase {
                         return ibas.enums.valueOf(emAgreementMethod, value);
                     } else if (property === bo.BlanketAgreement.PROPERTY_AGREEMENTTYPE_NAME) {
                         return ibas.enums.valueOf(emAgreementType, value);
-                    } else if (property === bo.BlanketAgreement.PROPERTY_PRICEMODE_NAME) {
-                        return ibas.enums.valueOf(emPriceMode, value);
                     }
                 } else if (boName === bo.DownPaymentRequest.name) {
                     if (property === bo.DownPaymentRequest.PROPERTY_ROUNDING_NAME) {

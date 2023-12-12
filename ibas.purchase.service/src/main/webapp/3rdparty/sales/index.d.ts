@@ -68,10 +68,6 @@ declare namespace sales {
             ITEM = 0,
             MONETARY = 1
         }
-        enum emPriceMode {
-            NET = 0,
-            GROSS = 1
-        }
     }
     namespace app {
     }
@@ -2045,8 +2041,6 @@ declare namespace sales {
             agreementMethod: emAgreementMethod;
             /** 协议类型 */
             agreementType: emAgreementType;
-            /** 价格方式 */
-            priceMode: emPriceMode;
             /** 结算概率 */
             settlementProbability: number;
             /** 合同 */
@@ -2119,6 +2113,14 @@ declare namespace sales {
             rate: number;
             /** 行总计 */
             lineTotal: number;
+            /** 税定义 */
+            tax: string;
+            /** 税率 */
+            taxRate: number;
+            /** 税总额 */
+            taxTotal: number;
+            /** 税前价格 */
+            preTaxPrice: number;
             /** 已清数量 */
             closedQuantity: number;
             /** 已清金额 */
@@ -8320,12 +8322,6 @@ declare namespace sales {
             get agreementType(): emAgreementType;
             /** 设置-协议类型 */
             set agreementType(value: emAgreementType);
-            /** 映射的属性名称-价格方式 */
-            static PROPERTY_PRICEMODE_NAME: string;
-            /** 获取-价格方式 */
-            get priceMode(): emPriceMode;
-            /** 设置-价格方式 */
-            set priceMode(value: emPriceMode);
             /** 映射的属性名称-结算概率 */
             static PROPERTY_SETTLEMENTPROBABILITY_NAME: string;
             /** 获取-结算概率 */
@@ -8532,6 +8528,36 @@ declare namespace sales {
             get lineTotal(): number;
             /** 设置-行总计 */
             set lineTotal(value: number);
+            /** 映射的属性名称-税定义 */
+            static PROPERTY_TAX_NAME: string;
+            /** 获取-税定义 */
+            get tax(): string;
+            /** 设置-税定义 */
+            set tax(value: string);
+            /** 映射的属性名称-税率 */
+            static PROPERTY_TAXRATE_NAME: string;
+            /** 获取-税率 */
+            get taxRate(): number;
+            /** 设置-税率 */
+            set taxRate(value: number);
+            /** 映射的属性名称-税总额 */
+            static PROPERTY_TAXTOTAL_NAME: string;
+            /** 获取-税总额 */
+            get taxTotal(): number;
+            /** 设置-税总额 */
+            set taxTotal(value: number);
+            /** 映射的属性名称-税前价格 */
+            static PROPERTY_PRETAXPRICE_NAME: string;
+            /** 获取-税前价格 */
+            get preTaxPrice(): number;
+            /** 设置-税前价格 */
+            set preTaxPrice(value: number);
+            /** 映射的属性名称-税前行总计 */
+            static PROPERTY_PRETAXLINETOTAL_NAME: string;
+            /** 获取-税前行总计 */
+            get preTaxLineTotal(): number;
+            /** 设置-税前行总计 */
+            set preTaxLineTotal(value: number);
             /** 映射的属性名称-已清数量 */
             static PROPERTY_CLOSEDQUANTITY_NAME: string;
             /** 获取-已清数量 */

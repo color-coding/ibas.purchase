@@ -325,6 +325,19 @@ namespace purchase {
                                         }),
                                     }),
                                     new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_blanketagreementitem_tax"),
+                                        template: new component.TaxGroupSelect("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "tax",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
+                                        }).bindProperty("rate", {
+                                            path: "taxRate",
+                                            type: new sap.extension.data.Rate()
+                                        }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_linetotal"),
                                         template: new sap.extension.m.Input("", {
 
@@ -494,15 +507,6 @@ namespace purchase {
                                 path: "agreementType",
                                 type: new sap.extension.data.Enum({
                                     enumType: bo.emAgreementType
-                                }),
-                            }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_pricemode") }),
-                            new sap.extension.m.EnumSelect("", {
-                                enumType: bo.emPriceMode
-                            }).bindProperty("bindingValue", {
-                                path: "priceMode",
-                                type: new sap.extension.data.Enum({
-                                    enumType: bo.emPriceMode
                                 }),
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_paymentcode") }),

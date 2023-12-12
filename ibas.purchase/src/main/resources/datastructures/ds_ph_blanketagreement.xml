@@ -45,7 +45,6 @@
     <Property Name="TerminationDate" Description="终止日期" DataType="Date" DataSubType="Default" EditSize="8" Mapped="TermDate"/>
     <Property Name="AgreementMethod" Description="协议方法" DataType="Alphanumeric" DataSubType="Default" EditSize="2" DeclaredType="emAgreementMethod" Mapped="AgrtMethod"/>
     <Property Name="AgreementType" Description="协议类型" DataType="Alphanumeric" DataSubType="Default" EditSize="2" DeclaredType="emAgreementType" Mapped="AgrtType"/>
-    <Property Name="PriceMode" Description="价格方式" DataType="Alphanumeric" DataSubType="Default" EditSize="2" DeclaredType="emPriceMode" Mapped="PriceMode"/>
     <Property Name="SettlementProbability" Description="结算概率" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="SettPrbly"/>
     <Property Name="Agreements" Description="合同" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Agreements"/>
     <Property Name="DocumentNumber" Description="对象类型" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="Number"/>
@@ -80,6 +79,11 @@
     <Property Name="Currency" Description="货币" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Currency"/>
     <Property Name="Rate" Description="汇率" DataType="Decimal" DataSubType="Rate" EditSize="8" Mapped="Rate"/>
     <Property Name="LineTotal" Description="行总计" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="LineTotal"/>
+    <Property Name="Tax" Description="税定义" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Tax"/>
+    <Property Name="TaxRate" Description="税率" DataType="Decimal" DataSubType="Rate" EditSize="8" Mapped="TaxRate"/>
+    <Property Name="TaxTotal" Description="税总额" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="TaxTotal"/>
+    <Property Name="PreTaxPrice" Description="税前价格" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PreTaxPrice"/>
+    <Property Name="PreTaxLineTotal" Description="税前行总计" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="PreTaxTotal"/>
     <Property Name="ClosedQuantity" Description="已清数量" DataType="Decimal" DataSubType="Quantity" EditSize="8" Mapped="ClosedQty"/>
     <Property Name="ClosedAmount" Description="已清金额" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="ClosedAmt"/>
     <Property Name="Reference1" Description="参考1" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Ref1"/>

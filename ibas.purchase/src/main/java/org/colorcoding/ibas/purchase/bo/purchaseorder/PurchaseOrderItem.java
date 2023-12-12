@@ -39,11 +39,11 @@ import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReservationCreateContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseRequestClosingContract;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
 import org.colorcoding.ibas.sales.bo.salesorder.SalesOrder;
 import org.colorcoding.ibas.sales.logic.ISalesOrderOrderContract;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
  * 获取-采购订单-行

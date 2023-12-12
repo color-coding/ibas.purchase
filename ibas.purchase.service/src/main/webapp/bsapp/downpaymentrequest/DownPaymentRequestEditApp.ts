@@ -578,6 +578,24 @@ namespace purchase {
                 condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
                 condition.relationship = ibas.emConditionRelationship.OR;
                 condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.BlanketAgreement.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.BlanketAgreement.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.BlanketAgreement.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
                 // 当前供应商的
                 condition = criteria.conditions.create();
                 condition.alias = bo.BlanketAgreement.PROPERTY_SUPPLIERCODE_NAME;
@@ -654,12 +672,10 @@ namespace purchase {
                                             if (!ibas.strings.isEmpty(baItem.uom)) {
                                                 item.uom = baItem.uom;
                                             }
+                                            item.tax = baItem.tax;
+                                            item.taxRate = baItem.taxRate;
+                                            item.price = baItem.price;
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
-                                            if (selected.priceMode === bo.emPriceMode.NET) {
-                                                item.unitPrice = baItem.price;
-                                            } else if (selected.priceMode === bo.emPriceMode.GROSS) {
-                                                item.price = baItem.price;
-                                            }
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
                                             beChangeds.add({

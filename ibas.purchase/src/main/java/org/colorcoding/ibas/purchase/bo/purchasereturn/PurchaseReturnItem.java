@@ -39,9 +39,9 @@ import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuanti
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IPurchaseDeliveryReturnContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReturnContract;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionDiscount;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceQtyTotal;
-import org.colorcoding.ibas.purchase.rules.BusinessRuleDeductionPriceTaxTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
  * 获取-采购退货-行
