@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -21,6 +22,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
@@ -40,8 +43,8 @@ import org.colorcoding.ibas.purchase.MyConfiguration;
 @XmlType(name = PurchaseRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseRequest.BUSINESS_OBJECT_CODE)
-public class PurchaseRequest extends BusinessObject<PurchaseRequest>
-		implements IPurchaseRequest, IDataOwnership, IApprovalData, IProjectData, IBOSeriesKey, IBOUserFields {
+public class PurchaseRequest extends BusinessObject<PurchaseRequest> implements IPurchaseRequest, IDataOwnership,
+		IApprovalData, IProjectData, IBOSeriesKey, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -1555,5 +1558,25 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest>
 	@Override
 	public void setSeriesValue(Object value) {
 		this.setDocNum(String.valueOf(value));
+	}
+
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		return new IBusinessLogicContract[] {
+				// 分支检查
+				new IBranchCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseRequest.this.toString();
+					}
+
+					@Override
+					public String getBranch() {
+						return PurchaseRequest.this.getBranch();
+					}
+				}
+
+		};
 	}
 }

@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -23,6 +24,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
@@ -34,6 +37,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
+import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrderItem;
@@ -50,7 +54,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @BusinessObjectUnit(code = DownPaymentRequest.BUSINESS_OBJECT_CODE)
 public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 		implements IDownPaymentRequest, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator {
+		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -1708,4 +1712,35 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 		this.setDocNum(String.valueOf(value));
 	}
 
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		return new IBusinessLogicContract[] {
+				// 供应商检查
+				new ISupplierCheckContract() {
+					@Override
+					public String getIdentifiers() {
+						return DownPaymentRequest.this.getIdentifiers();
+					}
+
+					@Override
+					public String getSupplierCode() {
+						return DownPaymentRequest.this.getSupplierCode();
+					}
+				},
+				// 分支检查
+				new IBranchCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return DownPaymentRequest.this.toString();
+					}
+
+					@Override
+					public String getBranch() {
+						return DownPaymentRequest.this.getBranch();
+					}
+				}
+
+		};
+	}
 }

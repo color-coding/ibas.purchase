@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -1876,7 +1877,7 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
-				// 客户检查
+				// 供应商及价格检查
 				new ISupplierAndFloorListCheckContract() {
 					@Override
 					public String getIdentifiers() {
@@ -1898,6 +1899,19 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 						PurchaseQuote.this.floorList = value;
 					}
 
+				},
+				// 分支检查
+				new IBranchCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseQuote.this.toString();
+					}
+
+					@Override
+					public String getBranch() {
+						return PurchaseQuote.this.getBranch();
+					}
 				},
 				// 价格检查
 				new IMaterialPriceCheckContract() {

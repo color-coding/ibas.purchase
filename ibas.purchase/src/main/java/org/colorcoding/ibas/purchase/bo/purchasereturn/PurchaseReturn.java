@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
@@ -1998,6 +1999,19 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 					@Override
 					public String getSupplierCode() {
 						return PurchaseReturn.this.getSupplierCode();
+					}
+				},
+				// 分支检查
+				new IBranchCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseReturn.this.toString();
+					}
+
+					@Override
+					public String getBranch() {
+						return PurchaseReturn.this.getBranch();
 					}
 				},
 				// 创建分录

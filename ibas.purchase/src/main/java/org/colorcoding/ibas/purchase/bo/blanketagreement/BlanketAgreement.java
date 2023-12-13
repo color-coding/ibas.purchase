@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
+import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -22,6 +23,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
@@ -30,6 +33,7 @@ import org.colorcoding.ibas.bobas.period.IPeriodData;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.data.emAgreementMethod;
 import org.colorcoding.ibas.purchase.data.emAgreementType;
@@ -42,8 +46,9 @@ import org.colorcoding.ibas.purchase.data.emAgreementType;
 @XmlType(name = BlanketAgreement.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = BlanketAgreement.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = BlanketAgreement.BUSINESS_OBJECT_CODE)
-public class BlanketAgreement extends BusinessObject<BlanketAgreement> implements IBlanketAgreement, IDataOwnership,
-		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBOSeriesKey, IBOUserFields {
+public class BlanketAgreement extends BusinessObject<BlanketAgreement>
+		implements IBlanketAgreement, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
+		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -1565,6 +1570,38 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement> implement
 				new BusinessRuleRequired(PROPERTY_SUPPLIERCODE), // 要求有值
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_BLANKETAGREEMENTITEMS,
 						BlanketAgreementItem.PROPERTY_LINESTATUS), // 使用集合元素状态
+		};
+	}
+
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		return new IBusinessLogicContract[] {
+				// 供应商检查
+				new ISupplierCheckContract() {
+					@Override
+					public String getIdentifiers() {
+						return BlanketAgreement.this.getIdentifiers();
+					}
+
+					@Override
+					public String getSupplierCode() {
+						return BlanketAgreement.this.getSupplierCode();
+					}
+				},
+				// 分支检查
+				new IBranchCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return BlanketAgreement.this.toString();
+					}
+
+					@Override
+					public String getBranch() {
+						return BlanketAgreement.this.getBranch();
+					}
+				}
+
 		};
 	}
 
