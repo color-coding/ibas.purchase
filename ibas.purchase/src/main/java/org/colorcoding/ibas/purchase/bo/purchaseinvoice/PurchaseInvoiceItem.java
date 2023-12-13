@@ -2515,7 +2515,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 
 					@Override
 					public BigDecimal getPrice() {
-						return PurchaseInvoiceItem.this.getPrice();
+						return PurchaseInvoiceItem.this.getPreTaxPrice();
 					}
 
 					@Override

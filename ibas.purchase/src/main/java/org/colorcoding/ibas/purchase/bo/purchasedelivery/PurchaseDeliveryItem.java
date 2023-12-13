@@ -2468,7 +2468,7 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 
 					@Override
 					public BigDecimal getPrice() {
-						return PurchaseDeliveryItem.this.getPrice();
+						return PurchaseDeliveryItem.this.getPreTaxPrice();
 					}
 
 					@Override
