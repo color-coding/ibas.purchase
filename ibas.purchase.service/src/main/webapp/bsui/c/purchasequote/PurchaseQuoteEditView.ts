@@ -320,7 +320,7 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemCode",
                                             type: new sap.extension.data.Alphanumeric({
-                                                maxLength: 20
+                                                maxLength: 50
                                             })
                                         }),
                                     }),

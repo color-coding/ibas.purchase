@@ -923,7 +923,7 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemCode",
                                             type: new sap.extension.data.Alphanumeric({
-                                                maxLength: 20
+                                                maxLength: 50
                                             }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoiceitem_itemdescription") }),

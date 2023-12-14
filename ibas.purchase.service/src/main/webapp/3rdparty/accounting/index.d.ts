@@ -1021,6 +1021,10 @@ declare namespace accounting {
             createActionId: string;
             /** 更新动作标识 */
             updateActionId: string;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
+            /** 删除的 */
+            deleted: ibas.emYesNo;
             /** 备注 */
             remarks: string;
         }
@@ -3712,6 +3716,18 @@ declare namespace accounting {
             get updateActionId(): string;
             /** 设置-更新动作标识 */
             set updateActionId(value: string);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-删除的 */
+            static PROPERTY_DELETED_NAME: string;
+            /** 获取-删除的 */
+            get deleted(): ibas.emYesNo;
+            /** 设置-删除的 */
+            set deleted(value: ibas.emYesNo);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -6844,6 +6860,43 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 应用-默认分支设置 */
+        class BranchSettingApp extends ibas.ResidentApplication<IBranchSettingView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private set;
+            protected barShowed(): void;
+        }
+        /** 视图-默认分支设置 */
+        interface IBranchSettingView extends ibas.IResidentView {
+            setEvent: Function;
+            /** 显示数据 */
+            showBranchs(datas: bo.Branch[]): void;
+        }
+        class BranchSettingApplicationMapping extends ibas.ResidentApplicationMapping {
+            /** 构造函数 */
+            constructor();
+            create(): ibas.ResidentApplication<ibas.IResidentView>;
         }
     }
 }
