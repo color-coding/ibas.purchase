@@ -51,6 +51,7 @@ import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPrice;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPriceDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
@@ -2062,7 +2063,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
 								/** 基于交货 **/
 								// 分配科目
-								jeContent = new JournalEntrySmartContent(line);
+								jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计

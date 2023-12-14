@@ -189,6 +189,9 @@ namespace purchase {
                 // 视图加载完成
                 if (ibas.objects.isNull(this.purchaseOrder)) {
                     this.purchaseOrder = new bo.PurchaseOrder();
+                    if (accounting.config.isEnableBranch()) {
+                        this.purchaseOrder.branch = ibas.variablesManager.getValue(ibas.VARIABLE_NAME_USER_BRANCH);
+                    }
                 }
                 this.view.showPurchaseOrder(this.purchaseOrder);
                 this.view.showPurchaseOrderItems(this.purchaseOrder.purchaseOrderItems.filterDeleted());

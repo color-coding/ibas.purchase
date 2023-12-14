@@ -13,7 +13,7 @@ public class PurchaseCreditNoteMaterialsCost extends MaterialsCost {
 	}
 
 	@Override
-	public void caculate() {
+	public void caculate() throws Exception {
 		if (this.getSourceData() instanceof IPurchaseCreditNoteItem) {
 			IPurchaseCreditNoteItem item = (IPurchaseCreditNoteItem) this.getSourceData();
 			BigDecimal avaPrice = null;
@@ -33,7 +33,7 @@ public class PurchaseCreditNoteMaterialsCost extends MaterialsCost {
 				return;
 			}
 		}
-		throw new RuntimeException("no result.");
+		this.setAmount(Decimal.ZERO);
 	}
 
 }

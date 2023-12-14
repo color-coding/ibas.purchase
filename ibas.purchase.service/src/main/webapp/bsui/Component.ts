@@ -40,6 +40,11 @@ namespace purchase {
                 metadata: {
                     properties: {
                         branchData: { type: "any" },
+                        forceSelection: {
+                            type: "boolean",
+                            group: "Behavior",
+                            defaultValue: false
+                        },
                     },
                     events: {
                     },

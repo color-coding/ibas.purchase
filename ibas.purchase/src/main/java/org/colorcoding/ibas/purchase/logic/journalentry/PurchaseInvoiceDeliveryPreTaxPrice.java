@@ -16,9 +16,9 @@ import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoiceItem;
 import org.colorcoding.ibas.purchase.data.DataConvert;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
-public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartContent {
+public class PurchaseInvoiceDeliveryPreTaxPrice extends JournalEntrySmartContent {
 
-	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData) {
+	public PurchaseInvoiceDeliveryPreTaxPrice(Object sourceData) {
 		super(sourceData);
 	}
 
@@ -55,9 +55,8 @@ public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartCon
 						if (item.getBaseDocumentLineId().compareTo(baseLine.getLineId()) != 0) {
 							continue;
 						}
-						// 金额 = 数量 * （税前价格 - 入库税前价格）
-						this.setAmount(Decimal.multiply(item.getQuantity(),
-								item.getPreTaxPrice().subtract(baseLine.getPreTaxPrice())));
+						// 金额 = 数量 * 入库税前价格
+						this.setAmount(Decimal.multiply(item.getQuantity(), baseLine.getPreTaxPrice()));
 						// 计算完成，退出
 						return;
 					}

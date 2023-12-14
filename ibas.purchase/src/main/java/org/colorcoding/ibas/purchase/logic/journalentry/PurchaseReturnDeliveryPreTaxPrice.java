@@ -5,6 +5,7 @@ import org.colorcoding.ibas.bobas.common.IChildCriteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.i18n.I18N;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
@@ -22,7 +23,7 @@ public class PurchaseReturnDeliveryPreTaxPrice extends JournalEntrySmartContent 
 	}
 
 	@Override
-	public void caculate() {
+	public void caculate() throws Exception {
 		if (this.getSourceData() instanceof IPurchaseReturnItem) {
 			IPurchaseReturnItem item = (IPurchaseReturnItem) this.getSourceData();
 			if (!DataConvert.isNullOrEmpty(item.getBaseDocumentType()) && item.getBaseDocumentEntry() > 0
@@ -61,7 +62,7 @@ public class PurchaseReturnDeliveryPreTaxPrice extends JournalEntrySmartContent 
 				}
 			}
 		}
-		throw new RuntimeException("no result.");
+		throw new Exception(I18N.prop("msg_bobas_not_support_the_compute"));
 	}
 
 }

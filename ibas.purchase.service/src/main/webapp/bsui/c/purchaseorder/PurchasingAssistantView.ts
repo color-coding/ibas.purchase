@@ -172,7 +172,7 @@ namespace purchase {
                                                 text: ibas.i18n.prop("purchase_assistant_order_type")
                                             }),
                                             this.selectType = new sap.extension.m.PropertySelect("", {
-                                                width: "10rem",
+                                                width: "8rem",
                                                 propertyName: "orderType",
                                                 dataInfo: {
                                                     code: bo.PurchaseOrder.BUSINESS_OBJECT_CODE,
@@ -183,7 +183,7 @@ namespace purchase {
                                                 text: ibas.i18n.prop("purchase_assistant_order_paid")
                                             }).addStyleClass("sapUiSmallMarginBegin"),
                                             this.selectPaid = new sap.extension.m.Select("", {
-                                                width: "10rem",
+                                                width: "8rem",
                                                 forceSelection: false,
                                                 items: [
                                                     new sap.extension.m.SelectItem("", {
@@ -433,7 +433,7 @@ namespace purchase {
                                 width: "auto",
                                 orientation: sap.ui.core.Orientation.Vertical,
                                 layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                    size: "60%",
+                                    size: "55%",
                                     resizable: true,
                                 }),
                                 contentAreas: [
@@ -762,20 +762,12 @@ namespace purchase {
                                                 new sap.m.ToolbarSeparator(),
                                                 new sap.m.Label("", {
                                                     showColon: true,
-                                                    text: ibas.i18n.prop("bo_branch")
+                                                    text: ibas.i18n.prop("bo_branch"),
+                                                    visible: accounting.config.isEnableBranch(),
                                                 }),
-                                                this.branchInput = new sap.extension.m.SelectionInput("", {
+                                                this.branchInput = new sap.extension.m.BranchInput("", {
                                                     showValueHelp: true,
                                                     width: "12rem",
-                                                    repository: accounting.bo.BORepositoryAccounting,
-                                                    dataInfo: {
-                                                        type: accounting.bo.Branch,
-                                                        key: accounting.bo.Branch.PROPERTY_CODE_NAME,
-                                                        text: accounting.bo.Branch.PROPERTY_NAME_NAME
-                                                    },
-                                                    criteria: [
-                                                        new ibas.Condition(accounting.bo.Branch.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES.toString())
-                                                    ],
                                                     visible: accounting.config.isEnableBranch(),
                                                 }).bindProperty("bindingValue", {
                                                     path: "/branch",
@@ -844,7 +836,7 @@ namespace purchase {
                                 width: "auto",
                                 orientation: sap.ui.core.Orientation.Vertical,
                                 layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                    size: "40%",
+                                    size: "45%",
                                     resizable: true,
                                 }),
                                 contentAreas: [
@@ -888,6 +880,11 @@ namespace purchase {
                                                         width: "6rem",
                                                         hAlign: sap.ui.core.TextAlign.Begin,
                                                         header: ibas.i18n.prop("bo_purchaseorderitem_price"),
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_tax"),
                                                     }),
                                                     new sap.extension.m.Column("", {
                                                         width: "6rem",
@@ -939,6 +936,16 @@ namespace purchase {
                                                             }).bindProperty("bindingValue", {
                                                                 path: "price",
                                                                 type: new sap.extension.data.Price()
+                                                            }),
+                                                            new component.TaxGroupSelect("", {
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "tax",
+                                                                type: new sap.extension.data.Alphanumeric({
+                                                                    maxLength: 8
+                                                                })
+                                                            }).bindProperty("rate", {
+                                                                path: "taxRate",
+                                                                type: new sap.extension.data.Rate()
                                                             }),
                                                             new sap.extension.m.ObjectNumber("", {
                                                                 number: {

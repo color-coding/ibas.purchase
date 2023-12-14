@@ -2427,12 +2427,13 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 			@Override
 			public BigDecimal getQuantity() {
-				return PurchaseOrderItem.this.getQuantity().multiply(PurchaseOrderItem.this.getUOMRate());
+				return Decimal.multiply(PurchaseOrderItem.this.getQuantity(), PurchaseOrderItem.this.getUOMRate());
 			}
 
 			@Override
 			public BigDecimal getClosedQuantity() {
-				return PurchaseOrderItem.this.getClosedQuantity().multiply(PurchaseOrderItem.this.getUOMRate());
+				return Decimal.multiply(PurchaseOrderItem.this.getClosedQuantity(),
+						PurchaseOrderItem.this.getUOMRate());
 			}
 
 			@Override
