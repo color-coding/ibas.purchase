@@ -570,6 +570,7 @@ namespace purchase {
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
                         materialBatches: item.materialBatches,
+                        agreements: item.agreements
                     });
                 }
                 ibas.servicesManager.runApplicationService<materials.app.IMaterialBatchContract[], materials.app.IServiceExtraBatches>({
@@ -763,8 +764,50 @@ namespace purchase {
                         if (!ibas.strings.isEmpty(that.view.defaultWarehouse)) {
                             that.editData.purchaseOrderItems.forEach(c =>
                                 ibas.strings.isEmpty(c.warehouse) ? c.warehouse = that.view.defaultWarehouse : c.warehouse = null);
+                            that.view.showPurchaseOrderItems(that.editData.purchaseOrderItems.filterDeleted());
+                        } else {
+                            // 查询物料默认仓库
+                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                            for (let item of that.editData.purchaseOrderItems) {
+                                if (!ibas.strings.isEmpty(item.warehouse)) {
+                                    continue;
+                                }
+                                let condition: ibas.ICondition = criteria.conditions.create();
+                                condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;
+                                condition.value = item.itemCode;
+                                if (criteria.conditions.length > 0) {
+                                    condition.relationship = ibas.emConditionRelationship.OR;
+                                }
+                            }
+                            if (criteria.conditions.length > 0) {
+                                if (criteria.conditions.length > 1) {
+                                    criteria.conditions.firstOrDefault().bracketOpen++;
+                                    criteria.conditions.lastOrDefault().bracketClose++;
+                                }
+                                let condition: ibas.ICondition = criteria.conditions.create();
+                                condition.alias = materials.bo.Material.PROPERTY_DEFAULTWAREHOUSE_NAME;
+                                condition.operation = ibas.emConditionOperation.NOT_NULL;
+                                let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                                boRepository.fetchMaterial({
+                                    criteria: criteria,
+                                    onCompleted(opRslt: ibas.IOperationResult<materials.bo.Material>): void {
+                                        for (let item of that.editData.purchaseOrderItems) {
+                                            if (!ibas.strings.isEmpty(item.warehouse)) {
+                                                continue;
+                                            }
+                                            let material: materials.bo.Material = opRslt.resultObjects.firstOrDefault(c => c.code === item.itemCode);
+                                            if (ibas.objects.isNull(material)) {
+                                                continue;
+                                            }
+                                            item.warehouse = material.defaultWarehouse;
+                                        }
+                                        that.view.showPurchaseOrderItems(that.editData.purchaseOrderItems.filterDeleted());
+                                    }
+                                });
+                            } else {
+                                that.view.showPurchaseOrderItems(that.editData.purchaseOrderItems.filterDeleted());
+                            }
                         }
-                        that.view.showPurchaseOrderItems(that.editData.purchaseOrderItems.filterDeleted());
                     }
                 });
             }

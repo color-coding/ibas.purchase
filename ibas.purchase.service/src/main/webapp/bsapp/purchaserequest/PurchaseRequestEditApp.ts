@@ -628,7 +628,7 @@ namespace purchase {
                                                             if (quantity <= item.quantity) {
                                                                 nItem.quantity = quantity;
                                                             } else {
-                                                                nItem.quantity = quantity - item.quantity;
+                                                                nItem.quantity = item.quantity;
                                                             }
                                                             reservations.add(nItem);
                                                             if (quantity <= item.quantity) {

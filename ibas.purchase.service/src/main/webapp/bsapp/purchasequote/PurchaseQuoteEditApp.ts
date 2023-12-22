@@ -609,7 +609,47 @@ namespace purchase {
                         for (let selected of selecteds) {
                             that.editData.baseDocument(selected);
                         }
-                        that.view.showPurchaseQuoteItems(that.editData.purchaseQuoteItems.filterDeleted());
+                        // 查询物料默认仓库
+                        let criteria: ibas.ICriteria = new ibas.Criteria();
+                        for (let item of that.editData.purchaseQuoteItems) {
+                            if (!ibas.strings.isEmpty(item.warehouse)) {
+                                continue;
+                            }
+                            let condition: ibas.ICondition = criteria.conditions.create();
+                            condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;
+                            condition.value = item.itemCode;
+                            if (criteria.conditions.length > 0) {
+                                condition.relationship = ibas.emConditionRelationship.OR;
+                            }
+                        }
+                        if (criteria.conditions.length > 0) {
+                            if (criteria.conditions.length > 1) {
+                                criteria.conditions.firstOrDefault().bracketOpen++;
+                                criteria.conditions.lastOrDefault().bracketClose++;
+                            }
+                            let condition: ibas.ICondition = criteria.conditions.create();
+                            condition.alias = materials.bo.Material.PROPERTY_DEFAULTWAREHOUSE_NAME;
+                            condition.operation = ibas.emConditionOperation.NOT_NULL;
+                            let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                            boRepository.fetchMaterial({
+                                criteria: criteria,
+                                onCompleted(opRslt: ibas.IOperationResult<materials.bo.Material>): void {
+                                    for (let item of that.editData.purchaseQuoteItems) {
+                                        if (!ibas.strings.isEmpty(item.warehouse)) {
+                                            continue;
+                                        }
+                                        let material: materials.bo.Material = opRslt.resultObjects.firstOrDefault(c => c.code === item.itemCode);
+                                        if (ibas.objects.isNull(material)) {
+                                            continue;
+                                        }
+                                        item.warehouse = material.defaultWarehouse;
+                                    }
+                                    that.view.showPurchaseQuoteItems(that.editData.purchaseQuoteItems.filterDeleted());
+                                }
+                            });
+                        } else {
+                            that.view.showPurchaseQuoteItems(that.editData.purchaseQuoteItems.filterDeleted());
+                        }
                     }
                 });
             }

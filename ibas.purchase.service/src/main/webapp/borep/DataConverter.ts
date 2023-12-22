@@ -258,7 +258,7 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
-                    if (config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE) === true) {
+                    if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
                         continue;
                     }
                     myItem = target.userFields.register(item.name, item.valueType);
@@ -318,7 +318,7 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
-                    if (config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE) === true) {
+                    if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
                         continue;
                     }
                     myItem = target.userFields.register(item.name, item.valueType);

@@ -45,6 +45,10 @@ declare namespace businesspartner {
         const BO_CODE_PAYMENTTERM: string;
         /** 业务对象编码-合同/协议 */
         const BO_CODE_AGREEMENT: string;
+        /** 业务对象编码-客户资产 */
+        const BO_CODE_CUSTOMERASSET: string;
+        /** 业务对象编码-供应商伴资产 */
+        const BO_CODE_SUPPLIERASSET: string;
         /** 业务伙伴性质 */
         enum emBusinessPartnerNature {
             /** 公司 */
@@ -801,6 +805,29 @@ declare namespace businesspartner {
             /** 客户 */
             customer: string;
         }
+        /** 供应商资产 */
+        class ISupplierAsset {
+            /** 资产编码 */
+            code: string;
+            /** 资产名称 */
+            name: string;
+            /** 图片 */
+            picture: string;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 可用值 */
+            amount: number;
+            /** 值单位 */
+            unit: string;
+            /** 可用次数 */
+            times: number;
+            /** 折扣 */
+            discount: number;
+            /** 供应商 */
+            supplier: string;
+        }
     }
 }
 /**
@@ -1186,7 +1213,12 @@ declare namespace businesspartner {
              * 查询 客户资产
              * @param fetcher 查询者
              */
-            fetchCustomerAsset(fetcher: IAssetRequester): void;
+            fetchCustomerAsset(fetcher: IAssetRequester<ICustomerAsset>): void;
+            /**
+             * 查询 供应商资产
+             * @param fetcher 查询者
+             */
+            fetchSupplierAsset(fetcher: IAssetRequester<ISupplierAsset>): void;
             /**
              * 查询 潜在客户
              * @param fetcher 查询者
@@ -1221,7 +1253,7 @@ declare namespace businesspartner {
         /**
          * 查询调用者
          */
-        interface IAssetRequester extends ibas.IMethodCaller<bo.ICustomerAsset> {
+        interface IAssetRequester<T extends bo.ICustomerAsset | bo.ISupplierAsset> extends ibas.IMethodCaller<T> {
             /** 请求 */
             request: IAssetRequest;
         }
@@ -2900,6 +2932,29 @@ declare namespace businesspartner {
             /** 客户 */
             customer: string;
         }
+        /** 供应商资产 */
+        class SupplierAsset {
+            /** 资产编码 */
+            code: string;
+            /** 资产名称 */
+            name: string;
+            /** 图片 */
+            picture: string;
+            /** 生效日期 */
+            validDate: Date;
+            /** 失效日期 */
+            invalidDate: Date;
+            /** 可用值 */
+            amount: number;
+            /** 值单位 */
+            unit: string;
+            /** 可用次数 */
+            times: number;
+            /** 折扣 */
+            discount: number;
+            /** 供应商 */
+            supplier: string;
+        }
     }
 }
 /**
@@ -3704,6 +3759,29 @@ declare namespace businesspartner {
                 /** 客户 */
                 Customer: string;
             }
+            /** 供应商资产 */
+            interface ISupplierAsset extends IDataDeclaration {
+                /** 资产编码 */
+                Code: string;
+                /** 资产名称 */
+                Name: string;
+                /** 图片 */
+                Picture: string;
+                /** 生效日期 */
+                ValidDate: string;
+                /** 失效日期 */
+                InvalidDate: string;
+                /** 可用值 */
+                Amount: number;
+                /** 值单位 */
+                Unit: string;
+                /** 可用次数 */
+                Times: number;
+                /** 折扣 */
+                Discount: number;
+                /** 供应商 */
+                Supplier: string;
+            }
         }
     }
 }
@@ -3856,10 +3934,15 @@ declare namespace businesspartner {
              */
             saveBusinessPartnerAssetJournal(saver: ibas.ISaveCaller<bo.BusinessPartnerAssetJournal>): void;
             /**
-             * 查询 业务伙伴资产
+             * 查询 客户资产
              * @param fetcher 查询者
              */
-            fetchCustomerAsset(fetcher: IAssetRequester): void;
+            fetchCustomerAsset(fetcher: IAssetRequester<ICustomerAsset>): void;
+            /**
+             * 查询 供应商资产
+             * @param fetcher 查询者
+             */
+            fetchSupplierAsset(fetcher: IAssetRequester<ISupplierAsset>): void;
             /**
              * 查询 潜在客户
              * @param fetcher 查询者
@@ -5269,6 +5352,62 @@ declare namespace businesspartner {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IBOChooseService<bo.BusinessPartnerAsset>;
+        }
+        /** 选择应用-客户资产 */
+        class CustomerAssetChooseApp extends ibas.BOChooseService<ICustomerAssetChooseView, bo.CustomerAsset> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            protected newData(): void;
+        }
+        /** 视图-客户资产 */
+        interface ICustomerAssetChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.CustomerAsset[]): void;
+        }
+        /** 客户资产选择服务映射 */
+        class CustomerAssetChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.CustomerAsset>;
+        }
+        /** 选择应用-供应商资产 */
+        class SupplierAssetChooseApp extends ibas.BOChooseService<ISupplierAssetChooseView, bo.SupplierAsset> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            protected newData(): void;
+        }
+        /** 视图-供应商资产 */
+        interface ISupplierAssetChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.SupplierAsset[]): void;
+        }
+        /** 供应商资产选择服务映射 */
+        class SupplierAssetChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.SupplierAsset>;
         }
     }
 }

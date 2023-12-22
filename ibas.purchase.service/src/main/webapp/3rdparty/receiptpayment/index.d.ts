@@ -51,6 +51,8 @@ declare namespace receiptpayment {
             documentCurrency: string;
             /** 单据摘要 */
             documentSummary?: string;
+            /** 选择的 */
+            selective?: boolean;
         }
         /** 收款方式代理 */
         class ReceiptMethodProxy extends ibas.ServiceProxy<IReceiptMethodContract> {
@@ -110,6 +112,8 @@ declare namespace receiptpayment {
             documentCurrency: string;
             /** 单据摘要 */
             documentSummary?: string;
+            /** 选择的 */
+            selective?: boolean;
         }
         /** 付款方式代理 */
         class PaymentMethodProxy extends ibas.ServiceProxy<IPaymentMethodContract> {
@@ -133,6 +137,8 @@ declare namespace receiptpayment {
             icon?: string;
             /** 可用金额 */
             amount: number;
+            /** 单位 */
+            unit?: string;
         }
         /** 付款方式 */
         abstract class PaymentMethod extends ibas.Element implements ibas.IService<ibas.IServiceWithResultCaller<IPaymentMethodContract, ibas.IOperationResult<IPaymentTradingMethod>>> {
@@ -3071,6 +3077,23 @@ declare namespace receiptpayment {
         }
         /** 收款方式映射-业务伙伴资产 */
         class ReceiptMethodBPAssetMapping extends ReceiptMethodServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 交易标记-付款-业务伙伴资产 */
+        const TRADING_ID_PAYMENT_BP_ASSSET: string;
+        /**
+         * 付款方式-业务伙伴资产
+         */
+        class PaymentMethodBPAsset extends PaymentMethod {
+            constructor();
+            /** 获取可用交易类型 */
+            run(caller: ibas.IServiceWithResultCaller<IPaymentMethodContract, ibas.IOperationResult<IPaymentTradingMethod>>): void;
+        }
+        /** 付款方式映射-业务伙伴资产 */
+        class PaymentMethodBPAssetMapping extends PaymentMethodServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */

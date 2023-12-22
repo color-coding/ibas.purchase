@@ -79,6 +79,10 @@ declare namespace accounting {
         const BO_CODE_PERIODLEDGERACCOUNT: string;
         /** 业务对象编码-分类账条件属性 */
         const BO_CODE_LEDGERCONDITIONPROPERTY: string;
+        /** 业务对象编码-银行 */
+        const BO_CODE_BANK: string;
+        /** 业务对象编码-银行账户 */
+        const BO_CODE_BANKACCOUNT: string;
         /**
          * 期间状态
          */
@@ -1429,6 +1433,130 @@ declare namespace accounting {
  */
 declare namespace accounting {
     namespace bo {
+        /** 银行 */
+        interface IBank extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 标识符 */
+            swiftCode: string;
+            /** 凭证编号 */
+            docEntry: number;
+            /** 类型 */
+            objectCode: string;
+            /** 编号系列 */
+            series: number;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 已激活的 */
+            activated: ibas.emYesNo;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
+            /** 删除的 */
+            deleted: ibas.emYesNo;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 银行账户 */
+        interface IBankAccount extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 银行 */
+            bank: string;
+            /** 开户支行 */
+            openingBank: string;
+            /** 账户类型 */
+            accountType: string;
+            /** 凭证编号 */
+            docEntry: number;
+            /** 类型 */
+            objectCode: string;
+            /** 编号系列 */
+            series: number;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 团队成员 */
+            teamMembers: string;
+            /** 数据所属组织 */
+            organization: string;
+            /** 已激活的 */
+            activated: ibas.emYesNo;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
+            /** 删除的 */
+            deleted: ibas.emYesNo;
+            /** 分支 */
+            branch: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryAccounting extends ibas.IBORepositoryApplication {
             /**
@@ -1561,6 +1689,26 @@ declare namespace accounting {
              * @param fetcher 查询者
              */
             fetchLedgerConditionProperty(fetcher: ibas.IFetchCaller<bo.ILedgerConditionProperty>): void;
+            /**
+             * 查询 银行
+             * @param fetcher 查询者
+             */
+            fetchBank(fetcher: ibas.IFetchCaller<bo.IBank>): void;
+            /**
+             * 保存 银行
+             * @param saver 保存者
+             */
+            saveBank(saver: ibas.ISaveCaller<bo.IBank>): void;
+            /**
+             * 查询 银行账户
+             * @param fetcher 查询者
+             */
+            fetchBankAccount(fetcher: ibas.IFetchCaller<bo.IBankAccount>): void;
+            /**
+             * 保存 银行账户
+             * @param saver 保存者
+             */
+            saveBankAccount(saver: ibas.ISaveCaller<bo.IBankAccount>): void;
         }
     }
 }
@@ -4810,6 +4958,334 @@ declare namespace accounting {
  */
 declare namespace accounting {
     namespace bo {
+        /** 银行 */
+        class Bank extends ibas.BOMasterData<Bank> implements IBank {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-标识符 */
+            static PROPERTY_SWIFTCODE_NAME: string;
+            /** 获取-标识符 */
+            get swiftCode(): string;
+            /** 设置-标识符 */
+            set swiftCode(value: string);
+            /** 映射的属性名称-凭证编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-凭证编号 */
+            get docEntry(): number;
+            /** 设置-凭证编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-编号系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-编号系列 */
+            get series(): number;
+            /** 设置-编号系列 */
+            set series(value: number);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-已激活的 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-已激活的 */
+            get activated(): ibas.emYesNo;
+            /** 设置-已激活的 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-删除的 */
+            static PROPERTY_DELETED_NAME: string;
+            /** 获取-删除的 */
+            get deleted(): ibas.emYesNo;
+            /** 设置-删除的 */
+            set deleted(value: ibas.emYesNo);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
+        /** 银行账户 */
+        class BankAccount extends ibas.BOMasterData<BankAccount> implements IBankAccount {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-银行 */
+            static PROPERTY_BANK_NAME: string;
+            /** 获取-银行 */
+            get bank(): string;
+            /** 设置-银行 */
+            set bank(value: string);
+            /** 映射的属性名称-开户支行 */
+            static PROPERTY_OPENINGBANK_NAME: string;
+            /** 获取-开户支行 */
+            get openingBank(): string;
+            /** 设置-开户支行 */
+            set openingBank(value: string);
+            /** 映射的属性名称-账户类型 */
+            static PROPERTY_ACCOUNTTYPE_NAME: string;
+            /** 获取-账户类型 */
+            get accountType(): string;
+            /** 设置-账户类型 */
+            set accountType(value: string);
+            /** 映射的属性名称-凭证编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-凭证编号 */
+            get docEntry(): number;
+            /** 设置-凭证编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-编号系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-编号系列 */
+            get series(): number;
+            /** 设置-编号系列 */
+            set series(value: number);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-团队成员 */
+            static PROPERTY_TEAMMEMBERS_NAME: string;
+            /** 获取-团队成员 */
+            get teamMembers(): string;
+            /** 设置-团队成员 */
+            set teamMembers(value: string);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-已激活的 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-已激活的 */
+            get activated(): ibas.emYesNo;
+            /** 设置-已激活的 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-删除的 */
+            static PROPERTY_DELETED_NAME: string;
+            /** 获取-删除的 */
+            get deleted(): ibas.emYesNo;
+            /** 设置-删除的 */
+            set deleted(value: ibas.emYesNo);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -4977,6 +5453,26 @@ declare namespace accounting {
              * @param fetcher 查询者
              */
             fetchLedgerConditionProperty(fetcher: ibas.IFetchCaller<bo.LedgerConditionProperty>): void;
+            /**
+             * 查询 银行
+             * @param fetcher 查询者
+             */
+            fetchBank(fetcher: ibas.IFetchCaller<bo.Bank>): void;
+            /**
+             * 保存 银行
+             * @param saver 保存者
+             */
+            saveBank(saver: ibas.ISaveCaller<bo.Bank>): void;
+            /**
+             * 查询 银行账户
+             * @param fetcher 查询者
+             */
+            fetchBankAccount(fetcher: ibas.IFetchCaller<bo.BankAccount>): void;
+            /**
+             * 保存 银行账户
+             * @param saver 保存者
+             */
+            saveBankAccount(saver: ibas.ISaveCaller<bo.BankAccount>): void;
         }
         /**
          * 费用结束者
@@ -7253,6 +7749,413 @@ declare namespace accounting {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class BankFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 列表应用-银行 */
+        class BankListApp extends ibas.BOListApplication<IBankListView, bo.Bank> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.Bank): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.Bank): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.Bank | bo.Bank[]): void;
+        }
+        /** 视图-银行 */
+        interface IBankListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.Bank[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 选择应用-银行 */
+        class BankChooseApp extends ibas.BOChooseService<IBankChooseView, bo.Bank> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-银行 */
+        interface IBankChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.Bank[]): void;
+        }
+        /** 银行选择服务映射 */
+        class BankChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.Bank>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 查看应用-银行 */
+        class BankViewApp extends ibas.BOViewService<IBankViewView, bo.Bank> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.Bank): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-银行 */
+        interface IBankViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showBank(data: bo.Bank): void;
+        }
+        /** 银行连接服务映射 */
+        class BankLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 编辑应用-银行 */
+        class BankEditApp extends ibas.BOEditApplication<IBankEditView, bo.Bank> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.Bank): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-银行 */
+        interface IBankEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showBank(data: bo.Bank): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        class BankAccountFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 列表应用-银行账户 */
+        class BankAccountListApp extends ibas.BOListApplication<IBankAccountListView, bo.BankAccount> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.BankAccount): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.BankAccount): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.BankAccount | bo.BankAccount[]): void;
+            protected bank(): void;
+        }
+        /** 视图-银行账户 */
+        interface IBankAccountListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.BankAccount[]): void;
+            /** 银行事件 */
+            bankEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 选择应用-银行账户 */
+        class BankAccountChooseApp extends ibas.BOChooseService<IBankAccountChooseView, bo.BankAccount> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-银行账户 */
+        interface IBankAccountChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.BankAccount[]): void;
+        }
+        /** 银行账户选择服务映射 */
+        class BankAccountChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.BankAccount>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 查看应用-银行账户 */
+        class BankAccountViewApp extends ibas.BOViewService<IBankAccountViewView, bo.BankAccount> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: bo.BankAccount): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-银行账户 */
+        interface IBankAccountViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showBankAccount(data: bo.BankAccount): void;
+        }
+        /** 银行账户连接服务映射 */
+        class BankAccountLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace app {
+        /** 编辑应用-银行账户 */
+        class BankAccountEditApp extends ibas.BOEditApplication<IBankAccountEditView, bo.BankAccount> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.BankAccount): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-银行账户 */
+        interface IBankAccountEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showBankAccount(data: bo.BankAccount): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
         }
     }
 }

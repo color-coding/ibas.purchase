@@ -299,6 +299,8 @@ declare namespace materials {
             documentEntry?: number;
             /** 单据行号 */
             documentLineId?: number;
+            /** 协议/合同 */
+            agreements?: string;
         }
         /** 序列服务契约 */
         interface IMaterialSerialContract extends ibas.IServiceContract {
@@ -1212,6 +1214,8 @@ declare namespace materials {
             maximumInventory: number;
             /** 最低订购数量 */
             minimumOrderQuantity: number;
+            /** 订购倍数 */
+            orderMultiple: number;
             /** 提前期（天） */
             leadTime: number;
             /** 序号管理 */
@@ -1799,6 +1803,30 @@ declare namespace materials {
             itemName: string;
             /** 仓库编号 */
             warehouse: string;
+            /** 方向 */
+            direction: ibas.emDirection;
+            /** 数量 */
+            quantity: number;
+            /** 价格 */
+            price: number;
+            /** 货币 */
+            currency: string;
+            /** 汇率 */
+            rate: number;
+            /** 计算价格 */
+            calculatedPrice: number;
+            /** 交易值 */
+            transactionValue: number;
+            /** 过账日期 */
+            postingDate: Date;
+            /** 到期日 */
+            deliveryDate: Date;
+            /** 凭证日期 */
+            documentDate: Date;
+            /** 库存数量 */
+            inventoryQuantity: number;
+            /** 库存价值 */
+            inventoryValue: number;
             /** 基于类型 */
             baseDocumentType: string;
             /** 基于标识 */
@@ -1811,22 +1839,6 @@ declare namespace materials {
             originalDocumentEntry: number;
             /** 原始行号 */
             originalDocumentLineId: number;
-            /** 方向 */
-            direction: ibas.emDirection;
-            /** 数量 */
-            quantity: number;
-            /** 价格 */
-            price: number;
-            /** 货币 */
-            currency: string;
-            /** 汇率 */
-            rate: number;
-            /** 过账日期 */
-            postingDate: Date;
-            /** 到期日 */
-            deliveryDate: Date;
-            /** 凭证日期 */
-            documentDate: Date;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -5680,6 +5692,12 @@ declare namespace materials {
             get minimumOrderQuantity(): number;
             /** 设置-最低订购数量 */
             set minimumOrderQuantity(value: number);
+            /** 映射的属性名称-订购倍数 */
+            static PROPERTY_ORDERMULTIPLE_NAME: string;
+            /** 获取-订购倍数 */
+            get orderMultiple(): number;
+            /** 设置-订购倍数 */
+            set orderMultiple(value: number);
             /** 映射的属性名称-提前期（天） */
             static PROPERTY_LEADTIME_NAME: string;
             /** 获取-提前期（天） */
@@ -6733,42 +6751,6 @@ declare namespace materials {
             get warehouse(): string;
             /** 设置-仓库编号 */
             set warehouse(value: string);
-            /** 映射的属性名称-基于类型 */
-            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
-            /** 获取-基于类型 */
-            get baseDocumentType(): string;
-            /** 设置-基于类型 */
-            set baseDocumentType(value: string);
-            /** 映射的属性名称-基于标识 */
-            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
-            /** 获取-基于标识 */
-            get baseDocumentEntry(): number;
-            /** 设置-基于标识 */
-            set baseDocumentEntry(value: number);
-            /** 映射的属性名称-基于行号 */
-            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
-            /** 获取-基于行号 */
-            get baseDocumentLineId(): number;
-            /** 设置-基于行号 */
-            set baseDocumentLineId(value: number);
-            /** 映射的属性名称-原始类型 */
-            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
-            /** 获取-原始类型 */
-            get originalDocumentType(): string;
-            /** 设置-原始类型 */
-            set originalDocumentType(value: string);
-            /** 映射的属性名称-原始标识 */
-            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
-            /** 获取-原始标识 */
-            get originalDocumentEntry(): number;
-            /** 设置-原始标识 */
-            set originalDocumentEntry(value: number);
-            /** 映射的属性名称-原始行号 */
-            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
-            /** 获取-原始行号 */
-            get originalDocumentLineId(): number;
-            /** 设置-原始行号 */
-            set originalDocumentLineId(value: number);
             /** 映射的属性名称-方向 */
             static PROPERTY_DIRECTION_NAME: string;
             /** 获取-方向 */
@@ -6829,6 +6811,54 @@ declare namespace materials {
             get documentDate(): Date;
             /** 设置-凭证日期 */
             set documentDate(value: Date);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
+            /** 映射的属性名称-库存价值 */
+            static PROPERTY_INVENTORYVALUE_NAME: string;
+            /** 获取-库存价值 */
+            get inventoryValue(): number;
+            /** 设置-库存价值 */
+            set inventoryValue(value: number);
+            /** 映射的属性名称-基于类型 */
+            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
+            /** 获取-基于类型 */
+            get baseDocumentType(): string;
+            /** 设置-基于类型 */
+            set baseDocumentType(value: string);
+            /** 映射的属性名称-基于标识 */
+            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
+            /** 获取-基于标识 */
+            get baseDocumentEntry(): number;
+            /** 设置-基于标识 */
+            set baseDocumentEntry(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
+            /** 获取-基于行号 */
+            get baseDocumentLineId(): number;
+            /** 设置-基于行号 */
+            set baseDocumentLineId(value: number);
+            /** 映射的属性名称-原始类型 */
+            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
+            /** 获取-原始类型 */
+            get originalDocumentType(): string;
+            /** 设置-原始类型 */
+            set originalDocumentType(value: string);
+            /** 映射的属性名称-原始标识 */
+            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
+            /** 获取-原始标识 */
+            get originalDocumentEntry(): number;
+            /** 设置-原始标识 */
+            set originalDocumentEntry(value: number);
+            /** 映射的属性名称-原始行号 */
+            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
+            /** 获取-原始行号 */
+            get originalDocumentLineId(): number;
+            /** 设置-原始行号 */
+            set originalDocumentLineId(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */

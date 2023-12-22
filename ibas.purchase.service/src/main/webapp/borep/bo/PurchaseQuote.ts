@@ -654,7 +654,7 @@ namespace purchase {
                     for (let item of document.userFields.forEach()) {
                         let myItem: ibas.IUserField = this.userFields.get(item.name);
                         if (ibas.objects.isNull(myItem)) {
-                            if (config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE) === true) {
+                            if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
                                 continue;
                             }
                             myItem = this.userFields.register(item.name, item.valueType);

@@ -550,6 +550,7 @@ namespace purchase {
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
                         materialBatches: item.materialBatches,
+                        agreements: item.agreements
                     });
                 }
                 ibas.servicesManager.runApplicationService<materials.app.IMaterialBatchContract[]>({
