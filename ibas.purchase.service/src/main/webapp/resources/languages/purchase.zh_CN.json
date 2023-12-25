@@ -108,5 +108,6 @@
   "purchase_app_materialorderedreservation_purchaseorder": "采购订单",
   "purchase_app_materialorderedreservation_purchaserequest": "采购申请",
   "purchase_app_purchaserequest_to_": "转为",
+  "purchase_app_line_has_been_processed": "已处理过[{0}, {1} - {2}]此条数据",
   "purchase_closing_delimiter": "----结束----"
 }

@@ -563,6 +563,7 @@ namespace purchase {
                     }
                 });
             }
+            private doneItems: ibas.IList<bo.PurchaseRequestItem> = new ibas.ArrayList<bo.PurchaseRequestItem>();
             private purchaseRequestTo(agent: ibas.IServiceAgent, item: bo.PurchaseRequestItem): void {
                 if (ibas.objects.isNull(agent)) {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
@@ -583,98 +584,103 @@ namespace purchase {
                                 // 报错
                             } else {
                                 // 转换数量，行数量减少
-                                item.quantity -= result.quantity;
-                                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
-                                boRepository.savePurchaseRequest({
-                                    beSaved: that.editData,
-                                    onCompleted(opRslt: ibas.IOperationResult<bo.PurchaseRequest>): void {
-                                        try {
-                                            if (opRslt.resultCode !== 0) {
-                                                throw new Error(opRslt.message);
-                                            }
-                                            if (opRslt.resultObjects.length === 0) {
-                                                // 删除成功，释放当前对象
-                                                that.proceeding(ibas.emMessageType.SUCCESS,
-                                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
-                                                that.editData = undefined;
-                                            } else {
-                                                // 替换编辑对象
-                                                that.editData = opRslt.resultObjects.firstOrDefault();
-                                                that.proceeding(ibas.emMessageType.SUCCESS,
-                                                    ibas.i18n.prop("bo_purchaserequest") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
-                                                // 处理预留
-                                                let criteria: ibas.ICriteria = new ibas.Criteria();
-                                                let condition: ibas.ICondition = criteria.conditions.create();
-                                                condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTTYPE_NAME;
-                                                condition.value = item.objectCode;
-                                                condition = criteria.conditions.create();
-                                                condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTENTRY_NAME;
-                                                condition.value = item.docEntry.toString();
-                                                condition = criteria.conditions.create();
-                                                condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTLINEID_NAME;
-                                                condition.value = item.lineId.toString();
-                                                let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
-                                                boRepository.fetchMaterialOrderedReservation({
-                                                    criteria: criteria,
-                                                    onCompleted: (opRslt) => {
-                                                        let quantity: number = result.quantity;
-                                                        let reservations: ibas.IList<materials.bo.MaterialOrderedReservation> = new ibas.ArrayList<materials.bo.MaterialOrderedReservation>();
-                                                        for (let item of opRslt.resultObjects) {
-                                                            let nItem: materials.bo.MaterialOrderedReservation = item.clone();
-                                                            nItem.sourceDocumentType = result.documentType;
-                                                            nItem.sourceDocumentEntry = result.docmentEntry;
-                                                            nItem.sourceDocumentLineId = result.documentLineId;
-                                                            nItem.warehouse = result.warehouse;
-                                                            if (quantity <= item.quantity) {
-                                                                nItem.quantity = quantity;
-                                                            } else {
-                                                                nItem.quantity = item.quantity;
+                                if (!that.doneItems.contain(item)) {
+                                    that.doneItems.add(item);
+                                    item.quantity -= result.quantity;
+                                    let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                                    boRepository.savePurchaseRequest({
+                                        beSaved: that.editData,
+                                        onCompleted(opRslt: ibas.IOperationResult<bo.PurchaseRequest>): void {
+                                            try {
+                                                if (opRslt.resultCode !== 0) {
+                                                    throw new Error(opRslt.message);
+                                                }
+                                                if (opRslt.resultObjects.length === 0) {
+                                                    // 删除成功，释放当前对象
+                                                    that.proceeding(ibas.emMessageType.SUCCESS,
+                                                        ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                                    that.editData = undefined;
+                                                } else {
+                                                    // 替换编辑对象
+                                                    that.editData = opRslt.resultObjects.firstOrDefault();
+                                                    that.proceeding(ibas.emMessageType.SUCCESS,
+                                                        ibas.i18n.prop("bo_purchaserequest") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                                    // 处理预留
+                                                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                    let condition: ibas.ICondition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTTYPE_NAME;
+                                                    condition.value = item.objectCode;
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTENTRY_NAME;
+                                                    condition.value = item.docEntry.toString();
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTLINEID_NAME;
+                                                    condition.value = item.lineId.toString();
+                                                    let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                                                    boRepository.fetchMaterialOrderedReservation({
+                                                        criteria: criteria,
+                                                        onCompleted: (opRslt) => {
+                                                            let quantity: number = result.quantity;
+                                                            let reservations: ibas.IList<materials.bo.MaterialOrderedReservation> = new ibas.ArrayList<materials.bo.MaterialOrderedReservation>();
+                                                            for (let item of opRslt.resultObjects) {
+                                                                let nItem: materials.bo.MaterialOrderedReservation = item.clone();
+                                                                nItem.sourceDocumentType = result.documentType;
+                                                                nItem.sourceDocumentEntry = result.docmentEntry;
+                                                                nItem.sourceDocumentLineId = result.documentLineId;
+                                                                nItem.warehouse = result.warehouse;
+                                                                if (quantity <= item.quantity) {
+                                                                    nItem.quantity = quantity;
+                                                                } else {
+                                                                    nItem.quantity = item.quantity;
+                                                                }
+                                                                reservations.add(nItem);
+                                                                if (quantity <= (item.quantity - item.closedQuantity)) {
+                                                                    item.closedQuantity += quantity;
+                                                                } else {
+                                                                    item.closedQuantity += (item.quantity - item.closedQuantity);
+                                                                }
+                                                                if (item.closedQuantity >= item.quantity) {
+                                                                    item.status = ibas.emBOStatus.CLOSED;
+                                                                }
+                                                                reservations.add(item);
+                                                                quantity = quantity - nItem.quantity;
+                                                                if (item.quantity <= 0) {
+                                                                    break;
+                                                                }
                                                             }
-                                                            reservations.add(nItem);
-                                                            if (quantity <= item.quantity) {
-                                                                item.quantity = 0;
-                                                            } else {
-                                                                item.quantity = item.quantity - quantity;
-                                                            }
-                                                            if (item.quantity <= 0) {
-                                                                item.delete();
-                                                            }
-                                                            reservations.add(item);
-                                                            quantity = quantity - nItem.quantity;
-                                                            if (item.quantity <= 0) {
-                                                                break;
-                                                            }
-                                                        }
-                                                        ibas.queues.execute(reservations, (data, next) => {
-                                                            boRepository.saveMaterialOrderedReservation({
-                                                                beSaved: data,
-                                                                onCompleted: (opRslt) => {
-                                                                    if (opRslt.resultCode !== 0) {
-                                                                        next(new Error(opRslt.message));
-                                                                    } else {
-                                                                        next();
+                                                            ibas.queues.execute(reservations, (data, next) => {
+                                                                boRepository.saveMaterialOrderedReservation({
+                                                                    beSaved: data,
+                                                                    onCompleted: (opRslt) => {
+                                                                        if (opRslt.resultCode !== 0) {
+                                                                            next(new Error(opRslt.message));
+                                                                        } else {
+                                                                            next();
+                                                                        }
                                                                     }
+                                                                });
+                                                            }, (error) => {
+                                                                if (error instanceof Error) {
+                                                                    that.messages(error);
+                                                                } else {
+                                                                    that.proceeding(ibas.emMessageType.SUCCESS,
+                                                                        ibas.i18n.prop("bo_materialorderedreservation") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
                                                                 }
                                                             });
-                                                        }, (error) => {
-                                                            if (error instanceof Error) {
-                                                                that.messages(error);
-                                                            } else {
-                                                                that.proceeding(ibas.emMessageType.SUCCESS,
-                                                                    ibas.i18n.prop("bo_materialorderedreservation") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
-                                                            }
-                                                        });
-                                                    }
-                                                });
+                                                        }
+                                                    });
+                                                }
+                                                // 刷新当前视图
+                                                that.viewShowed();
+                                            } catch (error) {
+                                                that.messages(error);
                                             }
-                                            // 刷新当前视图
-                                            that.viewShowed();
-                                        } catch (error) {
-                                            that.messages(error);
                                         }
-                                    }
-                                });
-                                that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_saving_data"));
+                                    });
+                                    that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_saving_data"));
+                                } else {
+                                    that.messages(ibas.emMessageType.ERROR, ibas.i18n.prop("purchase_app_line_has_been_processed", item.lineId, item.itemCode, item.itemDescription));
+                                }
                             }
                         }
                     }),

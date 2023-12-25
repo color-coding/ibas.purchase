@@ -646,6 +646,7 @@ namespace purchase {
                     this.postingDate = ibas.dates.today();
                     this.reference1 = document.reference1;
                     this.reference2 = document.reference2;
+                    this.agreements = document.agreements;
                     this.remarks = document.remarks;
                     this.project = document.project;
                     this.priceList = document.priceList;
@@ -698,6 +699,7 @@ namespace purchase {
                         myItem.distributionRule3 = item.distributionRule3;
                         myItem.distributionRule4 = item.distributionRule4;
                         myItem.distributionRule5 = item.distributionRule5;
+                        myItem.agreements = item.agreements;
                         myItem.itemCode = item.itemCode;
                         myItem.itemDescription = item.itemDescription;
                         myItem.itemSign = item.itemSign;
