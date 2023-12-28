@@ -128,6 +128,14 @@ namespace purchase {
                                 }),
                             }),
                             new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaserequest_scheduling"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "scheduling",
+                                    type: new sap.extension.data.Alphanumeric(),
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchaserequest_reference1"),
                                 template: new sap.extension.m.Text("", {
                                 }).bindProperty("bindingValue", {

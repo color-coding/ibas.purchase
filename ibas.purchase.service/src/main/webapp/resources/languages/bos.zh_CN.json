@@ -165,6 +165,7 @@
         "bo_purchaserequest_ordertype": "单据类型",
         "bo_purchaserequest_agreements": "合同/协议",
         "bo_purchaserequest_branch": "分支",
+        "bo_purchaserequest_scheduling": "计划编号",
         "bo_purchaserequest_itemslinetotal": "行总计",
         "bo_purchaserequest_itemstaxtotal": "行税总计",
         "bo_purchaserequest_itemspretaxtotal": "行税前总计",

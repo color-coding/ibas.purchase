@@ -681,6 +681,20 @@ public interface IPurchaseRequest extends IBODocument {
 	void setBranch(String value);
 
 	/**
+	 * 获取-计划编号
+	 * 
+	 * @return 值
+	 */
+	String getScheduling();
+
+	/**
+	 * 设置-计划编号
+	 * 
+	 * @param value 值
+	 */
+	void setScheduling(String value);
+
+	/**
 	 * 获取-采购申请-行集合
 	 * 
 	 * @return 值

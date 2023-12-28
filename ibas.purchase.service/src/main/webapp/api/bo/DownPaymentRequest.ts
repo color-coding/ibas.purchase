@@ -106,6 +106,8 @@ namespace purchase {
             downPaymentRequestItems: IDownPaymentRequestItems;
             /** 基于采购订单 */
             baseDocument(document: IPurchaseOrder): void;
+            /** 基于采购收货 */
+            baseDocument(document: IPurchaseDelivery): void;
 
         }
 

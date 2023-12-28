@@ -1486,6 +1486,37 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest> implements 
 	}
 
 	/**
+	 * 属性名称-计划编号
+	 */
+	private static final String PROPERTY_SCHEDULING_NAME = "Scheduling";
+
+	/**
+	 * 计划编号 属性
+	 */
+	@DbField(name = "Scheduling", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<String> PROPERTY_SCHEDULING = registerProperty(PROPERTY_SCHEDULING_NAME,
+			String.class, MY_CLASS);
+
+	/**
+	 * 获取-计划编号
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_SCHEDULING_NAME)
+	public final String getScheduling() {
+		return this.getProperty(PROPERTY_SCHEDULING);
+	}
+
+	/**
+	 * 设置-计划编号
+	 * 
+	 * @param value 值
+	 */
+	public final void setScheduling(String value) {
+		this.setProperty(PROPERTY_SCHEDULING, value);
+	}
+
+	/**
 	 * 属性名称-采购申请-行
 	 */
 	private static final String PROPERTY_PURCHASEREQUESTITEMS_NAME = "PurchaseRequestItems";

@@ -159,6 +159,15 @@ namespace purchase {
                                     maxLength: 110
                                 }),
                             }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequest_scheduling") }),
+                            new sap.extension.m.Input("", {
+                                editable: false,
+                            }).bindProperty("bindingValue", {
+                                path: "scheduling",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 100
+                                }),
+                            }),
                         ]
                     });
                     let formPurchaseRequestItem: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {

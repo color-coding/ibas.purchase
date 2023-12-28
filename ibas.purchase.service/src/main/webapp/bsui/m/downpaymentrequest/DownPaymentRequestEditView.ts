@@ -32,6 +32,8 @@ namespace purchase {
                 chooseDownPaymentRequestPurchaseOrderEvent: Function;
                 /** 选择预付款申请-一揽子协议事件 */
                 chooseDownPaymentRequestBlanketAgreementEvent: Function;
+                /** 选择预付款申请-采购收货事件 */
+                chooseDownPaymentRequestPurchaseDeliveryEvent: Function;
                 /** 选择预付款申请-行成本中心事件 */
                 chooseDownPaymentRequestItemDistributionRuleEvent: Function;
                 /** 选择供应商合同 */
@@ -73,6 +75,16 @@ namespace purchase {
                                                 visible: shell.app.privileges.canRun({
                                                     id: app.PurchaseOrderChooseApp.APPLICATION_ID,
                                                     name: app.PurchaseOrderChooseApp.APPLICATION_NAME,
+                                                })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_purchasedelivery"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.chooseDownPaymentRequestPurchaseDeliveryEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.PurchaseDeliveryChooseApp.APPLICATION_ID,
+                                                    name: app.PurchaseDeliveryChooseApp.APPLICATION_NAME,
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {

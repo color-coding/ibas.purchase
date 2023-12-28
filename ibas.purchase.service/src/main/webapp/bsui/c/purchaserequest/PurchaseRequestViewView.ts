@@ -282,6 +282,13 @@ namespace purchase {
                                         },
                                         propertyName: "orderType",
                                     }),
+                                    new sap.extension.m.ObjectAttribute("", {
+                                        title: ibas.i18n.prop("bo_purchaserequest_scheduling"),
+                                        bindingValue: {
+                                            path: "scheduling",
+                                            type: new sap.extension.data.Alphanumeric(),
+                                        }
+                                    }),
                                 ],
                             }),
                             new sap.ui.layout.VerticalLayout("", {

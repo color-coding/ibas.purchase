@@ -488,6 +488,16 @@ namespace purchase {
                 this.setProperty(PurchaseRequest.PROPERTY_BRANCH_NAME, value);
             }
 
+            /** 映射的属性名称-计划编号 */
+            static PROPERTY_SCHEDULING_NAME: string = "Scheduling";
+            /** 获取-计划编号 */
+            get scheduling(): string {
+                return this.getProperty<string>(PurchaseRequest.PROPERTY_SCHEDULING_NAME);
+            }
+            /** 设置-计划编号 */
+            set scheduling(value: string) {
+                this.setProperty(PurchaseRequest.PROPERTY_SCHEDULING_NAME, value);
+            }
 
 
             /** 映射的属性名称-采购申请-行集合 */
