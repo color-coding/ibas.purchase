@@ -97,6 +97,16 @@ namespace purchase {
                     } else if (property === bo.PurchaseInvoiceItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.toString(ibas.emYesNo, value);
                     }
+                } else if (boName === bo.PurchaseReserveInvoice.name) {
+                    if (property === bo.PurchaseReserveInvoice.PROPERTY_ROUNDING_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    }
+                } else if (boName === bo.PurchaseReserveInvoiceItem.name) {
+                    if (property === bo.PurchaseReserveInvoiceItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseReserveInvoiceItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    }
                 } else if (boName === bo.PurchaseCreditNote.name) {
                     if (property === bo.PurchaseCreditNote.PROPERTY_ROUNDING_NAME) {
                         return ibas.enums.toString(ibas.emYesNo, value);
@@ -193,6 +203,16 @@ namespace purchase {
                     } else if (property === bo.PurchaseInvoiceItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
                     }
+                } else if (boName === bo.PurchaseReserveInvoice.name) {
+                    if (property === bo.PurchaseReserveInvoice.PROPERTY_ROUNDING_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    }
+                } else if (boName === bo.PurchaseReserveInvoiceItem.name) {
+                    if (property === bo.PurchaseReserveInvoiceItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseReserveInvoiceItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    }
                 } else if (boName === bo.PurchaseCreditNote.name) {
                     if (property === bo.PurchaseCreditNote.PROPERTY_ROUNDING_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
@@ -234,8 +254,8 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocument(
-            target: PurchaseOrder | PurchaseDelivery | PurchaseReturn | PurchaseCreditNote | PurchaseInvoice | DownPaymentRequest,
-            source: IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseCreditNote | IPurchaseInvoice
+            target: PurchaseOrder | PurchaseDelivery | PurchaseReturn | PurchaseCreditNote | PurchaseInvoice | DownPaymentRequest | PurchaseReserveInvoice,
+            source: IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseCreditNote | IPurchaseInvoice | IPurchaseReserveInvoice
         ): void {
             // 复制头信息
             target.contactPerson = source.contactPerson;
@@ -275,8 +295,8 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocumentItem(
-            target: IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReturnItem | IDownPaymentRequestItem,
-            source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem
+            target: IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReturnItem | IDownPaymentRequestItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem,
+            source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem
         ): void {
             target.baseDocumentType = source.objectCode;
             target.baseDocumentEntry = source.docEntry;
@@ -330,7 +350,9 @@ namespace purchase {
             }
         }
         export function baseProduct(
-            target: PurchaseQuoteItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem | PurchaseRequestItem | PurchaseCreditNoteItem | PurchaseInvoiceItem | DownPaymentRequestItem,
+            target: PurchaseQuoteItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem
+                | PurchaseRequestItem | PurchaseCreditNoteItem | PurchaseInvoiceItem | DownPaymentRequestItem
+                | PurchaseReserveInvoiceItem,
             source: materials.bo.IProduct
         ): void {
             target.itemCode = source.code;

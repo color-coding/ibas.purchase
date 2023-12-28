@@ -20,6 +20,8 @@ import org.colorcoding.ibas.purchase.bo.purchasequote.IPurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchasequote.PurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.IPurchaseRequest;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.IPurchaseReserveInvoice;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturn;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
 
@@ -422,6 +424,50 @@ public class BORepositoryPurchase extends BORepositoryServiceApplication
 				this.saveDownPaymentRequest((DownPaymentRequest) bo, this.getUserToken()));
 	}
 
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购预留发票
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseReserveInvoice> fetchPurchaseReserveInvoice(ICriteria criteria, String token) {
+		return super.fetch(criteria, token, PurchaseReserveInvoice.class);
+	}
+
+	/**
+	 * 查询-采购预留发票（提前设置用户口令）
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseReserveInvoice> fetchPurchaseReserveInvoice(ICriteria criteria) {
+		return new OperationResult<IPurchaseReserveInvoice>(
+				this.fetchPurchaseReserveInvoice(criteria, this.getUserToken()));
+	}
+
+	/**
+	 * 保存-采购预留发票
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseReserveInvoice> savePurchaseReserveInvoice(PurchaseReserveInvoice bo, String token) {
+		return super.save(bo, token);
+	}
+
+	/**
+	 * 保存-采购预留发票（提前设置用户口令）
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseReserveInvoice> savePurchaseReserveInvoice(IPurchaseReserveInvoice bo) {
+		return new OperationResult<IPurchaseReserveInvoice>(
+				this.savePurchaseReserveInvoice((PurchaseReserveInvoice) bo, this.getUserToken()));
+	}
 	// --------------------------------------------------------------------------------------------//
 
 }

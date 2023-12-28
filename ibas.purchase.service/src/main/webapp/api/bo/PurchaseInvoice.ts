@@ -122,7 +122,7 @@ namespace purchase {
         }
 
         /** 采购发票-行 */
-        export interface IPurchaseInvoiceItem extends ibas.IBODocumentLine, ibas.IBOUserFields {
+        export interface IPurchaseInvoiceItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
             /** 编码 */
             docEntry: number;
             /** 行号 */

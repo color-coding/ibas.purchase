@@ -169,6 +169,20 @@ namespace purchase {
             saveDownPaymentRequest(saver: ibas.ISaveCaller<bo.DownPaymentRequest>): void {
                 super.save(bo.DownPaymentRequest.name, saver);
             }
+            /**
+             * 查询 采购预留发票
+             * @param fetcher 查询者
+             */
+            fetchPurchaseReserveInvoice(fetcher: ibas.IFetchCaller<bo.PurchaseReserveInvoice>): void {
+                super.fetch(bo.PurchaseReserveInvoice.name, fetcher);
+            }
+            /**
+             * 保存 采购预留发票
+             * @param saver 保存者
+             */
+            savePurchaseReserveInvoice(saver: ibas.ISaveCaller<bo.PurchaseReserveInvoice>): void {
+                super.save(bo.PurchaseReserveInvoice.name, saver);
+            }
 
         }
     }

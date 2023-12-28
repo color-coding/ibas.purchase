@@ -16,6 +16,7 @@
 /// <reference path="./shippingaddress/index.ts" />
 /// <reference path="./blanketagreement/index.ts" />
 /// <reference path="./downpaymentrequest/index.ts" />
+/// <reference path="./purchasereserveinvoice/index.ts" />
 /// <reference path="./others/index.ts" />
 namespace purchase {
     export namespace app {
@@ -47,6 +48,7 @@ namespace purchase {
                 this.register(new PurchaseDeliveryFunc());
                 this.register(new PurchaseReturnFunc());
                 this.register(new PurchaseInvoiceFunc());
+                this.register(new PurchaseReserveInvoiceFunc());
                 this.register(new PurchaseCreditNoteFunc());
                 this.register(new DownPaymentRequestFunc());
                 this.register(new PurchasingAssistantFunc());
@@ -78,6 +80,8 @@ namespace purchase {
                 this.register(new DownPaymentRequestChooseServiceMapping());
                 this.register(new DownPaymentRequestLinkServiceMapping());
                 this.register(new DownPaymentRequestEditServiceMapping());
+                this.register(new PurchaseReserveInvoiceChooseServiceMapping());
+                this.register(new PurchaseReserveInvoiceLinkServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 // this.register(new PurchaseReturnReceiptServiceMapping()); 没这种情况
@@ -85,6 +89,7 @@ namespace purchase {
                 this.register(new PurchaseDeliveryPaymentServiceMapping());
                 this.register(new PurchaseOrderPaymentServiceMapping());
                 this.register(new PurchaseInvoicePaymentServiceMapping());
+                this.register(new PurchaseReserveInvoicePaymentServiceMapping());
                 this.register(new DownPaymentRequestPaymentServiceMapping());
                 // 订购服务
                 this.register(new MaterialOrderedReservationSourcePurchaseOrderServiceMapping());

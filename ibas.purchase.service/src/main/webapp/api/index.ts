@@ -16,4 +16,5 @@
 /// <reference path="./bo/ShippingAddress.ts" />
 /// <reference path="./bo/BlanketAgreement.ts" />
 /// <reference path="./bo/DownPaymentRequest.ts" />
+/// <reference path="./bo/PurchaseReserveInvoice.ts" />
 /// <reference path="./BORepository.ts" />

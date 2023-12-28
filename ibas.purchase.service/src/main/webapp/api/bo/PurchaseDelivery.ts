@@ -163,6 +163,8 @@ namespace purchase {
 
             /** 基于采购订单 */
             baseDocument(document: IPurchaseOrder): void;
+            /** 基于采购预留发票 */
+            baseDocument(document: IPurchaseReserveInvoice): void;
 
         }
 

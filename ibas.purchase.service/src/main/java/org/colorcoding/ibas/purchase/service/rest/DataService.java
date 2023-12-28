@@ -17,6 +17,7 @@ import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.PurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
@@ -310,6 +311,39 @@ public class DataService extends BORepositoryPurchase {
 	public OperationResult<DownPaymentRequest> saveDownPaymentRequest(DownPaymentRequest bo,
 			@QueryParam("token") String token) {
 		return super.saveDownPaymentRequest(bo, token);
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购预留发票
+	 * 
+	 * @param criteria 查询
+	 * @param token    口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("fetchPurchaseReserveInvoice")
+	public OperationResult<PurchaseReserveInvoice> fetchPurchaseReserveInvoice(Criteria criteria,
+			@QueryParam("token") String token) {
+		return super.fetchPurchaseReserveInvoice(criteria, token);
+	}
+
+	/**
+	 * 保存-采购预留发票
+	 * 
+	 * @param bo    对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("savePurchaseReserveInvoice")
+	public OperationResult<PurchaseReserveInvoice> savePurchaseReserveInvoice(PurchaseReserveInvoice bo,
+			@QueryParam("token") String token) {
+		return super.savePurchaseReserveInvoice(bo, token);
 	}
 
 	// --------------------------------------------------------------------------------------------//

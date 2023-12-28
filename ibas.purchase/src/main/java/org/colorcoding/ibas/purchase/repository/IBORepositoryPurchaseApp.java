@@ -11,6 +11,7 @@ import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.IPurchaseOrder;
 import org.colorcoding.ibas.purchase.bo.purchasequote.IPurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.IPurchaseRequest;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.IPurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturn;
 
 /**
@@ -169,6 +170,23 @@ public interface IBORepositoryPurchaseApp extends IBORepositoryApplication {
 	 * @return 操作结果
 	 */
 	IOperationResult<IDownPaymentRequest> saveDownPaymentRequest(IDownPaymentRequest bo);
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购预留发票
+	 * 
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseReserveInvoice> fetchPurchaseReserveInvoice(ICriteria criteria);
+
+	/**
+	 * 保存-采购预留发票
+	 * 
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseReserveInvoice> savePurchaseReserveInvoice(IPurchaseReserveInvoice bo);
 
 	// --------------------------------------------------------------------------------------------//
 

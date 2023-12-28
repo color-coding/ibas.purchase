@@ -48,6 +48,8 @@ namespace purchase {
         export const BO_CODE_BLANKETAGREEMENT: string = "${Company}_PH_BLANKETAGT";
         /** 业务对象编码-预付款申请 */
         export const BO_CODE_DOWNPAYMNETREQUEST: string = "${Company}_PH_PAYREQUEST";
+        /** 业务对象编码-采购预留发票 */
+        export const BO_CODE_PURCHASERESERVEINVOICE: string = "${Company}_PH_PURCHRSVINVOICE";
 
         /** 运输状态 */
         export enum emShippingStatus {

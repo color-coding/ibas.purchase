@@ -42,6 +42,8 @@ namespace purchase {
                 choosePurchaseDeliveryPurchaseOrderEvent: Function;
                 /** 选择采购收货-一揽子协议事件 */
                 choosePurchaseDeliveryBlanketAgreementEvent: Function;
+                /** 选择采购收货-采购预留发票 */
+                choosePurchaseDeliveryPurchaseReserveInvoiceEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 付款采购收货 */
@@ -253,6 +255,16 @@ namespace purchase {
                                                         visible: shell.app.privileges.canRun({
                                                             id: app.PurchaseOrderChooseApp.APPLICATION_ID,
                                                             name: app.PurchaseOrderChooseApp.APPLICATION_NAME,
+                                                        })
+                                                    }),
+                                                    new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("bo_purchasereserveinvoice"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.choosePurchaseDeliveryPurchaseReserveInvoiceEvent);
+                                                        },
+                                                        visible: shell.app.privileges.canRun({
+                                                            id: app.PurchaseReserveInvoiceChooseApp.APPLICATION_ID,
+                                                            name: app.PurchaseReserveInvoiceChooseApp.APPLICATION_NAME,
                                                         })
                                                     }),
                                                     new sap.m.MenuItem("", {

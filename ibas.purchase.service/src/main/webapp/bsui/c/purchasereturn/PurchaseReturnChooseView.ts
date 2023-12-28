@@ -445,15 +445,20 @@ namespace purchase {
                                                         if (selectItems.length > 0) {
                                                             let selects: bo.PurchaseReturn[] = that.table.getSelecteds();
                                                             for (let select of selects) {
-                                                                for (let i: number = 0; i < select.purchaseReturnItems.length; i++) {
+                                                                let has: boolean = false;
+                                                                for (let i: number = select.purchaseReturnItems.length - 1; i >= 0; i--) {
                                                                     let item: any = select.purchaseReturnItems[i];
                                                                     if (selectItems.find(c => c === item)) {
+                                                                        has = true;
                                                                         continue;
                                                                     }
                                                                     select.purchaseReturnItems.removeAt(i);
                                                                 }
+                                                                if (has === false) {
+                                                                    select.markDeleted();
+                                                                }
                                                             }
-                                                            that.fireViewEvents(that.chooseDataEvent, selects);
+                                                            that.fireViewEvents(that.chooseDataEvent, selects.filter(c => c.isDeleted === false));
                                                         }
                                                     }
                                                 }),
