@@ -162,175 +162,153 @@ namespace purchase {
                             that.fireViewEvents(that.fetchDataEvent, criteria);
                         }
                     });
-                    this.itemTable = new sap.extension.m.DataTable("", {
-                        autoPopinMode: true,
+                    this.itemTable = new sap.extension.table.DataTable("", {
                         chooseType: ibas.emChooseType.MULTIPLE,
+                        visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
                         dataInfo: {
                             code: bo.BlanketAgreement.BUSINESS_OBJECT_CODE,
                             name: bo.BlanketAgreementItem.name
                         },
+                        rows: "{/}",
                         columns: [
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_lineid"),
-                                width: "6rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_lineid"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "docEntry",
+                                            type: new sap.extension.data.Numeric()
+                                        },
+                                        {
+                                            path: "lineId",
+                                            type: new sap.extension.data.Numeric()
+
+                                        }
+                                    ],
+                                    formatter(docEntry: number, lineId: number): string {
+                                        return ibas.strings.format("{0} - {1}", docEntry, lineId);
+                                    }
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_itemcode"),
-                                width: "10rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_itemcode"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "itemCode",
+                                    type: new sap.extension.data.Alphanumeric()
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_itemdescription"),
-                                width: "14rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_itemdescription"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "itemDescription",
+                                    type: new sap.extension.data.Alphanumeric()
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_quantity"),
-                                width: "8rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_quantity"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "quantity",
+                                            type: new sap.extension.data.Quantity()
+                                        }, {
+                                            path: "uom",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        }
+                                    ]
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_price"),
-                                width: "8rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_price"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "price",
+                                            type: new sap.extension.data.Price()
+                                        }, {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        }
+                                    ]
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_linetotal"),
-                                width: "8rem",
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_linetotal"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "lineTotal",
+                                            type: new sap.extension.data.Sum()
+                                        }, {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        }
+                                    ]
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_openquantity"),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_openquantity"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "quantity",
+                                            type: new sap.extension.data.Quantity(),
+                                        },
+                                        {
+                                            path: "closedQuantity",
+                                            type: new sap.extension.data.Quantity(),
+
+                                        }
+                                    ],
+                                    formatter(quantity: number, closedQuantity: number): string {
+                                        return sap.extension.data.formatValue(sap.extension.data.Quantity, quantity - closedQuantity, "string");
+                                    }
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_openamount"),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_openamount"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "lineTotal",
+                                            type: new sap.extension.data.Sum(),
+                                        },
+                                        {
+                                            path: "closedAmount",
+                                            type: new sap.extension.data.Sum(),
+
+                                        }
+                                    ],
+                                    formatter(lineTotal: number, closedAmount: number): string {
+                                        return sap.extension.data.formatValue(sap.extension.data.Sum, lineTotal - closedAmount, "string");
+                                    }
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_reference1"),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_reference1"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "reference1",
+                                    type: new sap.extension.data.Alphanumeric()
+                                }),
                             }),
-                            new sap.extension.m.Column("", {
-                                header: ibas.i18n.prop("bo_blanketagreementitem_reference2"),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_blanketagreementitem_reference2"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "reference2",
+                                    type: new sap.extension.data.Alphanumeric()
+                                }),
                             }),
                         ],
-                        items: {
-                            path: "/",
-                            template: new sap.m.ColumnListItem("", {
-                                cells: [
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "docEntry",
-                                                    type: new sap.extension.data.Numeric()
-                                                },
-                                                {
-                                                    path: "lineId",
-                                                    type: new sap.extension.data.Numeric()
-
-                                                }
-                                            ],
-                                            formatter(docEntry: number, lineId: number): string {
-                                                return ibas.strings.format("{0} - {1}", docEntry, lineId);
-                                            }
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            path: "itemCode",
-                                            type: new sap.extension.data.Alphanumeric()
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            path: "itemDescription",
-                                            type: new sap.extension.data.Alphanumeric()
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "quantity",
-                                                    type: new sap.extension.data.Quantity()
-                                                }, {
-                                                    path: "uom",
-                                                    type: new sap.extension.data.Alphanumeric()
-                                                }
-                                            ]
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "price",
-                                                    type: new sap.extension.data.Price()
-                                                }, {
-                                                    path: "currency",
-                                                    type: new sap.extension.data.Alphanumeric()
-                                                }
-                                            ]
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "lineTotal",
-                                                    type: new sap.extension.data.Sum()
-                                                }, {
-                                                    path: "currency",
-                                                    type: new sap.extension.data.Alphanumeric()
-                                                }
-                                            ]
-                                        },
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "quantity",
-                                                    type: new sap.extension.data.Quantity(),
-                                                },
-                                                {
-                                                    path: "closedQuantity",
-                                                    type: new sap.extension.data.Quantity(),
-
-                                                }
-                                            ],
-                                            formatter(quantity: number, closedQuantity: number): string {
-                                                return sap.extension.data.formatValue(sap.extension.data.Quantity, quantity - closedQuantity, "string");
-                                            }
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            parts: [
-                                                {
-                                                    path: "lineTotal",
-                                                    type: new sap.extension.data.Sum(),
-                                                },
-                                                {
-                                                    path: "closedAmount",
-                                                    type: new sap.extension.data.Sum(),
-
-                                                }
-                                            ],
-                                            formatter(lineTotal: number, closedAmount: number): string {
-                                                return sap.extension.data.formatValue(sap.extension.data.Sum, lineTotal - closedAmount, "string");
-                                            }
-                                        }
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            path: "reference1",
-                                            type: new sap.extension.data.Alphanumeric()
-                                        },
-                                    }),
-                                    new sap.extension.m.ObjectAttribute("", {
-                                        bindingValue: {
-                                            path: "reference2",
-                                            type: new sap.extension.data.Alphanumeric()
-                                        },
-                                    }),
-                                ]
-                            }),
-                        }
                     });
                     return new sap.m.Dialog("", {
                         title: this.title,
@@ -422,33 +400,47 @@ namespace purchase {
                                                     search(event: sap.ui.base.Event): void {
                                                         let source: any = event.getSource();
                                                         if (source instanceof sap.m.SearchField) {
-                                                            that.itemTable.setBusy(true);
                                                             let search: string = source.getValue();
                                                             if (!ibas.strings.isEmpty(search)) {
                                                                 search = search.trim().toLowerCase();
                                                             }
-                                                            for (let item of that.itemTable.getItems()) {
-                                                                if (item instanceof sap.m.ColumnListItem) {
-                                                                    item.setVisible(true);
-                                                                    if (ibas.strings.isEmpty(search)) {
+                                                            let filters: ibas.IList<sap.ui.model.Filter> = new ibas.ArrayList<sap.ui.model.Filter>();
+                                                            if (!ibas.strings.isEmpty(search)) {
+                                                                for (let i: number = 0; i < that.itemTable.getVisibleRowCount(); i++) {
+                                                                    let row: sap.ui.table.Row = that.itemTable.getRows()[i];
+                                                                    let data: ibas.IBODocumentLine = row.getBindingContext()?.getObject();
+                                                                    if (ibas.objects.isNull(data)) {
                                                                         continue;
                                                                     }
                                                                     let done: boolean = false;
-                                                                    for (let cell of item.getCells()) {
-                                                                        if (cell instanceof sap.m.ObjectAttribute) {
-                                                                            let text: string = cell.getText();
+                                                                    for (let cell of row.getCells()) {
+                                                                        if (cell instanceof sap.m.Text) {
+                                                                            let text: string = cell.getText(false);
                                                                             if (text && text.toLowerCase().indexOf(search) >= 0) {
                                                                                 done = true;
                                                                                 break;
                                                                             }
                                                                         }
                                                                     }
-                                                                    if (!done) {
-                                                                        item.setVisible(false);
+                                                                    if (done) {
+                                                                        filters.add(new sap.ui.model.Filter({
+                                                                            filters: [
+                                                                                new sap.ui.model.Filter("docEntry", sap.ui.model.FilterOperator.EQ, data.docEntry),
+                                                                                new sap.ui.model.Filter("lineId", sap.ui.model.FilterOperator.EQ, data.lineId),
+                                                                            ],
+                                                                            and: true,
+                                                                        }));
                                                                     }
                                                                 }
                                                             }
-                                                            that.itemTable.setBusy(false);
+                                                            let binding: any = that.itemTable.getBinding("rows");
+                                                            if (binding instanceof sap.ui.model.ListBinding) {
+                                                                if (filters.length > 0) {
+                                                                    binding.filter(new sap.ui.model.Filter({ filters: filters, and: false }));
+                                                                } else {
+                                                                    binding.filter(undefined);
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }),
@@ -508,7 +500,7 @@ namespace purchase {
                 }
                 private container: sap.m.NavContainer;
                 private table: sap.extension.table.Table;
-                private itemTable: sap.extension.m.Table;
+                private itemTable: sap.extension.table.Table;
                 private customMenuItem: sap.m.MenuItem;
 
                 embedded(view: any): void {
