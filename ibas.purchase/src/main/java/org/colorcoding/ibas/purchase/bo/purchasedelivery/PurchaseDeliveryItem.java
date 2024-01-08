@@ -34,10 +34,11 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.IMaterialPriceContract;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
+import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
@@ -2483,66 +2484,45 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					}
 				},
 				// 采购订单收货
-				MyConfiguration.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE)
-						.equalsIgnoreCase(PurchaseDeliveryItem.this.getBaseDocumentType())
-								// 基于预留发票的，返回原始单据
-								? new IPurchaseOrderReceiptContract() {
+				new IPurchaseOrderReceiptContract() {
 
-									@Override
-									public String getIdentifiers() {
-										return PurchaseDeliveryItem.this.getIdentifiers();
-									}
+					String PurchaseOrderCode = MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE);
 
-									@Override
-									public BigDecimal getQuantity() {
-										return PurchaseDeliveryItem.this.getQuantity();
-									}
+					@Override
+					public String getIdentifiers() {
+						return PurchaseDeliveryItem.this.getIdentifiers();
+					}
 
-									@Override
-									public String getBaseDocumentType() {
-										return PurchaseDeliveryItem.this.getOriginalDocumentType();
-									}
+					@Override
+					public BigDecimal getQuantity() {
+						return PurchaseDeliveryItem.this.getQuantity();
+					}
 
-									@Override
-									public Integer getBaseDocumentEntry() {
-										return PurchaseDeliveryItem.this.getOriginalDocumentEntry();
-									}
+					@Override
+					public String getBaseDocumentType() {
+						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
+							return PurchaseDeliveryItem.this.getOriginalDocumentType();
+						}
+						return PurchaseDeliveryItem.this.getBaseDocumentType();
+					}
 
-									@Override
-									public Integer getBaseDocumentLineId() {
-										return PurchaseDeliveryItem.this.getOriginalDocumentLineId();
-									}
+					@Override
+					public Integer getBaseDocumentEntry() {
+						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
+							return PurchaseDeliveryItem.this.getOriginalDocumentEntry();
+						}
+						return PurchaseDeliveryItem.this.getBaseDocumentEntry();
+					}
 
-								}
-								// 返回基于单据
-								: new IPurchaseOrderReceiptContract() {
+					@Override
+					public Integer getBaseDocumentLineId() {
+						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
+							return PurchaseDeliveryItem.this.getOriginalDocumentLineId();
+						}
+						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
+					}
 
-									@Override
-									public String getIdentifiers() {
-										return PurchaseDeliveryItem.this.getIdentifiers();
-									}
-
-									@Override
-									public BigDecimal getQuantity() {
-										return PurchaseDeliveryItem.this.getQuantity();
-									}
-
-									@Override
-									public String getBaseDocumentType() {
-										return PurchaseDeliveryItem.this.getBaseDocumentType();
-									}
-
-									@Override
-									public Integer getBaseDocumentEntry() {
-										return PurchaseDeliveryItem.this.getBaseDocumentEntry();
-									}
-
-									@Override
-									public Integer getBaseDocumentLineId() {
-										return PurchaseDeliveryItem.this.getBaseDocumentLineId();
-									}
-
-								},
+				},
 				// 一揽子协议
 				new IBlanketAgreementQuantityContract() {
 
@@ -2576,6 +2556,34 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
 					}
 
+				},
+				// 最后采购价格清单
+				new IMaterialPriceContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseDeliveryItem.this.getIdentifiers();
+					}
+
+					@Override
+					public Integer getPriceList() {
+						return MyConfiguration.DATA_MATERIALS_PURCHASE_PRICE_LIST;
+					}
+
+					@Override
+					public BigDecimal getPrice() {
+						return PurchaseDeliveryItem.this.getPreTaxPrice();
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseDeliveryItem.this.getItemCode();
+					}
+
+					@Override
+					public String getCurrency() {
+						return null;
+					}
 				}
 
 		};

@@ -55,4 +55,7 @@ public class MyConfiguration extends org.colorcoding.ibas.bobas.MyConfiguration 
 	 * 服务命名空间
 	 */
 	public static final String NAMESPACE_SERVICE = NAMESPACE_ROOT + "service";
+
+	/** 物料最后采购价格清单 */
+	public static final Integer DATA_MATERIALS_PURCHASE_PRICE_LIST = -2;
 }

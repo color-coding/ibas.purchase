@@ -20,11 +20,13 @@ namespace purchase {
                 deleteDataEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 改变订单状态 */
+                changeDocumentStatusEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
                     this.table = new sap.extension.table.DataTable("", {
-                        enableSelectAll: false,
+                        enableSelectAll: true,
                         visibleRowCount: sap.extension.table.visibleRowCount(15),
                         visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Interactive,
                         dataInfo: this.queryTarget,
@@ -221,6 +223,20 @@ namespace purchase {
                                     type: sap.m.ButtonType.Transparent,
                                     menu: new sap.m.Menu("", {
                                         items: [
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("shell_batch") + ibas.enums.describe(ibas.emDocumentStatus, ibas.emDocumentStatus.RELEASED),
+                                                icon: "sap-icon://status-in-process",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.changeDocumentStatusEvent, ibas.emDocumentStatus.RELEASED, that.table.getSelecteds());
+                                                },
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("shell_batch") + ibas.enums.describe(ibas.emDocumentStatus, ibas.emDocumentStatus.FINISHED),
+                                                icon: "sap-icon://status-completed",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.changeDocumentStatusEvent, ibas.emDocumentStatus.FINISHED, that.table.getSelecteds());
+                                                },
+                                            }),
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("purchase_orderer_reservation"),
                                                 icon: "sap-icon://blank-tag",

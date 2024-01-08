@@ -271,7 +271,7 @@ namespace purchase {
             }
             /** 更改行价格 */
             private changePurchaseOrderItemPrice(priceList: number | ibas.Criteria, orderItems: ibas.IList<bo.PurchaseOrderItem>): void {
-                if (typeof priceList === "number" && priceList > 0) {
+                if (typeof priceList === "number" && ibas.numbers.valueOf(priceList) !== 0) {
                     let criteria: ibas.Criteria = new ibas.Criteria();
                     let condition: ibas.ICondition = criteria.conditions.create();
                     condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_PRICELIST;
