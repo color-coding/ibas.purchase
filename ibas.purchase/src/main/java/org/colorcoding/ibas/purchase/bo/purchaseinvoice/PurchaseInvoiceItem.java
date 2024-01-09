@@ -34,6 +34,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.IMaterialPriceContract;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -2592,6 +2593,36 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 						return PurchaseInvoiceItem.this.getBaseDocumentLineId();
 					}
 
+				},
+				// 最后采购价格清单
+				new IMaterialPriceContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseInvoiceItem.this.getIdentifiers();
+					}
+
+					@Override
+					public Integer getPriceList() {
+						return MyConfiguration.DATA_MATERIALS_PURCHASE_PRICE_LIST;
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseInvoiceItem.this.getItemCode();
+					}
+
+					@Override
+					public String getCurrency() {
+						return null;
+					}
+
+					@Override
+					public BigDecimal getPrice() {
+						// 转为本币
+						return Decimal.multiply(PurchaseInvoiceItem.this.getPreTaxPrice(),
+								PurchaseInvoiceItem.this.getRate());
+					}
 				}
 
 		};

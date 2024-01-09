@@ -2571,11 +2571,6 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					}
 
 					@Override
-					public BigDecimal getPrice() {
-						return PurchaseDeliveryItem.this.getPreTaxPrice();
-					}
-
-					@Override
 					public String getItemCode() {
 						return PurchaseDeliveryItem.this.getItemCode();
 					}
@@ -2583,6 +2578,13 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					@Override
 					public String getCurrency() {
 						return null;
+					}
+
+					@Override
+					public BigDecimal getPrice() {
+						// 转为本币
+						return Decimal.multiply(PurchaseDeliveryItem.this.getPreTaxPrice(),
+								PurchaseDeliveryItem.this.getRate());
 					}
 				}
 

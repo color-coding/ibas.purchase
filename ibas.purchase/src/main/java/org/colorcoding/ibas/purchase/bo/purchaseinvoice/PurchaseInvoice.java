@@ -2068,6 +2068,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 库存科目
 								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
@@ -2075,6 +2076,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 税科目
 								jeContent = new JournalEntrySmartContent(line);
@@ -2082,6 +2084,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 							} else {
 								/** 不基于单据 **/
@@ -2091,6 +2094,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 税科目
 								jeContent = new JournalEntrySmartContent(line);
@@ -2098,6 +2102,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
 								jeContent.setAmount(line.getTaxTotal());// 税总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 
 							}
@@ -2108,6 +2113,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
+						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
 						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
 						jeContents.add(jeContent);
 						return jeContents.toArray(new JournalEntryContent[] {});

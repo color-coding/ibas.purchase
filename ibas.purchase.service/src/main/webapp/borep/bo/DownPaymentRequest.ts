@@ -538,7 +538,9 @@ namespace purchase {
                 this.downPaymentRequestItems = new DownPaymentRequestItems(this);
                 this.objectCode = ibas.config.applyVariables(DownPaymentRequest.BUSINESS_OBJECT_CODE);
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.documentCurrency = ibas.config.get(ibas.CONFIG_ITEM_DEFAULT_CURRENCY);
+                this.documentCurrency = accounting.config.currency("LOCAL");
+                this.documentDate = ibas.dates.today();
+                this.deliveryDate = ibas.dates.today();
                 this.rounding = ibas.emYesNo.YES;
                 this.discount = 1;
             }
@@ -703,7 +705,15 @@ namespace purchase {
                 super.afterAdd(item);
                 if (!this.parent.isLoading) {
                     if (item.isNew && !item.isLoading) {
-                        item.agreements = this.parent.agreements;
+                        if (ibas.strings.isEmpty(item.baseDocumentType)) {
+                            item.agreements = this.parent.agreements;
+                            item.rate = this.parent.documentRate;
+                            item.currency = this.parent.documentCurrency;
+                        }
+                    }
+                    if (ibas.strings.isEmpty(this.parent.documentCurrency)
+                        && !ibas.strings.isEmpty(item.currency)) {
+                        this.parent.documentCurrency = item.currency;
                     }
                 }
             }
@@ -717,7 +727,32 @@ namespace purchase {
                             if (item.isLoading) {
                                 continue;
                             }
+                            if (!ibas.strings.isEmpty(item.baseDocumentType)) {
+                                continue;
+                            }
                             item.agreements = argument;
+                        }
+                    } else if (ibas.strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_DOCUMENTRATE_NAME)) {
+                        let rate: number = this.parent.documentRate;
+                        for (let item of this) {
+                            if (item.isLoading) {
+                                continue;
+                            }
+                            if (!ibas.strings.isEmpty(item.baseDocumentType)) {
+                                continue;
+                            }
+                            item.rate = rate;
+                        }
+                    } else if (ibas.strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_DOCUMENTCURRENCY_NAME)) {
+                        let currency: string = this.parent.documentCurrency;
+                        for (let item of this) {
+                            if (item.isLoading) {
+                                continue;
+                            }
+                            if (!ibas.strings.isEmpty(item.baseDocumentType)) {
+                                continue;
+                            }
+                            item.currency = currency;
                         }
                     }
                 }
@@ -1382,7 +1417,7 @@ namespace purchase {
 
             /** 初始化数据 */
             protected init(): void {
-                this.currency = ibas.config.get(ibas.CONFIG_ITEM_DEFAULT_CURRENCY);
+                this.currency = accounting.config.currency("LOCAL");
                 this.discount = 1;
                 this.taxRate = 0;
                 this.uomRate = 1;

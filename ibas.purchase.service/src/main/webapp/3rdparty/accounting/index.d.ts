@@ -83,6 +83,8 @@ declare namespace accounting {
         const BO_CODE_BANK: string;
         /** 业务对象编码-银行账户 */
         const BO_CODE_BANKACCOUNT: string;
+        /** 业务对象编码-货币汇率 */
+        const BO_CODE_CURRENCYRATE: string;
         /**
          * 期间状态
          */
@@ -1173,30 +1175,6 @@ declare namespace accounting {
             credit: number;
             /** 货币 */
             currency: string;
-            /** 借方金额（系统） */
-            systemDebit: number;
-            /** 贷方金额（系统） */
-            systemCredit: number;
-            /** 系统币 */
-            systemCurrency: string;
-            /** 系统币汇率 */
-            systemRate: number;
-            /** 借方金额（本币） */
-            localDebit: number;
-            /** 贷方金额（本币） */
-            localCredit: number;
-            /** 本币 */
-            localCurrency: string;
-            /** 本币汇率 */
-            localRate: number;
-            /** 税码 */
-            tax: string;
-            /** 税率 */
-            taxRate: number;
-            /** 基础总额 */
-            baseTotal: number;
-            /** 分支 */
-            branch: string;
             /** 项目代码 */
             project: string;
             /** 成本中心1 */
@@ -1557,6 +1535,54 @@ declare namespace accounting {
  */
 declare namespace accounting {
     namespace bo {
+        /** 货币汇率 */
+        interface ICurrencyRate extends ibas.IBOSimple {
+            /** 货币 */
+            currency: string;
+            /** 日期 */
+            date: Date;
+            /** 汇率 */
+            rate: number;
+            /** 编号 */
+            objectKey: number;
+            /** 类型 */
+            objectCode: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 编号系列 */
+            series: number;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryAccounting extends ibas.IBORepositoryApplication {
             /**
@@ -1709,6 +1735,16 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveBankAccount(saver: ibas.ISaveCaller<bo.IBankAccount>): void;
+            /**
+             * 查询 货币汇率
+             * @param fetcher 查询者
+             */
+            fetchCurrencyRate(fetcher: ibas.IFetchCaller<bo.ICurrencyRate>): void;
+            /**
+             * 保存 货币汇率
+             * @param saver 保存者
+             */
+            saveCurrencyRate(saver: ibas.ISaveCaller<bo.ICurrencyRate>): void;
         }
     }
 }
@@ -4277,78 +4313,6 @@ declare namespace accounting {
             get currency(): string;
             /** 设置-货币 */
             set currency(value: string);
-            /** 映射的属性名称-借方金额（系统） */
-            static PROPERTY_SYSTEMDEBIT_NAME: string;
-            /** 获取-借方金额（系统） */
-            get systemDebit(): number;
-            /** 设置-借方金额（系统） */
-            set systemDebit(value: number);
-            /** 映射的属性名称-贷方金额（系统） */
-            static PROPERTY_SYSTEMCREDIT_NAME: string;
-            /** 获取-贷方金额（系统） */
-            get systemCredit(): number;
-            /** 设置-贷方金额（系统） */
-            set systemCredit(value: number);
-            /** 映射的属性名称-系统币 */
-            static PROPERTY_SYSTEMCURRENCY_NAME: string;
-            /** 获取-系统币 */
-            get systemCurrency(): string;
-            /** 设置-系统币 */
-            set systemCurrency(value: string);
-            /** 映射的属性名称-系统币汇率 */
-            static PROPERTY_SYSTEMRATE_NAME: string;
-            /** 获取-系统币汇率 */
-            get systemRate(): number;
-            /** 设置-系统币汇率 */
-            set systemRate(value: number);
-            /** 映射的属性名称-借方金额（本币） */
-            static PROPERTY_LOCALDEBIT_NAME: string;
-            /** 获取-借方金额（本币） */
-            get localDebit(): number;
-            /** 设置-借方金额（本币） */
-            set localDebit(value: number);
-            /** 映射的属性名称-贷方金额（本币） */
-            static PROPERTY_LOCALCREDIT_NAME: string;
-            /** 获取-贷方金额（本币） */
-            get localCredit(): number;
-            /** 设置-贷方金额（本币） */
-            set localCredit(value: number);
-            /** 映射的属性名称-本币 */
-            static PROPERTY_LOCALCURRENCY_NAME: string;
-            /** 获取-本币 */
-            get localCurrency(): string;
-            /** 设置-本币 */
-            set localCurrency(value: string);
-            /** 映射的属性名称-本币汇率 */
-            static PROPERTY_LOCALRATE_NAME: string;
-            /** 获取-本币汇率 */
-            get localRate(): number;
-            /** 设置-本币汇率 */
-            set localRate(value: number);
-            /** 映射的属性名称-税码 */
-            static PROPERTY_TAX_NAME: string;
-            /** 获取-税码 */
-            get tax(): string;
-            /** 设置-税码 */
-            set tax(value: string);
-            /** 映射的属性名称-税率 */
-            static PROPERTY_TAXRATE_NAME: string;
-            /** 获取-税率 */
-            get taxRate(): number;
-            /** 设置-税率 */
-            set taxRate(value: number);
-            /** 映射的属性名称-基础总额 */
-            static PROPERTY_BASETOTAL_NAME: string;
-            /** 获取-基础总额 */
-            get baseTotal(): number;
-            /** 设置-基础总额 */
-            set baseTotal(value: number);
-            /** 映射的属性名称-分支 */
-            static PROPERTY_BRANCH_NAME: string;
-            /** 获取-分支 */
-            get branch(): string;
-            /** 设置-分支 */
-            set branch(value: string);
             /** 映射的属性名称-项目代码 */
             static PROPERTY_PROJECT_NAME: string;
             /** 获取-项目代码 */
@@ -5286,6 +5250,128 @@ declare namespace accounting {
  */
 declare namespace accounting {
     namespace bo {
+        /** 货币汇率 */
+        class CurrencyRate extends ibas.BOSimple<CurrencyRate> implements ICurrencyRate {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
+            /** 映射的属性名称-日期 */
+            static PROPERTY_DATE_NAME: string;
+            /** 获取-日期 */
+            get date(): Date;
+            /** 设置-日期 */
+            set date(value: Date);
+            /** 映射的属性名称-汇率 */
+            static PROPERTY_RATE_NAME: string;
+            /** 获取-汇率 */
+            get rate(): number;
+            /** 设置-汇率 */
+            set rate(value: number);
+            /** 映射的属性名称-编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-编号 */
+            get objectKey(): number;
+            /** 设置-编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-编号系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-编号系列 */
+            get series(): number;
+            /** 设置-编号系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace accounting {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -5473,6 +5559,16 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveBankAccount(saver: ibas.ISaveCaller<bo.BankAccount>): void;
+            /**
+             * 查询 货币汇率
+             * @param fetcher 查询者
+             */
+            fetchCurrencyRate(fetcher: ibas.IFetchCaller<bo.CurrencyRate>): void;
+            /**
+             * 保存 货币汇率
+             * @param saver 保存者
+             */
+            saveCurrencyRate(saver: ibas.ISaveCaller<bo.CurrencyRate>): void;
         }
         /**
          * 费用结束者
@@ -6740,6 +6836,63 @@ declare namespace accounting {
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+declare namespace accounting {
+    namespace app {
+        class CurrencyRateDay extends ibas.Bindable {
+            constructor(date: Date);
+            get date(): Date;
+            set date(value: Date);
+            addRate(data: bo.CurrencyRate): void;
+        }
+        /** 编辑应用-货币汇率 */
+        class CurrencyRateApp extends ibas.ResidentApplication<ICurrencyRateView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private localCurrency;
+            private systemCurrency;
+            private currencies;
+            private currencyRates;
+            /** 保存数据 */
+            protected saveData(): void;
+            private selectYearMonth;
+        }
+        /** 视图-货币汇率 */
+        interface ICurrencyRateView extends ibas.IResidentView {
+            /** 显示本币 */
+            showLocalCurrency(data: bo.Currency): void;
+            /** 显示系统币 */
+            showSystemCurrency(data: bo.Currency): void;
+            /** 显示货币 */
+            showCurrencies(datas: bo.Currency[]): void;
+            /** 显示数据 */
+            showCurrencyRates(datas: CurrencyRateDay[]): void;
+            /** 选择年月份事件 */
+            selectYearMonthEvent: Function;
+            /** 保存事件 */
+            saveDataEvent: Function;
+        }
+        class CurrencyRateApplicationMapping extends ibas.ResidentApplicationMapping {
+            /** 构造函数 */
+            constructor();
+            create(): ibas.ResidentApplication<ibas.IResidentView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
@@ -7682,6 +7835,8 @@ declare namespace accounting {
             protected createPostingPeriodAccount(ledger: bo.LedgerAccount, period: bo.PeriodCategory): void;
             /** 删除账期间总账科目科目事件 */
             protected deletePostingPeriodAccount(periodAccount: bo.PeriodLedgerAccount): void;
+            /** 复制从期间总账科目事件 */
+            private copyLedgerAccountsEvent;
         }
         /** 视图-分类账 */
         interface ILedgerAccountDeterminationView extends ibas.IView {
@@ -7701,6 +7856,8 @@ declare namespace accounting {
             choosePostingPeriodAccountAccountEvent: Function;
             /** 保存过账期间总账科目事件 */
             savePostingPeriodAccountEvent: Function;
+            /** 复制从期间总账科目事件 */
+            copyLedgerAccountsEvent: Function;
         }
     }
 }

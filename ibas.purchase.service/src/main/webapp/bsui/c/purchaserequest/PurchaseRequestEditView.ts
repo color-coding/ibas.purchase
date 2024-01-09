@@ -587,13 +587,26 @@ namespace purchase {
                                 path: "documentTotal",
                                 type: new sap.extension.data.Sum()
                             }),
-                            new sap.extension.m.CurrencySelect("", {
-                                editable: false,
-                            }).bindProperty("bindingValue", {
-                                path: "documentCurrency",
-                                type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 8
-                                })
+                            new sap.extension.m.CurrencyRateSelect("", {
+                                editable: {
+                                    path: "priceList",
+                                    formatter(data: any): boolean {
+                                        return ibas.numbers.valueOf(data) === 0 ? true : false;
+                                    }
+                                },
+                                baseCurrency: accounting.config.currency("LOCAL"),
+                                currency: {
+                                    path: "documentCurrency",
+                                    type: new sap.extension.data.Alphanumeric()
+                                },
+                                rate: {
+                                    path: "documentRate",
+                                    type: new sap.extension.data.Rate()
+                                },
+                                date: {
+                                    path: "documentDate",
+                                    type: new sap.extension.data.Date()
+                                }
                             }),
                         ]
                     });

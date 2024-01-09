@@ -68,8 +68,10 @@ public class ShippingAddresss extends BusinessObjects<IShippingAddress, IShippin
 		super.afterAddItem(item);
 		item.setBaseDocumentType(this.getParent().getObjectCode());
 		item.setBaseDocumentEntry(this.getParent().getDocEntry());
-		item.setCurrency(this.getParent().getDocumentCurrency());
-		item.setRate(this.getParent().getDocumentRate());
+		if (item.isNew()) {
+			item.setRate(this.getParent().getDocumentRate());
+			item.setCurrency(this.getParent().getDocumentCurrency());
+		}
 
 	}
 

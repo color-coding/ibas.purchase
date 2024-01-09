@@ -2243,6 +2243,8 @@ declare namespace sales {
             downPaymentRequestItems: IDownPaymentRequestItems;
             /** 基于销售订单 */
             baseDocument(document: ISalesOrder): void;
+            /** 基于销售交货 */
+            baseDocument(document: ISalesDelivery): void;
         }
         /** 预收款申请-行 集合 */
         interface IDownPaymentRequestItems extends ibas.IBusinessObjects<IDownPaymentRequestItem> {
@@ -4841,7 +4843,7 @@ declare namespace sales {
  */
 declare namespace sales {
     namespace bo {
-        /** 销售订单 */
+        /** 销售报价 */
         class SalesQuote extends ibas.BODocument<SalesQuote> implements ISalesQuote, ibas.IConvertedData {
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string;
@@ -5175,7 +5177,7 @@ declare namespace sales {
             /** 数据解析后 */
             afterParsing(): void;
         }
-        /** 销售订单-行 集合 */
+        /** 销售报价-行 集合 */
         class SalesQuoteItems extends ibas.BusinessObjects<SalesQuoteItem, SalesQuote> implements ISalesQuoteItems {
             /** 创建并添加子项 */
             create(): SalesQuoteItem;
@@ -5186,7 +5188,7 @@ declare namespace sales {
             protected afterAdd(item: SalesQuoteItem): void;
             protected onParentPropertyChanged(name: string): void;
         }
-        /** 销售订单-行 */
+        /** 销售报价-行 */
         class SalesQuoteItem extends ibas.BODocumentLine<SalesQuoteItem> implements ISalesQuoteItem {
             /** 构造函数 */
             constructor();
@@ -9185,6 +9187,8 @@ declare namespace sales {
             afterParsing(): void;
             /** 基于销售订单 */
             baseDocument(document: ISalesOrder): void;
+            /** 基于销售交货 */
+            baseDocument(document: ISalesDelivery): void;
         }
         /** 预收款申请-行 集合 */
         class DownPaymentRequestItems extends ibas.BusinessObjects<DownPaymentRequestItem, DownPaymentRequest> implements IDownPaymentRequestItems {
@@ -11920,6 +11924,8 @@ declare namespace sales {
             private chooseSalesQuoteItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesQuoteItemDistributionRule;
+            /** 预留物料库存 */
+            private reserveMaterialsInventory;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -11959,6 +11965,8 @@ declare namespace sales {
             showSalesQuoteItemExtraEvent: Function;
             /** 转为销售订单事件 */
             turnToSalesOrderEvent: Function;
+            /** 预留物料库存 */
+            reserveMaterialsInventoryEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }
@@ -12025,6 +12033,8 @@ declare namespace sales {
             protected editData(data: bo.SalesQuote): void;
             /** 删除数据，参数：目标数据集合 */
             protected deleteData(data: bo.SalesQuote | bo.SalesQuote[]): void;
+            /** 预留物料库存 */
+            private reserveMaterialsInventory;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteListView extends ibas.IBOListView {
@@ -12034,6 +12044,8 @@ declare namespace sales {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.SalesQuote[]): void;
+            /** 预留物料库存 */
+            reserveMaterialsInventoryEvent: Function;
         }
     }
 }
@@ -13208,6 +13220,8 @@ declare namespace sales {
             private chooseDownPaymentRequestContactPerson;
             /** 选择一揽子协议事件 */
             private chooseDownPaymentRequestBlanketAgreement;
+            /** 选择预收款申请-销售交货事件 */
+            private chooseDownPaymentRequestSalesDelivery;
             private chooseDownPaymentRequestItemUnit;
             private chooseDownPaymentRequestItemMaterialVersion;
             private chooseCustomerAgreements;
@@ -13245,6 +13259,8 @@ declare namespace sales {
             chooseDownPaymentRequestSalesOrderEvent: Function;
             /** 选择预收款申请-一揽子协议事件 */
             chooseDownPaymentRequestBlanketAgreementEvent: Function;
+            /** 选择预收款申请-销售交货事件 */
+            chooseDownPaymentRequestSalesDeliveryEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 默认仓库 */

@@ -2062,6 +2062,7 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 							jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 							jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
 							jeContents.add(jeContent);
 							// 税科目
 							jeContent = new JournalEntrySmartContent(line);
@@ -2069,6 +2070,7 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 							jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
 							jeContent.setAmount(line.getTaxTotal());// 税总计
 							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
 							jeContents.add(jeContent);
 						}
 						// 应付账款
@@ -2077,6 +2079,7 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 						jeContent.setAmount(PurchaseReserveInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseReserveInvoice.this.getDocumentCurrency());
+						jeContent.setRate(PurchaseReserveInvoice.this.getDocumentRate());
 						jeContent.setShortName(PurchaseReserveInvoice.this.getSupplierCode());
 						jeContents.add(jeContent);
 						return jeContents.toArray(new JournalEntryContent[] {});

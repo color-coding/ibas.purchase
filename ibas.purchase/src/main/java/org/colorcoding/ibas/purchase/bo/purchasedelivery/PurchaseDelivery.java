@@ -2066,6 +2066,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 应付账款
 								jeContent = new JournalEntrySmartContent(line);
@@ -2073,6 +2074,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
 								jeContents.add(jeContent);
 							} else {
@@ -2082,6 +2084,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 分配科目
 								jeContent = new JournalEntrySmartContent(line);
@@ -2089,6 +2092,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 							}
 						}

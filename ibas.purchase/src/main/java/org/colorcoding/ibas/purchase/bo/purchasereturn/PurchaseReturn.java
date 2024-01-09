@@ -2067,6 +2067,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 分配科目
 								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line);
@@ -2074,6 +2075,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 							} else {
 								/** 不基于单据 **/
@@ -2083,6 +2085,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 分配科目
 								jeContent = new PurchaseReturnMaterialsCost(line);
@@ -2090,6 +2093,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(Decimal.ZERO);// 待计算
 								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 							}
 						}

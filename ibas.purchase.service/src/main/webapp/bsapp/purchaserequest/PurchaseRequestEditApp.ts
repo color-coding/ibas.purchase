@@ -588,7 +588,7 @@ namespace purchase {
                                 // 转换数量，行数量减少
                                 if (!that.doneItems.contain(item)) {
                                     that.doneItems.add(item);
-                                    item.quantity -= result.quantity;
+                                    item.closedQuantity += result.quantity;
                                     let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
                                     boRepository.savePurchaseRequest({
                                         beSaved: that.editData,
