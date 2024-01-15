@@ -1052,8 +1052,6 @@ declare namespace materials {
             project: string;
             /** 单据类型 */
             orderType: string;
-            /** 从仓库 */
-            fromWarehouse: string;
             /** 分支 */
             branch: string;
             /** 库存转储-行集合 */
@@ -1109,6 +1107,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 从仓库 */
+            fromWarehouse: string;
             /** 基于类型 */
             baseDocumentType: string;
             /** 基于标识 */
@@ -1233,6 +1233,8 @@ declare namespace materials {
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
             batchManagement: ibas.emYesNo;
+            /** 版本管理 */
+            versionManagement: ibas.emYesNo;
             /** 采购税收组 */
             purchaseTaxGroup: string;
             /** 销售税收组 */
@@ -1658,6 +1660,12 @@ declare namespace materials {
             baseDocumentEntry: number;
             /** 基于行号 */
             baseDocumentLineId: number;
+            /** 过账日期 */
+            postingDate: Date;
+            /** 到期日 */
+            deliveryDate: Date;
+            /** 凭证日期 */
+            documentDate: Date;
             /** 原始类型 */
             originalDocumentType: string;
             /** 原始标识 */
@@ -1760,7 +1768,7 @@ declare namespace materials {
         interface IMaterialInventory extends ibas.IBOSimple {
             /** 物料编码 */
             itemCode: string;
-            /** 仓库编号 */
+            /** 仓库编码 */
             warehouse: string;
             /** 冻结的 */
             frozen: ibas.emYesNo;
@@ -1820,7 +1828,7 @@ declare namespace materials {
             itemCode: string;
             /** 物料名称 */
             itemName: string;
-            /** 仓库编号 */
+            /** 仓库编码 */
             warehouse: string;
             /** 方向 */
             direction: ibas.emDirection;
@@ -2281,6 +2289,12 @@ declare namespace materials {
             baseDocumentEntry: number;
             /** 基于行号 */
             baseDocumentLineId: number;
+            /** 过账日期 */
+            postingDate: Date;
+            /** 到期日 */
+            deliveryDate: Date;
+            /** 凭证日期 */
+            documentDate: Date;
             /** 原始类型 */
             originalDocumentType: string;
             /** 原始标识 */
@@ -3275,7 +3289,7 @@ declare namespace materials {
         interface IMaterialInventoryReservation extends ibas.IBOSimple {
             /** 物料编码 */
             itemCode: string;
-            /** 仓库编号 */
+            /** 仓库编码 */
             warehouse: string;
             /** 批次编码 */
             batchCode: string;
@@ -3421,7 +3435,7 @@ declare namespace materials {
             sourceDocumentLineId: number;
             /** 物料编码 */
             itemCode: string;
-            /** 仓库编号 */
+            /** 仓库编码 */
             warehouse: string;
             /** 数量 */
             quantity: number;
@@ -3491,7 +3505,7 @@ declare namespace materials {
             itemCode: string;
             /** 物料名称 */
             itemName: string;
-            /** 仓库编号 */
+            /** 仓库编码 */
             warehouse: string;
             /** 预估类型 */
             estimate: emEstimateType;
@@ -3765,8 +3779,6 @@ declare namespace materials {
             project: string;
             /** 单据类型 */
             orderType: string;
-            /** 从仓库 */
-            fromWarehouse: string;
             /** 分支 */
             branch: string;
             /** 库存转储-行集合 */
@@ -3821,6 +3833,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 从仓库 */
+            fromWarehouse: string;
             /** 基于类型 */
             baseDocumentType: string;
             /** 基于标识 */
@@ -5444,12 +5458,6 @@ declare namespace materials {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
-            /** 映射的属性名称-从仓库 */
-            static PROPERTY_FROMWAREHOUSE_NAME: string;
-            /** 获取-从仓库 */
-            get fromWarehouse(): string;
-            /** 设置-从仓库 */
-            set fromWarehouse(value: string);
             /** 映射的属性名称-分支 */
             static PROPERTY_BRANCH_NAME: string;
             /** 获取-分支 */
@@ -5606,6 +5614,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-从仓库 */
+            static PROPERTY_FROMWAREHOUSE_NAME: string;
+            /** 获取-从仓库 */
+            get fromWarehouse(): string;
+            /** 设置-从仓库 */
+            set fromWarehouse(value: string);
             /** 映射的属性名称-基于类型 */
             static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
             /** 获取-基于类型 */
@@ -5967,6 +5981,12 @@ declare namespace materials {
             get batchManagement(): ibas.emYesNo;
             /** 设置-批号管理 */
             set batchManagement(value: ibas.emYesNo);
+            /** 映射的属性名称-版本管理 */
+            static PROPERTY_VERSIONMANAGEMENT_NAME: string;
+            /** 获取-版本管理 */
+            get versionManagement(): ibas.emYesNo;
+            /** 设置-版本管理 */
+            set versionManagement(value: ibas.emYesNo);
             /** 映射的属性名称-采购税收组 */
             static PROPERTY_PURCHASETAXGROUP_NAME: string;
             /** 获取-采购税收组 */
@@ -6346,11 +6366,11 @@ declare namespace materials {
             get batchCode(): string;
             /** 设置-批次编号 */
             set batchCode(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-数量 */
             static PROPERTY_QUANTITY_NAME: string;
@@ -6596,6 +6616,24 @@ declare namespace materials {
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
             set baseDocumentLineId(value: number);
+            /** 映射的属性名称-过账日期 */
+            static PROPERTY_POSTINGDATE_NAME: string;
+            /** 获取-过账日期 */
+            get postingDate(): Date;
+            /** 设置-过账日期 */
+            set postingDate(value: Date);
+            /** 映射的属性名称-到期日 */
+            static PROPERTY_DELIVERYDATE_NAME: string;
+            /** 获取-到期日 */
+            get deliveryDate(): Date;
+            /** 设置-到期日 */
+            set deliveryDate(value: Date);
+            /** 映射的属性名称-凭证日期 */
+            static PROPERTY_DOCUMENTDATE_NAME: string;
+            /** 获取-凭证日期 */
+            get documentDate(): Date;
+            /** 设置-凭证日期 */
+            set documentDate(value: Date);
             /** 映射的属性名称-原始类型 */
             static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
             /** 获取-原始类型 */
@@ -6858,11 +6896,11 @@ declare namespace materials {
             get itemCode(): string;
             /** 设置-物料编码 */
             set itemCode(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-冻结的 */
             static PROPERTY_FROZEN_NAME: string;
@@ -7020,11 +7058,11 @@ declare namespace materials {
             get itemName(): string;
             /** 设置-物料名称 */
             set itemName(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-方向 */
             static PROPERTY_DIRECTION_NAME: string;
@@ -7506,11 +7544,11 @@ declare namespace materials {
             get serialCode(): string;
             /** 设置-序列编号 */
             set serialCode(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-在仓库 */
             static PROPERTY_INSTOCK_NAME: string;
@@ -7768,6 +7806,24 @@ declare namespace materials {
             get baseDocumentLineId(): number;
             /** 设置-基于行号 */
             set baseDocumentLineId(value: number);
+            /** 映射的属性名称-过账日期 */
+            static PROPERTY_POSTINGDATE_NAME: string;
+            /** 获取-过账日期 */
+            get postingDate(): Date;
+            /** 设置-过账日期 */
+            set postingDate(value: Date);
+            /** 映射的属性名称-到期日 */
+            static PROPERTY_DELIVERYDATE_NAME: string;
+            /** 获取-到期日 */
+            get deliveryDate(): Date;
+            /** 设置-到期日 */
+            set deliveryDate(value: Date);
+            /** 映射的属性名称-凭证日期 */
+            static PROPERTY_DOCUMENTDATE_NAME: string;
+            /** 获取-凭证日期 */
+            get documentDate(): Date;
+            /** 设置-凭证日期 */
+            set documentDate(value: Date);
             /** 映射的属性名称-原始类型 */
             static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
             /** 获取-原始类型 */
@@ -8039,6 +8095,12 @@ declare namespace materials {
             get batchManagement(): ibas.emYesNo;
             /** 设置-批号管理 */
             set batchManagement(value: ibas.emYesNo);
+            /** 映射的属性名称-版本管理 */
+            static PROPERTY_VERSIONMANAGEMENT_NAME: string;
+            /** 获取-版本管理 */
+            get versionManagement(): ibas.emYesNo;
+            /** 设置-版本管理 */
+            set versionManagement(value: ibas.emYesNo);
             /** 映射的属性名称-采购税收组 */
             static PROPERTY_PURCHASETAXGROUP_NAME: string;
             /** 获取-采购税收组 */
@@ -10377,11 +10439,11 @@ declare namespace materials {
             get itemCode(): string;
             /** 设置-物料编码 */
             set itemCode(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-批次编码 */
             static PROPERTY_BATCHCODE_NAME: string;
@@ -10771,11 +10833,11 @@ declare namespace materials {
             get itemCode(): string;
             /** 设置-物料编码 */
             set itemCode(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-数量 */
             static PROPERTY_QUANTITY_NAME: string;
@@ -10961,11 +11023,11 @@ declare namespace materials {
             get itemName(): string;
             /** 设置-物料名称 */
             set itemName(value: string);
-            /** 映射的属性名称-仓库编号 */
+            /** 映射的属性名称-仓库编码 */
             static PROPERTY_WAREHOUSE_NAME: string;
-            /** 获取-仓库编号 */
+            /** 获取-仓库编码 */
             get warehouse(): string;
-            /** 设置-仓库编号 */
+            /** 设置-仓库编码 */
             set warehouse(value: string);
             /** 映射的属性名称-预估类型 */
             static PROPERTY_ESTIMATE_NAME: string;
@@ -11743,12 +11805,6 @@ declare namespace materials {
             get orderType(): string;
             /** 设置-单据类型 */
             set orderType(value: string);
-            /** 映射的属性名称-从仓库 */
-            static PROPERTY_FROMWAREHOUSE_NAME: string;
-            /** 获取-从仓库 */
-            get fromWarehouse(): string;
-            /** 设置-从仓库 */
-            set fromWarehouse(value: string);
             /** 映射的属性名称-分支 */
             static PROPERTY_BRANCH_NAME: string;
             /** 获取-分支 */
@@ -11904,6 +11960,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-从仓库 */
+            static PROPERTY_FROMWAREHOUSE_NAME: string;
+            /** 获取-从仓库 */
+            get fromWarehouse(): string;
+            /** 设置-从仓库 */
+            set fromWarehouse(value: string);
             /** 映射的属性名称-基于类型 */
             static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
             /** 获取-基于类型 */
@@ -12542,7 +12604,6 @@ declare namespace materials {
             /** 运行,覆盖原方法 */
             run(): void;
             run(data: bo.GoodsIssue): void;
-            protected priceListData: bo.MaterialPriceList[];
             /** 保存数据 */
             protected saveData(): void;
             /** 删除数据 */
@@ -13060,12 +13121,10 @@ declare namespace materials {
             /** 调用库存转储添加服务 */
             private callInventoryTransferAddService;
             /** 选择库存转储订单行物料事件 */
-            private chooseInventoryTransferWarehouse;
-            /** 选择库存转储订单行物料事件 */
             private chooseInventoryTransferLineMaterial;
             /** 选择库存转储订单物料价格清单事件 */
             private chooseeInventoryTransferMaterialPriceList;
-            /** 选择库存转储订单行物料事件 */
+            /** 选择库存转储订单行仓库事件 */
             private chooseInventoryTransferLineWarehouse;
             private chooseInventoryTransferLineMaterialBatch;
             private chooseInventoryTransferLineMaterialSerial;
@@ -13081,8 +13140,6 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
-            /** 选择库存转储单从仓库事件 */
-            chooseInventoryTransferWarehouseEvent: Function;
             /** 选择库存转储单物料价格清单 */
             chooseeInventoryTransferMaterialPriceListEvent: Function;
             /** 添加库存转储-行事件 */
@@ -13109,8 +13166,10 @@ declare namespace materials {
             showServiceAgent(datas: ibas.IServiceAgent[]): void;
             /** 选择库存转储-行 物料版本 */
             chooseInventoryTransferLineMaterialVersionEvent: Function;
-            /** 默认仓库 */
-            defaultWarehouse: string;
+            /** 从仓库 */
+            fromWarehouse: string;
+            /** 目标仓库 */
+            toWarehouse: string;
         }
         /** 库存转储编辑服务映射 */
         class InventoryTransferEditServiceMapping extends ibas.BOEditServiceMapping {
@@ -13332,6 +13391,7 @@ declare namespace materials {
             private editMaterialSubstitute;
             /** 选择总账科目事件 */
             private chooseLedgerAccount;
+            protected overview(): void;
         }
         /** 视图-物料 */
         interface IMaterialEditView extends ibas.IBOEditView {
@@ -13359,6 +13419,8 @@ declare namespace materials {
             editMaterialSubstituteEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+            /** 更多信息 */
+            overviewEvent: Function;
         }
     }
 }
@@ -13424,16 +13486,19 @@ declare namespace materials {
     namespace app {
         class MaterialsWarehouse {
             constructor(material: bo.IMaterial, warehouses?: bo.IWarehouse[]);
+            material: bo.IMaterial;
             get code(): string;
-            get name(): number;
+            get name(): string;
             warehouses: ibas.IList<bo.IWarehouse>;
         }
         /** 列表应用-物料库存 */
-        class MaterialInventoryListApp extends ibas.Application<IMaterialInventoryListView> {
+        class MaterialInventoryListApp extends ibas.BOListApplication<IMaterialInventoryListView, bo.Material> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
             static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
             /** 构造函数 */
             constructor();
             /** 注册视图 */
@@ -13442,19 +13507,20 @@ declare namespace materials {
             protected viewShowed(): void;
             private warehouses;
             run(type?: "ONHAND" | "ONORDERED" | "ONCOMMITED", itemCode?: string, warehouse?: string): void;
-            private fetchMaterial;
+            run(criteria?: ibas.ICriteria | ibas.ICondition[]): void;
+            protected newData(): void;
+            protected viewData(data: bo.Material): void;
+            protected fetchData(criteria: ibas.ICriteria, warehouse?: string, type?: string): void;
             private fetchInventoryJournal;
             private fetchOrderedJournal;
             private fetchCommitedJournal;
         }
         /** 视图-物料库存 */
-        interface IMaterialInventoryListView extends ibas.IView {
+        interface IMaterialInventoryListView extends ibas.IBOListView {
             /** 显示数据 */
-            showMaterials(datas: MaterialsWarehouse[], type?: string): void;
+            showDatas(datas: MaterialsWarehouse[], type?: string): void;
             /** 查询物料库存交易记录 */
             fetchInventoryJournalEvent: Function;
-            /** 查询物料 */
-            fetchMaterialEvent: Function;
             /** 显示物料库存交易数据 */
             showInventoryJournals(datas: bo.MaterialInventoryJournal[]): void;
             /** 查询物料订购交易记录 */
@@ -13563,6 +13629,8 @@ declare namespace materials {
             private viewMaterialInventory;
             private viewMaterialOrdered;
             private viewMaterialCommited;
+            private viewMaterialBatch;
+            private viewMaterialSerial;
         }
         /** 视图-物料 */
         interface IMaterialOverviewView extends ibas.IBOListView {
@@ -13582,12 +13650,16 @@ declare namespace materials {
             fetchMaterialBatchEvent: Function;
             /** 编辑批次信息 */
             editMaterialBatchEvent: Function;
+            /** 查看批次信息 */
+            viewMaterialBatchEvent: Function;
             /** 显示物料批次信息 */
             showMaterialBatch(datas: bo.IMaterialBatch[]): void;
             /** 查询序列信息 */
             fetchMaterialSerialEvent: Function;
             /** 编辑序列信息 */
             editMaterialSerialEvent: Function;
+            /** 查看序列信息 */
+            viewMaterialSerialEvent: Function;
             /** 显示物料序列信息 */
             showMaterialSerial(datas: bo.IMaterialSerial[]): void;
             /** 查询预留信息 */
@@ -14258,27 +14330,25 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
+            /** 运行 */
+            run(criteria?: ibas.ICriteria | ibas.ICondition[]): void;
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria): void;
             /** 新建数据 */
             protected newData(): void;
-            /** 查看数据，参数：目标数据 */
-            protected viewData(data: bo.MaterialBatch): void;
             /** 编辑数据，参数：目标数据 */
-            protected editData(data: bo.MaterialBatch): void;
+            protected viewData(data: bo.MaterialBatch): void;
             /** 查询物料批次交易记录 */
-            protected fetchBatchJournal(criteria: ibas.ICriteria): void;
+            protected fetchDataJournal(data: ibas.ICriteria | bo.MaterialBatch, dateFrom?: Date, dateTo?: Date): void;
         }
         /** 视图-物料批次 */
         interface IMaterialBatchListView extends ibas.IBOListView {
-            /** 编辑数据事件，参数：编辑对象 */
-            editDataEvent: Function;
             /** 显示物料批次数据 */
-            showBatches(datas: bo.MaterialBatch[]): void;
+            showDatas(datas: bo.MaterialBatch[]): void;
             /** 查询物料批次交易记录 */
-            fetchBatchJournalEvent: Function;
+            fetchDataJournalEvent: Function;
             /** 显示物料批次交易数据 */
-            showBatchJournals(datas: bo.MaterialBatchJournal[]): void;
+            showDataJournals(datas: bo.MaterialBatchJournal[]): void;
         }
     }
 }
@@ -15018,27 +15088,25 @@ declare namespace materials {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
+            /** 运行 */
+            run(criteria?: ibas.ICriteria | ibas.ICondition[]): void;
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria): void;
             /** 新建数据 */
             protected newData(): void;
             /** 查看数据，参数：目标数据 */
             protected viewData(data: bo.MaterialSerial): void;
-            /** 编辑数据，参数：目标数据 */
-            protected editData(data: bo.MaterialSerial): void;
-            /** 查询物料批次交易记录 */
-            protected fetchSerialJournal(criteria: ibas.ICriteria): void;
+            /** 查询物料序列交易记录 */
+            protected fetchDataJournal(data: ibas.ICriteria | bo.MaterialSerial, dateFrom?: Date, dateTo?: Date): void;
         }
         /** 视图-物料序列 */
         interface IMaterialSerialListView extends ibas.IBOListView {
-            /** 编辑数据事件 */
-            editDataEvent: Function;
-            /** 显示物料批次数据 */
-            showSerials(datas: bo.MaterialSerial[]): void;
-            /** 查询物料批次交易记录 */
-            fetchSerialJournalEvent: Function;
-            /** 显示物料批次交易数据 */
-            showSerialJournals(datas: bo.MaterialSerialJournal[]): void;
+            /** 显示物料序列数据 */
+            showDatas(datas: bo.MaterialSerial[]): void;
+            /** 查询物料序列交易记录 */
+            fetchDataJournalEvent: Function;
+            /** 显示物料序列交易数据 */
+            showDataJournals(datas: bo.MaterialSerialJournal[]): void;
         }
     }
 }
@@ -17347,8 +17415,6 @@ declare namespace materials {
             /** 删除库存转储申请-行事件 */
             private removeInventoryTransferRequestLine;
             /** 选择库存转储申请订单行物料事件 */
-            private chooseInventoryTransferRequestWarehouse;
-            /** 选择库存转储申请订单行物料事件 */
             private chooseInventoryTransferRequestLineMaterial;
             /** 选择库存转储申请订单物料价格清单事件 */
             private chooseeInventoryTransferRequestMaterialPriceList;
@@ -17362,20 +17428,18 @@ declare namespace materials {
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestEditView extends ibas.IBOEditView {
-            /** 显示数据 */
-            showInventoryTransferRequest(data: bo.InventoryTransferRequest): void;
             /** 删除数据事件 */
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
-            /** 选择库存转储申请单从仓库事件 */
-            chooseInventoryTransferRequestWarehouseEvent: Function;
             /** 选择库存转储申请单物料价格清单 */
             chooseeInventoryTransferRequestMaterialPriceListEvent: Function;
             /** 添加库存转储申请-行事件 */
             addInventoryTransferRequestLineEvent: Function;
             /** 删除库存转储申请-行事件 */
             removeInventoryTransferRequestLineEvent: Function;
+            /** 显示数据 */
+            showInventoryTransferRequest(data: bo.InventoryTransferRequest): void;
             /** 显示数据 */
             showInventoryTransferRequestLines(datas: bo.InventoryTransferRequestLine[]): void;
             /** 选择库存转储申请单行物料事件 */
@@ -17390,8 +17454,10 @@ declare namespace materials {
             chooseInventoryTransferRequestLineDistributionRuleEvent: Function;
             /** 选择库存转储申请-行 物料版本 */
             chooseInventoryTransferRequestLineMaterialVersionEvent: Function;
-            /** 默认仓库 */
-            defaultWarehouse: string;
+            /** 从仓库 */
+            fromWarehouse: string;
+            /** 目标仓库 */
+            toWarehouse: string;
             /** 转为库存转储申请事件 */
             turnToInventoryTransferEvent: Function;
         }

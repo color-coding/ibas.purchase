@@ -46,6 +46,7 @@ namespace purchase {
                 this.view.receiptPurchaseReserveInvoiceEvent = this.receiptPurchaseReserveInvoice;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseCreditNoteEvent = this.turnToPurchaseCreditNote;
+                this.view.turnToPurchaseDeliveryEvent = this.turnToPurchaseDelivery;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -750,6 +751,48 @@ namespace purchase {
                     }
                 });
             }
+            /** 转为采购交货 */
+            protected turnToPurchaseDelivery(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseReserveInvoice({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseReserveInvoice(this.editData);
+                            this.view.showPurchaseReserveInvoiceItems(this.editData.purchaseReserveInvoiceItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.PurchaseDelivery = new bo.PurchaseDelivery();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
+
+                            let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
+            }
             private choosePurchaseReserveInvoiceItemUnit(caller: bo.PurchaseReserveInvoiceItem): void {
                 let that: this = this;
                 ibas.servicesManager.runChooseService<materials.bo.IUnit>({
@@ -940,6 +983,8 @@ namespace purchase {
             editShippingAddressesEvent: Function;
             /** 转为采购交货事件 */
             turnToPurchaseCreditNoteEvent: Function;
+            /** 转为采购交货事件 */
+            turnToPurchaseDeliveryEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

@@ -4039,7 +4039,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-业务伙伴地址 */
-        class AddressEditApp extends ibas.BOEditApplication<IAddressEditView, bo.Address> {
+        class AddressEditApp extends ibas.BOEditService<IAddressEditView, bo.Address> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -4072,6 +4072,13 @@ declare namespace businesspartner {
             createDataEvent: Function;
             /*** 选择业务伙伴事件 */
             chooseBusinessPartnerEvent: Function;
+        }
+        /** 业务伙伴地址服务映射 */
+        class AddressEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Address>>;
         }
     }
 }
@@ -4407,7 +4414,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-业务伙伴联系人 */
-        class ContactPersonEditApp extends ibas.BOEditApplication<IContactPersonEditView, bo.ContactPerson> {
+        class ContactPersonEditApp extends ibas.BOEditService<IContactPersonEditView, bo.ContactPerson> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -4441,6 +4448,13 @@ declare namespace businesspartner {
             createDataEvent: Function;
             /*** 选择业务伙伴事件 */
             chooseBusinessPartnerEvent: Function;
+        }
+        /** 业务伙伴联系人编辑服务映射 */
+        class ContactPersonEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.ContactPerson>>;
         }
     }
 }
@@ -4615,7 +4629,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-客户 */
-        class CustomerEditApp extends ibas.BOEditApplication<ICustomerEditView, bo.Customer> {
+        class CustomerEditApp extends ibas.BOEditService<ICustomerEditView, bo.Customer> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -4680,6 +4694,13 @@ declare namespace businesspartner {
             createAddressEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+        }
+        /** 客户编辑服务映射 */
+        class CustomerEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Customer>>;
         }
     }
 }
@@ -4855,7 +4876,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-供应商 */
-        class SupplierEditApp extends ibas.BOEditApplication<ISupplierEditView, bo.Supplier> {
+        class SupplierEditApp extends ibas.BOEditService<ISupplierEditView, bo.Supplier> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -4920,6 +4941,13 @@ declare namespace businesspartner {
             createAddressEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+        }
+        /** 供应商编辑服务映射 */
+        class SupplierEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Supplier>>;
         }
     }
 }
@@ -5713,7 +5741,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-潜在潜在客户 */
-        class LeadEditApp extends ibas.BOEditApplication<ILeadEditView, bo.Lead> {
+        class LeadEditApp extends ibas.BOEditService<ILeadEditView, bo.Lead> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -5777,6 +5805,13 @@ declare namespace businesspartner {
             createAddressEvent: Function;
             /** 转为客户 */
             turnToCustomerEvent: Function;
+        }
+        /** 潜在潜在客户辑服务映射 */
+        class LeadEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Lead>>;
         }
     }
 }

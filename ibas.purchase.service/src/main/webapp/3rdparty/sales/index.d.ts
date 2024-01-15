@@ -10947,6 +10947,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售交货客户事件 */
             private chooseSalesDeliveryCustomer;
             /** 选择销售交货价格清单事件 */
@@ -11273,6 +11274,8 @@ declare namespace sales {
             protected turnToSalesReturn(): void;
             /** 转为销售发票 */
             protected turnToSalesInvoice(): void;
+            /** 转为销售预留发票 */
+            protected turnToSalesReserveInvoice(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesOrderBlanketAgreement;
             /** 选择销售订单-行 单位 */
@@ -11335,6 +11338,8 @@ declare namespace sales {
             turnToSalesReturnEvent: Function;
             /** 转为销售发票事件 */
             turnToSalesInvoiceEvent: Function;
+            /** 转为销售预留发票事件 */
+            turnToSalesReserveInvoiceEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
             /** 默认仓库 */
@@ -11617,6 +11622,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售退货客户事件 */
             private chooseSalesReturnCustomer;
             /** 选择销售退货价格清单事件 */
@@ -11899,6 +11905,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售报价客户事件 */
             private chooseSalesQuoteCustomer;
             /** 选择销售报价价格清单事件 */
@@ -12226,6 +12233,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售发票客户事件 */
             private chooseSalesInvoiceCustomer;
             /** 选择销售发票价格清单事件 */
@@ -12515,6 +12523,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售贷项客户事件 */
             private chooseSalesCreditNoteCustomer;
             /** 选择销售贷项价格清单事件 */
@@ -12967,6 +12976,7 @@ declare namespace sales {
             protected addBlanketAgreementItem(): void;
             /** 删除一揽子协议-项目事件 */
             protected removeBlanketAgreementItem(items: bo.BlanketAgreementItem[]): void;
+            private customer;
             /** 选择一揽子协议客户事件 */
             private chooseBlanketAgreementCustomer;
             /** 选择联系人 */
@@ -13000,6 +13010,8 @@ declare namespace sales {
             chooseBlanketAgreementItemUnitEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
+            /** 默认税组 */
+            defaultTaxGroup: string;
         }
         /** 一揽子协议编辑服务映射 */
         class BlanketAgreementEditServiceMapping extends ibas.BOEditServiceMapping {
@@ -13204,6 +13216,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择客户信息 */
             private chooseDownPaymentRequestCustomer;
             /** 选择物料主数据 */
@@ -13358,6 +13371,7 @@ declare namespace sales {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 or 导入文件 */
             protected createData(clone: boolean | Blob): void;
+            private customer;
             /** 选择销售预留发票客户事件 */
             private chooseSalesReserveInvoiceCustomer;
             /** 选择销售预留发票价格清单事件 */
@@ -13383,6 +13397,8 @@ declare namespace sales {
             private chooseSalesReserveInvoiceContactPerson;
             private editShippingAddresses;
             protected turnToSalesCreditNote(): void;
+            /** 转为销售交货 */
+            protected turnToSalesDelivery(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesReserveInvoiceBlanketAgreement;
             private chooseSalesReserveInvoiceItemUnit;
@@ -13436,6 +13452,8 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 转为销售交货事件 */
             turnToSalesCreditNoteEvent: Function;
+            /** 转为销售交货事件 */
+            turnToSalesDeliveryEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

@@ -2418,6 +2418,16 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	IPurchaseCreditNote parent;
 
 	@Override
+	public DateTime getPostingDate() {
+		return this.parent.getPostingDate();
+	}
+
+	@Override
+	public DateTime getDocumentDate() {
+		return this.parent.getDocumentDate();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		// 基于采购退货不执行库存逻辑
 		if (MyConfiguration.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE)

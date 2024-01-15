@@ -71,9 +71,11 @@ public class PurchaseOrderItems extends BusinessObjects<IPurchaseOrderItem, IPur
 			((PurchaseOrderItem) item).parent = this.getParent();
 		}
 		// 记录父项的值
-		if (item.isNew() && DataConvert.isNullOrEmpty(item.getBaseDocumentType())) {
-			item.setRate(this.getParent().getDocumentRate());
-			item.setCurrency(this.getParent().getDocumentCurrency());
+		if (!this.getParent().isLoading()) {
+			if (item.isNew() && DataConvert.isNullOrEmpty(item.getBaseDocumentType())) {
+				item.setRate(this.getParent().getDocumentRate());
+				item.setCurrency(this.getParent().getDocumentCurrency());
+			}
 		}
 	}
 

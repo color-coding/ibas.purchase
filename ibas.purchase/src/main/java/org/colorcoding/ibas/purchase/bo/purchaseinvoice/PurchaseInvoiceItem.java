@@ -2419,6 +2419,16 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	IPurchaseInvoice parent;
 
 	@Override
+	public DateTime getPostingDate() {
+		return this.parent.getPostingDate();
+	}
+
+	@Override
+	public DateTime getDocumentDate() {
+		return this.parent.getDocumentDate();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		// 基于采购交货
 		if (MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)

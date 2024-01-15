@@ -2072,6 +2072,7 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Credit);
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());

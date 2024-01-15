@@ -2077,6 +2077,7 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						jeContent = new JournalEntrySmartContent(PurchaseReserveInvoice.this);
 						jeContent.setCategory(Category.Credit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+						jeContent.setShortName(PurchaseReserveInvoice.this.getSupplierCode());
 						jeContent.setAmount(PurchaseReserveInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseReserveInvoice.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseReserveInvoice.this.getDocumentRate());

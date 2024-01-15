@@ -38,7 +38,6 @@ import org.colorcoding.ibas.materials.logic.IMaterialPriceContract;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
@@ -2409,6 +2408,16 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 	IPurchaseDelivery parent;
 
 	@Override
+	public DateTime getPostingDate() {
+		return this.parent.getPostingDate();
+	}
+
+	@Override
+	public DateTime getDocumentDate() {
+		return this.parent.getDocumentDate();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
 				// 物料收货
@@ -2517,8 +2526,6 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 				// 采购订单收货
 				new IPurchaseOrderReceiptContract() {
 
-					String PurchaseOrderCode = MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE);
-
 					@Override
 					public String getIdentifiers() {
 						return PurchaseDeliveryItem.this.getIdentifiers();
@@ -2531,25 +2538,16 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 
 					@Override
 					public String getBaseDocumentType() {
-						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
-							return PurchaseDeliveryItem.this.getOriginalDocumentType();
-						}
 						return PurchaseDeliveryItem.this.getBaseDocumentType();
 					}
 
 					@Override
 					public Integer getBaseDocumentEntry() {
-						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
-							return PurchaseDeliveryItem.this.getOriginalDocumentEntry();
-						}
 						return PurchaseDeliveryItem.this.getBaseDocumentEntry();
 					}
 
 					@Override
 					public Integer getBaseDocumentLineId() {
-						if (PurchaseOrderCode.equalsIgnoreCase(PurchaseDeliveryItem.this.getOriginalDocumentType())) {
-							return PurchaseDeliveryItem.this.getOriginalDocumentLineId();
-						}
 						return PurchaseDeliveryItem.this.getBaseDocumentLineId();
 					}
 

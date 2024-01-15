@@ -5569,6 +5569,11 @@ declare namespace accounting {
              * @param saver 保存者
              */
             saveCurrencyRate(saver: ibas.ISaveCaller<bo.CurrencyRate>): void;
+            /**
+             * 查询 业务伙伴
+             * @param fetcher 查询者
+             */
+            fetchBusinessPartner<T extends ibas.IBOMasterData>(fetcher: ibas.IFetchCaller<T>): void;
         }
         /**
          * 费用结束者

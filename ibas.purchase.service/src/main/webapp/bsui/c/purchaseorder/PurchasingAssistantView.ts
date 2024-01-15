@@ -967,6 +967,7 @@ namespace purchase {
                                             content: [
                                                 new sap.m.Label("", {
                                                     wrapping: false,
+                                                    showColon: true,
                                                     text: ibas.i18n.prop("purchase_assistant_warehouse")
                                                 }).addStyleClass("sapUiTinyMarginBegin"),
                                                 this.selectWarehouse = new component.WarehouseSelect("", {

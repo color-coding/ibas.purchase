@@ -2409,6 +2409,16 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 	IPurchaseReturn parent;
 
 	@Override
+	public DateTime getPostingDate() {
+		return this.parent.getPostingDate();
+	}
+
+	@Override
+	public DateTime getDocumentDate() {
+		return this.parent.getDocumentDate();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
 				// 物料发货

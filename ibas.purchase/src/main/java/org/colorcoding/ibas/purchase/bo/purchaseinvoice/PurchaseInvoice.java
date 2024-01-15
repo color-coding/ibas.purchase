@@ -2111,6 +2111,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
 						jeContent.setCategory(Category.Credit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
 						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());

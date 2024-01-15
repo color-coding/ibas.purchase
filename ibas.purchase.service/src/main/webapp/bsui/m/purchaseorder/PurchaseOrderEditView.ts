@@ -58,6 +58,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseInvoiceEvent: Function;
+                /** 转为采购预留发票事件 */
+                turnToPurchaseReserveInvoiceEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
                 /** 默认仓库 */
@@ -250,6 +252,18 @@ namespace purchase {
                                                     visible: shell.app.privileges.canRun({
                                                         id: purchase.app.PurchaseInvoiceFunc.FUNCTION_ID,
                                                         name: purchase.app.PurchaseInvoiceFunc.FUNCTION_NAME,
+                                                    })
+                                                }),
+                                                new sap.m.Button("", {
+                                                    type: sap.m.ButtonType.Transparent,
+                                                    text: ibas.i18n.prop("bo_purchasereserveinvoice"),
+                                                    icon: "sap-icon://doc-attachment",
+                                                    press: function (): void {
+                                                        that.fireViewEvents(that.turnToPurchaseReserveInvoiceEvent);
+                                                    },
+                                                    visible: shell.app.privileges.canRun({
+                                                        id: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_ID,
+                                                        name: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_NAME,
                                                     })
                                                 }),
                                                 new sap.m.Button("", {
@@ -761,33 +775,42 @@ namespace purchase {
                                                         },
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documenttotal") }),
-                                                    new sap.extension.m.Input("", {
-                                                        editable: true,
-
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "documentTotal",
-                                                        type: new sap.extension.data.Sum()
-                                                    }),
-                                                    new sap.extension.m.CurrencyRateSelect("", {
-                                                        editable: {
-                                                            path: "priceList",
-                                                            formatter(data: any): boolean {
-                                                                return ibas.numbers.valueOf(data) === 0 ? true : false;
-                                                            }
-                                                        },
-                                                        baseCurrency: accounting.config.currency("LOCAL"),
-                                                        currency: {
-                                                            path: "documentCurrency",
-                                                            type: new sap.extension.data.Alphanumeric()
-                                                        },
-                                                        rate: {
-                                                            path: "documentRate",
-                                                            type: new sap.extension.data.Rate()
-                                                        },
-                                                        date: {
-                                                            path: "documentDate",
-                                                            type: new sap.extension.data.Date()
-                                                        }
+                                                    new sap.m.FlexBox("", {
+                                                        width: "100%",
+                                                        justifyContent: sap.m.FlexJustifyContent.Start,
+                                                        renderType: sap.m.FlexRendertype.Bare,
+                                                        alignContent: sap.m.FlexAlignContent.Center,
+                                                        alignItems: sap.m.FlexAlignItems.Center,
+                                                        items: [
+                                                            new sap.extension.m.Input("", {
+                                                                width: "70%",
+                                                                editable: true,
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "documentTotal",
+                                                                type: new sap.extension.data.Sum()
+                                                            }).addStyleClass("sapUiTinyMarginEnd"),
+                                                            new sap.extension.m.CurrencyRateSelect("", {
+                                                                editable: {
+                                                                    path: "priceList",
+                                                                    formatter(data: any): boolean {
+                                                                        return ibas.numbers.valueOf(data) === 0 ? true : false;
+                                                                    }
+                                                                },
+                                                                baseCurrency: accounting.config.currency("LOCAL"),
+                                                                currency: {
+                                                                    path: "documentCurrency",
+                                                                    type: new sap.extension.data.Alphanumeric()
+                                                                },
+                                                                rate: {
+                                                                    path: "documentRate",
+                                                                    type: new sap.extension.data.Rate()
+                                                                },
+                                                                date: {
+                                                                    path: "documentDate",
+                                                                    type: new sap.extension.data.Date()
+                                                                }
+                                                            }),
+                                                        ]
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_paidtotal") }),
                                                     new sap.extension.m.Input("", {
@@ -880,7 +903,7 @@ namespace purchase {
                                                     }).bindProperty("bindingValue", {
                                                         path: "project",
                                                         type: new sap.extension.data.Alphanumeric({
-                                                            maxLength: 8
+                                                            maxLength: 20
                                                         })
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_organization") }),

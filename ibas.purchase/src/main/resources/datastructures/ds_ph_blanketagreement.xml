@@ -36,7 +36,7 @@
     <Property Name="SupplierName" Description="供应商名称" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="CardName"/>
     <Property Name="ContactPerson" Description="联系人" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="CntctCode"/>
     <Property Name="PaymentCode" Description="付款条款代码" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="PaymentCode"/>
-    <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Project"/>
+    <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="Project"/>
     <Property Name="OrderType" Description="单据类型" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OrderType"/>
     <Property Name="Description" Description="描述" DataType="Alphanumeric" DataSubType="Default" EditSize="200" Mapped="Description"/>
     <Property Name="StartDate" Description="开始日期" DataType="Date" DataSubType="Default" EditSize="8" Mapped="StartDate"/>

@@ -36,6 +36,7 @@ import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
+import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2431,7 +2432,36 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 						return PurchaseReserveInvoiceItem.this.getBaseDocumentLineId();
 					}
 
-				}
+				},
+				// 采购订单收货
+				new IPurchaseOrderReceiptContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseReserveInvoiceItem.this.getIdentifiers();
+					}
+
+					@Override
+					public BigDecimal getQuantity() {
+						return PurchaseReserveInvoiceItem.this.getQuantity();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseReserveInvoiceItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseReserveInvoiceItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseReserveInvoiceItem.this.getBaseDocumentLineId();
+					}
+
+				},
 
 		};
 	}

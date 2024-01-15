@@ -41,7 +41,7 @@
     <Property Name="PriceList" Description="价格清单" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="PriceList"/>
     <Property Name="Rounding" Description="舍入" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Rounding"/>
     <Property Name="DiffAmount" Description="舍入差额" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="RoundDiff"/>
-    <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Project"/>
+    <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="Project"/>
     <Property Name="OrderType" Description="单据类型" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OrderType"/>
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>

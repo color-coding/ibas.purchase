@@ -48,6 +48,23 @@ namespace purchase {
                 }
                 this.view.showBlanketAgreement(this.editData);
                 this.view.showBlanketAgreementItems(this.editData.blanketAgreementItems.filterDeleted());
+                // 查询额外信息
+                if (!ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    let boRepository: businesspartner.bo.BORepositoryBusinessPartner = new businesspartner.bo.BORepositoryBusinessPartner();
+                    boRepository.fetchSupplier({
+                        criteria: [
+                            new ibas.Condition(businesspartner.bo.Supplier.PROPERTY_CODE_NAME, ibas.emConditionOperation.EQUAL, this.editData.supplierCode)
+                        ],
+                        onCompleted: (opRslt) => {
+                            let supplier: businesspartner.bo.Supplier = opRslt.resultObjects.firstOrDefault();
+                            if (!ibas.objects.isNull(supplier)) {
+                                if (!ibas.strings.isEmpty(supplier.taxGroup)) {
+                                    this.view.defaultTaxGroup = supplier.taxGroup;
+                                }
+                            }
+                        }
+                    });
+                }
             }
             run(): void;
             run(data: bo.BlanketAgreement): void;
@@ -222,6 +239,9 @@ namespace purchase {
                         that.editData.supplierName = selected.name;
                         that.editData.contactPerson = selected.contactPerson;
                         that.editData.paymentCode = selected.paymentCode;
+                        if (!ibas.strings.isEmpty(selected.taxGroup)) {
+                            that.view.defaultTaxGroup = selected.taxGroup;
+                        }
                     }
                 });
             }
@@ -287,6 +307,21 @@ namespace purchase {
                             item.uom = selected.purchaseUOM;
                             if (ibas.strings.isEmpty(item.uom)) {
                                 item.uom = selected.inventoryUOM;
+                            }
+                            if (!ibas.strings.isEmpty(that.view.defaultTaxGroup)) {
+                                item.tax = that.view.defaultTaxGroup;
+                                if (!ibas.strings.isEmpty(item.tax)) {
+                                    accounting.taxrate.assign(item.tax, (rate) => {
+                                        if (rate >= 0) {
+                                            item.taxRate = rate;
+                                            if (selected.taxed === ibas.emYesNo.NO) {
+                                                item.preTaxPrice = selected.price;
+                                            } else {
+                                                item.price = selected.price;
+                                            }
+                                        }
+                                    });
+                                }
                             }
                             item = null;
                         }
@@ -401,6 +436,8 @@ namespace purchase {
             chooseBlanketAgreementItemUnitEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
+            /** 默认税组 */
+            defaultTaxGroup: string;
         }
         /** 一揽子协议辑服务映射 */
         export class BlanketAgreementEditServiceMapping extends ibas.BOEditServiceMapping {

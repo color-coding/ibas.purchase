@@ -2122,6 +2122,7 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 						jeContent = new JournalEntrySmartContent(PurchaseCreditNote.this);
 						jeContent.setCategory(Category.Credit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+						jeContent.setShortName(PurchaseCreditNote.this.getSupplierCode());
 						jeContent.setAmount(PurchaseCreditNote.this.getDocumentTotal().negate());
 						jeContent.setCurrency(PurchaseCreditNote.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseCreditNote.this.getDocumentRate());

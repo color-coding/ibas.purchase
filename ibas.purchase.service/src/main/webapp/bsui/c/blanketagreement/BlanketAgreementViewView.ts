@@ -287,6 +287,7 @@ namespace purchase {
                                     },
                                 }),
                                 new sap.extension.m.ObjectNumber("", {
+                                    textAlign: sap.ui.core.TextAlign.Right,
                                     number: {
                                         path: "settlementProbability",
                                         type: new sap.extension.data.Percentage()

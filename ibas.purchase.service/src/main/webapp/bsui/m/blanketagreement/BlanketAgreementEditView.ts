@@ -646,7 +646,7 @@ namespace purchase {
                                                     }).bindProperty("bindingValue", {
                                                         path: "project",
                                                         type: new sap.extension.data.Alphanumeric({
-                                                            maxLength: 8
+                                                            maxLength: 20
                                                         })
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_organization") }),
@@ -679,6 +679,8 @@ namespace purchase {
                 private page: sap.extension.uxap.ObjectPageLayout;
                 private listBlanketAgreementItem: sap.extension.m.List;
 
+                /** 默认税组 */
+                defaultTaxGroup: string;
                 /** 显示数据 */
                 showBlanketAgreement(data: bo.BlanketAgreement): void {
                     this.page.setModel(new sap.extension.model.JSONModel(data));

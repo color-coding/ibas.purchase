@@ -632,6 +632,8 @@ namespace purchase {
 
                 private page: sap.extension.m.Page;
                 private tableBlanketAgreementItem: sap.extension.table.Table;
+                /** 默认税组 */
+                defaultTaxGroup: string;
 
                 /** 显示数据 */
                 showBlanketAgreement(data: bo.BlanketAgreement): void {

@@ -38,7 +38,7 @@ public interface IPurchaseOrderReservationCreateContract extends IBusinessLogicC
 	BigDecimal getQuantity();
 
 	/**
-	 * 获取-仓库编号
+	 * 获取-仓库编码
 	 * 
 	 * @return 值
 	 */
