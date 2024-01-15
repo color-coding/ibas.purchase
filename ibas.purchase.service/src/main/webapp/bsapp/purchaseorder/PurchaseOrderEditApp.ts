@@ -43,6 +43,7 @@ namespace purchase {
                 this.view.choosePurchaseOrderPurchaseRequestEvent = this.choosePurchaseOrderPurchaseRequest;
                 this.view.choosePurchaseOrderBlanketAgreementEvent = this.choosePurchaseOrderBlanketAgreement;
                 this.view.choosePurchaseOrderItemDistributionRuleEvent = this.choosePurchaseOrderItemDistributionRule;
+                this.view.choosePurchaseOrderItemMaterialVersionEvent = this.choosePurchaseOrderItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.showPurchaseOrderItemExtraEvent = this.showSaleOrderItemExtra;
@@ -568,6 +569,7 @@ namespace purchase {
                         batchManagement: item.batchManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -591,6 +593,7 @@ namespace purchase {
                         serialManagement: item.serialManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -1304,6 +1307,28 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseOrderItemMaterialVersion(caller: bo.PurchaseOrderItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseOrderEditView extends ibas.IBOEditView {
@@ -1345,6 +1370,8 @@ namespace purchase {
             choosePurchaseOrderBlanketAgreementEvent: Function;
             /** 选择采购订单-行 成本中心事件 */
             choosePurchaseOrderItemDistributionRuleEvent: Function;
+            /** 选择采购订单-行 物料版本 */
+            choosePurchaseOrderItemMaterialVersionEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */

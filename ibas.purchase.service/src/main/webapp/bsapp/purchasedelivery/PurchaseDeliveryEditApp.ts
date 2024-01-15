@@ -43,6 +43,7 @@ namespace purchase {
                 this.view.choosePurchaseDeliveryBlanketAgreementEvent = this.choosePurchaseDeliveryBlanketAgreement;
                 this.view.choosePurchaseDeliveryItemDistributionRuleEvent = this.choosePurchaseDeliveryItemDistributionRule;
                 this.view.choosePurchaseDeliveryPurchaseReserveInvoiceEvent = this.choosePurchaseDeliveryPurchaseReserveInvoice;
+                this.view.choosePurchaseDeliveryItemMaterialVersionEvent = this.choosePurchaseDeliveryItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
@@ -570,6 +571,7 @@ namespace purchase {
                         batchManagement: item.batchManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -593,6 +595,7 @@ namespace purchase {
                         serialManagement: item.serialManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -838,6 +841,7 @@ namespace purchase {
                                     sItem.itemCode = item.itemCode;
                                     sItem.itemDescription = item.itemDescription;
                                     sItem.itemSign = item.itemSign;
+                                    sItem.itemVersion = item.itemVersion;
                                     sItem.quantity = item.quantity;
                                     sItem.warehouse = item.warehouse;
                                     sItem.uom = item.uom;
@@ -1315,6 +1319,28 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseDeliveryItemMaterialVersion(caller: bo.PurchaseDeliveryItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购收货 */
         export interface IPurchaseDeliveryEditView extends ibas.IBOEditView {
@@ -1354,6 +1380,8 @@ namespace purchase {
             choosePurchaseDeliveryPurchaseReserveInvoiceEvent: Function;
             /** 选择采购收货-行 成本中心事件 */
             choosePurchaseDeliveryItemDistributionRuleEvent: Function;
+            /** 选择采购收货-行 物料版本 */
+            choosePurchaseDeliveryItemMaterialVersionEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */

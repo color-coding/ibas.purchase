@@ -463,6 +463,20 @@ public interface IPurchaseRequestItem extends IBODocumentLine {
 	void setItemSign(String value);
 
 	/**
+	 * 获取-物料版本
+	 * 
+	 * @return 值
+	 */
+	String getItemVersion();
+
+	/**
+	 * 设置-物料版本
+	 * 
+	 * @param value 值
+	 */
+	void setItemVersion(String value);
+
+	/**
 	 * 获取-物料/服务描述
 	 * 
 	 * @return 值

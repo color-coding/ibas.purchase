@@ -30,6 +30,8 @@ namespace purchase {
                 showPurchaseRequestItemExtraEvent: Function;
                 /** 选择采购申请-行成本中心事件 */
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
+                /** 选择采购申请-行 物料版本 */
+                choosePurchaseRequestItemMaterialVersionEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
                 /** 采购申请转换事件 */
@@ -692,6 +694,20 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_itemversion") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseRequestItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_quantity") }),
                                         new sap.extension.m.Input("", {

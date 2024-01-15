@@ -438,6 +438,20 @@ public interface IPurchaseCreditNoteItem
 	void setItemSign(String value);
 
 	/**
+	 * 获取-物料版本
+	 * 
+	 * @return 值
+	 */
+	String getItemVersion();
+
+	/**
+	 * 设置-物料版本
+	 * 
+	 * @param value 值
+	 */
+	void setItemVersion(String value);
+
+	/**
 	 * 获取-序号管理
 	 * 
 	 * @return 值

@@ -1184,6 +1184,17 @@ namespace purchase {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_ITEMSIGN_NAME, value);
             }
 
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string = "ItemVersion";
+            /** 获取-物料版本 */
+            get itemVersion(): string {
+                return this.getProperty<string>(PurchaseInvoiceItem.PROPERTY_ITEMVERSION_NAME);
+            }
+            /** 设置-物料版本 */
+            set itemVersion(value: string) {
+                this.setProperty(PurchaseInvoiceItem.PROPERTY_ITEMVERSION_NAME, value);
+            }
+
 
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string = "SerialManagement";

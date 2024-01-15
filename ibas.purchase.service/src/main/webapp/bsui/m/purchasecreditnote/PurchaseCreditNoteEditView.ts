@@ -40,6 +40,8 @@ namespace purchase {
                 choosePurchaseCreditNotePurchaseReturnEvent: Function;
                 /** 选择采购贷项-行 成本中心事件 */
                 choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
+                /** 选择采购贷项-行 物料版本 */
+                choosePurchaseCreditNoteItemMaterialVersionEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 编辑地址事件 */
@@ -900,6 +902,20 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnoteitem_itemversion") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseCreditNoteItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnoteitem_warehouse") }),
                                         new sap.extension.m.RepositoryInput("", {

@@ -754,6 +754,8 @@ declare namespace materials {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 物料版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -934,6 +936,8 @@ declare namespace materials {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 物料版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -1117,6 +1121,8 @@ declare namespace materials {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 物料版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -3827,6 +3833,8 @@ declare namespace materials {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 物料版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */
@@ -4573,6 +4581,12 @@ declare namespace materials {
             get itemSign(): string;
             /** 设置-物料标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-物料版本 */
+            get itemVersion(): string;
+            /** 设置-物料版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -5094,6 +5108,12 @@ declare namespace materials {
             get itemSign(): string;
             /** 设置-物料标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-物料版本 */
+            get itemVersion(): string;
+            /** 设置-物料版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -5622,6 +5642,12 @@ declare namespace materials {
             get itemSign(): string;
             /** 设置-物料标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-物料版本 */
+            get itemVersion(): string;
+            /** 设置-物料版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -11914,6 +11940,12 @@ declare namespace materials {
             get itemSign(): string;
             /** 设置-物料标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string;
+            /** 获取-物料版本 */
+            get itemVersion(): string;
+            /** 设置-物料版本 */
+            set itemVersion(value: string);
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string;
             /** 获取-序号管理 */
@@ -12532,6 +12564,7 @@ declare namespace materials {
             /** 选择库存发货序列事件 */
             private chooseGoodsIssueLineMaterialSerial;
             private chooseGoodsIssueLineDistributionRule;
+            private chooseGoodsIssueLineMaterialVersion;
         }
         /** 视图-库存发货 */
         interface IGoodsIssueEditView extends ibas.IBOEditView {
@@ -12559,6 +12592,8 @@ declare namespace materials {
             chooseGoodsIssueLineMaterialSerialEvent: Function;
             /** 选择库存发货单行成本中心事件 */
             chooseGoodsIssueLineDistributionRuleEvent: Function;
+            /** 选择库存发货-行 物料版本 */
+            chooseGoodsIssueLineMaterialVersionEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -12783,6 +12818,7 @@ declare namespace materials {
             /** 选择物料序列信息 */
             private createGoodsReceiptLineMaterialSerial;
             private chooseGoodsReceiptLineDistributionRule;
+            private chooseGoodsReceiptLineMaterialVersion;
         }
         /** 视图-库存收货 */
         interface IGoodsReceiptEditView extends ibas.IBOEditView {
@@ -12810,6 +12846,8 @@ declare namespace materials {
             chooseGoodsReceiptLineMaterialSerialEvent: Function;
             /** 选择库存收货单行成本中心事件 */
             chooseGoodsReceiptLineDistributionRuleEvent: Function;
+            /** 选择库存收货-行 物料版本 */
+            chooseGoodsReceiptLineMaterialVersionEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -13033,6 +13071,7 @@ declare namespace materials {
             private chooseInventoryTransferLineMaterialSerial;
             private chooseInventoryTransferLineDistributionRule;
             private chooseInventoryTransferLineTransferRequest;
+            private chooseInventoryTransferLineMaterialVersion;
         }
         /** 视图-库存转储 */
         interface IInventoryTransferEditView extends ibas.IBOEditView {
@@ -13068,6 +13107,8 @@ declare namespace materials {
             callInventoryTransferAddServiceEvent: Function;
             /** 显示库存转储添加服务 */
             showServiceAgent(datas: ibas.IServiceAgent[]): void;
+            /** 选择库存转储-行 物料版本 */
+            chooseInventoryTransferLineMaterialVersionEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -17317,6 +17358,7 @@ declare namespace materials {
             private chooseInventoryTransferRequestLineMaterialSerial;
             private chooseInventoryTransferRequestLineDistributionRule;
             private turnToInventoryTransfer;
+            private chooseInventoryTransferRequestLineMaterialVersion;
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestEditView extends ibas.IBOEditView {
@@ -17346,6 +17388,8 @@ declare namespace materials {
             chooseInventoryTransferRequestLineMaterialSerialEvent: Function;
             /** 选择库存转储申请单行成本中心事件 */
             chooseInventoryTransferRequestLineDistributionRuleEvent: Function;
+            /** 选择库存转储申请-行 物料版本 */
+            chooseInventoryTransferRequestLineMaterialVersionEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 转为库存转储申请事件 */

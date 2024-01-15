@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseReserveInvoiceItemUnitEvent = this.choosePurchaseReserveInvoiceItemUnit;
                 this.view.choosePurchaseReserveInvoicePurchaseOrderEvent = this.choosePurchaseReserveInvoicePurchaseOrder;
                 this.view.choosePurchaseReserveInvoiceItemDistributionRuleEvent = this.choosePurchaseReserveInvoiceItemDistributionRule;
+                this.view.choosePurchaseReserveInvoiceItemMaterialVersionEvent = this.choosePurchaseReserveInvoiceItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.receiptPurchaseReserveInvoiceEvent = this.receiptPurchaseReserveInvoice;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
@@ -546,6 +547,7 @@ namespace purchase {
                         batchManagement: item.batchManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -565,6 +567,7 @@ namespace purchase {
                         serialManagement: item.serialManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -870,6 +873,28 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseReserveInvoiceItemMaterialVersion(caller: bo.PurchaseReserveInvoiceItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购预留发票 */
         export interface IPurchaseReserveInvoiceEditView extends ibas.IBOEditView {
@@ -905,6 +930,8 @@ namespace purchase {
             choosePurchaseReserveInvoicePurchaseOrderEvent: Function;
             /** 选择采购预留发票-行成本中心事件 */
             choosePurchaseReserveInvoiceItemDistributionRuleEvent: Function;
+            /** 选择采购预留发票-行 物料版本 */
+            choosePurchaseReserveInvoiceItemMaterialVersionEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 采购预留发票收款事件 */

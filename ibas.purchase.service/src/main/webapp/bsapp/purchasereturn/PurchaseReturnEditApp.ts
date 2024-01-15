@@ -42,6 +42,7 @@ namespace purchase {
                 this.view.choosePurchaseReturnPurchaseOrderEvent = this.choosePurchaseReturnPurchaseOrder;
                 this.view.choosePurchaseReturnPurchaseDeliveryEvent = this.choosePurchaseReturnPurchaseDelivery;
                 this.view.choosePurchaseReturnItemDistributionRuleEvent = this.choosePurchaseReturnItemDistributionRule;
+                this.view.choosePurchaseReturnItemMaterialVersionEvent = this.choosePurchaseReturnItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.turnToPurchaseCreditNoteEvent = this.turnToPurchaseCreditNote;
@@ -503,6 +504,7 @@ namespace purchase {
                         batchManagement: item.batchManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -521,6 +523,7 @@ namespace purchase {
                         serialManagement: item.serialManagement,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion,
                         warehouse: item.warehouse,
                         quantity: item.inventoryQuantity,
                         uom: item.inventoryUOM,
@@ -896,6 +899,28 @@ namespace purchase {
                     }
                 });
             }
+            private choosePurchaseReturnItemMaterialVersion(caller: bo.PurchaseReturnItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购退货 */
         export interface IPurchaseReturnEditView extends ibas.IBOEditView {
@@ -935,6 +960,8 @@ namespace purchase {
             chooseSupplierAgreementsEvent: Function;
             /** 选择采购退货-行 成本中心事件 */
             choosePurchaseReturnItemDistributionRuleEvent: Function;
+            /** 选择采购退货-行 物料版本 */
+            choosePurchaseReturnItemMaterialVersionEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为采购贷项事件 */

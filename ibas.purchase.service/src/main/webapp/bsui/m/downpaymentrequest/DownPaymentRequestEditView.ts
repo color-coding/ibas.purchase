@@ -36,6 +36,8 @@ namespace purchase {
                 chooseDownPaymentRequestPurchaseDeliveryEvent: Function;
                 /** 选择预付款申请-行成本中心事件 */
                 chooseDownPaymentRequestItemDistributionRuleEvent: Function;
+                /** 选择预付款申请-行 物料版本 */
+                chooseDownPaymentRequestItemMaterialVersionEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 默认仓库 */
@@ -827,6 +829,20 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_downpaymentrequestitem_itemversion") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.chooseDownPaymentRequestItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_downpaymentrequestitem_warehouse") }),
                                         new sap.extension.m.RepositoryInput("", {

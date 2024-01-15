@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseReturnItemMaterialSerialEvent: Function;
                 /** 选择采购退货-行 物料批次事件 */
                 choosePurchaseReturnItemMaterialBatchEvent: Function;
+                /** 选择采购退货-行 物料版本 */
+                choosePurchaseReturnItemMaterialVersionEvent: Function;
                 /** 选择采购退货-行 成本中心事件 */
                 choosePurchaseReturnItemDistributionRuleEvent: Function;
                 /** 选择采购退货项目-采购订单事件 */
@@ -410,6 +412,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchasereturnitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseReturnItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereturnitem_warehouse"),

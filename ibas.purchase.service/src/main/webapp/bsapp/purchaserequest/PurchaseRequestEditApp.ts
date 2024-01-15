@@ -36,6 +36,7 @@ namespace purchase {
                 this.view.showPurchaseRequestItemExtraEvent = this.showPurchaseRequestItemExtra;
                 this.view.choosePurchaseRequestItemUnitEvent = this.choosePurchaseRequestItemUnit;
                 this.view.choosePurchaseRequestItemDistributionRuleEvent = this.choosePurchaseRequestItemDistributionRule;
+                this.view.choosePurchaseRequestItemMaterialVersionEvent = this.choosePurchaseRequestItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
                 this.view.purchaseRequestToEvent = this.purchaseRequestTo;
@@ -692,6 +693,28 @@ namespace purchase {
                     }
                 }
             }
+            private choosePurchaseRequestItemMaterialVersion(caller: bo.PurchaseRequestItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -717,6 +740,8 @@ namespace purchase {
             showPurchaseRequestItemExtraEvent: Function;
             /** 选择采购申请-行成本中心事件 */
             choosePurchaseRequestItemDistributionRuleEvent: Function;
+            /** 选择采购申请-行 物料版本 */
+            choosePurchaseRequestItemMaterialVersionEvent: Function;
             /** 显示数据-采购申请-行 */
             showPurchaseRequestItems(datas: bo.PurchaseRequestItem[]): void;
             /** 预留物料订购 */

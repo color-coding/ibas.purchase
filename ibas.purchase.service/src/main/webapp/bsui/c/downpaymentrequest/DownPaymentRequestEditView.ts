@@ -28,6 +28,8 @@ namespace purchase {
                 chooseDownPaymentRequestItemMaterialEvent: Function;
                 /** 选择预付款申请-行 仓库 */
                 chooseDownPaymentRequestItemWarehouseEvent: Function;
+                /** 选择预付款申请-行 物料版本 */
+                chooseDownPaymentRequestItemMaterialVersionEvent: Function;
                 /** 选择预付款申请-行 单位 */
                 chooseDownPaymentRequestItemUnitEvent: Function;
                 /** 选择预付款申请项目-采购订单事件 */
@@ -354,6 +356,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_downpaymentrequestitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.chooseDownPaymentRequestItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_downpaymentrequestitem_warehouse"),

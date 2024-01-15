@@ -34,6 +34,8 @@ namespace purchase {
                 choosePurchaseInvoiceItemMaterialSerialEvent: Function;
                 /** 选择采购发票-行 物料批次事件 */
                 choosePurchaseInvoiceItemMaterialBatchEvent: Function;
+                /** 选择采购发票-行 物料版本 */
+                choosePurchaseInvoiceItemMaterialVersionEvent: Function;
                 /** 选择采购发票项目-采购订单事件 */
                 choosePurchaseInvoicePurchaseOrderEvent: Function;
                 /** 选择采购发票项目-采购发票事件 */
@@ -945,6 +947,20 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoiceitem_itemversion") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseInvoiceItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoiceitem_warehouse") }),
                                         new sap.extension.m.RepositoryInput("", {

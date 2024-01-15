@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.chooseDownPaymentRequestPurchaseDeliveryEvent = this.chooseDownPaymentRequestPurchaseDelivery;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.chooseDownPaymentRequestItemDistributionRuleEvent = this.chooseDownPaymentRequestItemDistributionRule;
+                this.view.chooseDownPaymentRequestItemMaterialVersionEvent = this.chooseDownPaymentRequestItemMaterialVersion;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -907,6 +908,28 @@ namespace purchase {
                     }
                 });
             }
+            private chooseDownPaymentRequestItemMaterialVersion(caller: bo.DownPaymentRequestItem): void {
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ITEMCODE_NAME;
+                condition.value = caller.itemCode;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.MaterialVersion.PROPERTY_ACTIVATED_NAME;
+                condition.value = ibas.emYesNo.YES.toString();
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.MaterialVersion>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    boCode: materials.bo.MaterialVersion.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        for (let selected of selecteds) {
+                            caller.itemVersion = selected.name;
+                        }
+                    }
+                });
+            }
         }
         /** 视图-预付款申请 */
         export interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -942,6 +965,8 @@ namespace purchase {
             chooseSupplierAgreementsEvent: Function;
             /** 选择预付款申请-行成本中心事件 */
             chooseDownPaymentRequestItemDistributionRuleEvent: Function;
+            /** 选择预付款申请-行 物料版本 */
+            chooseDownPaymentRequestItemMaterialVersionEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseReserveInvoiceItemMaterialSerialEvent: Function;
                 /** 选择采购预留发票-行 物料批次事件 */
                 choosePurchaseReserveInvoiceItemMaterialBatchEvent: Function;
+                /** 选择采购预留发票-行 物料版本 */
+                choosePurchaseReserveInvoiceItemMaterialVersionEvent: Function;
                 /** 选择采购预留发票-行成本中心事件 */
                 choosePurchaseReserveInvoiceItemDistributionRuleEvent: Function;
                 /** 选择采购预留发票项目-采购订单事件 */
@@ -407,6 +409,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchasereserveinvoiceitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseReserveInvoiceItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereserveinvoiceitem_warehouse"),

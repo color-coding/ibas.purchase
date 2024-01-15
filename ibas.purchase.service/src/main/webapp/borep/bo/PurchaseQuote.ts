@@ -705,6 +705,7 @@ namespace purchase {
                         myItem.itemCode = item.itemCode;
                         myItem.itemDescription = item.itemDescription;
                         myItem.itemSign = item.itemSign;
+                        myItem.itemVersion = item.itemVersion;
                         myItem.batchManagement = item.batchManagement;
                         myItem.serialManagement = item.serialManagement;
                         myItem.price = item.price;
@@ -1143,6 +1144,17 @@ namespace purchase {
             /** 设置-物料标识 */
             set itemSign(value: string) {
                 this.setProperty(PurchaseQuoteItem.PROPERTY_ITEMSIGN_NAME, value);
+            }
+
+            /** 映射的属性名称-物料版本 */
+            static PROPERTY_ITEMVERSION_NAME: string = "ItemVersion";
+            /** 获取-物料版本 */
+            get itemVersion(): string {
+                return this.getProperty<string>(PurchaseQuoteItem.PROPERTY_ITEMVERSION_NAME);
+            }
+            /** 设置-物料版本 */
+            set itemVersion(value: string) {
+                this.setProperty(PurchaseQuoteItem.PROPERTY_ITEMVERSION_NAME, value);
             }
 
             /** 映射的属性名称-序号管理 */

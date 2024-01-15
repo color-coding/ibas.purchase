@@ -46,6 +46,8 @@ namespace purchase {
                 choosePurchaseOrderPurchaseRequestEvent: Function;
                 /** 选择采购订单-一揽子协议事件 */
                 choosePurchaseOrderBlanketAgreementEvent: Function;
+                /** 选择采购订单-行 物料版本 */
+                choosePurchaseOrderItemMaterialVersionEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 付款采购订单 */
@@ -442,6 +444,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchaseorderitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseOrderItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseorderitem_warehouse"),

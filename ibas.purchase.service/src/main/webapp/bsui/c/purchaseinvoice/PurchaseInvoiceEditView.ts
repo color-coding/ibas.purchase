@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseInvoiceItemMaterialSerialEvent: Function;
                 /** 选择采购发票-行 物料批次事件 */
                 choosePurchaseInvoiceItemMaterialBatchEvent: Function;
+                /** 选择采购发票-行 物料版本 */
+                choosePurchaseInvoiceItemMaterialVersionEvent: Function;
                 /** 选择采购发票-行成本中心事件 */
                 choosePurchaseInvoiceItemDistributionRuleEvent: Function;
                 /** 选择采购发票项目-采购订单事件 */
@@ -431,6 +433,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchaseinvoiceitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseInvoiceItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseinvoiceitem_warehouse"),

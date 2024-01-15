@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseCreditNoteItemMaterialSerialEvent: Function;
                 /** 选择采购贷项-行 物料批次事件 */
                 choosePurchaseCreditNoteItemMaterialBatchEvent: Function;
+                /** 选择采购贷项-行 物料版本 */
+                choosePurchaseCreditNoteItemMaterialVersionEvent: Function;
                 /** 选择采购贷项-行 成本中心事件 */
                 choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
                 /** 选择采购贷项项目-采购发票事件 */
@@ -416,6 +418,23 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchasecreditnoteitem_itemversion"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseCreditNoteItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
+                                        }),
+                                        width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasecreditnoteitem_warehouse"),

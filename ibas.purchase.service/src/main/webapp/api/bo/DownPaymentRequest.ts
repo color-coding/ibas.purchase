@@ -179,6 +179,8 @@ namespace purchase {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 物料版本 */
+            itemVersion: string;
             /** 序号管理 */
             serialManagement: ibas.emYesNo;
             /** 批号管理 */

@@ -28,6 +28,8 @@ namespace purchase {
                 choosePurchaseReturnItemMaterialEvent: Function;
                 /** 选择采购退货-行 仓库 */
                 choosePurchaseReturnItemWarehouseEvent: Function;
+                /** 选择采购退货-行 物料版本 */
+                choosePurchaseReturnItemMaterialVersionEvent: Function;
                 /** 选择采购退货-行 单位 */
                 choosePurchaseReturnItemUnitEvent: Function;
                 /** 选择采购退货-行 物料序列事件 */
@@ -933,6 +935,20 @@ namespace purchase {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturnitem_itemversion") }),
+                                        new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseReturnItemMaterialVersionEvent,
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "itemVersion",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 10
+                                            }),
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturnitem_warehouse") }),
                                         new sap.extension.m.RepositoryInput("", {

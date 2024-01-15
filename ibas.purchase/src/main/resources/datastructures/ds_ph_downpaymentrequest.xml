@@ -80,6 +80,7 @@
     <Property Name="ItemCode" Description="物料编码" DataType="Alphanumeric" DataSubType="Default" EditSize="50" Mapped="ItemCode"/>
     <Property Name="ItemDescription" Description="物料/服务描述" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="Dscription"/>
     <Property Name="ItemSign" Description="物料标识" DataType="Alphanumeric" DataSubType="Default" EditSize="60" Mapped="ItemSign"/>
+    <Property Name="ItemVersion" Description="物料版本" DataType="Alphanumeric" DataSubType="Default" EditSize="10" Mapped="ItemVer"/>
     <Property Name="SerialManagement" Description="序号管理" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="SerialMgment"/>
     <Property Name="BatchManagement" Description="批号管理" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="BatchMgment"/>
     <Property Name="Quantity" Description="数量" DataType="Decimal" DataSubType="Quantity" EditSize="8" Mapped="Quantity"/>
