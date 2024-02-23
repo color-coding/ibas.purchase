@@ -2522,6 +2522,11 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 					public BigDecimal getRate() {
 						return PurchaseReturnItem.this.getRate();
 					}
+
+					@Override
+					public String getItemVersion() {
+						return PurchaseReturnItem.this.getItemVersion();
+					}
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

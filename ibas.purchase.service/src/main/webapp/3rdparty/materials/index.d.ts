@@ -13,12 +13,18 @@ declare namespace materials {
     /** 模块-版本 */
     const CONSOLE_VERSION: string;
     namespace config {
+        /** 配置项目-启用物料版本管理 */
+        const CONFIG_ITEM_ENABLE_MATERIAL_VERSIONS: string;
         /**
          * 获取此模块配置
          * @param key 配置项
          * @param defalut 默认值
          */
         function get<T>(key: string, defalut?: T): T;
+        /**
+         * 是否启用物料版本管理
+         */
+        function isEnableMaterialVersions(): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */

@@ -604,6 +604,8 @@ declare namespace receiptpayment {
             serviceCode: string;
             /** 充值量 */
             amount: number;
+            /** 货币 */
+            currency: string;
             /** 充值次数 */
             times: number;
             /** 单据类型 */
@@ -1949,6 +1951,12 @@ declare namespace receiptpayment {
             get amount(): number;
             /** 设置-充值量 */
             set amount(value: number);
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
             /** 映射的属性名称-充值次数 */
             static PROPERTY_TIMES_NAME: string;
             /** 获取-充值次数 */

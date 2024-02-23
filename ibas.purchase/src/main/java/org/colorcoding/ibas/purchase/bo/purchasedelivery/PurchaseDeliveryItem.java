@@ -2522,6 +2522,11 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					public BigDecimal getRate() {
 						return PurchaseDeliveryItem.this.getRate();
 					}
+
+					@Override
+					public String getItemVersion() {
+						return PurchaseDeliveryItem.this.getItemVersion();
+					}
 				},
 				// 采购订单收货
 				new IPurchaseOrderReceiptContract() {

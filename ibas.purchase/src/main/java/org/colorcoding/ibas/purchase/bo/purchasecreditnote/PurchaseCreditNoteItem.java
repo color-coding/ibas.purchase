@@ -2569,6 +2569,11 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 						return PurchaseCreditNoteItem.this.getRate();
 					}
 
+					@Override
+					public String getItemVersion() {
+						return PurchaseCreditNoteItem.this.getItemVersion();
+					}
+
 				},
 				// 基础单据为采购订单
 				new IPurchaseOrderReturnContract() {

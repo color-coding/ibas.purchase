@@ -2570,6 +2570,11 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 						return PurchaseInvoiceItem.this.getRate();
 					}
 
+					@Override
+					public String getItemVersion() {
+						return PurchaseInvoiceItem.this.getItemVersion();
+					}
+
 				},
 
 				// 采购订单发货

@@ -325,6 +325,7 @@ namespace purchase {
                                             }),
                                         }),
                                         width: "8rem",
+                                        visible: materials.config.isEnableMaterialVersions(),
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_quantity"),

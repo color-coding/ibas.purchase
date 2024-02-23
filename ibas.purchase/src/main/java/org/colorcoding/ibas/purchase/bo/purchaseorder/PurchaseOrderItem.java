@@ -2526,6 +2526,11 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				return PurchaseOrderItem.this.parent.getPostingDate();
 			}
 
+			@Override
+			public String getItemVersion() {
+				return PurchaseOrderItem.this.getItemVersion();
+			}
+
 		});
 		// 采购请求完成
 		contracts.add(new IPurchaseRequestClosingContract() {

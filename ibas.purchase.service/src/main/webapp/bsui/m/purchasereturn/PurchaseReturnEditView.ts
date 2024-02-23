@@ -945,7 +945,10 @@ namespace purchase {
                                             path: "itemDescription",
                                             type: new sap.extension.data.Alphanumeric()
                                         }),
-                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturnitem_itemversion") }),
+                                        new sap.m.Label("", {
+                                            text: ibas.i18n.prop("bo_purchasereturnitem_itemversion"),
+                                            visible: materials.config.isEnableMaterialVersions(),
+                                        }),
                                         new sap.extension.m.Input("", {
                                             showValueHelp: true,
                                             valueHelpRequest: function (): void {
@@ -953,6 +956,7 @@ namespace purchase {
                                                     this.getBindingContext().getObject()
                                                 );
                                             },
+                                            visible: materials.config.isEnableMaterialVersions(),
                                         }).bindProperty("bindingValue", {
                                             path: "itemVersion",
                                             type: new sap.extension.data.Alphanumeric({
