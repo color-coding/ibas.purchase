@@ -2018,6 +2018,23 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 				new IJournalEntryCreationContract() {
 
 					@Override
+					public boolean isOffsetting() {
+						if (PurchaseReturn.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturn.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseReturn.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseReturn.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
 					public String getIdentifiers() {
 						return PurchaseReturn.this.toString();
 					}
@@ -2059,6 +2076,15 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 						String PurchaseDeliveryCode = MyConfiguration
 								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
 						for (IPurchaseReturnItem line : PurchaseReturn.this.getPurchaseReturnItems()) {
+							if (line.getDeleted() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
 							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
 								/** 基于交货 **/
 								// 库存科目

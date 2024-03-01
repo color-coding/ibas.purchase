@@ -53,6 +53,8 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPrice;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPriceDiff;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCost;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCostDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2019,6 +2021,23 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				new IJournalEntryCreationContract() {
 
 					@Override
+					public boolean isOffsetting() {
+						if (PurchaseInvoice.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoice.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseInvoice.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseInvoice.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
 					public String getIdentifiers() {
 						return PurchaseInvoice.this.toString();
 					}
@@ -2060,6 +2079,15 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						String PurchaseDeliveryCode = MyConfiguration
 								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
 						for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+							if (line.getDeleted() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
 							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
 								/** 基于交货 **/
 								// 分配科目
@@ -2113,6 +2141,89 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
 						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
 						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
+						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
+						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
+						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+						jeContents.add(jeContent);
+						return jeContents.toArray(new JournalEntryContent[] {});
+					}
+
+					@Override
+					public JournalEntryContent[] reverseContents(JournalEntryContent[] contents) {
+						JournalEntryContent jeContent;
+						List<JournalEntryContent> jeContents = new ArrayList<>();
+						String PurchaseDeliveryCode = MyConfiguration
+								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+						for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+							if (line.getDeleted() == emYesNo.NO) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.NO) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
+							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+								/** 基于交货 **/
+								// 分配科目
+								jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, true);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 库存科目
+								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, true);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(Decimal.ZERO);// 待计算
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 税科目
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+							} else {
+								/** 不基于单据 **/
+								// 库存科目
+								jeContent = new PurchaseInvoiceMaterialsCost(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 价格差异科目
+								jeContent = new PurchaseInvoiceMaterialsCostDiff(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 税科目
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+							}
+						}
+						// 应付账款
+						jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
+						jeContent.setCategory(Category.Credit);
+						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal().negate());
 						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
 						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());

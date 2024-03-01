@@ -2424,6 +2424,35 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 				new IMaterialReceiptContract() {
 
 					@Override
+					public boolean isOffsetting() {
+						if (PurchaseDeliveryItem.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDeliveryItem.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseDeliveryItem.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseDeliveryItem.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseDeliveryItem.this.parent instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDeliveryItem.this.parent;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseDeliveryItem.this.parent instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseDeliveryItem.this.parent;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
 					public String getIdentifiers() {
 						return PurchaseDeliveryItem.this.getIdentifiers();
 					}

@@ -22,6 +22,13 @@ public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartCon
 		super(sourceData);
 	}
 
+	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData, boolean negate) {
+		super(sourceData);
+		this.negate = negate;
+	}
+
+	private boolean negate = false;
+
 	@Override
 	public void caculate() throws Exception {
 		if (this.getSourceData() instanceof IPurchaseInvoiceItem) {
@@ -58,6 +65,9 @@ public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartCon
 						// 金额 = 数量 * （税前价格 - 入库税前价格）
 						this.setAmount(Decimal.multiply(item.getQuantity(),
 								item.getPreTaxPrice().subtract(baseLine.getPreTaxPrice())));
+						if (this.negate) {
+							this.setAmount(this.getAmount().negate());
+						}
 						// 计算完成，退出
 						return;
 					}

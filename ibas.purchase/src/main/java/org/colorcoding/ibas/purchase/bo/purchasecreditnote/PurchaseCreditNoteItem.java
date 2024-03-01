@@ -2470,6 +2470,35 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 				new IMaterialIssueContract() {
 
 					@Override
+					public boolean isOffsetting() {
+						if (PurchaseCreditNoteItem.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNoteItem.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseCreditNoteItem.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseCreditNoteItem.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseCreditNoteItem.this.parent instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNoteItem.this.parent;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseCreditNoteItem.this.parent instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseCreditNoteItem.this.parent;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
 					public String getIdentifiers() {
 						return PurchaseCreditNoteItem.this.getIdentifiers();
 					}

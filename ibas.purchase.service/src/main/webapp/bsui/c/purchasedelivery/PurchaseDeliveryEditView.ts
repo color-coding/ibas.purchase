@@ -924,12 +924,20 @@ namespace purchase {
                                                 press: function (): void {
                                                     let data: any = this.getBindingContext().getObject();
                                                     if (data instanceof bo.PurchaseDelivery) {
+                                                        let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                        criteria.result = 1;
+                                                        let condition: ibas.ICondition = criteria.conditions.create();
+                                                        condition.alias = accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                                                        condition.value = data.objectCode;
+                                                        condition = criteria.conditions.create();
+                                                        condition.alias = accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTENTRY_NAME;
+                                                        condition.value = data.docEntry.toString();
+                                                        let sort: ibas.ISort = criteria.sorts.create();
+                                                        sort.alias = accounting.bo.JournalEntry.PROPERTY_DOCENTRY_NAME;
+                                                        sort.sortType = ibas.emSortType.DESCENDING;
                                                         ibas.servicesManager.runLinkService({
                                                             boCode: accounting.bo.JournalEntry.BUSINESS_OBJECT_CODE,
-                                                            linkValue: [
-                                                                new ibas.Condition(accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTTYPE_NAME, ibas.emConditionOperation.EQUAL, data.objectCode),
-                                                                new ibas.Condition(accounting.bo.JournalEntry.PROPERTY_BASEDOCUMENTENTRY_NAME, ibas.emConditionOperation.EQUAL, data.docEntry)
-                                                            ]
+                                                            linkValue: criteria
                                                         });
                                                     }
                                                 },

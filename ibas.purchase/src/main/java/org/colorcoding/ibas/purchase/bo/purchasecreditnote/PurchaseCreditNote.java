@@ -2018,6 +2018,22 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 				},
 				// 创建分录
 				new IJournalEntryCreationContract() {
+					@Override
+					public boolean isOffsetting() {
+						if (PurchaseCreditNote.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNote.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseCreditNote.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseCreditNote.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
 
 					@Override
 					public String getIdentifiers() {
@@ -2062,6 +2078,15 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 								PurchaseInvoiceCode = MyConfiguration
 										.applyVariables(PurchaseInvoice.BUSINESS_OBJECT_CODE);
 						for (IPurchaseCreditNoteItem line : PurchaseCreditNote.this.getPurchaseCreditNoteItems()) {
+							if (line.getDeleted() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
 							if (PurchaseReturnCode.equals(line.getBaseDocumentType())) {
 								/** 基于退货 **/
 								// 分配科目

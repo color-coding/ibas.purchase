@@ -51,6 +51,8 @@ import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveIn
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseDeliveryMaterialsCost;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseDeliveryMaterialsCostDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2017,6 +2019,23 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 				new IJournalEntryCreationContract() {
 
 					@Override
+					public boolean isOffsetting() {
+						if (PurchaseDelivery.this instanceof IBOTagCanceled) {
+							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDelivery.this;
+							if (boTag.getCanceled() == emYesNo.YES) {
+								return true;
+							}
+						}
+						if (PurchaseDelivery.this instanceof IBOTagDeleted) {
+							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseDelivery.this;
+							if (boTag.getDeleted() == emYesNo.YES) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
 					public String getIdentifiers() {
 						return PurchaseDelivery.this.toString();
 					}
@@ -2058,6 +2077,15 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 						String PurchaseReserveInvoiceCode = MyConfiguration
 								.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
 						for (IPurchaseDeliveryItem line : PurchaseDelivery.this.getPurchaseDeliveryItems()) {
+							if (line.getDeleted() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.YES) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
 							if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getBaseDocumentType())) {
 								/** 基于预留发票 **/
 								// 库存科目
@@ -2092,6 +2120,80 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 								jeContent.setCategory(Category.Credit);
 								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+							}
+						}
+						return jeContents.toArray(new JournalEntryContent[] {});
+					}
+
+					@Override
+					public JournalEntryContent[] reverseContents(JournalEntryContent[] contents) {
+						JournalEntryContent jeContent;
+						List<JournalEntryContent> jeContents = new ArrayList<>();
+						String PurchaseReserveInvoiceCode = MyConfiguration
+								.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
+						for (IPurchaseDeliveryItem line : PurchaseDelivery.this.getPurchaseDeliveryItems()) {
+							if (line.getDeleted() == emYesNo.NO) {
+								continue;
+							}
+							if (line.getCanceled() == emYesNo.NO) {
+								continue;
+							}
+							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+								continue;
+							}
+							if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getBaseDocumentType())) {
+								/** 基于预留发票 **/
+								// 库存科目
+								jeContent = new PurchaseDeliveryMaterialsCost(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 价格差异科目
+								jeContent = new PurchaseDeliveryMaterialsCostDiff(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 应付账款
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Credit);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
+								jeContents.add(jeContent);
+							} else {
+								// 库存科目
+								jeContent = new PurchaseDeliveryMaterialsCost(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 价格差异科目
+								jeContent = new PurchaseDeliveryMaterialsCostDiff(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 分配科目
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Credit);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
