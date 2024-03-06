@@ -2135,9 +2135,6 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 						String PurchaseReserveInvoiceCode = MyConfiguration
 								.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
 						for (IPurchaseDeliveryItem line : PurchaseDelivery.this.getPurchaseDeliveryItems()) {
-							if (line.getDeleted() == emYesNo.NO) {
-								continue;
-							}
 							if (line.getCanceled() == emYesNo.NO) {
 								continue;
 							}

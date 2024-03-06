@@ -186,10 +186,10 @@ namespace purchase {
                                             sourceLineId: item.lineId,
                                             itemCode: item.itemCode,
                                             itemDescription: item.itemDescription,
-                                            quantity: item.quantity,
+                                            quantity: ibas.numbers.valueOf(item.quantity) - ibas.numbers.valueOf(item.closedQuantity),
                                             warehouse: undefined, // 不提供仓库信息，不触发占用逻辑
                                             deliveryDate: item.requestDate instanceof Date ? item.requestDate : data.deliveryDate,
-                                            uom: item.uom
+                                            uom: item.uom,
                                         });
                                     }
                                     contracts.add(contract);

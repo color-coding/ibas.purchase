@@ -2432,7 +2432,9 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	public IBusinessLogicContract[] getContracts() {
 		// 基于采购交货
 		if (MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
-				.equalsIgnoreCase(this.getBaseDocumentType())) {
+				.equalsIgnoreCase(this.getBaseDocumentType())
+				|| MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+						.equalsIgnoreCase(this.getOriginalDocumentType())) {
 			return new IBusinessLogicContract[] {
 					// 采购交货开票
 					new IPurchaseDeliveryInvoiceContract() {
@@ -2605,7 +2607,6 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 					}
 
 				},
-
 				// 采购订单发货
 				new IPurchaseOrderReceiptContract() {
 

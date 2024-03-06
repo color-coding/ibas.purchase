@@ -140,11 +140,14 @@ public class PurchaseOrderReservationCreateService
 							&& c.getTargetDocumentLineId().compareTo(item.getTargetDocumentLineId()) == 0);
 			if (gItem == null) {
 				gItem = new MaterialOrderedReservation();
-				gItem.setCauses(causes);
 				gItem.setTargetDocumentType(item.getTargetDocumentType());
 				gItem.setTargetDocumentEntry(item.getTargetDocumentEntry());
 				gItem.setTargetDocumentLineId(item.getTargetDocumentLineId());
+				gItem.setTargetDocumentClosed(item.getTargetDocumentClosed());
+				gItem.setSourceDocumentClosed(item.getSourceDocumentClosed());
+				gItem.setStatus(item.getStatus());
 				gItem.setQuantity(Decimal.ZERO);
+				gItem.setCauses(causes);
 				reservationGroup.getItems().add(gItem);
 			} else {
 				if (gItem.isDeleted()) {

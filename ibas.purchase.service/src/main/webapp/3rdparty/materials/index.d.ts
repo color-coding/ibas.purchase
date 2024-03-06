@@ -15,6 +15,8 @@ declare namespace materials {
     namespace config {
         /** 配置项目-启用物料版本管理 */
         const CONFIG_ITEM_ENABLE_MATERIAL_VERSIONS: string;
+        /** 配置项目-启用物料预留选择报表 */
+        const CONFIG_ITEM_ENABLE_MATERIAL_RESERVATION_CHOOSE_REPORT: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -3439,6 +3441,8 @@ declare namespace materials {
             sourceDocumentEntry: number;
             /** 源单据行号 */
             sourceDocumentLineId: number;
+            /** 源单据关闭 */
+            sourceDocumentClosed: ibas.emYesNo;
             /** 物料编码 */
             itemCode: string;
             /** 仓库编码 */
@@ -3457,6 +3461,8 @@ declare namespace materials {
             targetDocumentEntry: number;
             /** 目标单据行号 */
             targetDocumentLineId: number;
+            /** 目标单据关闭 */
+            targetDocumentClosed: ibas.emYesNo;
             /** 数据所有者 */
             dataOwner: number;
             /** 原因 */
@@ -10833,6 +10839,12 @@ declare namespace materials {
             get sourceDocumentLineId(): number;
             /** 设置-源单据行号 */
             set sourceDocumentLineId(value: number);
+            /** 映射的属性名称-源单据关闭 */
+            static PROPERTY_SOURCEDOCUMENTCLOSED_NAME: string;
+            /** 获取-源单据关闭 */
+            get sourceDocumentClosed(): ibas.emYesNo;
+            /** 设置-源单据关闭 */
+            set sourceDocumentClosed(value: ibas.emYesNo);
             /** 映射的属性名称-物料编码 */
             static PROPERTY_ITEMCODE_NAME: string;
             /** 获取-物料编码 */
@@ -10887,6 +10899,12 @@ declare namespace materials {
             get targetDocumentLineId(): number;
             /** 设置-目标单据行号 */
             set targetDocumentLineId(value: number);
+            /** 映射的属性名称-目标单据关闭 */
+            static PROPERTY_TARGETDOCUMENTCLOSED_NAME: string;
+            /** 获取-目标单据关闭 */
+            get targetDocumentClosed(): ibas.emYesNo;
+            /** 设置-目标单据关闭 */
+            set targetDocumentClosed(value: ibas.emYesNo);
             /** 映射的属性名称-数据所有者 */
             static PROPERTY_DATAOWNER_NAME: string;
             /** 获取-数据所有者 */
@@ -17585,6 +17603,63 @@ declare namespace materials {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /**
+         * 物料订购预留原单
+         */
+        class MaterialOrderedReservationTargetReportService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialOrderedReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected runService(contract: materials.app.IMaterialOrderedReservationTarget): void;
+            protected viewShowed(): void;
+        }
+        class MaterialOrderedReservationTargetReportServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        class MaterialOrderedReservationSourceReportService extends ibas.ServiceApplication<ibas.IView, materials.app.IMaterialOrderedReservationTarget> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            protected runService(contract: materials.app.IMaterialOrderedReservationTarget): void;
+            protected viewShowed(): void;
+        }
+        class MaterialOrderedReservationSourceReportServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
         }
     }
 }

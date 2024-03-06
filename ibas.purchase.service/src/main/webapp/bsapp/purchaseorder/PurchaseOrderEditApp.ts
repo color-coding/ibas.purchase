@@ -1255,10 +1255,10 @@ namespace purchase {
                         sourceLineId: item.lineId,
                         itemCode: item.itemCode,
                         itemDescription: item.itemDescription,
-                        quantity: item.quantity,
+                        quantity: ibas.numbers.valueOf(item.quantity) - ibas.numbers.valueOf(item.closedQuantity),
                         warehouse: item.warehouse,
                         deliveryDate: item.deliveryDate instanceof Date ? item.deliveryDate : this.editData.deliveryDate,
-                        uom: item.uom
+                        uom: item.uom,
                     });
                 }
                 ibas.servicesManager.runApplicationService<materials.app.IMaterialOrderedReservationSource | materials.app.IMaterialOrderedReservationSource[]>({
