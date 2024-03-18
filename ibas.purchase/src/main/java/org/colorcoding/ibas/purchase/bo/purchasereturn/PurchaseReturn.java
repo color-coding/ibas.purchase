@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.purchasereturn;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,6 +44,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -63,9 +66,9 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseReturn.BUSINESS_OBJECT_CODE)
-public class PurchaseReturn extends BusinessObject<PurchaseReturn>
-		implements IPurchaseReturn, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator {
+public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IPurchaseReturn, IDataOwnership,
+		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey,
+		IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator {
 
 	/**
 	 * 序列化版本标记
@@ -2128,6 +2131,31 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn>
 
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return PurchaseReturn.this.getPurchaseReturnItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (PurchaseReturn.this.getPurchaseReturnItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= PurchaseReturn.this.getPurchaseReturnItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

@@ -10,7 +10,27 @@ import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
  * @author Niuren.Zhu
  *
  */
-public interface IBlanketAgreementQuantityContract extends IBusinessLogicContract, IPurchaseBaseDocumentItem {
+public interface IBlanketAgreementQuantityContract extends IBusinessLogicContract {
+	/**
+	 * 基于单据类型
+	 * 
+	 * @return
+	 */
+	String getBaseDocumentType();
+
+	/**
+	 * 基于单据编号
+	 * 
+	 * @return
+	 */
+	Integer getBaseDocumentEntry();
+
+	/**
+	 * 基于单据行号
+	 * 
+	 * @return
+	 */
+	Integer getBaseDocumentLineId();
 
 	/**
 	 * 数量

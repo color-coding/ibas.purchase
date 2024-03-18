@@ -26,8 +26,8 @@ public class PurchaseOrderReservationCreateService
 
 	@Override
 	protected boolean checkDataStatus(Object data) {
-		if (data instanceof IPurchaseBaseDocument) {
-			IPurchaseBaseDocument contract = (IPurchaseBaseDocument) data;
+		if (data instanceof IPurchaseOrderReservationCreateContract) {
+			IPurchaseOrderReservationCreateContract contract = (IPurchaseOrderReservationCreateContract) data;
 			if (!MyConfiguration.applyVariables(PurchaseRequest.BUSINESS_OBJECT_CODE)
 					.equals(contract.getBaseDocumentType())) {
 				Logger.log(MessageLevel.DEBUG, MSG_LOGICS_SKIP_LOGIC_EXECUTION, this.getClass().getName(),

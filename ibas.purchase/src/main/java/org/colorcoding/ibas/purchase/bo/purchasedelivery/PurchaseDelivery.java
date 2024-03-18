@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.purchasedelivery;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,6 +44,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
@@ -64,9 +67,9 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseDelivery.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseDelivery.BUSINESS_OBJECT_CODE)
-public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
-		implements IPurchaseDelivery, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator {
+public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implements IPurchaseDelivery, IDataOwnership,
+		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey,
+		IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator {
 
 	/**
 	 * 序列化版本标记
@@ -2200,6 +2203,31 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery>
 					}
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return PurchaseDelivery.this.getPurchaseDeliveryItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (PurchaseDelivery.this.getPurchaseDeliveryItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= PurchaseDelivery.this.getPurchaseDeliveryItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

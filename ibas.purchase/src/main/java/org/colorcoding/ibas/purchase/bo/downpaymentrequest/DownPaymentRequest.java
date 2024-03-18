@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.downpaymentrequest;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -38,6 +39,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrderItem;
@@ -52,9 +55,9 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = DownPaymentRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = DownPaymentRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = DownPaymentRequest.BUSINESS_OBJECT_CODE)
-public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
-		implements IDownPaymentRequest, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IBusinessLogicsHost {
+public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> implements IDownPaymentRequest,
+		IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBOSeriesKey,
+		IBOUserFields, IDocumentPaidTotalOperator, IBusinessLogicsHost, IDocumentCloseQuantityOperator {
 
 	/**
 	 * 序列化版本标记
@@ -1741,6 +1744,31 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 					}
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return DownPaymentRequest.this.getDownPaymentRequestItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (DownPaymentRequest.this.getDownPaymentRequestItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= DownPaymentRequest.this.getDownPaymentRequestItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

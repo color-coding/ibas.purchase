@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.purchaserequest;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,6 +34,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
 /**
@@ -44,7 +47,7 @@ import org.colorcoding.ibas.purchase.MyConfiguration;
 @XmlRootElement(name = PurchaseRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseRequest.BUSINESS_OBJECT_CODE)
 public class PurchaseRequest extends BusinessObject<PurchaseRequest> implements IPurchaseRequest, IDataOwnership,
-		IApprovalData, IProjectData, IBOSeriesKey, IBOUserFields, IBusinessLogicsHost {
+		IApprovalData, IProjectData, IBOSeriesKey, IBOUserFields, IBusinessLogicsHost, IDocumentCloseQuantityOperator {
 
 	/**
 	 * 序列化版本标记
@@ -1608,6 +1611,31 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest> implements 
 					}
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return PurchaseRequest.this.getPurchaseRequestItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (PurchaseRequest.this.getPurchaseRequestItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= PurchaseRequest.this.getPurchaseRequestItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.logic;
 
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 
 /**
  * 客户检查契约
@@ -8,8 +9,7 @@ import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
  * @author Niuren.Zhu
  *
  */
-public interface ISupplierAndFloorListCheckContract
-		extends IBusinessLogicContract, org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract {
+public interface ISupplierAndFloorListCheckContract extends IBusinessLogicContract, ISupplierCheckContract {
 
 	/**
 	 * 获取-价格清单

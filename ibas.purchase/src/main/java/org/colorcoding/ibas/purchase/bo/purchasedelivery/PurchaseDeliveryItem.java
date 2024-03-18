@@ -39,7 +39,7 @@ import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
-import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReceiptContract;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2557,8 +2557,8 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 						return PurchaseDeliveryItem.this.getItemVersion();
 					}
 				},
-				// 采购订单收货
-				new IPurchaseOrderReceiptContract() {
+				// 基于单据数量关闭
+				new IDocumentQuantityClosingContract() {
 
 					@Override
 					public String getIdentifiers() {

@@ -36,6 +36,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.ISupplierAndFloorListCheckContract;
@@ -51,7 +53,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlRootElement(name = PurchaseQuote.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseQuote.BUSINESS_OBJECT_CODE)
 public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPurchaseQuote, IDataOwnership,
-		IApprovalData, IBusinessLogicsHost, IProjectData, IBOSeriesKey, IBOUserFields {
+		IApprovalData, IBusinessLogicsHost, IProjectData, IBOSeriesKey, IBOUserFields, IDocumentCloseQuantityOperator {
 
 	private static final long serialVersionUID = -1107057696040517844L;
 
@@ -1932,47 +1934,39 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 					}
 
 					@Override
-					public Iterable<IMaterialPrice> getMaterialPrices() {
-						return new Iterable<IMaterialPrice>() {
+					public Iterator<IMaterialPrice> getMaterialPrices() {
+
+						return new Iterator<IMaterialPrice>() {
+
+							Iterator<IPurchaseQuoteItem> iterator = PurchaseQuote.this.getPurchaseQuoteItems().stream()
+									.filter(c -> c.isDeleted() != true && c.getDeleted() != emYesNo.YES).iterator();
 
 							@Override
-							public Iterator<IMaterialPrice> iterator() {
+							public boolean hasNext() {
+								return iterator.hasNext();
+							}
 
-								return new Iterator<IMaterialPrice>() {
+							@Override
+							public IMaterialPrice next() {
 
-									Iterator<IPurchaseQuoteItem> iterator = PurchaseQuote.this.getPurchaseQuoteItems()
-											.stream()
-											.filter(c -> c.isDeleted() != true && c.getDeleted() != emYesNo.YES)
-											.iterator();
+								return new IMaterialPrice() {
+									IPurchaseQuoteItem item = iterator.next();
 
 									@Override
-									public boolean hasNext() {
-										return iterator.hasNext();
+									public String getItemCode() {
+										return item.getItemCode();
 									}
 
 									@Override
-									public IMaterialPrice next() {
-
-										return new IMaterialPrice() {
-											IPurchaseQuoteItem item = iterator.next();
-
-											@Override
-											public String getItemCode() {
-												return item.getItemCode();
-											}
-
-											@Override
-											public BigDecimal getPrice() {
-												return item.getPrice();
-											}
-
-											@Override
-											public String getCurrency() {
-												return item.getCurrency();
-											}
-
-										};
+									public BigDecimal getPrice() {
+										return item.getPrice();
 									}
+
+									@Override
+									public String getCurrency() {
+										return item.getCurrency();
+									}
+
 								};
 							}
 
@@ -1980,6 +1974,31 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 					}
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return PurchaseQuote.this.getPurchaseQuoteItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (PurchaseQuote.this.getPurchaseQuoteItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= PurchaseQuote.this.getPurchaseQuoteItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

@@ -613,6 +613,21 @@ namespace purchase {
                 condition.alias = bo.PurchaseReturn.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 子项查询
+                let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCriteria.propertyPath = bo.PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME;
+                cCriteria.onlyHasChilds = true;
+                cCriteria.noChilds = false;
+                // 未取消的
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnItem.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 数量大于已清数量
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnItem.PROPERTY_QUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.comparedAlias = bo.PurchaseReturnItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseReturn>({

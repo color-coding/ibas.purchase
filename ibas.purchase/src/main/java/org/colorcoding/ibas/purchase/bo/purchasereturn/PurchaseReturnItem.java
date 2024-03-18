@@ -14,6 +14,7 @@ import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
+import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
@@ -37,8 +38,9 @@ import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.IMaterialIssueContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.logic.IPurchaseDeliveryReturnContract;
-import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReturnContract;
+import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityReturnContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2420,231 +2422,238 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		return new IBusinessLogicContract[] {
-				// 物料发货
-				new IMaterialIssueContract() {
-					@Override
-					public boolean isOffsetting() {
-						if (PurchaseReturnItem.this instanceof IBOTagCanceled) {
-							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this;
-							if (boTag.getCanceled() == emYesNo.YES) {
-								return true;
-							}
-						}
-						if (PurchaseReturnItem.this instanceof IBOTagDeleted) {
-							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseReturnItem.this;
-							if (boTag.getDeleted() == emYesNo.YES) {
-								return true;
-							}
-						}
-						if (PurchaseReturnItem.this.parent instanceof IBOTagCanceled) {
-							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this.parent;
-							if (boTag.getCanceled() == emYesNo.YES) {
-								return true;
-							}
-						}
-						if (PurchaseReturnItem.this.parent instanceof IBOTagDeleted) {
-							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseReturnItem.this.parent;
-							if (boTag.getDeleted() == emYesNo.YES) {
-								return true;
-							}
-						}
-						return false;
-					}
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>();
+		// 物料发货
+		contracts.add(new IMaterialIssueContract() {
 
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public String getItemCode() {
-						return PurchaseReturnItem.this.getItemCode();
-					}
-
-					@Override
-					public String getItemName() {
-						return PurchaseReturnItem.this.getItemDescription();
-					}
-
-					@Override
-					public String getWarehouse() {
-						return PurchaseReturnItem.this.getWarehouse();
-					}
-
-					@Override
-					public String getDocumentType() {
-						return PurchaseReturnItem.this.getObjectCode();
-					}
-
-					@Override
-					public Integer getDocumentEntry() {
-						return PurchaseReturnItem.this.getDocEntry();
-					}
-
-					@Override
-					public Integer getDocumentLineId() {
-						return PurchaseReturnItem.this.getLineId();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getInventoryQuantity();
-					}
-
-					@Override
-					public String getUOM() {
-						return PurchaseReturnItem.this.getInventoryUOM();
-					}
-
-					@Override
-					public DateTime getPostingDate() {
-						return PurchaseReturnItem.this.parent.getPostingDate();
-					}
-
-					@Override
-					public DateTime getDeliveryDate() {
-						return PurchaseReturnItem.this.parent.getDeliveryDate();
-					}
-
-					@Override
-					public DateTime getDocumentDate() {
-						return PurchaseReturnItem.this.parent.getDocumentDate();
-					}
-
-					@Override
-					public emYesNo getBatchManagement() {
-						return PurchaseReturnItem.this.getBatchManagement();
-					}
-
-					@Override
-					public emYesNo getSerialManagement() {
-						return PurchaseReturnItem.this.getSerialManagement();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
-					}
-
-					@Override
-					public BigDecimal getPrice() {
-						return PurchaseReturnItem.this.getPrice();
-					}
-
-					@Override
-					public String getCurrency() {
-						return PurchaseReturnItem.this.getCurrency();
-					}
-
-					@Override
-					public BigDecimal getRate() {
-						return PurchaseReturnItem.this.getRate();
-					}
-
-					@Override
-					public String getItemVersion() {
-						return PurchaseReturnItem.this.getItemVersion();
-					}
-				},
-				// 基础单据为采购订单
-				new IPurchaseOrderReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
-					}
-
-				},
-				// 原始单据为采购订单
-				new IPurchaseOrderReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getOriginalDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getOriginalDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getOriginalDocumentLineId();
-					}
-
-				},
-				// 采购交货的退货
-				new IPurchaseDeliveryReturnContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseReturnItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReturnItem.this.getQuantity();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseReturnItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseReturnItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return PurchaseReturnItem.this.getBaseDocumentLineId();
+			@Override
+			public boolean isOffsetting() {
+				if (PurchaseReturnItem.this instanceof IBOTagCanceled) {
+					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this;
+					if (boTag.getCanceled() == emYesNo.YES) {
+						return true;
 					}
 				}
+				if (PurchaseReturnItem.this instanceof IBOTagDeleted) {
+					IBOTagDeleted boTag = (IBOTagDeleted) PurchaseReturnItem.this;
+					if (boTag.getDeleted() == emYesNo.YES) {
+						return true;
+					}
+				}
+				if (PurchaseReturnItem.this.parent instanceof IBOTagCanceled) {
+					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this.parent;
+					if (boTag.getCanceled() == emYesNo.YES) {
+						return true;
+					}
+				}
+				if (PurchaseReturnItem.this.parent instanceof IBOTagDeleted) {
+					IBOTagDeleted boTag = (IBOTagDeleted) PurchaseReturnItem.this.parent;
+					if (boTag.getDeleted() == emYesNo.YES) {
+						return true;
+					}
+				}
+				return false;
+			}
 
-		};
+			@Override
+			public String getIdentifiers() {
+				return PurchaseReturnItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getItemCode() {
+				return PurchaseReturnItem.this.getItemCode();
+			}
+
+			@Override
+			public String getItemName() {
+				return PurchaseReturnItem.this.getItemDescription();
+			}
+
+			@Override
+			public String getWarehouse() {
+				return PurchaseReturnItem.this.getWarehouse();
+			}
+
+			@Override
+			public String getDocumentType() {
+				return PurchaseReturnItem.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getDocumentEntry() {
+				return PurchaseReturnItem.this.getDocEntry();
+			}
+
+			@Override
+			public Integer getDocumentLineId() {
+				return PurchaseReturnItem.this.getLineId();
+			}
+
+			@Override
+			public BigDecimal getQuantity() {
+				return PurchaseReturnItem.this.getInventoryQuantity();
+			}
+
+			@Override
+			public String getUOM() {
+				return PurchaseReturnItem.this.getInventoryUOM();
+			}
+
+			@Override
+			public DateTime getPostingDate() {
+				return PurchaseReturnItem.this.parent.getPostingDate();
+			}
+
+			@Override
+			public DateTime getDeliveryDate() {
+				return PurchaseReturnItem.this.parent.getDeliveryDate();
+			}
+
+			@Override
+			public DateTime getDocumentDate() {
+				return PurchaseReturnItem.this.parent.getDocumentDate();
+			}
+
+			@Override
+			public emYesNo getBatchManagement() {
+				return PurchaseReturnItem.this.getBatchManagement();
+			}
+
+			@Override
+			public emYesNo getSerialManagement() {
+				return PurchaseReturnItem.this.getSerialManagement();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseReturnItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseReturnItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseReturnItem.this.getBaseDocumentLineId();
+			}
+
+			@Override
+			public BigDecimal getPrice() {
+				return PurchaseReturnItem.this.getPreTaxPrice();
+			}
+
+			@Override
+			public String getCurrency() {
+				return PurchaseReturnItem.this.getCurrency();
+			}
+
+			@Override
+			public BigDecimal getRate() {
+				return PurchaseReturnItem.this.getRate();
+			}
+
+			@Override
+			public String getItemVersion() {
+				return PurchaseReturnItem.this.getItemVersion();
+			}
+		});
+		if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
+				.equals(PurchaseReturnItem.this.getBaseDocumentType())) {
+			// 基础单据销售订单
+			contracts.add(new IDocumentQuantityReturnContract() {
+
+				@Override
+				public String getIdentifiers() {
+					return PurchaseReturnItem.this.getIdentifiers();
+				}
+
+				@Override
+				public BigDecimal getQuantity() {
+					return PurchaseReturnItem.this.getQuantity();
+				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseReturnItem.this.getBaseDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseReturnItem.this.getBaseDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseReturnItem.this.getBaseDocumentLineId();
+				}
+
+			});
+		} else if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
+				.equals(PurchaseReturnItem.this.getOriginalDocumentType())) {
+			// 原始单据销售订单
+			contracts.add(new IDocumentQuantityReturnContract() {
+
+				@Override
+				public String getIdentifiers() {
+					return PurchaseReturnItem.this.getIdentifiers();
+				}
+
+				@Override
+				public BigDecimal getQuantity() {
+					return PurchaseReturnItem.this.getQuantity();
+				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseReturnItem.this.getOriginalDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseReturnItem.this.getOriginalDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseReturnItem.this.getOriginalDocumentLineId();
+				}
+
+			});
+		} else {
+			// 其他基础单据
+			contracts.add(new IDocumentQuantityClosingContract() {
+
+				@Override
+				public String getIdentifiers() {
+					return PurchaseReturnItem.this.getIdentifiers();
+				}
+
+				@Override
+				public BigDecimal getQuantity() {
+					return PurchaseReturnItem.this.getQuantity();
+				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseReturnItem.this.getBaseDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseReturnItem.this.getBaseDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseReturnItem.this.getBaseDocumentLineId();
+				}
+
+			});
+		}
+		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 
 	@Override

@@ -7,7 +7,27 @@ import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 /**
  * 采购订单预留创建（复制从采购申请）
  */
-public interface IPurchaseOrderReservationCreateContract extends IBusinessLogicContract, IPurchaseBaseDocumentItem {
+public interface IPurchaseOrderReservationCreateContract extends IBusinessLogicContract {
+	/**
+	 * 基于单据类型
+	 * 
+	 * @return
+	 */
+	String getBaseDocumentType();
+
+	/**
+	 * 基于单据编号
+	 * 
+	 * @return
+	 */
+	Integer getBaseDocumentEntry();
+
+	/**
+	 * 基于单据行号
+	 * 
+	 * @return
+	 */
+	Integer getBaseDocumentLineId();
 
 	/**
 	 * 单据类型

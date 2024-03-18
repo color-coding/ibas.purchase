@@ -678,6 +678,21 @@ namespace purchase {
                 condition.alias = bo.PurchaseDelivery.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 子项查询
+                let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCriteria.propertyPath = bo.PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME;
+                cCriteria.onlyHasChilds = true;
+                cCriteria.noChilds = false;
+                // 未取消的
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 数量大于已清数量
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.comparedAlias = bo.PurchaseDeliveryItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseDelivery>({

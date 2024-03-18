@@ -7,12 +7,13 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
 
 /**
  * 采购申请-行 接口
  * 
  */
-public interface IPurchaseRequestItem extends IBODocumentLine {
+public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentCloseQuantityItem {
 
 	/**
 	 * 获取-编码

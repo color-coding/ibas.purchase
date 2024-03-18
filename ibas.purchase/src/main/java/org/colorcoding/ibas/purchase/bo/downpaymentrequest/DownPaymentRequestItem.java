@@ -17,6 +17,8 @@ import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
@@ -24,6 +26,9 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -35,7 +40,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = DownPaymentRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestItem>
-		implements IDownPaymentRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields {
+		implements IDownPaymentRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
@@ -1985,4 +1990,50 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 		this.setClosedQuantity(Decimal.ZERO);
 	}
 
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		return new IBusinessLogicContract[] {
+				// 基于单据数量关闭
+				new IDocumentQuantityClosingContract() {
+
+					@Override
+					public boolean checkDataStatus() {
+						if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
+								.equals(DownPaymentRequestItem.this.getBaseDocumentType())
+								|| MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+										.equals(DownPaymentRequestItem.this.getBaseDocumentType())) {
+							return true;
+						}
+						return IDocumentQuantityClosingContract.super.checkDataStatus();
+					}
+
+					@Override
+					public String getIdentifiers() {
+						return DownPaymentRequestItem.this.getIdentifiers();
+					}
+
+					@Override
+					public BigDecimal getQuantity() {
+						return DownPaymentRequestItem.this.getQuantity();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return DownPaymentRequestItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return DownPaymentRequestItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return DownPaymentRequestItem.this.getBaseDocumentLineId();
+					}
+
+				}
+
+		};
+	}
 }

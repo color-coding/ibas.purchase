@@ -39,6 +39,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -57,9 +59,9 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = PurchaseOrder.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseOrder.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseOrder.BUSINESS_OBJECT_CODE)
-public class PurchaseOrder extends BusinessObject<PurchaseOrder>
-		implements IPurchaseOrder, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator {
+public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPurchaseOrder, IDataOwnership,
+		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey,
+		IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator {
 
 	/**
 	 * 序列化版本标记
@@ -2040,47 +2042,39 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder>
 					}
 
 					@Override
-					public Iterable<IMaterialPrice> getMaterialPrices() {
-						return new Iterable<IMaterialPrice>() {
+					public Iterator<IMaterialPrice> getMaterialPrices() {
+
+						return new Iterator<IMaterialPrice>() {
+
+							Iterator<IPurchaseOrderItem> iterator = PurchaseOrder.this.getPurchaseOrderItems().stream()
+									.filter(c -> c.isDeleted() != true && c.getDeleted() != emYesNo.YES).iterator();
 
 							@Override
-							public Iterator<IMaterialPrice> iterator() {
+							public boolean hasNext() {
+								return iterator.hasNext();
+							}
 
-								return new Iterator<IMaterialPrice>() {
+							@Override
+							public IMaterialPrice next() {
 
-									Iterator<IPurchaseOrderItem> iterator = PurchaseOrder.this.getPurchaseOrderItems()
-											.stream()
-											.filter(c -> c.isDeleted() != true && c.getDeleted() != emYesNo.YES)
-											.iterator();
+								return new IMaterialPrice() {
+									IPurchaseOrderItem item = iterator.next();
 
 									@Override
-									public boolean hasNext() {
-										return iterator.hasNext();
+									public String getItemCode() {
+										return item.getItemCode();
 									}
 
 									@Override
-									public IMaterialPrice next() {
-
-										return new IMaterialPrice() {
-											IPurchaseOrderItem item = iterator.next();
-
-											@Override
-											public String getItemCode() {
-												return item.getItemCode();
-											}
-
-											@Override
-											public BigDecimal getPrice() {
-												return item.getPrice();
-											}
-
-											@Override
-											public String getCurrency() {
-												return item.getCurrency();
-											}
-
-										};
+									public BigDecimal getPrice() {
+										return item.getPrice();
 									}
+
+									@Override
+									public String getCurrency() {
+										return item.getCurrency();
+									}
+
 								};
 							}
 
@@ -2088,6 +2082,31 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder>
 					}
 				}
 
+		};
+	}
+
+	@Override
+	public Iterator<IDocumentCloseQuantityItem> getItems() {
+		return new Iterator<IDocumentCloseQuantityItem>() {
+			int index = -1;
+
+			@Override
+			public IDocumentCloseQuantityItem next() {
+				this.index += 1;
+				return PurchaseOrder.this.getPurchaseOrderItems().get(this.index);
+			}
+
+			@Override
+			public boolean hasNext() {
+				if (PurchaseOrder.this.getPurchaseOrderItems().isEmpty()) {
+					return false;
+				}
+				int nIndex = this.index + 1;
+				if (nIndex >= PurchaseOrder.this.getPurchaseOrderItems().size()) {
+					return false;
+				}
+				return true;
+			}
 		};
 	}
 }

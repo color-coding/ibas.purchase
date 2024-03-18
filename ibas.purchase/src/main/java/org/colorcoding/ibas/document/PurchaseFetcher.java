@@ -4,7 +4,7 @@ import org.colorcoding.ibas.bobas.core.IBORepository;
 import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
-public abstract class PurchaseFetcher<T extends IDocumentPaidTotalOperator> implements IDocumentFetcher<T> {
+public abstract class PurchaseFetcher<T extends IDocumentOperatingTarget> implements IDocumentFetcher<T> {
 
 	private BORepositoryPurchase repository;
 
