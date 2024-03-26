@@ -52,6 +52,10 @@ namespace purchase {
                 editShippingAddressesEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseCreditNoteEvent: Function;
+                /** 添加采购发票-预付款事件 */
+                addPurchaseInvoiceDownPaymentEvent: Function;
+                /** 删除采购发票-预付款事件 */
+                removePurchaseInvoiceDownPaymentEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */
@@ -887,6 +891,9 @@ namespace purchase {
                 /** 显示数据（采购发票-行） */
                 showPurchaseInvoiceItems(datas: bo.PurchaseInvoiceItem[]): void {
                     this.listPurchaseInvoiceItem.setModel(new sap.extension.model.JSONModel({ rows: datas }));
+                }
+                /** 显示数据-采购发票-预付款 */
+                showPurchaseInvoiceDownPayments(datas: bo.PurchaseInvoiceDownPayment[]): void {
                 }
                 /** 编辑数据（采购发票-行） */
                 editPurchaseInvoiceItem(data: bo.PurchaseInvoiceItem): void {

@@ -2110,7 +2110,6 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						jeContent.setAmount(PurchaseReserveInvoice.this.getDocumentTotal());
 						jeContent.setCurrency(PurchaseReserveInvoice.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseReserveInvoice.this.getDocumentRate());
-						jeContent.setShortName(PurchaseReserveInvoice.this.getSupplierCode());
 						jeContents.add(jeContent);
 						return jeContents.toArray(new JournalEntryContent[] {});
 					}

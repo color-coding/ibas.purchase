@@ -2154,7 +2154,6 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> imple
 						jeContent.setAmount(PurchaseCreditNote.this.getDocumentTotal().negate());
 						jeContent.setCurrency(PurchaseCreditNote.this.getDocumentCurrency());
 						jeContent.setRate(PurchaseCreditNote.this.getDocumentRate());
-						jeContent.setShortName(PurchaseCreditNote.this.getSupplierCode());
 						jeContents.add(jeContent);
 						return jeContents.toArray(new JournalEntryContent[] {});
 					}

@@ -181,9 +181,9 @@ namespace purchase {
                                 }
                             }
                         }
-                    }));
+                    }).addStyleClass("sapUiTinyMarginEnd"));
                     this.setAggregation("_button", new sap.m.Button("", {
-                        type: sap.m.ButtonType.Transparent,
+                        type: sap.m.ButtonType.Default,
                         icon: "sap-icon://contacts",
                         press: (event: sap.ui.base.Event) => {
                             let select: any = this.getAggregation("_select", undefined);

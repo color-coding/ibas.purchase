@@ -9,6 +9,8 @@ import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.data.emBOStatus;
+import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.logic.BusinessLogic;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
 import org.colorcoding.ibas.bobas.mapping.LogicContract;
@@ -129,6 +131,9 @@ public class PurchaseOrderReservationCreateService
 			if (item.getTargetDocumentType() == null) {
 				continue;
 			}
+			if (item.getTargetDocumentClosed() == emYesNo.YES) {
+				continue;
+			}
 			remQuantity = item.getQuantity().subtract(item.getClosedQuantity());
 			if (remQuantity.compareTo(Decimal.ZERO) <= 0) {
 				continue;
@@ -157,8 +162,9 @@ public class PurchaseOrderReservationCreateService
 			gItem.setSourceDocumentType(contract.getDocumentType());
 			gItem.setSourceDocumentEntry(contract.getDocumentEntry());
 			gItem.setSourceDocumentLineId(contract.getDocumentLineId());
-			gItem.setItemCode(item.getItemCode());
 			gItem.setWarehouse(contract.getWarehouse());
+			gItem.setTargetDocumentClosed(item.getTargetDocumentClosed());
+			gItem.setItemCode(item.getItemCode());
 			gItem.setDeliveryDate(item.getDeliveryDate());
 			gItem.setInvalidDate(item.getInvalidDate());
 			gItem.setInvalidTime(item.getInvalidTime());
@@ -171,6 +177,20 @@ public class PurchaseOrderReservationCreateService
 				gItem.setQuantity(gItem.getQuantity().add(remQuantity));
 				item.setClosedQuantity(item.getClosedQuantity().add(remQuantity));
 				avaQuantity = avaQuantity.subtract(remQuantity);
+			}
+			if (gItem.getQuantity().compareTo(gItem.getClosedQuantity()) > 0) {
+				gItem.setStatus(emBOStatus.OPEN);
+			} else {
+				gItem.setStatus(emBOStatus.CLOSED);
+			}
+			if (item.getQuantity().compareTo(item.getClosedQuantity()) > 0) {
+				item.setStatus(emBOStatus.OPEN);
+			} else {
+				item.setStatus(emBOStatus.CLOSED);
+			}
+			// 目标关闭，则此关闭
+			if (gItem.getTargetDocumentClosed() == emYesNo.YES || gItem.getSourceDocumentClosed() == emYesNo.YES) {
+				gItem.setStatus(emBOStatus.CLOSED);
 			}
 			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
 				// 无可用量

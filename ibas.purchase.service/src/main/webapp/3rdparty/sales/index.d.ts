@@ -1706,6 +1706,8 @@ declare namespace sales {
             branch: string;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
+            /** 销售发票-预收款集合 */
+            salesInvoiceDownPayments: ISalesInvoiceDownPayments;
             /** 送货地址集合 */
             shippingAddresss: IShippingAddresss;
             /** 基于销售订单 */
@@ -1719,6 +1721,11 @@ declare namespace sales {
         interface ISalesInvoiceItems extends ibas.IBusinessObjects<ISalesInvoiceItem> {
             /** 创建并添加子项 */
             create(): ISalesInvoiceItem;
+        }
+        /** 销售发票-预收款 集合 */
+        interface ISalesInvoiceDownPayments extends ibas.IBusinessObjects<ISalesInvoiceDownPayment> {
+            /** 创建并添加子项 */
+            create(): ISalesInvoiceDownPayment;
         }
         /** 销售发票-行 */
         interface ISalesInvoiceItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
@@ -1850,6 +1857,73 @@ declare namespace sales {
             agreements: string;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
+        }
+        /** 销售发票-预收款 */
+        interface ISalesInvoiceDownPayment extends ibas.IBODocumentLine {
+            /** 凭证编号 */
+            docEntry: number;
+            /** 行号 */
+            lineId: number;
+            /** 显示顺序 */
+            visOrder: number;
+            /** 类型 */
+            objectCode: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 状态 */
+            status: ibas.emBOStatus;
+            /** 单据状态 */
+            lineStatus: ibas.emDocumentStatus;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 参考1 */
+            reference1: string;
+            /** 参考2 */
+            reference2: string;
+            /** 收款类型 */
+            paymentType: string;
+            /** 收款编号 */
+            paymentEntry: number;
+            /** 收款行号 */
+            paymentLineId: number;
+            /** 收款总计 */
+            paymentTotal: number;
+            /** 收款货币 */
+            paymentCurrency: string;
+            /** 收款汇率 */
+            paymentRate: number;
+            /** 提取金额 */
+            drawnTotal: number;
+            /** 基于类型 */
+            baseDocumentType: string;
+            /** 基于标识 */
+            baseDocumentEntry: number;
+            /** 基于行号 */
+            baseDocumentLineId: number;
+            /** 原始类型 */
+            originalDocumentType: string;
+            /** 原始标识 */
+            originalDocumentEntry: number;
+            /** 原始行号 */
+            originalDocumentLineId: number;
+            /** 基于收款 */
+            baseDocument(document: receiptpayment.bo.IReceiptItem): void;
         }
     }
 }
@@ -7602,6 +7676,12 @@ declare namespace sales {
             get salesInvoiceItems(): SalesInvoiceItems;
             /** 设置-销售发票-行集合 */
             set salesInvoiceItems(value: SalesInvoiceItems);
+            /** 映射的属性名称-销售发票-预收款集合 */
+            static PROPERTY_SALESINVOICEDOWNPAYMENTS_NAME: string;
+            /** 获取-销售发票-预收款集合 */
+            get salesInvoiceDownPayments(): SalesInvoiceDownPayments;
+            /** 设置-销售发票-预收款集合 */
+            set salesInvoiceDownPayments(value: SalesInvoiceDownPayments);
             /** 映射的属性名称-送货地址集合 */
             static PROPERTY_SHIPPINGADDRESSS_NAME: string;
             /** 获取-送货地址集合 */
@@ -7640,6 +7720,12 @@ declare namespace sales {
             get shippingsTaxTotal(): number;
             /** 设置-运送费税总计 */
             set shippingsTaxTotal(value: number);
+            /** 映射的属性名称-预付款总计 */
+            static PROPERTY_DOWNPAYMENTTOTAL_NAME: string;
+            /** 获取-预付款总计 */
+            get downPaymentTotal(): number;
+            /** 设置-预付款总计 */
+            set downPaymentTotal(value: number);
             protected registerRules(): ibas.IBusinessRule[];
             /** 重置 */
             reset(): void;
@@ -7662,6 +7748,11 @@ declare namespace sales {
             protected onItemPropertyChanged(item: SalesInvoiceItem, name: string): void;
             protected afterAdd(item: SalesInvoiceItem): void;
             protected onParentPropertyChanged(name: string): void;
+        }
+        /** 销售发票-预收款 集合 */
+        class SalesInvoiceDownPayments extends ibas.BusinessObjects<SalesInvoiceDownPayment, SalesInvoice> implements ISalesInvoiceDownPayments {
+            /** 创建并添加子项 */
+            create(): SalesInvoiceDownPayment;
         }
         /** 销售发票-行 */
         class SalesInvoiceItem extends ibas.BODocumentLine<SalesInvoiceItem> implements ISalesInvoiceItem {
@@ -8065,6 +8156,201 @@ declare namespace sales {
             protected registerRules(): ibas.IBusinessRule[];
             /** 重置 */
             reset(): void;
+        }
+        /** 销售发票-预收款 */
+        class SalesInvoiceDownPayment extends ibas.BODocumentLine<SalesInvoiceDownPayment> implements ISalesInvoiceDownPayment {
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-凭证编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-凭证编号 */
+            get docEntry(): number;
+            /** 设置-凭证编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-行号 */
+            static PROPERTY_LINEID_NAME: string;
+            /** 获取-行号 */
+            get lineId(): number;
+            /** 设置-行号 */
+            set lineId(value: number);
+            /** 映射的属性名称-显示顺序 */
+            static PROPERTY_VISORDER_NAME: string;
+            /** 获取-显示顺序 */
+            get visOrder(): number;
+            /** 设置-显示顺序 */
+            set visOrder(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-状态 */
+            static PROPERTY_STATUS_NAME: string;
+            /** 获取-状态 */
+            get status(): ibas.emBOStatus;
+            /** 设置-状态 */
+            set status(value: ibas.emBOStatus);
+            /** 映射的属性名称-单据状态 */
+            static PROPERTY_LINESTATUS_NAME: string;
+            /** 获取-单据状态 */
+            get lineStatus(): ibas.emDocumentStatus;
+            /** 设置-单据状态 */
+            set lineStatus(value: ibas.emDocumentStatus);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-参考1 */
+            static PROPERTY_REFERENCE1_NAME: string;
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 映射的属性名称-参考2 */
+            static PROPERTY_REFERENCE2_NAME: string;
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
+            /** 映射的属性名称-收款类型 */
+            static PROPERTY_PAYMENTTYPE_NAME: string;
+            /** 获取-收款类型 */
+            get paymentType(): string;
+            /** 设置-收款类型 */
+            set paymentType(value: string);
+            /** 映射的属性名称-收款编号 */
+            static PROPERTY_PAYMENTENTRY_NAME: string;
+            /** 获取-收款编号 */
+            get paymentEntry(): number;
+            /** 设置-收款编号 */
+            set paymentEntry(value: number);
+            /** 映射的属性名称-收款行号 */
+            static PROPERTY_PAYMENTLINEID_NAME: string;
+            /** 获取-收款行号 */
+            get paymentLineId(): number;
+            /** 设置-收款行号 */
+            set paymentLineId(value: number);
+            /** 映射的属性名称-收款总计 */
+            static PROPERTY_PAYMENTTOTAL_NAME: string;
+            /** 获取-收款总计 */
+            get paymentTotal(): number;
+            /** 设置-收款总计 */
+            set paymentTotal(value: number);
+            /** 映射的属性名称-收款货币 */
+            static PROPERTY_PAYMENTCURRENCY_NAME: string;
+            /** 获取-收款货币 */
+            get paymentCurrency(): string;
+            /** 设置-收款货币 */
+            set paymentCurrency(value: string);
+            /** 映射的属性名称-收款汇率 */
+            static PROPERTY_PAYMENTRATE_NAME: string;
+            /** 获取-收款汇率 */
+            get paymentRate(): number;
+            /** 设置-收款汇率 */
+            set paymentRate(value: number);
+            /** 映射的属性名称-提取金额 */
+            static PROPERTY_DRAWNTOTAL_NAME: string;
+            /** 获取-提取金额 */
+            get drawnTotal(): number;
+            /** 设置-提取金额 */
+            set drawnTotal(value: number);
+            /** 映射的属性名称-基于类型 */
+            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
+            /** 获取-基于类型 */
+            get baseDocumentType(): string;
+            /** 设置-基于类型 */
+            set baseDocumentType(value: string);
+            /** 映射的属性名称-基于标识 */
+            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
+            /** 获取-基于标识 */
+            get baseDocumentEntry(): number;
+            /** 设置-基于标识 */
+            set baseDocumentEntry(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
+            /** 获取-基于行号 */
+            get baseDocumentLineId(): number;
+            /** 设置-基于行号 */
+            set baseDocumentLineId(value: number);
+            /** 映射的属性名称-原始类型 */
+            static PROPERTY_ORIGINALDOCUMENTTYPE_NAME: string;
+            /** 获取-原始类型 */
+            get originalDocumentType(): string;
+            /** 设置-原始类型 */
+            set originalDocumentType(value: string);
+            /** 映射的属性名称-原始标识 */
+            static PROPERTY_ORIGINALDOCUMENTENTRY_NAME: string;
+            /** 获取-原始标识 */
+            get originalDocumentEntry(): number;
+            /** 设置-原始标识 */
+            set originalDocumentEntry(value: number);
+            /** 映射的属性名称-原始行号 */
+            static PROPERTY_ORIGINALDOCUMENTLINEID_NAME: string;
+            /** 获取-原始行号 */
+            get originalDocumentLineId(): number;
+            /** 设置-原始行号 */
+            set originalDocumentLineId(value: number);
+            /** 基于收款 */
+            baseDocument(document: receiptpayment.bo.IReceiptItem): void;
+            /** 初始化数据 */
+            protected init(): void;
         }
     }
 }
@@ -12267,6 +12553,12 @@ declare namespace sales {
             private chooseSalesInvoiceItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesInvoiceItemDistributionRule;
+            /** 添加销售发票-预收款事件 */
+            addSalesInvoiceDownPayment(criteria?: ibas.ICriteria): void;
+            /** 删除销售发票-预收款事件 */
+            protected removeSalesInvoiceDownPayment(items: bo.SalesInvoiceDownPayment[]): void;
+            /** 添加销售发票-预收款事件 */
+            protected chooseSalesInvoiceDownPayment(): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -12316,6 +12608,12 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 转为销售交货事件 */
             turnToSalesCreditNoteEvent: Function;
+            /** 添加销售发票-预收款事件 */
+            addSalesInvoiceDownPaymentEvent: Function;
+            /** 删除销售发票-预收款事件 */
+            removeSalesInvoiceDownPaymentEvent: Function;
+            /** 显示数据-销售发票-预收款 */
+            showSalesInvoiceDownPayments(datas: bo.SalesInvoiceDownPayment[]): void;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

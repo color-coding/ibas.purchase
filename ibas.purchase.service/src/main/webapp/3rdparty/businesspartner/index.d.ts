@@ -49,6 +49,8 @@ declare namespace businesspartner {
         const BO_CODE_CUSTOMERASSET: string;
         /** 业务对象编码-供应商伴资产 */
         const BO_CODE_SUPPLIERASSET: string;
+        /** 业务对象编码-内部对账 */
+        const BO_CODE_INTERNALRECONCILIATION: string;
         /** 业务伙伴性质 */
         enum emBusinessPartnerNature {
             /** 公司 */
@@ -1117,6 +1119,122 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 内部对账 */
+        interface IInternalReconciliation extends ibas.IBOSimple {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 实例号 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 更新日期 */
+            updateDate: Date;
+            /** 更新时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 更新用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 备注 */
+            remarks: string;
+            /** 取消 */
+            canceled: ibas.emYesNo;
+            /** 系统 */
+            systemed: ibas.emYesNo;
+            /** 基于类型 */
+            baseDocumentType: string;
+            /** 基于标识 */
+            baseDocumentEntry: number;
+            /** 基于行号 */
+            baseDocumentLineId: number;
+            /** 对账类型 */
+            reconciliationType: string;
+            /** 对账日期 */
+            reconciliationDate: Date;
+            /** 分支 */
+            branch: string;
+            /** 内部对账-行集合 */
+            internalReconciliationLines: IInternalReconciliationLines;
+        }
+        /** 内部对账-行 集合 */
+        interface IInternalReconciliationLines extends ibas.IBusinessObjects<IInternalReconciliationLine> {
+            /** 创建并添加子项 */
+            create(): IInternalReconciliationLine;
+        }
+        /** 内部对账-行 */
+        interface IInternalReconciliationLine extends ibas.IBOSimpleLine {
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象行号 */
+            lineId: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 实例号 */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 更新日期 */
+            updateDate: Date;
+            /** 更新时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 更新用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 备注 */
+            remarks: string;
+            /** 业务伙伴/科目代码 */
+            shortName: string;
+            /** 源单据类型 */
+            documentType: string;
+            /** 源单据编号 */
+            documentEntry: number;
+            /** 源单据行号 */
+            documentLineId: number;
+            /** 类别 */
+            category: string;
+            /** 金额 */
+            amount: number;
+            /** 货币 */
+            currency: string;
+            /** 汇率 */
+            rate: number;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryBusinessPartner extends ibas.IBORepositoryApplication {
             /**
@@ -1249,6 +1367,16 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveAgreement(saver: ibas.ISaveCaller<bo.IAgreement>): void;
+            /**
+             * 查询 内部对账
+             * @param fetcher 查询者
+             */
+            fetchInternalReconciliation(fetcher: ibas.IFetchCaller<bo.IInternalReconciliation>): void;
+            /**
+             * 保存 内部对账
+             * @param saver 保存者
+             */
+            saveInternalReconciliation(saver: ibas.ISaveCaller<bo.IInternalReconciliation>): void;
         }
         /**
          * 查询调用者
@@ -3714,6 +3842,320 @@ declare namespace businesspartner {
  */
 declare namespace businesspartner {
     namespace bo {
+        /** 内部对账 */
+        class InternalReconciliation extends ibas.BOSimple<InternalReconciliation> implements IInternalReconciliation {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号 */
+            get logInst(): number;
+            /** 设置-实例号 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-更新日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-更新日期 */
+            get updateDate(): Date;
+            /** 设置-更新日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-更新时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-更新时间 */
+            get updateTime(): number;
+            /** 设置-更新时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-更新用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-更新用户 */
+            get updateUserSign(): number;
+            /** 设置-更新用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-取消 */
+            static PROPERTY_CANCELED_NAME: string;
+            /** 获取-取消 */
+            get canceled(): ibas.emYesNo;
+            /** 设置-取消 */
+            set canceled(value: ibas.emYesNo);
+            /** 映射的属性名称-系统 */
+            static PROPERTY_SYSTEMED_NAME: string;
+            /** 获取-系统 */
+            get systemed(): ibas.emYesNo;
+            /** 设置-系统 */
+            set systemed(value: ibas.emYesNo);
+            /** 映射的属性名称-基于类型 */
+            static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
+            /** 获取-基于类型 */
+            get baseDocumentType(): string;
+            /** 设置-基于类型 */
+            set baseDocumentType(value: string);
+            /** 映射的属性名称-基于标识 */
+            static PROPERTY_BASEDOCUMENTENTRY_NAME: string;
+            /** 获取-基于标识 */
+            get baseDocumentEntry(): number;
+            /** 设置-基于标识 */
+            set baseDocumentEntry(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASEDOCUMENTLINEID_NAME: string;
+            /** 获取-基于行号 */
+            get baseDocumentLineId(): number;
+            /** 设置-基于行号 */
+            set baseDocumentLineId(value: number);
+            /** 映射的属性名称-对账类型 */
+            static PROPERTY_RECONCILIATIONTYPE_NAME: string;
+            /** 获取-对账类型 */
+            get reconciliationType(): string;
+            /** 设置-对账类型 */
+            set reconciliationType(value: string);
+            /** 映射的属性名称-对账日期 */
+            static PROPERTY_RECONCILIATIONDATE_NAME: string;
+            /** 获取-对账日期 */
+            get reconciliationDate(): Date;
+            /** 设置-对账日期 */
+            set reconciliationDate(value: Date);
+            /** 映射的属性名称-分支 */
+            static PROPERTY_BRANCH_NAME: string;
+            /** 获取-分支 */
+            get branch(): string;
+            /** 设置-分支 */
+            set branch(value: string);
+            /** 映射的属性名称-内部对账-行集合 */
+            static PROPERTY_INTERNALRECONCILIATIONLINES_NAME: string;
+            /** 获取-内部对账-行集合 */
+            get internalReconciliationLines(): InternalReconciliationLines;
+            /** 设置-内部对账-行集合 */
+            set internalReconciliationLines(value: InternalReconciliationLines);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+        /** 内部对账-行 集合 */
+        class InternalReconciliationLines extends ibas.BusinessObjects<InternalReconciliationLine, InternalReconciliation> implements IInternalReconciliationLines {
+            /** 创建并添加子项 */
+            create(): InternalReconciliationLine;
+        }
+        /** 内部对账-行 */
+        class InternalReconciliationLine extends ibas.BOSimpleLine<InternalReconciliationLine> implements IInternalReconciliationLine {
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象行号 */
+            static PROPERTY_LINEID_NAME: string;
+            /** 获取-对象行号 */
+            get lineId(): number;
+            /** 设置-对象行号 */
+            set lineId(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号 */
+            get logInst(): number;
+            /** 设置-实例号 */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-更新日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-更新日期 */
+            get updateDate(): Date;
+            /** 设置-更新日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-更新时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-更新时间 */
+            get updateTime(): number;
+            /** 设置-更新时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-更新用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-更新用户 */
+            get updateUserSign(): number;
+            /** 设置-更新用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 映射的属性名称-业务伙伴/科目代码 */
+            static PROPERTY_SHORTNAME_NAME: string;
+            /** 获取-业务伙伴/科目代码 */
+            get shortName(): string;
+            /** 设置-业务伙伴/科目代码 */
+            set shortName(value: string);
+            /** 映射的属性名称-源单据类型 */
+            static PROPERTY_DOCUMENTTYPE_NAME: string;
+            /** 获取-源单据类型 */
+            get documentType(): string;
+            /** 设置-源单据类型 */
+            set documentType(value: string);
+            /** 映射的属性名称-源单据编号 */
+            static PROPERTY_DOCUMENTENTRY_NAME: string;
+            /** 获取-源单据编号 */
+            get documentEntry(): number;
+            /** 设置-源单据编号 */
+            set documentEntry(value: number);
+            /** 映射的属性名称-源单据行号 */
+            static PROPERTY_DOCUMENTLINEID_NAME: string;
+            /** 获取-源单据行号 */
+            get documentLineId(): number;
+            /** 设置-源单据行号 */
+            set documentLineId(value: number);
+            /** 映射的属性名称-类别 */
+            static PROPERTY_CATEGORY_NAME: string;
+            /** 获取-类别 */
+            get category(): string;
+            /** 设置-类别 */
+            set category(value: string);
+            /** 映射的属性名称-金额 */
+            static PROPERTY_AMOUNT_NAME: string;
+            /** 获取-金额 */
+            get amount(): number;
+            /** 设置-金额 */
+            set amount(value: number);
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
+            /** 映射的属性名称-汇率 */
+            static PROPERTY_RATE_NAME: string;
+            /** 获取-汇率 */
+            get rate(): number;
+            /** 设置-汇率 */
+            set rate(value: number);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace businesspartner {
+    namespace bo {
         namespace ibas4j {
             /** ibas的java端数据声明 */
             /** 操作消息 */
@@ -3973,6 +4415,16 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveAgreement(saver: ibas.ISaveCaller<bo.Agreement>): void;
+            /**
+             * 查询 内部对账
+             * @param fetcher 查询者
+             */
+            fetchInternalReconciliation(fetcher: ibas.IFetchCaller<bo.InternalReconciliation>): void;
+            /**
+             * 保存 内部对账
+             * @param saver 保存者
+             */
+            saveInternalReconciliation(saver: ibas.ISaveCaller<bo.InternalReconciliation>): void;
         }
     }
 }

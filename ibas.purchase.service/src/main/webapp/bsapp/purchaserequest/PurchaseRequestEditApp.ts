@@ -619,6 +619,13 @@ namespace purchase {
                                                     condition = criteria.conditions.create();
                                                     condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTLINEID_NAME;
                                                     condition.value = item.lineId.toString();
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_TARGETDOCUMENTCLOSED_NAME;
+                                                    condition.value = ibas.emYesNo.NO.toString();
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_QUANTITY_NAME;
+                                                    condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                                                    condition.comparedAlias = materials.bo.MaterialOrderedReservation.PROPERTY_CLOSEDQUANTITY_NAME;
                                                     let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
                                                     boRepository.fetchMaterialOrderedReservation({
                                                         criteria: criteria,
@@ -630,6 +637,7 @@ namespace purchase {
                                                                 nItem.sourceDocumentType = result.documentType;
                                                                 nItem.sourceDocumentEntry = result.docmentEntry;
                                                                 nItem.sourceDocumentLineId = result.documentLineId;
+                                                                nItem.sourceDocumentClosed = ibas.emYesNo.NO;
                                                                 nItem.warehouse = result.warehouse;
                                                                 if (quantity <= item.quantity) {
                                                                     nItem.quantity = quantity;

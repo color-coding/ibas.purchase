@@ -39,10 +39,13 @@ import org.colorcoding.ibas.bobas.ownership.IDataOwnership;
 import org.colorcoding.ibas.bobas.period.IPeriodData;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
+import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMaxProperty;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
+import org.colorcoding.ibas.businesspartner.logic.IDocumentReconciliationContent;
+import org.colorcoding.ibas.businesspartner.logic.IDocumentReconciliationContract;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
@@ -56,6 +59,7 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPrice;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPriceDiff;
+import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDownPaymentAmount;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCost;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCostDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
@@ -1781,6 +1785,38 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 	}
 
 	/**
+	 * 属性名称-采购发票-预收款
+	 */
+	private static final String PROPERTY_PURCHASEINVOICEDOWNPAYMENTS_NAME = "PurchaseInvoiceDownPayments";
+
+	/**
+	 * 采购发票-预收款的集合属性
+	 * 
+	 */
+	public static final IPropertyInfo<IPurchaseInvoiceDownPayments> PROPERTY_PURCHASEINVOICEDOWNPAYMENTS = registerProperty(
+			PROPERTY_PURCHASEINVOICEDOWNPAYMENTS_NAME, IPurchaseInvoiceDownPayments.class, MY_CLASS);
+
+	/**
+	 * 获取-采购发票-预收款集合
+	 * 
+	 * @return 值
+	 */
+	@XmlElementWrapper(name = PROPERTY_PURCHASEINVOICEDOWNPAYMENTS_NAME)
+	@XmlElement(name = PurchaseInvoiceDownPayment.BUSINESS_OBJECT_NAME, type = PurchaseInvoiceDownPayment.class)
+	public final IPurchaseInvoiceDownPayments getPurchaseInvoiceDownPayments() {
+		return this.getProperty(PROPERTY_PURCHASEINVOICEDOWNPAYMENTS);
+	}
+
+	/**
+	 * 设置-采购发票-预收款集合
+	 * 
+	 * @param value 值
+	 */
+	public final void setPurchaseInvoiceDownPayments(IPurchaseInvoiceDownPayments value) {
+		this.setProperty(PROPERTY_PURCHASEINVOICEDOWNPAYMENTS, value);
+	}
+
+	/**
 	 * 属性名称-送货地址
 	 */
 	private static final String PROPERTY_SHIPPINGADDRESSS_NAME = "ShippingAddresss";
@@ -1819,6 +1855,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 	protected void initialize() {
 		super.initialize();// 基类初始化，不可去除
 		this.setPurchaseInvoiceItems(new PurchaseInvoiceItems(this));
+		this.setPurchaseInvoiceDownPayments(new PurchaseInvoiceDownPayments(this));
 		this.setShippingAddresss(new ShippingAddresss(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
 		this.setPostingDate(DateTime.getToday());
@@ -1945,6 +1982,35 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 		this.setProperty(PROPERTY_SHIPPINGSTAXTOTAL, value);
 	}
 
+	/**
+	 * 属性名称-预收款总计
+	 */
+	private static final String PROPERTY_DOWNPAYMENTTOTAL_NAME = "DownPaymentTotal";
+
+	/**
+	 * 预收款总计 属性
+	 */
+	public static final IPropertyInfo<BigDecimal> PROPERTY_DOWNPAYMENTTOTAL = registerProperty(
+			PROPERTY_DOWNPAYMENTTOTAL_NAME, BigDecimal.class, MY_CLASS);
+
+	/**
+	 * 获取-预收款总计
+	 * 
+	 * @return 值
+	 */
+	public final BigDecimal getDownPaymentTotal() {
+		return this.getProperty(PROPERTY_DOWNPAYMENTTOTAL);
+	}
+
+	/**
+	 * 设置-预收款总计
+	 * 
+	 * @param value 值
+	 */
+	final void setDownPaymentTotal(BigDecimal value) {
+		this.setProperty(PROPERTY_DOWNPAYMENTTOTAL, value);
+	}
+
 	@Override
 	protected IBusinessRule[] registerRules() {
 		return new IBusinessRule[] {
@@ -1968,6 +2034,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 				// 计算运输-税总计
 				new BusinessRuleSumElements(PROPERTY_SHIPPINGSTAXTOTAL, PROPERTY_SHIPPINGADDRESSS,
 						ShippingAddress.PROPERTY_TAXTOTAL),
+				// 计算预收款-总计
+				new BusinessRuleSumElements(PROPERTY_DOWNPAYMENTTOTAL, PROPERTY_PURCHASEINVOICEDOWNPAYMENTS,
+						PurchaseInvoiceDownPayment.PROPERTY_DRAWNTOTAL),
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),
@@ -1976,6 +2045,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 						PROPERTY_SHIPPINGSEXPENSETOTAL),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
+				new BusinessRuleMaxProperty<BigDecimal>(PROPERTY_DOCUMENTTOTAL, PROPERTY_DOWNPAYMENTTOTAL), // 不能预付款不能大过单据总计
 		};
 	}
 
@@ -1985,6 +2055,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 		this.setPaidTotal(Decimal.ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getPurchaseInvoiceItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
+		this.getPurchaseInvoiceDownPayments().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
 
 	@Override
@@ -1994,60 +2065,306 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		return new IBusinessLogicContract[] {
-				// 供应商检查
-				new ISupplierCheckContract() {
-					@Override
-					public String getIdentifiers() {
-						return PurchaseInvoice.this.getIdentifiers();
+		List<IBusinessLogicContract> contracts = new ArrayList<>(4);
+		// 供应商检查
+		contracts.add(new ISupplierCheckContract() {
+			@Override
+			public String getIdentifiers() {
+				return PurchaseInvoice.this.getIdentifiers();
+			}
+
+			@Override
+			public String getSupplierCode() {
+				return PurchaseInvoice.this.getSupplierCode();
+			}
+		});
+		// 分支检查
+		contracts.add(new IBranchCheckContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseInvoice.this.toString();
+			}
+
+			@Override
+			public String getBranch() {
+				return PurchaseInvoice.this.getBranch();
+			}
+		});
+		// 创建分录
+		contracts.add(new IJournalEntryCreationContract() {
+
+			@Override
+			public boolean isOffsetting() {
+				if (PurchaseInvoice.this instanceof IBOTagCanceled) {
+					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoice.this;
+					if (boTag.getCanceled() == emYesNo.YES) {
+						return true;
 					}
+				}
+				if (PurchaseInvoice.this instanceof IBOTagDeleted) {
+					IBOTagDeleted boTag = (IBOTagDeleted) PurchaseInvoice.this;
+					if (boTag.getDeleted() == emYesNo.YES) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseInvoice.this.toString();
+			}
+
+			@Override
+			public String getBranch() {
+				return PurchaseInvoice.this.getBranch();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseInvoice.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseInvoice.this.getDocEntry();
+			}
+
+			@Override
+			public DateTime getDocumentDate() {
+				return PurchaseInvoice.this.getDocumentDate();
+			}
+
+			@Override
+			public String getReference1() {
+				return PurchaseInvoice.this.getReference1();
+			}
+
+			@Override
+			public String getReference2() {
+				return PurchaseInvoice.this.getReference2();
+			}
+
+			@Override
+			public JournalEntryContent[] getContents() {
+				JournalEntryContent jeContent;
+				List<JournalEntryContent> jeContents = new ArrayList<>();
+				String PurchaseDeliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+				for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+					if (line.getDeleted() == emYesNo.YES) {
+						continue;
+					}
+					if (line.getCanceled() == emYesNo.YES) {
+						continue;
+					}
+					if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+						continue;
+					}
+					if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+						/** 基于交货 **/
+						// 分配科目
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 库存科目
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+						jeContent.setAmount(Decimal.ZERO);// 待计算
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 税科目
+						jeContent = new JournalEntrySmartContent(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+						jeContent.setAmount(line.getTaxTotal());// 税总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+					} else {
+						/** 不基于单据 **/
+						// 库存科目
+						jeContent = new JournalEntrySmartContent(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 税科目
+						jeContent = new JournalEntrySmartContent(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+						jeContent.setAmount(line.getTaxTotal());// 税总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+
+					}
+				}
+				// 预付款
+				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+					// 应付账款
+					jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
+					jeContent.setCategory(Category.Debit);
+					jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+					jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+					jeContent.setAmount(item.getDrawnTotal());
+					jeContent.setCurrency(item.getPaymentCurrency());
+					jeContent.setRate(item.getPaymentRate());
+					jeContents.add(jeContent);
+					// 预付款（取分录）
+					jeContent = new PurchaseInvoiceDownPaymentAmount(item);
+					jeContent.setCategory(Category.Credit);
+					jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+					jeContent.setAmount(item.getDrawnTotal());
+					jeContent.setCurrency(item.getPaymentCurrency());
+					jeContent.setRate(item.getPaymentRate());
+					jeContents.add(jeContent);
+				}
+				// 应付账款
+				jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
+				jeContent.setCategory(Category.Credit);
+				jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+				jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+				jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
+				jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
+				jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
+				jeContents.add(jeContent);
+				return jeContents.toArray(new JournalEntryContent[] {});
+			}
+
+			@Override
+			public JournalEntryContent[] reverseContents(JournalEntryContent[] contents) {
+				JournalEntryContent jeContent;
+				List<JournalEntryContent> jeContents = new ArrayList<>();
+				String PurchaseDeliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+				for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+					if (line.getCanceled() == emYesNo.NO) {
+						continue;
+					}
+					if (line.getLineStatus() == emDocumentStatus.PLANNED) {
+						continue;
+					}
+					if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+						/** 基于交货 **/
+						// 分配科目
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, true);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 库存科目
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, true);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+						jeContent.setAmount(Decimal.ZERO);// 待计算
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 税科目
+						jeContent = new JournalEntrySmartContent(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+						jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+					} else {
+						/** 不基于单据 **/
+						// 库存科目
+						jeContent = new PurchaseInvoiceMaterialsCost(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+						jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 价格差异科目
+						jeContent = new PurchaseInvoiceMaterialsCostDiff(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
+						jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+						// 税科目
+						jeContent = new JournalEntrySmartContent(line);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+						jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+						jeContent.setCurrency(line.getCurrency());
+						jeContent.setRate(line.getRate());
+						jeContents.add(jeContent);
+					}
+				}
+				// 预付款
+				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+					// 应付账款
+					jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
+					jeContent.setCategory(Category.Debit);
+					jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+					jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+					jeContent.setAmount(item.getDrawnTotal().negate());
+					jeContent.setCurrency(item.getPaymentCurrency());
+					jeContent.setRate(item.getPaymentRate());
+					jeContents.add(jeContent);
+					// 预付款（取分录）
+					jeContent = new PurchaseInvoiceDownPaymentAmount(item);
+					jeContent.setCategory(Category.Credit);
+					jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+					jeContent.setAmount(item.getDrawnTotal().negate());
+					jeContent.setCurrency(item.getPaymentCurrency());
+					jeContent.setRate(item.getPaymentRate());
+					jeContents.add(jeContent);
+				}
+				// 应付账款
+				jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
+				jeContent.setCategory(Category.Credit);
+				jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+				jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
+				jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal().negate());
+				jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
+				jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
+				jeContents.add(jeContent);
+				return jeContents.toArray(new JournalEntryContent[] {});
+			}
+		});
+		// 自动对账
+		contracts.add(new IDocumentReconciliationContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseInvoice.this.toString();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseInvoice.this.getObjectCode();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseInvoice.this.getDocEntry();
+			}
+
+			@Override
+			public IDocumentReconciliationContent[] getContents() {
+				ArrayList<IDocumentReconciliationContent> contents = new ArrayList<>(
+						PurchaseInvoice.this.getPurchaseInvoiceDownPayments().size() + 1);
+				contents.add(new IDocumentReconciliationContent() {
 
 					@Override
-					public String getSupplierCode() {
+					public String getShortName() {
 						return PurchaseInvoice.this.getSupplierCode();
-					}
-				},
-				// 分支检查
-				new IBranchCheckContract() {
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseInvoice.this.toString();
-					}
-
-					@Override
-					public String getBranch() {
-						return PurchaseInvoice.this.getBranch();
-					}
-				},
-				// 创建分录
-				new IJournalEntryCreationContract() {
-
-					@Override
-					public boolean isOffsetting() {
-						if (PurchaseInvoice.this instanceof IBOTagCanceled) {
-							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoice.this;
-							if (boTag.getCanceled() == emYesNo.YES) {
-								return true;
-							}
-						}
-						if (PurchaseInvoice.this instanceof IBOTagDeleted) {
-							IBOTagDeleted boTag = (IBOTagDeleted) PurchaseInvoice.this;
-							if (boTag.getDeleted() == emYesNo.YES) {
-								return true;
-							}
-						}
-						return false;
-					}
-
-					@Override
-					public String getIdentifiers() {
-						return PurchaseInvoice.this.toString();
-					}
-
-					@Override
-					public String getBranch() {
-						return PurchaseInvoice.this.getBranch();
 					}
 
 					@Override
@@ -2061,178 +2378,50 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 					}
 
 					@Override
-					public DateTime getDocumentDate() {
-						return PurchaseInvoice.this.getDocumentDate();
+					public BigDecimal getAmount() {
+						return PurchaseInvoice.this.getDownPaymentTotal().negate();
 					}
 
 					@Override
-					public String getReference1() {
-						return PurchaseInvoice.this.getReference1();
+					public String getCurrency() {
+						return PurchaseInvoice.this.getDocumentCurrency();
 					}
 
-					@Override
-					public String getReference2() {
-						return PurchaseInvoice.this.getReference2();
-					}
+				});
+				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+					contents.add(new IDocumentReconciliationContent() {
 
-					@Override
-					public JournalEntryContent[] getContents() {
-						JournalEntryContent jeContent;
-						List<JournalEntryContent> jeContents = new ArrayList<>();
-						String PurchaseDeliveryCode = MyConfiguration
-								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
-						for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
-							if (line.getDeleted() == emYesNo.YES) {
-								continue;
-							}
-							if (line.getCanceled() == emYesNo.YES) {
-								continue;
-							}
-							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
-								continue;
-							}
-							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
-								/** 基于交货 **/
-								// 分配科目
-								jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 库存科目
-								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(Decimal.ZERO);// 待计算
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 税科目
-								jeContent = new JournalEntrySmartContent(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-								jeContent.setAmount(line.getTaxTotal());// 税总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-							} else {
-								/** 不基于单据 **/
-								// 库存科目
-								jeContent = new JournalEntrySmartContent(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 税科目
-								jeContent = new JournalEntrySmartContent(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-								jeContent.setAmount(line.getTaxTotal());// 税总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-
-							}
+						@Override
+						public String getShortName() {
+							return PurchaseInvoice.this.getSupplierCode();
 						}
-						// 应付账款
-						jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
-						jeContent.setCategory(Category.Credit);
-						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
-						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
-						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal());
-						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
-						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
-						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
-						jeContents.add(jeContent);
-						return jeContents.toArray(new JournalEntryContent[] {});
-					}
 
-					@Override
-					public JournalEntryContent[] reverseContents(JournalEntryContent[] contents) {
-						JournalEntryContent jeContent;
-						List<JournalEntryContent> jeContents = new ArrayList<>();
-						String PurchaseDeliveryCode = MyConfiguration
-								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
-						for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
-							if (line.getCanceled() == emYesNo.NO) {
-								continue;
-							}
-							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
-								continue;
-							}
-							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
-								/** 基于交货 **/
-								// 分配科目
-								jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, true);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 库存科目
-								jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, true);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(Decimal.ZERO);// 待计算
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 税科目
-								jeContent = new JournalEntrySmartContent(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-							} else {
-								/** 不基于单据 **/
-								// 库存科目
-								jeContent = new PurchaseInvoiceMaterialsCost(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 价格差异科目
-								jeContent = new PurchaseInvoiceMaterialsCostDiff(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 税科目
-								jeContent = new JournalEntrySmartContent(line);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-							}
+						@Override
+						public String getBaseDocumentType() {
+							return item.getBaseDocumentType();
 						}
-						// 应付账款
-						jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
-						jeContent.setCategory(Category.Credit);
-						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
-						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
-						jeContent.setAmount(PurchaseInvoice.this.getDocumentTotal().negate());
-						jeContent.setCurrency(PurchaseInvoice.this.getDocumentCurrency());
-						jeContent.setRate(PurchaseInvoice.this.getDocumentRate());
-						jeContent.setShortName(PurchaseInvoice.this.getSupplierCode());
-						jeContents.add(jeContent);
-						return jeContents.toArray(new JournalEntryContent[] {});
-					}
+
+						@Override
+						public Integer getBaseDocumentEntry() {
+							return item.getBaseDocumentEntry();
+						}
+
+						@Override
+						public BigDecimal getAmount() {
+							return item.getDrawnTotal();
+						}
+
+						@Override
+						public String getCurrency() {
+							return item.getPaymentCurrency();
+						}
+
+					});
 				}
-
-		};
+				return contents.toArray(new IDocumentReconciliationContent[] {});
+			}
+		});
+		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 
 	@Override

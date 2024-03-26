@@ -54,6 +54,10 @@ namespace purchase {
                 editShippingAddressesEvent: Function;
                 /** 转为采购发票事件 */
                 turnToPurchaseCreditNoteEvent: Function;
+                /** 添加采购发票-预付款事件 */
+                addPurchaseInvoiceDownPaymentEvent: Function;
+                /** 删除采购发票-预付款事件 */
+                removePurchaseInvoiceDownPaymentEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -835,13 +839,63 @@ namespace purchase {
                                     }),
                                 ]
                             }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_downpaymenttotal") }),
+                            new sap.m.FlexBox("", {
+                                width: "100%",
+                                justifyContent: sap.m.FlexJustifyContent.Start,
+                                renderType: sap.m.FlexRendertype.Bare,
+                                alignContent: sap.m.FlexAlignContent.Center,
+                                alignItems: sap.m.FlexAlignItems.Center,
+                                items: [
+                                    new sap.extension.m.Input("", {
+                                        editable: false,
+                                    }).bindProperty("bindingValue", {
+                                        path: "downPaymentTotal",
+                                        type: new sap.extension.data.Sum()
+                                    }).addStyleClass("sapUiTinyMarginEnd"),
+                                    new sap.m.Button("", {
+                                        type: sap.m.ButtonType.Default,
+                                        icon: "sap-icon://list",
+                                        press: function (): void {
+                                            new sap.m.Dialog("", {
+                                                title: ibas.i18n.prop("bo_purchaseinvoicedownpayment"),
+                                                type: sap.m.DialogType.Standard,
+                                                state: sap.ui.core.ValueState.None,
+                                                horizontalScrolling: true,
+                                                verticalScrolling: true,
+                                                content: [
+                                                    that.tablePurchaseInvoiceDownPayment
+                                                ],
+                                                buttons: [
+                                                    new sap.m.Button("", {
+                                                        text: ibas.i18n.prop("shell_exit"),
+                                                        type: sap.m.ButtonType.Transparent,
+                                                        press: function (): void {
+                                                            (<sap.m.Dialog>that.tablePurchaseInvoiceDownPayment.getParent()).close();
+                                                        }
+                                                    }),
+                                                ]
+                                            }).addStyleClass("sapUiNoContentPadding").open();
+                                        }
+                                    }),
+                                ]
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_paidtotal") }),
                             new sap.extension.m.Input("", {
                                 editable: false,
-
                             }).bindProperty("bindingValue", {
-                                path: "paidTotal",
-                                type: new sap.extension.data.Sum()
+                                parts: [
+                                    {
+                                        path: "downPaymentTotal",
+                                        type: new sap.extension.data.Sum()
+                                    }, {
+                                        path: "paidTotal",
+                                        type: new sap.extension.data.Sum()
+                                    }
+                                ],
+                                formatter(downPaymentTotal: number, paidTotal: number): number {
+                                    return sap.extension.data.formatValue(sap.extension.data.Sum, ibas.numbers.valueOf(downPaymentTotal) + ibas.numbers.valueOf(paidTotal), "string");
+                                }
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_paymentcode") }),
                             new sap.extension.m.SelectionInput("", {
@@ -859,6 +913,213 @@ namespace purchase {
                                 path: "paymentCode",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 8
+                                }),
+                            }),
+                        ]
+                    });
+                    this.tablePurchaseInvoiceDownPayment = new sap.extension.table.DataTable("", {
+                        enableSelectAll: false,
+                        visibleRowCount: sap.extension.table.visibleRowCount(8),
+                        dataInfo: {
+                            code: bo.PurchaseInvoice.BUSINESS_OBJECT_CODE,
+                            name: bo.PurchaseInvoiceDownPayment.name
+                        },
+                        toolbar: new sap.m.Toolbar("", {
+                            content: [
+                                new sap.m.Button("", {
+                                    text: ibas.i18n.prop("shell_data_add"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    icon: "sap-icon://add",
+                                    press(): void {
+                                        that.fireViewEvents(that.addPurchaseInvoiceDownPaymentEvent);
+                                    }
+                                }),
+                                new sap.m.Button("", {
+                                    text: ibas.i18n.prop("shell_data_remove"),
+                                    type: sap.m.ButtonType.Transparent,
+                                    icon: "sap-icon://less",
+                                    press(): void {
+                                        that.fireViewEvents(that.removePurchaseInvoiceDownPaymentEvent, that.tablePurchaseInvoiceDownPayment.getSelecteds());
+                                    }
+                                })
+                            ]
+                        }),
+                        rows: "{/rows}",
+                        columns: [
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_lineid"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "lineId",
+                                    type: new sap.extension.data.Numeric(),
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_payment"),
+                                template: new sap.extension.m.Link("", {
+                                    press(this: sap.extension.m.Link): void {
+                                        let data: any = this.getBindingContext().getObject();
+                                        if (data instanceof bo.PurchaseInvoiceDownPayment) {
+                                            if (data.paymentEntry > 0) {
+                                                if (ibas.servicesManager.runLinkService({
+                                                    boCode: data.paymentType,
+                                                    linkValue: data.paymentEntry.toString(),
+                                                })) {
+                                                    (<sap.m.Dialog>that.tablePurchaseInvoiceDownPayment.getParent()).close();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "paymentType",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 30
+                                            }),
+                                        }, {
+                                            path: "paymentEntry",
+                                            type: new sap.extension.data.Numeric(),
+                                        }, {
+                                            path: "paymentLineId",
+                                            type: new sap.extension.data.Numeric(),
+                                        }
+                                    ],
+                                    formatter(type: string, entry: number, lineId: number): string {
+                                        if (ibas.objects.isNull(type) || ibas.objects.isNull(entry)) {
+                                            return "";
+                                        }
+                                        return ibas.businessobjects.describe(ibas.strings.format("{[{0}].[DocEntry = {1}]}", type, entry))
+                                            + (lineId > 0 ? ibas.strings.format(", {0}-{1}", ibas.i18n.prop("bo_purchaseinvoicedownpayment_lineid"), lineId) : "");
+                                    }
+                                }),
+                                width: "14rem",
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_paymenttotal"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "paymentTotal",
+                                            type: new sap.extension.data.Sum(),
+                                        }, {
+                                            path: "paymentCurrency",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            }),
+                                        }
+                                    ]
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_drawntotal"),
+                                template: new sap.extension.m.Input("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "drawnTotal",
+                                    type: new sap.extension.data.Sum(),
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_basedocument"),
+                                template: new sap.extension.m.Link("", {
+                                    press(this: sap.extension.m.Link): void {
+                                        let data: any = this.getBindingContext().getObject();
+                                        if (data instanceof bo.PurchaseInvoiceDownPayment) {
+                                            if (data.baseDocumentEntry > 0) {
+                                                if (ibas.servicesManager.runLinkService({
+                                                    boCode: data.baseDocumentType,
+                                                    linkValue: data.baseDocumentEntry.toString(),
+                                                })) {
+                                                    (<sap.m.Dialog>that.tablePurchaseInvoiceDownPayment.getParent()).close();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "baseDocumentType",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 30
+                                            }),
+                                        }, {
+                                            path: "baseDocumentEntry",
+                                            type: new sap.extension.data.Numeric(),
+                                        }, {
+                                            path: "baseDocumentLineId",
+                                            type: new sap.extension.data.Numeric(),
+                                        }
+                                    ],
+                                    formatter(type: string, entry: number, lineId: number): string {
+                                        if (ibas.objects.isNull(type) || ibas.objects.isNull(entry)) {
+                                            return "";
+                                        }
+                                        return ibas.businessobjects.describe(ibas.strings.format("{[{0}].[DocEntry = {1}]}", type, entry))
+                                            + (lineId > 0 ? ibas.strings.format(", {0}-{1}", ibas.i18n.prop("bo_purchaseinvoicedownpayment_lineid"), lineId) : "");
+                                    }
+                                }),
+                                width: "12rem",
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_originaldocument"),
+                                template: new sap.extension.m.Link("", {
+                                    press(this: sap.extension.m.Link): void {
+                                        let data: any = this.getBindingContext().getObject();
+                                        if (data instanceof bo.PurchaseInvoiceDownPayment) {
+                                            if (data.originalDocumentEntry > 0) {
+                                                if (ibas.servicesManager.runLinkService({
+                                                    boCode: data.originalDocumentType,
+                                                    linkValue: data.originalDocumentEntry.toString(),
+                                                })) {
+                                                    (<sap.m.Dialog>that.tablePurchaseInvoiceDownPayment.getParent()).close();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).bindProperty("bindingValue", {
+                                    parts: [
+                                        {
+                                            path: "originalDocumentType",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 30
+                                            }),
+                                        }, {
+                                            path: "originalDocumentEntry",
+                                            type: new sap.extension.data.Numeric(),
+                                        }, {
+                                            path: "originalDocumentLineId",
+                                            type: new sap.extension.data.Numeric(),
+                                        }
+                                    ],
+                                    formatter(type: string, entry: number, lineId: number): string {
+                                        if (ibas.objects.isNull(type) || ibas.objects.isNull(entry)) {
+                                            return "";
+                                        }
+                                        return ibas.businessobjects.describe(ibas.strings.format("{[{0}].[DocEntry = {1}]}", type, entry))
+                                            + (lineId > 0 ? ibas.strings.format(", {0}-{1}", ibas.i18n.prop("bo_purchaseinvoicedownpayment_lineid"), lineId) : "");
+                                    }
+                                }),
+                                width: "12rem",
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_reference1"),
+                                template: new sap.extension.m.Input("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "reference1",
+                                    type: new sap.extension.data.Alphanumeric({
+                                        maxLength: 100
+                                    }),
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaseinvoicedownpayment_reference2"),
+                                template: new sap.extension.m.Input("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "reference2",
+                                    type: new sap.extension.data.Alphanumeric({
+                                        maxLength: 200
+                                    }),
                                 }),
                             }),
                         ]
@@ -1037,6 +1298,7 @@ namespace purchase {
 
                 private page: sap.extension.m.Page;
                 private tablePurchaseInvoiceItem: sap.extension.table.Table;
+                private tablePurchaseInvoiceDownPayment: sap.extension.table.Table;
                 private selectWarehouse: component.WarehouseSelect;
                 get defaultWarehouse(): string {
                     return this.selectWarehouse.getSelectedKey();
@@ -1059,6 +1321,10 @@ namespace purchase {
                 /** 显示数据-采购发票-行 */
                 showPurchaseInvoiceItems(datas: bo.PurchaseInvoiceItem[]): void {
                     this.tablePurchaseInvoiceItem.setModel(new sap.extension.model.JSONModel({ rows: datas }));
+                }
+                /** 显示数据-采购发票-预付款 */
+                showPurchaseInvoiceDownPayments(datas: bo.PurchaseInvoiceDownPayment[]): void {
+                    this.tablePurchaseInvoiceDownPayment.setModel(new sap.extension.model.JSONModel({ rows: datas }));
                 }
             }
         }

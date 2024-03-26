@@ -151,7 +151,7 @@ namespace purchase {
                             }).bindProperty("bindingValue", {
                                 path: "docNum",
                                 type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 20
+                                    maxLength: 50
                                 })
                             }).bindProperty("editable", {
                                 path: "series",
@@ -353,11 +353,9 @@ namespace purchase {
                                             parts: [
                                                 {
                                                     path: "quantity",
-                                                    type: new sap.extension.data.Quantity(),
                                                 },
                                                 {
                                                     path: "closedQuantity",
-                                                    type: new sap.extension.data.Quantity(),
 
                                                 }
                                             ],

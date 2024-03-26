@@ -270,6 +270,8 @@ declare namespace receiptpayment {
             branch: string;
             /** 预付款 */
             downPayment: ibas.emYesNo;
+            /** 已清金额 */
+            closedAmount: number;
             /** 付款-项目集合 */
             paymentItems: IPaymentItems;
         }
@@ -442,6 +444,8 @@ declare namespace receiptpayment {
             branch: string;
             /** 预收款 */
             downPayment: ibas.emYesNo;
+            /** 已清金额 */
+            closedAmount: number;
             /** 收款-项目集合 */
             receiptItems: IReceiptItems;
         }
@@ -999,6 +1003,12 @@ declare namespace receiptpayment {
             get downPayment(): ibas.emYesNo;
             /** 设置-预付款 */
             set downPayment(value: ibas.emYesNo);
+            /** 映射的属性名称-已清金额 */
+            static PROPERTY_CLOSEDAMOUNT_NAME: string;
+            /** 获取-已清金额 */
+            get closedAmount(): number;
+            /** 设置-已清金额 */
+            set closedAmount(value: number);
             /** 映射的属性名称-付款-项目集合 */
             static PROPERTY_PAYMENTITEMS_NAME: string;
             /** 获取-付款-项目集合 */
@@ -1490,6 +1500,12 @@ declare namespace receiptpayment {
             get downPayment(): ibas.emYesNo;
             /** 设置-预收款 */
             set downPayment(value: ibas.emYesNo);
+            /** 映射的属性名称-已清金额 */
+            static PROPERTY_CLOSEDAMOUNT_NAME: string;
+            /** 获取-已清金额 */
+            get closedAmount(): number;
+            /** 设置-已清金额 */
+            set closedAmount(value: number);
             /** 映射的属性名称-收款-项目集合 */
             static PROPERTY_RECEIPTITEMS_NAME: string;
             /** 获取-收款-项目集合 */
@@ -3004,6 +3020,220 @@ declare namespace receiptpayment {
             constructor();
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IBOEditServiceCaller<bo.AssetRecharge>>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        class InternalReconciliationFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        /** 列表应用-内部对账 */
+        class InternalReconciliationListApp extends ibas.BOListApplication<IInternalReconciliationListView, businesspartner.bo.InternalReconciliation> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: businesspartner.bo.InternalReconciliation): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: businesspartner.bo.InternalReconciliation): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: businesspartner.bo.InternalReconciliation | businesspartner.bo.InternalReconciliation[]): void;
+        }
+        /** 视图-内部对账 */
+        interface IInternalReconciliationListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: businesspartner.bo.InternalReconciliation[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        /** 选择应用-内部对账 */
+        class InternalReconciliationChooseApp extends ibas.BOChooseService<IInternalReconciliationChooseView, businesspartner.bo.InternalReconciliation> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-内部对账 */
+        interface IInternalReconciliationChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: businesspartner.bo.InternalReconciliation[]): void;
+        }
+        /** 内部对账选择服务映射 */
+        class InternalReconciliationChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<businesspartner.bo.InternalReconciliation>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        /** 查看应用-内部对账 */
+        class InternalReconciliationViewApp extends ibas.BOViewService<IInternalReconciliationViewView, businesspartner.bo.InternalReconciliation> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(): void;
+            run(): void;
+            run(data: businesspartner.bo.InternalReconciliation): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria | string): void;
+        }
+        /** 视图-内部对账 */
+        interface IInternalReconciliationViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            showInternalReconciliation(data: businesspartner.bo.InternalReconciliation): void;
+            /** 显示数据-内部对账-行 */
+            showInternalReconciliationLines(datas: businesspartner.bo.InternalReconciliationLine[]): void;
+        }
+        /** 内部对账连接服务映射 */
+        class InternalReconciliationLinkServiceMapping extends ibas.BOLinkServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOLinkService;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        /** 编辑应用-内部对账 */
+        class InternalReconciliationEditApp extends ibas.BOEditApplication<IInternalReconciliationEditView, businesspartner.bo.InternalReconciliation> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: businesspartner.bo.InternalReconciliation): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+            /** 添加内部对账-行事件 */
+            protected addInternalReconciliationLine(): void;
+            /** 删除内部对账-行事件 */
+            protected removeInternalReconciliationLine(items: businesspartner.bo.InternalReconciliationLine[]): void;
+        }
+        /** 视图-内部对账 */
+        interface IInternalReconciliationEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showInternalReconciliation(data: businesspartner.bo.InternalReconciliation): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
+            /** 添加内部对账-行事件 */
+            addInternalReconciliationLineEvent: Function;
+            /** 删除内部对账-行事件 */
+            removeInternalReconciliationLineEvent: Function;
+            /** 显示数据-内部对账-行 */
+            showInternalReconciliationLines(datas: businesspartner.bo.InternalReconciliationLine[]): void;
         }
     }
 }

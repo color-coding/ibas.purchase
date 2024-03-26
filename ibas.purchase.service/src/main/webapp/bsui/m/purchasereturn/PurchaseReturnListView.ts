@@ -263,7 +263,7 @@ namespace purchase {
                     return this.page = new sap.m.Page("", {
                         showHeader: false,
                         showSubHeader: false,
-                        floatingFooter: true,
+                        floatingFooter: ibas.config.get(openui5.CONFIG_ITEM_LIST_VIEW_FLOATING_FOOTER, true),
                         content: [
                             this.list
                         ],

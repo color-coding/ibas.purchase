@@ -830,6 +830,20 @@ public interface IPurchaseInvoice extends IBODocument, IShippingAddressParent {
 	void setPurchaseInvoiceItems(IPurchaseInvoiceItems value);
 
 	/**
+	 * 获取-采购发票-预付款集合
+	 * 
+	 * @return 值
+	 */
+	IPurchaseInvoiceDownPayments getPurchaseInvoiceDownPayments();
+
+	/**
+	 * 设置-采购发票-预付款集合
+	 * 
+	 * @param value 值
+	 */
+	void setPurchaseInvoiceDownPayments(IPurchaseInvoiceDownPayments value);
+
+	/**
 	 * 获取-送货地址集合
 	 * 
 	 * @return 值

@@ -667,6 +667,26 @@ namespace purchase {
                 condition.alias = bo.PurchaseQuote.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.PurchaseQuote.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
                 // 未过期的
                 condition = criteria.conditions.create();
                 condition.alias = bo.PurchaseQuote.PROPERTY_DELIVERYDATE_NAME;
@@ -983,12 +1003,34 @@ namespace purchase {
                             target.supplierCode = this.editData.supplierCode;
                             target.supplierName = this.editData.supplierName;
                             target.baseDocument(this.editData);
+                            // 预付款查询
+                            let condition: ibas.ICondition;
+                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                            let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                            cCriteria.propertyPath = receiptpayment.bo.Receipt.PROPERTY_RECEIPTITEMS_NAME;
+                            cCriteria.onlyHasChilds = true;
+                            for (let item of this.editData.purchaseOrderItems) {
+                                // 基于单据为订单
+                                condition = cCriteria.conditions.create();
+                                condition.alias = receiptpayment.bo.ReceiptItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                                condition.value = item.objectCode;
+                                condition.bracketOpen = 1;
+                                if (cCriteria.conditions.length > 2) {
+                                    condition.relationship = ibas.emConditionRelationship.OR;
+                                }
+                                condition = cCriteria.conditions.create();
+                                condition.alias = receiptpayment.bo.ReceiptItem.PROPERTY_BASEDOCUMENTENTRY_NAME;
+                                condition.value = item.docEntry.toString();
+                                condition.bracketClose = 1;
+                            }
 
                             let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;
                             app.run(target);
-
+                            if (target.isNew) {
+                                app.addPurchaseInvoiceDownPayment(criteria);
+                            }
                         } catch (error) {
                             this.messages(error);
                         }
@@ -1099,6 +1141,26 @@ namespace purchase {
                 condition.alias = bo.BlanketAgreement.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.BlanketAgreement.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
                 // 未过期的
                 condition = criteria.conditions.create();
                 condition.bracketOpen = 1;

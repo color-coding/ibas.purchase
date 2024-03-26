@@ -116,11 +116,9 @@ namespace purchase {
                                             parts: [
                                                 {
                                                     path: "quantity",
-                                                    type: new sap.extension.data.Quantity(),
                                                 },
                                                 {
                                                     path: "closedQuantity",
-                                                    type: new sap.extension.data.Quantity(),
 
                                                 }
                                             ],

@@ -340,11 +340,11 @@ namespace purchase {
                 condition.comparedAlias = purchase.bo.PurchaseInvoice.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
-                ibas.servicesManager.runChooseService<purchase.bo.IPurchaseInvoice>({
+                ibas.servicesManager.runChooseService<purchase.bo.PurchaseInvoice>({
                     boCode: purchase.bo.BO_CODE_PURCHASEINVOICE,
                     chooseType: ibas.emChooseType.MULTIPLE,
                     criteria: criteria,
-                    onCompleted(selecteds: ibas.IList<purchase.bo.IPurchaseInvoice>): void {
+                    onCompleted(selecteds: ibas.IList<purchase.bo.PurchaseInvoice>): void {
                         for (let selected of selecteds) {
                             if (contract.payment.paymentItems.firstOrDefault(
                                 c => c.baseDocumentType === selected.objectCode
@@ -352,12 +352,15 @@ namespace purchase {
                                     && c.baseDocumentLineId === -1) !== null) {
                                 continue;
                             }
+                            if ((selected.documentTotal - selected.paidTotal - selected.downPaymentTotal) <= 0) {
+                                continue;
+                            }
                             let item: receiptpayment.bo.PaymentItem = contract.payment.paymentItems.create();
                             item.baseDocumentType = selected.objectCode;
                             item.baseDocumentEntry = selected.docEntry;
                             item.baseDocumentLineId = -1;
                             item.consumer = selected.consumer;
-                            item.amount = selected.documentTotal - selected.paidTotal;
+                            item.amount = selected.documentTotal - selected.paidTotal - selected.downPaymentTotal;
                             item.currency = selected.documentCurrency;
                         }
                         that.fireCompleted(contract.payment.paymentItems);

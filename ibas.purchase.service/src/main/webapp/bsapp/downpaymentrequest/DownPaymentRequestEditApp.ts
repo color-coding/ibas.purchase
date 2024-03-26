@@ -497,6 +497,26 @@ namespace purchase {
                 condition.alias = bo.PurchaseOrder.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.PurchaseOrder.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
                 // 子项查询
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME;
@@ -588,6 +608,26 @@ namespace purchase {
                 condition.alias = bo.PurchaseDelivery.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.PurchaseDelivery.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
                 // 子项查询
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME;
@@ -709,6 +749,26 @@ namespace purchase {
                 condition.alias = bo.BlanketAgreement.PROPERTY_SUPPLIERCODE_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.BlanketAgreement.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
                 // 未过期的
                 condition = criteria.conditions.create();
                 condition.bracketOpen = 1;

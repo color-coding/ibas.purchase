@@ -2107,7 +2107,6 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
-								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
 								jeContents.add(jeContent);
 							} else {
 								// 库存科目
@@ -2170,7 +2169,6 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
-								jeContent.setShortName(PurchaseDelivery.this.getSupplierCode());
 								jeContents.add(jeContent);
 							} else {
 								// 库存科目
