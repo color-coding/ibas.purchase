@@ -1,13 +1,14 @@
 package org.colorcoding.ibas.purchase.logic.journalentry;
 
+import java.math.BigDecimal;
+
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.IChildCriteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.Decimal;
-import org.colorcoding.ibas.bobas.i18n.I18N;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
-import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDeliveryItem;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
@@ -16,21 +17,20 @@ import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoiceItem;
 import org.colorcoding.ibas.purchase.data.DataConvert;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
-public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartContent {
+public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends MaterialsInventoryCost {
 
-	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData) {
-		super(sourceData);
+	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData, BigDecimal quantity) {
+		super(sourceData, quantity);
+		this.setNegate(false);
 	}
 
-	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData, boolean negate) {
-		super(sourceData);
-		this.negate = negate;
+	public PurchaseInvoiceDeliveryPreTaxPriceDiff(Object sourceData, BigDecimal quantity, boolean negate) {
+		this(sourceData, quantity);
+		this.setNegate(negate);
 	}
-
-	private boolean negate = false;
 
 	@Override
-	public void caculate() throws Exception {
+	protected boolean caculate(String itemCode, String warehouse) {
 		if (this.getSourceData() instanceof IPurchaseInvoiceItem) {
 			IPurchaseInvoiceItem item = (IPurchaseInvoiceItem) this.getSourceData();
 			if (!DataConvert.isNullOrEmpty(item.getBaseDocumentType()) && item.getBaseDocumentEntry() > 0
@@ -63,18 +63,15 @@ public class PurchaseInvoiceDeliveryPreTaxPriceDiff extends JournalEntrySmartCon
 							continue;
 						}
 						// 金额 = 数量 * （税前价格 - 入库税前价格）
-						this.setAmount(Decimal.multiply(item.getQuantity(),
+						this.setAmount(Decimal.multiply(this.getQuantity(),
 								item.getPreTaxPrice().subtract(baseLine.getPreTaxPrice())));
-						if (this.negate) {
-							this.setAmount(this.getAmount().negate());
-						}
 						// 计算完成，退出
-						return;
+						return true;
 					}
 				}
 			}
 		}
-		throw new Exception(I18N.prop("msg_bobas_not_support_the_compute"));
+		return false;
 	}
 
 }

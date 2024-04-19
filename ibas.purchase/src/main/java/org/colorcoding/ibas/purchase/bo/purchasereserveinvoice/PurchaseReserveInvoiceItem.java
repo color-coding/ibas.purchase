@@ -33,10 +33,11 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
+import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
-import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2352,7 +2353,6 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_ITEMCODE), // 要求有值
-				new BusinessRuleRequired(PROPERTY_WAREHOUSE), // 要求有值
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_QUANTITY), // 不能低于0
@@ -2399,6 +2399,39 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
+				// 物料及仓库检查
+				new IMaterialWarehouseCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseReserveInvoiceItem.this.getIdentifiers();
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseReserveInvoiceItem.this.getItemCode();
+					}
+
+					@Override
+					public String getItemVersion() {
+						return PurchaseReserveInvoiceItem.this.getItemVersion();
+					}
+
+					@Override
+					public emYesNo getBatchManagement() {
+						return PurchaseReserveInvoiceItem.this.getBatchManagement();
+					}
+
+					@Override
+					public emYesNo getSerialManagement() {
+						return PurchaseReserveInvoiceItem.this.getSerialManagement();
+					}
+
+					@Override
+					public String getWarehouse() {
+						return PurchaseReserveInvoiceItem.this.getWarehouse();
+					}
+				},
 				// 一揽子协议
 				new IBlanketAgreementQuantityContract() {
 

@@ -1,13 +1,14 @@
 package org.colorcoding.ibas.purchase.logic.journalentry;
 
+import java.math.BigDecimal;
+
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.IChildCriteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.Decimal;
-import org.colorcoding.ibas.bobas.i18n.I18N;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
-import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.purchase.bo.purchasecreditnote.IPurchaseCreditNoteItem;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDeliveryItem;
@@ -16,14 +17,15 @@ import org.colorcoding.ibas.purchase.bo.purchaseinvoice.IPurchaseInvoiceItem;
 import org.colorcoding.ibas.purchase.data.DataConvert;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
-public class PurchaseCreditNoteInvoicePreTaxPrice extends JournalEntrySmartContent {
+public class PurchaseCreditNoteInvoicePreTaxPrice extends MaterialsInventoryCost {
 
-	public PurchaseCreditNoteInvoicePreTaxPrice(Object sourceData) {
-		super(sourceData);
+	public PurchaseCreditNoteInvoicePreTaxPrice(Object sourceData, BigDecimal quantity) {
+		super(sourceData, quantity);
+		this.setNegate(true);
 	}
 
 	@Override
-	public void caculate() throws Exception {
+	protected boolean caculate(String itemCode, String warehouse) {
 		if (this.getSourceData() instanceof IPurchaseCreditNoteItem) {
 			IPurchaseCreditNoteItem item = (IPurchaseCreditNoteItem) this.getSourceData();
 			if (!DataConvert.isNullOrEmpty(item.getBaseDocumentType()) && item.getBaseDocumentEntry() > 0
@@ -55,14 +57,14 @@ public class PurchaseCreditNoteInvoicePreTaxPrice extends JournalEntrySmartConte
 						if (item.getBaseDocumentLineId().compareTo(baseLine.getLineId()) != 0) {
 							continue;
 						}
-						this.setAmount(Decimal.multiply(item.getQuantity(), item.getPreTaxPrice()).negate());
+						this.setAmount(Decimal.multiply(this.getQuantity(), item.getPreTaxPrice()));
 						// 计算完成，退出
-						return;
+						return true;
 					}
 				}
 			}
 		}
-		throw new Exception(I18N.prop("msg_bobas_not_support_the_compute"));
+		return false;
 	}
 
 }

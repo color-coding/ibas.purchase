@@ -32,14 +32,15 @@ import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItems;
 import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialOrderedJournalContract;
+import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReservationCreateContract;
 import org.colorcoding.ibas.sales.bo.salesorder.SalesOrder;
-import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.sales.logic.ISalesOrderOrderContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2390,7 +2391,6 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_ITEMCODE), // 要求有值
-				new BusinessRuleRequired(PROPERTY_WAREHOUSE), // 要求有值
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_QUANTITY), // 不能低于0
@@ -2437,7 +2437,40 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(6);
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(8);
+		// 物料及仓库检查
+		contracts.add(new IMaterialWarehouseCheckContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseOrderItem.this.getIdentifiers();
+			}
+
+			@Override
+			public String getItemCode() {
+				return PurchaseOrderItem.this.getItemCode();
+			}
+
+			@Override
+			public String getItemVersion() {
+				return PurchaseOrderItem.this.getItemVersion();
+			}
+
+			@Override
+			public emYesNo getBatchManagement() {
+				return PurchaseOrderItem.this.getBatchManagement();
+			}
+
+			@Override
+			public emYesNo getSerialManagement() {
+				return PurchaseOrderItem.this.getSerialManagement();
+			}
+
+			@Override
+			public String getWarehouse() {
+				return PurchaseOrderItem.this.getWarehouse();
+			}
+		});
 		// 物料已订购数量
 		contracts.add(new IMaterialOrderedJournalContract() {
 

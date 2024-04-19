@@ -49,13 +49,13 @@ import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCost;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCostDiff;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
-import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseDeliveryMaterialsCost;
-import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseDeliveryMaterialsCostDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2146,18 +2146,19 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 							if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getBaseDocumentType())) {
 								/** 基于预留发票 **/
 								// 库存科目
-								jeContent = new PurchaseDeliveryMaterialsCost(line);
+								jeContent = new MaterialsReceiptReverseCost(line, line.getInventoryQuantity(), true);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 价格差异科目
-								jeContent = new PurchaseDeliveryMaterialsCostDiff(line);
+								jeContent = new MaterialsReceiptReverseCostDiff(line, line.getInventoryQuantity(),
+										true);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
@@ -2172,18 +2173,19 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 								jeContents.add(jeContent);
 							} else {
 								// 库存科目
-								jeContent = new PurchaseDeliveryMaterialsCost(line);
+								jeContent = new MaterialsReceiptReverseCost(line, line.getInventoryQuantity(), true);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 价格差异科目
-								jeContent = new PurchaseDeliveryMaterialsCostDiff(line);
+								jeContent = new MaterialsReceiptReverseCostDiff(line, line.getInventoryQuantity(),
+										true);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);

@@ -16,11 +16,14 @@ import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
@@ -33,7 +36,8 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseQuoteItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
-public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem> implements IPurchaseQuoteItem, IBOUserFields {
+public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
+		implements IPurchaseQuoteItem, IBOUserFields, IBusinessLogicsHost {
 
 	private static final long serialVersionUID = -1573937349648316698L;
 
@@ -2334,4 +2338,45 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem> impleme
 	 * 父项
 	 */
 	IPurchaseQuote parent;
+
+	@Override
+	public IBusinessLogicContract[] getContracts() {
+		return new IBusinessLogicContract[] {
+				// 物料及仓库检查
+				new IMaterialWarehouseCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseQuoteItem.this.getIdentifiers();
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseQuoteItem.this.getItemCode();
+					}
+
+					@Override
+					public String getItemVersion() {
+						return PurchaseQuoteItem.this.getItemVersion();
+					}
+
+					@Override
+					public emYesNo getBatchManagement() {
+						return PurchaseQuoteItem.this.getBatchManagement();
+					}
+
+					@Override
+					public emYesNo getSerialManagement() {
+						return PurchaseQuoteItem.this.getSerialManagement();
+					}
+
+					@Override
+					public String getWarehouse() {
+						return PurchaseQuoteItem.this.getWarehouse();
+					}
+				}
+
+		};
+
+	}
 }

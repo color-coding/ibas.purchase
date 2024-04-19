@@ -52,6 +52,8 @@ import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCost;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCostDiff;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
@@ -60,8 +62,6 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPrice;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDeliveryPreTaxPriceDiff;
 import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceDownPaymentAmount;
-import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCost;
-import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseInvoiceMaterialsCostDiff;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2164,7 +2164,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 					if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
 						/** 基于交货 **/
 						// 分配科目
-						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line);
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, line.getInventoryQuantity());
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
@@ -2172,10 +2172,10 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
 						// 库存科目
-						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line);
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, line.getInventoryQuantity());
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-						jeContent.setAmount(Decimal.ZERO);// 待计算
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 						jeContent.setCurrency(line.getCurrency());
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
@@ -2255,7 +2255,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 					if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
 						/** 基于交货 **/
 						// 分配科目
-						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, true);
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPrice(line, line.getInventoryQuantity(), true);
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
 						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
@@ -2263,10 +2263,10 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
 						// 库存科目
-						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, true);
+						jeContent = new PurchaseInvoiceDeliveryPreTaxPriceDiff(line, line.getInventoryQuantity(), true);
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-						jeContent.setAmount(Decimal.ZERO);// 待计算
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 						jeContent.setCurrency(line.getCurrency());
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
@@ -2281,18 +2281,18 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 					} else {
 						/** 不基于单据 **/
 						// 库存科目
-						jeContent = new PurchaseInvoiceMaterialsCost(line);
+						jeContent = new MaterialsReceiptReverseCost(line, line.getInventoryQuantity(), true);
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-						jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 						jeContent.setCurrency(line.getCurrency());
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
 						// 价格差异科目
-						jeContent = new PurchaseInvoiceMaterialsCostDiff(line);
+						jeContent = new MaterialsReceiptReverseCostDiff(line, line.getInventoryQuantity(), true);
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
-						jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 						jeContent.setCurrency(line.getCurrency());
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
@@ -2360,35 +2360,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 			public IDocumentReconciliationContent[] getContents() {
 				ArrayList<IDocumentReconciliationContent> contents = new ArrayList<>(
 						PurchaseInvoice.this.getPurchaseInvoiceDownPayments().size() + 1);
-				contents.add(new IDocumentReconciliationContent() {
-
-					@Override
-					public String getShortName() {
-						return PurchaseInvoice.this.getSupplierCode();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return PurchaseInvoice.this.getObjectCode();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return PurchaseInvoice.this.getDocEntry();
-					}
-
-					@Override
-					public BigDecimal getAmount() {
-						return PurchaseInvoice.this.getDownPaymentTotal().negate();
-					}
-
-					@Override
-					public String getCurrency() {
-						return PurchaseInvoice.this.getDocumentCurrency();
-					}
-
-				});
-				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+				if (!PurchaseInvoice.this.getPurchaseInvoiceDownPayments().isEmpty()) {
 					contents.add(new IDocumentReconciliationContent() {
 
 						@Override
@@ -2398,25 +2370,55 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 
 						@Override
 						public String getBaseDocumentType() {
-							return item.getBaseDocumentType();
+							return PurchaseInvoice.this.getObjectCode();
 						}
 
 						@Override
 						public Integer getBaseDocumentEntry() {
-							return item.getBaseDocumentEntry();
+							return PurchaseInvoice.this.getDocEntry();
 						}
 
 						@Override
 						public BigDecimal getAmount() {
-							return item.getDrawnTotal();
+							return PurchaseInvoice.this.getDownPaymentTotal().negate();
 						}
 
 						@Override
 						public String getCurrency() {
-							return item.getPaymentCurrency();
+							return PurchaseInvoice.this.getDocumentCurrency();
 						}
 
 					});
+					for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+						contents.add(new IDocumentReconciliationContent() {
+
+							@Override
+							public String getShortName() {
+								return PurchaseInvoice.this.getSupplierCode();
+							}
+
+							@Override
+							public String getBaseDocumentType() {
+								return item.getBaseDocumentType();
+							}
+
+							@Override
+							public Integer getBaseDocumentEntry() {
+								return item.getBaseDocumentEntry();
+							}
+
+							@Override
+							public BigDecimal getAmount() {
+								return item.getDrawnTotal();
+							}
+
+							@Override
+							public String getCurrency() {
+								return item.getPaymentCurrency();
+							}
+
+						});
+					}
 				}
 				return contents.toArray(new IDocumentReconciliationContent[] {});
 			}

@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
-import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
@@ -2221,42 +2220,42 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(2);
-		// 订购预留关闭
-		contracts.add(new IMaterialOrderedReservationStatusContract() {
+		return new IBusinessLogicContract[] {
+				// 订购预留关闭
+				new IMaterialOrderedReservationStatusContract() {
 
-			@Override
-			public String getIdentifiers() {
-				return PurchaseRequestItem.this.getIdentifiers();
-			}
+					@Override
+					public String getIdentifiers() {
+						return PurchaseRequestItem.this.getIdentifiers();
+					}
 
-			@Override
-			public String getSourceDocumentType() {
-				return PurchaseRequestItem.this.getObjectCode();
-			}
+					@Override
+					public String getSourceDocumentType() {
+						return PurchaseRequestItem.this.getObjectCode();
+					}
 
-			@Override
-			public Integer getSourceDocumentEntry() {
-				return PurchaseRequestItem.this.getDocEntry();
-			}
+					@Override
+					public Integer getSourceDocumentEntry() {
+						return PurchaseRequestItem.this.getDocEntry();
+					}
 
-			@Override
-			public Integer getSourceDocumentLineId() {
-				return PurchaseRequestItem.this.getLineId();
-			}
+					@Override
+					public Integer getSourceDocumentLineId() {
+						return PurchaseRequestItem.this.getLineId();
+					}
 
-			@Override
-			public emDocumentStatus getSourceDocumentStatus() {
-				if (PurchaseRequestItem.this.getCanceled() == emYesNo.YES) {
-					return emDocumentStatus.CLOSED;
+					@Override
+					public emDocumentStatus getSourceDocumentStatus() {
+						if (PurchaseRequestItem.this.getCanceled() == emYesNo.YES) {
+							return emDocumentStatus.CLOSED;
+						}
+						if (PurchaseRequestItem.this.getDeleted() == emYesNo.YES) {
+							return emDocumentStatus.CLOSED;
+						}
+						return PurchaseRequestItem.this.getLineStatus();
+					}
 				}
-				if (PurchaseRequestItem.this.getDeleted() == emYesNo.YES) {
-					return emDocumentStatus.CLOSED;
-				}
-				return PurchaseRequestItem.this.getLineStatus();
-			}
 
-		});
-		return contracts.toArray(new IBusinessLogicContract[] {});
+		};
 	}
 }

@@ -49,13 +49,13 @@ import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
-import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseCreditNoteMaterialsCost;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -2129,18 +2129,18 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> imple
 							} else {
 								/** 不基于单据 **/
 								// 库存科目
-								jeContent = new PurchaseCreditNoteMaterialsCost(line);
+								jeContent = new MaterialsInventoryCost(line, line.getInventoryQuantity(), true);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(Decimal.ZERO);// 待计算
+								jeContent.setAmount(line.getPreTaxLineTotal());
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 								// 税科目
-								jeContent = new PurchaseCreditNoteMaterialsCost(line);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-								jeContent.setAmount(Decimal.ZERO);// 待计算
+								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);

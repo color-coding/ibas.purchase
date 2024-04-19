@@ -39,9 +39,6 @@ public class PurchaseInvoiceDownPaymentAmount extends JournalEntrySmartContent {
 				BORepositoryAccounting boRepository = new BORepositoryAccounting();
 				boRepository.setRepository(this.getService().getRepository());
 				IOperationResult<IJournalEntry> operationResult = boRepository.fetchJournalEntry(criteria);
-				if (operationResult.getError() != null) {
-					throw operationResult.getError();
-				}
 				for (IJournalEntry journalEntry : operationResult.getResultObjects()) {
 					for (IJournalEntryLine line : journalEntry.getJournalEntryLines()) {
 						if (DataConvert.isNullOrEmpty(line.getShortName())) {
