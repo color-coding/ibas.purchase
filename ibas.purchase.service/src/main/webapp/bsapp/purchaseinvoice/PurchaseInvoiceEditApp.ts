@@ -1288,8 +1288,54 @@ namespace purchase {
             /** 添加销售发票-预收款事件 */
             public addPurchaseInvoiceDownPayment(criteria?: ibas.ICriteria): void {
                 let condition: ibas.ICondition;
+                let boRepository: receiptpayment.bo.BORepositoryReceiptPayment;
                 if (ibas.objects.isNull(criteria)) {
                     criteria = new ibas.Criteria();
+                    let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                    cCriteria.propertyPath = receiptpayment.bo.Payment.PROPERTY_PAYMENTITEMS_NAME;
+                    cCriteria.onlyHasChilds = true;
+                    // 不基于单据
+                    condition = cCriteria.conditions.create();
+                    condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = cCriteria.conditions.create();
+                    condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.bracketClose = 1;
+                    let orderType: string = ibas.config.applyVariables(bo.PurchaseOrder.BUSINESS_OBJECT_CODE);
+                    let deliveryType: string = ibas.config.applyVariables(bo.PurchaseDelivery.BUSINESS_OBJECT_CODE);
+                    for (let item of this.editData.purchaseInvoiceItems) {
+                        if (ibas.strings.equals(item.baseDocumentType, orderType) || ibas.strings.equals(item.baseDocumentType, deliveryType)) {
+                            // 基于单据相同
+                            condition = cCriteria.conditions.create();
+                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                            condition.value = item.baseDocumentType;
+                            condition.bracketOpen = 1;
+                            if (cCriteria.conditions.length > 2) {
+                                condition.relationship = ibas.emConditionRelationship.OR;
+                            }
+                            condition = cCriteria.conditions.create();
+                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTENTRY_NAME;
+                            condition.value = item.baseDocumentEntry.toString();
+                            condition.bracketClose = 1;
+                        }
+                        if (ibas.strings.equals(item.originalDocumentType, orderType)) {
+                            condition = cCriteria.conditions.create();
+                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
+                            condition.value = item.originalDocumentType;
+                            condition.bracketOpen = 1;
+                            if (cCriteria.conditions.length > 2) {
+                                condition.relationship = ibas.emConditionRelationship.OR;
+                            }
+                            condition = cCriteria.conditions.create();
+                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTENTRY_NAME;
+                            condition.value = item.baseDocumentEntry.toString();
+                            condition.bracketClose = 1;
+                        }
+                    }
+                } else {
+                    boRepository = new receiptpayment.bo.BORepositoryReceiptPayment();
                 }
                 // 未取消的
                 condition = criteria.conditions.create();
@@ -1347,26 +1393,24 @@ namespace purchase {
                 condition = criteria.conditions.create();
                 condition.alias = receiptpayment.bo.Payment.PROPERTY_DOCUMENTTOTAL_NAME;
                 condition.operation = ibas.emConditionOperation.GRATER_THAN;
-                condition.value = "0";
-
-                let boRepository: receiptpayment.bo.BORepositoryReceiptPayment = new receiptpayment.bo.BORepositoryReceiptPayment();
-                boRepository.fetchPayment({
-                    criteria: criteria,
-                    onCompleted: (opRslt) => {
-                        try {
-                            if (opRslt.resultCode !== 0) {
-                                throw new Error(opRslt.message);
-                            }
-                            let amount: number = ibas.numbers.valueOf(this.editData.documentTotal)
-                                - ibas.numbers.valueOf(this.editData.paidTotal) - ibas.numbers.valueOf(this.editData.downPaymentTotal);
-                            for (let item of opRslt.resultObjects) {
+                condition.comparedAlias = receiptpayment.bo.Payment.PROPERTY_CLOSEDAMOUNT_NAME;
+                if (ibas.objects.isNull(boRepository)) {
+                    let that: this = this;
+                    ibas.servicesManager.runChooseService<receiptpayment.bo.Payment>({
+                        boCode: receiptpayment.bo.Payment.BUSINESS_OBJECT_CODE,
+                        chooseType: ibas.emChooseType.MULTIPLE,
+                        criteria: criteria,
+                        onCompleted(selecteds: ibas.IList<receiptpayment.bo.Payment>): void {
+                            let amount: number = ibas.numbers.valueOf(that.editData.documentTotal)
+                                - ibas.numbers.valueOf(that.editData.paidTotal) - ibas.numbers.valueOf(that.editData.downPaymentTotal);
+                            for (let item of selecteds) {
                                 for (let sItem of item.paymentItems) {
-                                    if (!ibas.objects.isNull(this.editData.purchaseInvoiceDownPayments.firstOrDefault(
+                                    if (!ibas.objects.isNull(that.editData.purchaseInvoiceDownPayments.firstOrDefault(
                                         c => c.paymentType === sItem.objectCode && c.paymentEntry === sItem.docEntry && c.paymentLineId === sItem.lineId
                                     ))) {
                                         continue;
                                     }
-                                    let item: bo.PurchaseInvoiceDownPayment = this.editData.purchaseInvoiceDownPayments.create();
+                                    let item: bo.PurchaseInvoiceDownPayment = that.editData.purchaseInvoiceDownPayments.create();
                                     item.baseDocument(sItem);
                                     if (amount > sItem.amount) {
                                         item.drawnTotal = sItem.amount;
@@ -1374,14 +1418,52 @@ namespace purchase {
                                         item.drawnTotal = amount;
                                     }
                                     amount -= item.drawnTotal;
+                                    if (amount <= 0) {
+                                        break;
+                                    }
+                                }
+                                if (amount <= 0) {
+                                    that.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("purchase_documents_no_amount_to_be_paid"));
+                                    break;
                                 }
                             }
-                            this.view.showPurchaseInvoiceDownPayments(this.editData.purchaseInvoiceDownPayments.filterDeleted());
-                        } catch (error) {
-                            this.messages(error);
+                            that.view.showPurchaseInvoiceDownPayments(that.editData.purchaseInvoiceDownPayments.filterDeleted());
                         }
-                    }
-                });
+                    });
+                } else {
+                    boRepository.fetchPayment({
+                        criteria: criteria,
+                        onCompleted: (opRslt) => {
+                            try {
+                                if (opRslt.resultCode !== 0) {
+                                    throw new Error(opRslt.message);
+                                }
+                                let amount: number = ibas.numbers.valueOf(this.editData.documentTotal)
+                                    - ibas.numbers.valueOf(this.editData.paidTotal) - ibas.numbers.valueOf(this.editData.downPaymentTotal);
+                                for (let item of opRslt.resultObjects) {
+                                    for (let sItem of item.paymentItems) {
+                                        if (!ibas.objects.isNull(this.editData.purchaseInvoiceDownPayments.firstOrDefault(
+                                            c => c.paymentType === sItem.objectCode && c.paymentEntry === sItem.docEntry && c.paymentLineId === sItem.lineId
+                                        ))) {
+                                            continue;
+                                        }
+                                        let item: bo.PurchaseInvoiceDownPayment = this.editData.purchaseInvoiceDownPayments.create();
+                                        item.baseDocument(sItem);
+                                        if (amount > sItem.amount) {
+                                            item.drawnTotal = sItem.amount;
+                                        } else {
+                                            item.drawnTotal = amount;
+                                        }
+                                        amount -= item.drawnTotal;
+                                    }
+                                }
+                                this.view.showPurchaseInvoiceDownPayments(this.editData.purchaseInvoiceDownPayments.filterDeleted());
+                            } catch (error) {
+                                this.messages(error);
+                            }
+                        }
+                    });
+                }
             }
             /** 删除销售发票-预收款事件 */
             protected removePurchaseInvoiceDownPayment(items: bo.PurchaseInvoiceDownPayment[]): void {
