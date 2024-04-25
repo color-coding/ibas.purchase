@@ -35,6 +35,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceContract;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
@@ -2475,6 +2476,35 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 			@Override
 			public BigDecimal getQuantity() {
 				return PurchaseInvoiceItem.this.getQuantity();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseInvoiceItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseInvoiceItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseInvoiceItem.this.getBaseDocumentLineId();
+			}
+
+		});
+		// 基于单据完成金额
+		contracts.add(new IDocumentAmountClosingContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseInvoiceItem.this.getIdentifiers();
+			}
+
+			@Override
+			public BigDecimal getAmount() {
+				return PurchaseInvoiceItem.this.getPreTaxLineTotal();
 			}
 
 			@Override

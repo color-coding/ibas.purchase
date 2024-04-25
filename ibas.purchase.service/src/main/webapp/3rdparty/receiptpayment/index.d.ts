@@ -3167,6 +3167,8 @@ declare namespace receiptpayment {
             run(data: businesspartner.bo.InternalReconciliation): void;
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria | string): void;
+            /** 删除数据 */
+            protected deleteData(): void;
         }
         /** 视图-内部对账 */
         interface IInternalReconciliationViewView extends ibas.IBOViewView {
@@ -3174,6 +3176,8 @@ declare namespace receiptpayment {
             showInternalReconciliation(data: businesspartner.bo.InternalReconciliation): void;
             /** 显示数据-内部对账-行 */
             showInternalReconciliationLines(datas: businesspartner.bo.InternalReconciliationLine[]): void;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
         }
         /** 内部对账连接服务映射 */
         class InternalReconciliationLinkServiceMapping extends ibas.BOLinkServiceMapping {
@@ -3234,6 +3238,101 @@ declare namespace receiptpayment {
             removeInternalReconciliationLineEvent: Function;
             /** 显示数据-内部对账-行 */
             showInternalReconciliationLines(datas: businesspartner.bo.InternalReconciliationLine[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        class InternalReconciliation extends ibas.Bindable {
+            constructor(data: bo.Receipt | bo.Payment | sales.bo.SalesInvoice | sales.bo.SalesCreditNote | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote);
+            data: bo.Receipt | bo.Payment | sales.bo.SalesInvoice | sales.bo.SalesCreditNote | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote;
+            /** 获取-单据类型 */
+            get documentType(): string;
+            /** 设置-单据类型 */
+            set documentType(value: string);
+            /** 获取-单据标识 */
+            get documentEntry(): number;
+            /** 设置-单据标识 */
+            set documentEntry(value: number);
+            /** 获取-过账日期 */
+            get postingDate(): Date;
+            /** 设置-过账日期 */
+            set postingDate(value: Date);
+            /** 获取-到期日 */
+            get deliveryDate(): Date;
+            /** 设置-到期日 */
+            set deliveryDate(value: Date);
+            /** 获取-凭证日期 */
+            get documentDate(): Date;
+            /** 设置-凭证日期 */
+            set documentDate(value: Date);
+            /** 获取-单据货币 */
+            get documentCurrency(): string;
+            /** 设置-单据货币 */
+            set documentCurrency(value: string);
+            /** 获取-单据汇率 */
+            get documentRate(): number;
+            /** 设置-单据汇率 */
+            set documentRate(value: number);
+            /** 获取-单据总计 */
+            get documentTotal(): number;
+            /** 设置-单据总计 */
+            set documentTotal(value: number);
+            /** 获取-已清金额 */
+            get closedAmount(): number;
+            /** 设置-已清金额 */
+            set closedAmount(value: number);
+            /** 获取-参考1 */
+            get reference1(): string;
+            /** 设置-参考1 */
+            set reference1(value: string);
+            /** 获取-参考2 */
+            get reference2(): string;
+            /** 设置-参考2 */
+            set reference2(value: string);
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 获取-提取金额 */
+            get drawnTotal(): number;
+            /** 设置-提取金额 */
+            set drawnTotal(value: number);
+            get shortName(): string;
+        }
+        /** 应用-内部对账 */
+        class InternalReconciliationApp extends ibas.Application<IInternalReconciliationView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private fetchDocuments;
+            /** 对账事件 */
+            private reconcile;
+        }
+        /** 视图-内部对账 */
+        interface IInternalReconciliationView extends ibas.IView {
+            /** 显示数据 */
+            showDocuments(datas: InternalReconciliation[]): void;
+            /** 查询数据事件 */
+            fetchDocumentsEvent: Function;
+            /** 对账事件 */
+            reconcileEvent: Function;
+            /** 显示结果 */
+            showResults(datas: businesspartner.bo.InternalReconciliation[]): void;
         }
     }
 }

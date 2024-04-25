@@ -152,25 +152,29 @@ namespace purchase {
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
                                     ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
-                                // 保存序列号信息
-                                if (!ibas.objects.isNull(that.serials) && that.serials.save instanceof Function) {
-                                    that.serials.save(
-                                        (error) => {
-                                            if (error instanceof Error) {
-                                                that.messages(error);
+                                if (that.editData.isDeleted !== true
+                                    && that.editData.canceled !== ibas.emYesNo.YES
+                                    && that.editData.deleted !== ibas.emYesNo.YES) {
+                                    // 保存序列号信息
+                                    if (!ibas.objects.isNull(that.serials) && that.serials.save instanceof Function) {
+                                        that.serials.save(
+                                            (error) => {
+                                                if (error instanceof Error) {
+                                                    that.messages(error);
+                                                }
                                             }
-                                        }
-                                    );
-                                }
-                                // 保存批次号信息
-                                if (!ibas.objects.isNull(that.batches) && that.batches.save instanceof Function) {
-                                    that.batches.save(
-                                        (error) => {
-                                            if (error instanceof Error) {
-                                                that.messages(error);
+                                        );
+                                    }
+                                    // 保存批次号信息
+                                    if (!ibas.objects.isNull(that.batches) && that.batches.save instanceof Function) {
+                                        that.batches.save(
+                                            (error) => {
+                                                if (error instanceof Error) {
+                                                    that.messages(error);
+                                                }
                                             }
-                                        }
-                                    );
+                                        );
+                                    }
                                 }
                             }
                             // 刷新当前视图

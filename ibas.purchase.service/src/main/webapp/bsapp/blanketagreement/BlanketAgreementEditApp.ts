@@ -58,6 +58,7 @@ namespace purchase {
                         onCompleted: (opRslt) => {
                             let supplier: businesspartner.bo.Supplier = opRslt.resultObjects.firstOrDefault();
                             if (!ibas.objects.isNull(supplier)) {
+                                this.supplier = supplier;
                                 if (!ibas.strings.isEmpty(supplier.taxGroup)) {
                                     this.view.defaultTaxGroup = supplier.taxGroup;
                                 }
@@ -197,7 +198,10 @@ namespace purchase {
                 if (this.editData.agreementMethod === bo.emAgreementMethod.ITEM) {
                     this.chooseBlanketAgreementItemMaterial(null);
                 } else {
-                    this.editData.blanketAgreementItems.create();
+                    let item: bo.IBlanketAgreementItem = this.editData.blanketAgreementItems.create();
+                    if (!ibas.objects.isNull(this.supplier)) {
+                        item.currency = this.supplier.currency;
+                    }
                     // 仅显示没有标记删除的
                     this.view.showBlanketAgreementItems(this.editData.blanketAgreementItems.filterDeleted());
                 }
@@ -226,15 +230,16 @@ namespace purchase {
                 // 仅显示没有标记删除的
                 this.view.showBlanketAgreementItems(this.editData.blanketAgreementItems.filterDeleted());
             }
-            /** 选择一揽子协议客户事件 */
+            private supplier: businesspartner.bo.Supplier;
+            /** 选择一揽子协议供应商事件 */
             private chooseBlanketAgreementSupplier(): void {
                 let that: this = this;
-                ibas.servicesManager.runChooseService<businesspartner.bo.ISupplier>({
+                ibas.servicesManager.runChooseService<businesspartner.bo.Supplier>({
                     boCode: businesspartner.bo.BO_CODE_SUPPLIER,
                     chooseType: ibas.emChooseType.SINGLE,
                     criteria: businesspartner.app.conditions.supplier.create(),
-                    onCompleted(selecteds: ibas.IList<businesspartner.bo.ISupplier>): void {
-                        let selected: businesspartner.bo.ISupplier = selecteds.firstOrDefault();
+                    onCompleted(selecteds: ibas.IList<businesspartner.bo.Supplier>): void {
+                        let selected: businesspartner.bo.Supplier = selecteds.firstOrDefault();
                         that.editData.supplierCode = selected.code;
                         that.editData.supplierName = selected.name;
                         that.editData.contactPerson = selected.contactPerson;
@@ -242,6 +247,7 @@ namespace purchase {
                         if (!ibas.strings.isEmpty(selected.taxGroup)) {
                             that.view.defaultTaxGroup = selected.taxGroup;
                         }
+                        that.supplier = selected;
                     }
                 });
             }
@@ -322,6 +328,9 @@ namespace purchase {
                                         }
                                     });
                                 }
+                            }
+                            if (!ibas.objects.isNull(that.supplier)) {
+                                item.currency = that.supplier.currency;
                             }
                             item = null;
                         }
@@ -426,7 +435,7 @@ namespace purchase {
             removeBlanketAgreementItemEvent: Function;
             /** 显示数据-一揽子协议-项目 */
             showBlanketAgreementItems(datas: bo.BlanketAgreementItem[]): void;
-            /** 选择一揽子协议客户事件 */
+            /** 选择一揽子协议供应商事件 */
             chooseBlanketAgreementSupplierEvent: Function;
             /** 选择一揽子协议联系人信息 */
             chooseBlanketAgreementContactPersonEvent: Function;

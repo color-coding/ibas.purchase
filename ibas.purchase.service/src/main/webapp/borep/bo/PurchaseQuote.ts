@@ -719,15 +719,17 @@ namespace purchase {
                         myItem.taxRate = item.taxRate;
                         // 复制自定义字段
                         for (let uItem of item.userFields.forEach()) {
-                            let myUItem: ibas.IUserField = myItem.userFields.get(uItem.name);
-                            if (ibas.objects.isNull(myUItem)) {
-                                // myUItem = myItem.userFields.register(uItem.name, uItem.valueType);
+                            let myItem: ibas.IUserField = this.userFields.get(uItem.name);
+                            if (ibas.objects.isNull(myItem)) {
+                                if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
+                                    continue;
+                                }
+                                myItem = this.userFields.register(uItem.name, uItem.valueType);
+                            }
+                            if (myItem.valueType !== uItem.valueType) {
                                 continue;
                             }
-                            if (myUItem.valueType !== uItem.valueType) {
-                                continue;
-                            }
-                            myUItem.value = uItem.value;
+                            myItem.value = uItem.value;
                         }
                         // 复制额外信息
                         for (let extra of item.purchaseRequestItemExtras) {

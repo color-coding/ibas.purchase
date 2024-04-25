@@ -187,7 +187,11 @@ declare namespace materials {
             /**
              * 移动平均
              */
-            MOVING_AVERAGE = 0
+            MOVING_AVERAGE = 0,
+            /**
+             * 批次移动平均
+             */
+            BATCH_MOVING_AVERAGE = 1
         }
         /**
          * 拣配状态
@@ -1486,6 +1490,8 @@ declare namespace materials {
             createActionId: string;
             /** 更新动作标识 */
             updateActionId: string;
+            /** 备注 */
+            remarks: string;
         }
         /** 物料批次记录集合 */
         interface IMaterialBatchItems extends ibas.IBusinessObjects<IMaterialBatchItem> {
@@ -1622,6 +1628,12 @@ declare namespace materials {
             get updateActionId(): string;
             /** 设置-更新动作标识 */
             set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -2137,6 +2149,8 @@ declare namespace materials {
             createActionId: string;
             /** 更新动作标识 */
             updateActionId: string;
+            /** 备注 */
+            remarks: string;
         }
         /** 物料序列记录集合 */
         interface IMaterialSerialItems extends ibas.IBusinessObjects<IMaterialSerialItem> {
@@ -2267,6 +2281,12 @@ declare namespace materials {
             get updateActionId(): string;
             /** 设置-更新动作标识 */
             set updateActionId(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -14517,6 +14537,8 @@ declare namespace materials {
             get targetMaterial(): bo.Material;
             set targetMaterial(value: bo.Material);
             reservations: ibas.IList<MaterialNumberReservation>;
+            get remarks(): string;
+            set remarks(value: string);
             get reservationQuantity(): number;
             get transferQuantity(): number;
             check(blocked: boolean): void;
@@ -14783,6 +14805,9 @@ declare namespace materials {
             /** 数量 */
             get quantity(): number;
             set quantity(value: number);
+            /** 备注 */
+            get remarks(): string;
+            set remarks(value: string);
             /** 供应商序号 */
             get supplierSerial(): string;
             set supplierSerial(value: string);
@@ -14809,7 +14834,7 @@ declare namespace materials {
             set notes(value: string);
         }
         class ExtraResultMaterialBatch implements IExtraResultMaterialBatch {
-            constructor(itemCode: string, warehouse: string);
+            constructor(itemCode: string, warehouse: string, batchCode: string);
             get isDirty(): boolean;
             /** 物料编码 */
             itemCode: string;
@@ -15536,6 +15561,9 @@ declare namespace materials {
             warehouse(): string;
             get serialCode(): string;
             set serialCode(value: string);
+            /** 备注 */
+            get remarks(): string;
+            set remarks(value: string);
             /** 供应商序号 */
             get supplierSerial(): string;
             set supplierSerial(value: string);
@@ -15571,7 +15599,7 @@ declare namespace materials {
             set notes(value: string);
         }
         class ExtraResultMaterialSerial implements IExtraResultMaterialSerial {
-            constructor(itemCode: string, warehouse: string);
+            constructor(itemCode: string, warehouse: string, serialCode: string);
             get isDirty(): boolean;
             /** 物料编码 */
             itemCode: string;

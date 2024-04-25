@@ -694,8 +694,10 @@ namespace purchase {
                         for (let uItem of item.userFields.forEach()) {
                             let myUItem: ibas.IUserField = myItem.userFields.get(uItem.name);
                             if (ibas.objects.isNull(myUItem)) {
+                                if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
+                                    continue;
+                                }
                                 myUItem = myItem.userFields.register(uItem.name, uItem.valueType);
-                                // continue;
                             }
                             if (myUItem.valueType !== uItem.valueType) {
                                 continue;

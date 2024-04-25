@@ -7,13 +7,13 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.document.IDocumentCloseQuantityItem;
+import org.colorcoding.ibas.document.IDocumentClosingItem;
 
 /**
  * 一揽子协议-项目 接口
  * 
  */
-public interface IBlanketAgreementItem extends IBODocumentLine, IDocumentCloseQuantityItem {
+public interface IBlanketAgreementItem extends IBODocumentLine, IDocumentClosingItem {
 
 	/**
 	 * 获取-编码

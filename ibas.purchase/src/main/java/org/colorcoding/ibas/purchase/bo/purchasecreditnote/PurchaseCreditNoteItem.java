@@ -35,6 +35,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IDocumentQuantityReturnContract;
 import org.colorcoding.ibas.materials.logic.IMaterialIssueContract;
@@ -2431,7 +2432,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 
 	@Override
 	public IBusinessLogicContract[] getContracts() {
-		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(4);
+		ArrayList<IBusinessLogicContract> contracts = new ArrayList<>(6);
 		// 物料及仓库检查
 		contracts.add(new IMaterialWarehouseCheckContract() {
 
@@ -2528,6 +2529,35 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 
 			});
 		}
+		// 基于单据完成金额
+		contracts.add(new IDocumentAmountClosingContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseCreditNoteItem.this.getIdentifiers();
+			}
+
+			@Override
+			public BigDecimal getAmount() {
+				return PurchaseCreditNoteItem.this.getPreTaxLineTotal();
+			}
+
+			@Override
+			public String getBaseDocumentType() {
+				return PurchaseCreditNoteItem.this.getBaseDocumentType();
+			}
+
+			@Override
+			public Integer getBaseDocumentEntry() {
+				return PurchaseCreditNoteItem.this.getBaseDocumentEntry();
+			}
+
+			@Override
+			public Integer getBaseDocumentLineId() {
+				return PurchaseCreditNoteItem.this.getBaseDocumentLineId();
+			}
+
+		});
 		// 不基于销售退货执行库存逻辑
 		if (!MyConfiguration.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE).equals(this.getBaseDocumentType())) {
 			// 物料发货

@@ -325,6 +325,14 @@ namespace purchase {
                                         }),
                                     }),
                                     new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_blanketagreementitem_currency"),
+                                        template: new sap.extension.m.CurrencySelect("", {
+                                        }).bindProperty("bindingValue", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric(),
+                                        }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_tax"),
                                         template: new component.TaxGroupSelect("", {
                                         }).bindProperty("bindingValue", {
