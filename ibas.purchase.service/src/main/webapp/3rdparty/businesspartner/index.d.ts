@@ -1367,16 +1367,6 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveAgreement(saver: ibas.ISaveCaller<bo.IAgreement>): void;
-            /**
-             * 查询 内部对账
-             * @param fetcher 查询者
-             */
-            fetchInternalReconciliation(fetcher: ibas.IFetchCaller<bo.IInternalReconciliation>): void;
-            /**
-             * 保存 内部对账
-             * @param saver 保存者
-             */
-            saveInternalReconciliation(saver: ibas.ISaveCaller<bo.IInternalReconciliation>): void;
         }
         /**
          * 查询调用者
@@ -4415,16 +4405,6 @@ declare namespace businesspartner {
              * @param saver 保存者
              */
             saveAgreement(saver: ibas.ISaveCaller<bo.Agreement>): void;
-            /**
-             * 查询 内部对账
-             * @param fetcher 查询者
-             */
-            fetchInternalReconciliation(fetcher: ibas.IFetchCaller<bo.InternalReconciliation>): void;
-            /**
-             * 保存 内部对账
-             * @param saver 保存者
-             */
-            saveInternalReconciliation(saver: ibas.ISaveCaller<bo.InternalReconciliation>): void;
         }
     }
 }

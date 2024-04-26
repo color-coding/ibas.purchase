@@ -39,8 +39,8 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
-import org.colorcoding.ibas.document.IDocumentClosingItem;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
+import org.colorcoding.ibas.document.IDocumentClosingItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -2086,7 +2086,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	}
 
 	@Override
-	public Iterator<IDocumentClosingItem> getItems() {
+	public Iterator<IDocumentClosingItem> getQuantityItems() {
 		return new Iterator<IDocumentClosingItem>() {
 			int index = -1;
 
