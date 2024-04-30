@@ -10797,6 +10797,9 @@ declare namespace sales {
             /** 计算规则 */
             protected compute(context: ibas.BusinessRuleContextCommon): void;
         }
+        /** 业务规则-计算库存数量 */
+        class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {
+        }
     }
 }
 /**

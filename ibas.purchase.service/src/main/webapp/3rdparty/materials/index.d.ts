@@ -14537,8 +14537,10 @@ declare namespace materials {
             get targetMaterial(): bo.Material;
             set targetMaterial(value: bo.Material);
             reservations: ibas.IList<MaterialNumberReservation>;
-            get remarks(): string;
-            set remarks(value: string);
+            get remarksOut(): string;
+            set remarksOut(value: string);
+            get remarksIn(): string;
+            set remarksIn(value: string);
             get reservationQuantity(): number;
             get transferQuantity(): number;
             check(blocked: boolean): void;

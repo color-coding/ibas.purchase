@@ -3271,8 +3271,20 @@ declare namespace receiptpayment {
 declare namespace receiptpayment {
     namespace app {
         class InternalReconciliation extends ibas.Bindable {
-            constructor(data: bo.Receipt | bo.Payment | sales.bo.SalesInvoice | sales.bo.SalesCreditNote | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote);
-            data: bo.Receipt | bo.Payment | sales.bo.SalesInvoice | sales.bo.SalesCreditNote | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote;
+            /**
+             * 构造
+             * @param data  bo.Receipt | bo.Payment
+             *    | sales.bo.SalesInvoice | sales.bo.SalesCreditNote
+             *    | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote
+             */
+            constructor(data: any);
+            /**
+             * 原始数据
+             * 类型：bo.Receipt | bo.Payment
+             *        | sales.bo.SalesInvoice | sales.bo.SalesCreditNote
+             *        | purchase.bo.PurchaseInvoice | purchase.bo.PurchaseCreditNote
+             */
+            data: any;
             /** 获取-单据类型 */
             get documentType(): string;
             /** 设置-单据类型 */
@@ -3325,6 +3337,7 @@ declare namespace receiptpayment {
             get drawnTotal(): number;
             /** 设置-提取金额 */
             set drawnTotal(value: number);
+            /** 获取业务伙伴信息 */
             get shortName(): string;
         }
         /** 应用-内部对账 */

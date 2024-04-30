@@ -1506,7 +1506,7 @@ namespace purchase {
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算库存数量 = 数量 * 换算率
-                    new materials.bo.BusinessRuleCalculateInventoryQuantity(
+                    new BusinessRuleCalculateInventoryQuantity(
                         PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME, PurchaseQuoteItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(

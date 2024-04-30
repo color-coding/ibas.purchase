@@ -2730,6 +2730,28 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 
+	public boolean checkBatchStatus() {
+		// 不基于交货的，库存变化
+		if (!MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+				.equalsIgnoreCase(this.getBaseDocumentType())
+				&& !MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+						.equalsIgnoreCase(this.getOriginalDocumentType())) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean checkSerialStatus() {
+		// 不基于交货的，库存变化
+		if (!MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+				.equalsIgnoreCase(this.getBaseDocumentType())
+				&& !MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
+						.equalsIgnoreCase(this.getOriginalDocumentType())) {
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public Object getValue(String property) {
 		switch (property) {

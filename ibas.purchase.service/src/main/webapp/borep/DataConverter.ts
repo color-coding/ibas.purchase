@@ -841,5 +841,9 @@ namespace purchase {
                 }
             }
         }
+        /** 业务规则-计算库存数量 */
+        export class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {
+
+        }
     }
 }
