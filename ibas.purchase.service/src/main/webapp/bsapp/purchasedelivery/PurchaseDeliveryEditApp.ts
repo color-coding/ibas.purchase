@@ -884,6 +884,8 @@ namespace purchase {
                                     sItem.quantity = item.quantity;
                                     sItem.warehouse = item.warehouse;
                                     sItem.uom = item.uom;
+                                    sItem.inventoryUOM = item.inventoryUOM;
+                                    sItem.uomRate = item.uomRate;
                                     sItem.batchManagement = item.batchManagement;
                                     sItem.serialManagement = item.serialManagement;
                                     let order: sales.bo.SalesOrder = salesOrders.firstOrDefault(
@@ -917,6 +919,10 @@ namespace purchase {
                                             sItem.taxRate = orderItem.taxRate;
                                             sItem.price = orderItem.price;
                                             sItem.currency = orderItem.currency;
+                                            sItem.uom = orderItem.uom;
+                                            sItem.inventoryUOM = orderItem.inventoryUOM;
+                                            sItem.uomRate = orderItem.uomRate;
+
                                             if (!(orderItem.closedQuantity > 0)) {
                                                 sItem.preTaxLineTotal = orderItem.preTaxLineTotal;
                                                 sItem.taxTotal = orderItem.taxTotal;

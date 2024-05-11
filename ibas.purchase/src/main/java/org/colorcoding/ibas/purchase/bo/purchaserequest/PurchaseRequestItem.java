@@ -26,7 +26,6 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusContract;
-import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
@@ -2194,9 +2193,6 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 				// 库存数量 = 数量 * 单位换算率
 				new BusinessRuleCalculateInventoryQuantity(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY,
 						PROPERTY_UOMRATE),
-				// 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
-				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE,
-						PROPERTY_INVENTORYQUANTITY),
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
 				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_INVENTORYQUANTITY,
 						PROPERTY_TAXRATE, PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL),

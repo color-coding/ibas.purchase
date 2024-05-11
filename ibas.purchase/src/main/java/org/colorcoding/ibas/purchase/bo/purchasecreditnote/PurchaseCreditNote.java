@@ -49,7 +49,6 @@ import org.colorcoding.ibas.document.IDocumentClosingItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
-import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
@@ -2129,10 +2128,10 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> imple
 							} else {
 								/** 不基于单据 **/
 								// 库存科目
-								jeContent = new MaterialsInventoryCost(line, line.getInventoryQuantity(), true);
+								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);

@@ -719,6 +719,9 @@ namespace purchase {
                         return;
                     }
                     context.outputValues.set(this.afterDiscount, ibas.numbers.round(result, DECIMAL_PLACES_SUM));
+                } else if (afterDiscount === 0 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
+                    context.outputValues.set(this.discount, 1);
+                    context.outputValues.set(this.preDiscount, afterDiscount);
                 } else {
                     if (preDiscount <= 0 || isNaN(preDiscount)) {
                         context.outputValues.set(this.discount, 1);
