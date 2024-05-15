@@ -2529,6 +2529,9 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 			contracts.add(new IMaterialReceiptContract() {
 				@Override
 				public boolean isOffsetting() {
+					if (PurchaseInvoiceItem.this.isDeleted()) {
+						return true;
+					}
 					if (PurchaseInvoiceItem.this instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoiceItem.this;
 						if (boTag.getCanceled() == emYesNo.YES) {
@@ -2540,6 +2543,9 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 						if (boTag.getDeleted() == emYesNo.YES) {
 							return true;
 						}
+					}
+					if (PurchaseInvoiceItem.this.parent.isDeleted()) {
+						return true;
 					}
 					if (PurchaseInvoiceItem.this.parent instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoiceItem.this.parent;

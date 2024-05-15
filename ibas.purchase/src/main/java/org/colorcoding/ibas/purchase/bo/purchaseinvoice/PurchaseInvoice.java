@@ -2096,6 +2096,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 
 			@Override
 			public boolean isOffsetting() {
+				if (PurchaseInvoice.this.isDeleted()) {
+					return true;
+				}
 				if (PurchaseInvoice.this instanceof IBOTagCanceled) {
 					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoice.this;
 					if (boTag.getCanceled() == emYesNo.YES) {

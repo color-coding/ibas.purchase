@@ -2022,6 +2022,9 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> imple
 				new IJournalEntryCreationContract() {
 					@Override
 					public boolean isOffsetting() {
+						if (PurchaseCreditNote.this.isDeleted()) {
+							return true;
+						}
 						if (PurchaseCreditNote.this instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNote.this;
 							if (boTag.getCanceled() == emYesNo.YES) {

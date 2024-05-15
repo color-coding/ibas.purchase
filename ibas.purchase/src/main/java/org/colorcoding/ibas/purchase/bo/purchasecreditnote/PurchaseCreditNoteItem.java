@@ -2562,6 +2562,9 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 
 				@Override
 				public boolean isOffsetting() {
+					if (PurchaseCreditNoteItem.this.isDeleted()) {
+						return true;
+					}
 					if (PurchaseCreditNoteItem.this instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNoteItem.this;
 						if (boTag.getCanceled() == emYesNo.YES) {
@@ -2573,6 +2576,9 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 						if (boTag.getDeleted() == emYesNo.YES) {
 							return true;
 						}
+					}
+					if (PurchaseCreditNoteItem.this.parent.isDeleted()) {
+						return true;
 					}
 					if (PurchaseCreditNoteItem.this.parent instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNoteItem.this.parent;

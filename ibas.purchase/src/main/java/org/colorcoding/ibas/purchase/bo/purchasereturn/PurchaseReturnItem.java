@@ -2458,6 +2458,9 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 
 			@Override
 			public boolean isOffsetting() {
+				if (PurchaseReturnItem.this.isDeleted()) {
+					return true;
+				}
 				if (PurchaseReturnItem.this instanceof IBOTagCanceled) {
 					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this;
 					if (boTag.getCanceled() == emYesNo.YES) {
@@ -2469,6 +2472,9 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 					if (boTag.getDeleted() == emYesNo.YES) {
 						return true;
 					}
+				}
+				if (PurchaseReturnItem.this.parent.isDeleted()) {
+					return true;
 				}
 				if (PurchaseReturnItem.this.parent instanceof IBOTagCanceled) {
 					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this.parent;

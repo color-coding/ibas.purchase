@@ -2022,6 +2022,9 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 
 					@Override
 					public boolean isOffsetting() {
+						if (PurchaseReturn.this.isDeleted()) {
+							return true;
+						}
 						if (PurchaseReturn.this instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturn.this;
 							if (boTag.getCanceled() == emYesNo.YES) {

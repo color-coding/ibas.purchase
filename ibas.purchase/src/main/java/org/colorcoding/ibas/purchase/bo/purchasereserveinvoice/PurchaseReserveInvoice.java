@@ -2020,6 +2020,9 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 
 					@Override
 					public boolean isOffsetting() {
+						if (PurchaseReserveInvoice.this.isDeleted()) {
+							return true;
+						}
 						if (PurchaseReserveInvoice.this instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReserveInvoice.this;
 							if (boTag.getCanceled() == emYesNo.YES) {

@@ -2023,6 +2023,9 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 
 					@Override
 					public boolean isOffsetting() {
+						if (PurchaseDelivery.this.isDeleted()) {
+							return true;
+						}
 						if (PurchaseDelivery.this instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDelivery.this;
 							if (boTag.getCanceled() == emYesNo.YES) {

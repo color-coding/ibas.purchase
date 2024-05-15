@@ -2455,6 +2455,9 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 
 					@Override
 					public boolean isOffsetting() {
+						if (PurchaseDeliveryItem.this.isDeleted()) {
+							return true;
+						}
 						if (PurchaseDeliveryItem.this instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDeliveryItem.this;
 							if (boTag.getCanceled() == emYesNo.YES) {
@@ -2466,6 +2469,9 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 							if (boTag.getDeleted() == emYesNo.YES) {
 								return true;
 							}
+						}
+						if (PurchaseDeliveryItem.this.parent.isDeleted()) {
+							return true;
 						}
 						if (PurchaseDeliveryItem.this.parent instanceof IBOTagCanceled) {
 							IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDeliveryItem.this.parent;
