@@ -1584,7 +1584,8 @@ namespace purchase {
                         for (let selected of selecteds) {
                             for (let item of selected.purchaseOrderItems) {
                                 contract.onReserved(selected.objectCode, selected.docEntry, item.lineId, item.quantity,
-                                    item.deliveryDate instanceof Date ? item.deliveryDate : selected.deliveryDate
+                                    item.deliveryDate instanceof Date ? item.deliveryDate : selected.deliveryDate,
+                                    item.warehouse
                                 );
                             }
                         }

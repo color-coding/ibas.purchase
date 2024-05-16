@@ -1028,6 +1028,8 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 退货成本（本币） */
+            returnCost: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1592,6 +1594,8 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 退货成本（本币） */
+            returnCost: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -6568,6 +6572,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-退货成本（本币） */
+            static PROPERTY_RETURNCOST_NAME: string;
+            /** 获取-退货成本（本币） */
+            get returnCost(): number;
+            /** 设置-退货成本（本币） */
+            set returnCost(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -7344,6 +7354,12 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-退货成本（本币） */
+            static PROPERTY_RETURNCOST_NAME: string;
+            /** 获取-退货成本（本币） */
+            get returnCost(): number;
+            /** 设置-退货成本（本币） */
+            set returnCost(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -12331,6 +12347,7 @@ declare namespace sales {
             protected deleteData(data: bo.SalesQuote | bo.SalesQuote[]): void;
             /** 预留物料库存 */
             private reserveMaterialsInventory;
+            private changeDocumentStatus;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteListView extends ibas.IBOListView {
@@ -12342,6 +12359,8 @@ declare namespace sales {
             showData(datas: bo.SalesQuote[]): void;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
+            /** 改变订单状态 */
+            changeDocumentStatusEvent: Function;
         }
     }
 }

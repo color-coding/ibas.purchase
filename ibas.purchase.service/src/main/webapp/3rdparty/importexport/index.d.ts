@@ -1865,6 +1865,10 @@ declare namespace importexport {
  */
 declare namespace importexport {
     namespace app {
+        enum emExportMode {
+            ALL = 0,
+            SELECTED = 1
+        }
         /** 应用-审批流程 */
         class ViewExportApp extends ibas.ResidentApplication<IViewExportView> {
             /** 应用标识 */
@@ -1877,6 +1881,8 @@ declare namespace importexport {
             protected registerView(): void;
             /** 运行,覆盖原方法 */
             run(): void;
+            exportMode: emExportMode;
+            protected showFullView(mode?: emExportMode): void;
             /** 视图显示后 */
             protected viewShowed(): void;
             private export;
@@ -1885,7 +1891,7 @@ declare namespace importexport {
         interface IViewExportView extends ibas.IResidentView {
             exportEvent: Function;
             /** 显示表格 */
-            showTables(): void;
+            showTables(mode?: emExportMode): void;
         }
         class ViewExportApplicationMapping extends ibas.ResidentApplicationMapping {
             /** 构造函数 */

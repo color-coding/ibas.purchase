@@ -22,7 +22,7 @@ namespace purchase {
                 draw(): any {
                     let that: this = this;
                     this.table = new sap.extension.table.DataTable("", {
-                        enableSelectAll: false,
+                        enableSelectAll: true,
                         visibleRowCount: sap.extension.table.visibleRowCount(15),
                         visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Interactive,
                         dataInfo: this.queryTarget,
