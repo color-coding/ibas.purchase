@@ -2337,6 +2337,36 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 		return this.getInventoryUOM();
 	}
 
+	@Override
+	public BigDecimal getBatchPrice() {
+		return this.getPreTaxPrice();
+	}
+
+	@Override
+	public String getBatchCurrency() {
+		return this.getCurrency();
+	}
+
+	@Override
+	public BigDecimal getBatchRate() {
+		return this.getRate();
+	}
+
+	@Override
+	public BigDecimal getSerialPrice() {
+		return this.getPreTaxPrice();
+	}
+
+	@Override
+	public String getSerialCurrency() {
+		return this.getCurrency();
+	}
+
+	@Override
+	public BigDecimal getSerialRate() {
+		return this.getRate();
+	}
+
 	/**
 	 * 初始化数据
 	 */

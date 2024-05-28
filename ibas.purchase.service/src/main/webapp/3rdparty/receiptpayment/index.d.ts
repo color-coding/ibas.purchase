@@ -2017,6 +2017,10 @@ declare namespace receiptpayment {
         class AssetRechargeItems extends ibas.BusinessObjects<AssetRechargeItem, AssetRecharge> implements IAssetRechargeItems {
             /** 创建并添加子项 */
             create(): AssetRechargeItem;
+            /** 添加子项后 子项属性赋值 */
+            protected afterAdd(item: AssetRechargeItem): void;
+            /** 主表属性发生变化后 子项属性赋值  */
+            protected onParentPropertyChanged(name: string): void;
         }
         /** 资产充值-项目 */
         class AssetRechargeItem extends ibas.BODocumentLine<AssetRechargeItem> implements IAssetRechargeItem {

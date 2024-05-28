@@ -11,7 +11,7 @@ declare namespace purchase {
             /**
              * 仓库选择-选择框
              */
-            class WarehouseSelect extends sap.extension.m.Select {
+            class WarehouseSelect extends sap.extension.m.ComboBox {
                 /** 绑定分支数据对象 */
                 setBranchData(data: ibas.Bindable): WarehouseSelect;
                 /** 绑定分支数据对象 */
