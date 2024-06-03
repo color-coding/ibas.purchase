@@ -16,6 +16,8 @@ namespace purchase {
     export namespace config {
         /** 配置项目-价格清单改变是否强制刷新价格 */
         export const CONFIG_ITEM_FORCE_UPDATE_PRICE_FOR_PRICE_LIST_CHANGED: string = "forcedUpdateForPriceListChanged";
+        /** 配置项目-允许改变基于单据币种 */
+        export const CONFIG_ITEM_ALLOW_CHANGE_BASED_DOCUMENT_CURRENCY: string = "allowChangeBasedDocumentCurrency";
         /**
          * 获取此模块配置
          * @param key 配置项

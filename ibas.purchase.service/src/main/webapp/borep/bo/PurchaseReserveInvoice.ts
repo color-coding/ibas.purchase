@@ -788,8 +788,10 @@ namespace purchase {
                             if (item.isLoading) {
                                 continue;
                             }
-                            if (!ibas.strings.isEmpty(item.baseDocumentType) && ibas.numbers.valueOf(item.rate) > 0) {
-                                continue;
+                            if (config.get<boolean>(config.CONFIG_ITEM_ALLOW_CHANGE_BASED_DOCUMENT_CURRENCY, false) === false) {
+                                if (!ibas.strings.isEmpty(item.baseDocumentType) && ibas.numbers.valueOf(item.rate) > 0) {
+                                    continue;
+                                }
                             }
                             item.rate = rate;
                         }
@@ -799,8 +801,10 @@ namespace purchase {
                             if (item.isLoading) {
                                 continue;
                             }
-                            if (!ibas.strings.isEmpty(item.baseDocumentType) && !ibas.strings.isEmpty(item.currency)) {
-                                continue;
+                            if (config.get<boolean>(config.CONFIG_ITEM_ALLOW_CHANGE_BASED_DOCUMENT_CURRENCY, false) === false) {
+                                if (!ibas.strings.isEmpty(item.baseDocumentType) && !ibas.strings.isEmpty(item.currency)) {
+                                    continue;
+                                }
                             }
                             item.currency = currency;
                         }
