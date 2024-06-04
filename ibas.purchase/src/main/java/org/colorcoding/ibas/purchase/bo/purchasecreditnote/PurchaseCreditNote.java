@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
@@ -66,9 +67,10 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = PurchaseCreditNote.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseCreditNote.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseCreditNote.BUSINESS_OBJECT_CODE)
-public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> implements IPurchaseCreditNote,
-		IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost,
-		IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator {
+public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
+		implements IPurchaseCreditNote, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
+		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator,
+		IDocumentCloseQuantityOperator, IJECPropertyValueGetter {
 
 	/**
 	 * 序列化版本标记
@@ -2162,6 +2164,28 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote> imple
 				}
 
 		};
+	}
+
+	@Override
+	public Object getValue(String property) {
+		switch (property) {
+		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
+			return this.getObjectCode();
+		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
+			return this.getDataOwner();
+		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
+			return this.getOrganization();
+		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
+			return this.getOrderType();
+		case Ledgers.CONDITION_PROPERTY_PROJECT:
+			return this.getProject();
+		case Ledgers.CONDITION_PROPERTY_BRANCH:
+			return this.getBranch();
+		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
+			return this.getSupplierCode();
+		default:
+			return null;
+		}
 	}
 
 	@Override

@@ -39,36 +39,21 @@ namespace purchase {
             sap.extension.m.ComboBox.extend("purchase.ui.component.WarehouseSelect", {
                 metadata: {
                     properties: {
-                        branchData: { type: "any" },
+                        branch: { type: "string" },
                     },
                     events: {
                     },
                 },
                 renderer: {
                 },
-                /** 绑定分支数据对象 */
-                setBranchData(this: WarehouseSelect, data: ibas.Bindable): WarehouseSelect {
-                    let old: ibas.Bindable = this.getBranchData();
-                    if (old instanceof ibas.Bindable) {
-                        old.removeListener(this.getId());
-                    }
-                    if (data instanceof ibas.Bindable) {
-                        let that: WarehouseSelect = this;
-                        data.registerListener({
-                            id: this.getId(),
-                            propertyChanged(property: string): void {
-                                if (ibas.strings.equalsIgnoreCase(property, "branch")) {
-                                    that.loadItemList();
-                                }
-                            }
-                        });
-                    }
-                    return this.setProperty("branchData", data);
-
+                getBranch(this: WarehouseSelect): string {
+                    return this.getProperty("branch");
                 },
-                /** 绑定分支数据对象 */
-                getBranchData(): ibas.Bindable {
-                    return this.getProperty("branchData");
+                setBranch(this: WarehouseSelect, value: string): WarehouseSelect {
+                    this.setProperty("branch", value);
+                    this.destroyItems();
+                    this.fireLoadItems({});
+                    return this;
                 },
                 applySettings(this: WarehouseSelect, mSettings: any, oScope?: any): WarehouseSelect {
                     !mSettings ? mSettings = {} : mSettings = mSettings;
@@ -86,17 +71,21 @@ namespace purchase {
                     return this;
                 },
                 /** 加载可选值 */
-                loadItemList(this: WarehouseSelect): WarehouseSelect {
+                loadItems(this: WarehouseSelect): WarehouseSelect {
                     if (this.getItems().length > 0) {
+                        if (arguments.length > 0) {
+
+                        } else {
+                            sap.extension.m.ComboBox.prototype.loadItems.apply(this, arguments);
+                        }
                         return this;
                     }
                     if (WAREHOUSE_CACHE.length > 0) {
-                        let branch: any = this.getBranchData();
-                        // tslint:disable-next-line: no-string-literal
-                        branch = branch ? branch["branch"] : null;
+                        let branch: any = this.getBranch();
                         for (let item of WAREHOUSE_CACHE) {
                             if (branch === null || branch === undefined
-                                || (branch !== undefined && branch === item.branch)) {
+                                || (branch !== undefined && branch === item.branch)
+                                || ibas.strings.isEmpty(item.branch)) {
                                 this.addItem(new sap.extension.m.SelectItem("", {
                                     key: item.code,
                                     text: item.name,
@@ -116,19 +105,13 @@ namespace purchase {
                                     for (let item of opRslt.resultObjects) {
                                         WAREHOUSE_CACHE.add(item);
                                     }
-                                    this.loadItemList();
+                                    this.loadItems();
                                 }
                             }
                         });
                     }
                     return this;
                 },
-                loadItems(this: WarehouseSelect): WarehouseSelect {
-                    if (this.getItems().length > 0) {
-                        return this;
-                    }
-                    this.loadItemList();
-                }
             });
             const WAREHOUSE_CACHE: ibas.IList<materials.bo.Warehouse> = new ibas.ArrayList<materials.bo.Warehouse>();
             /**

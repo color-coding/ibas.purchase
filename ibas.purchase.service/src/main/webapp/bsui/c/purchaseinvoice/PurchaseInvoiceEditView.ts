@@ -333,6 +333,10 @@ namespace purchase {
                                         }),
                                         this.selectWarehouse = new component.WarehouseSelect("", {
                                             width: "auto",
+                                            branch: {
+                                                path: "/branch",
+                                                type: new sap.extension.data.Alphanumeric()
+                                            },
                                             change(this: sap.m.Select, event: sap.ui.base.Event): void {
                                                 let sItem: any = this.getSelectedItem();
                                                 if (sItem instanceof sap.ui.core.Item && !ibas.strings.isEmpty(sItem.getKey())) {
@@ -1315,7 +1319,7 @@ namespace purchase {
                     sap.extension.pages.changeStatus(this.page);
                     // 设置分支对象
                     if (accounting.config.isEnableBranch()) {
-                        this.selectWarehouse.setBranchData(data);
+                        this.selectWarehouse.setModel(new sap.extension.model.JSONModel(data));
                     }
                 }
                 /** 显示数据-采购发票-行 */
