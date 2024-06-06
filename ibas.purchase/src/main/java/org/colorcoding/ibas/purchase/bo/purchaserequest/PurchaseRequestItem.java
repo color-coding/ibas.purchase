@@ -2194,7 +2194,7 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 				new BusinessRuleCalculateInventoryQuantity(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY,
 						PROPERTY_UOMRATE),
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_INVENTORYQUANTITY,
+				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY,
 						PROPERTY_TAXRATE, PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0

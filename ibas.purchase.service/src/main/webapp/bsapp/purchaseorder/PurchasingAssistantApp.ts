@@ -280,9 +280,14 @@ namespace purchase {
                         condition = criteria.conditions.create();
                         condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_ITEMCODE;
                         condition.value = item.itemCode;
+                        condition.bracketOpen = 1;
                         if (criteria.conditions.length > 2) {
                             condition.relationship = ibas.emConditionRelationship.OR;
                         }
+                        condition = criteria.conditions.create();
+                        condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_UOM;
+                        condition.value = item.uom;
+                        condition.bracketClose = 1;
                     }
                     if (criteria.conditions.length < 2) {
                         return;
@@ -317,7 +322,8 @@ namespace purchase {
                         onCompleted: (opRslt) => {
                             for (let item of opRslt.resultObjects) {
                                 orderItems.forEach((value) => {
-                                    if (value.itemCode === item.itemCode) {
+                                    if (value.itemCode === item.itemCode
+                                        && (ibas.strings.isEmpty(value.uom) || item.uom === value.uom)) {
                                         if (item.taxed === ibas.emYesNo.YES) {
                                             value.unitPrice = 0;
                                             value.price = item.price;

@@ -322,19 +322,27 @@ namespace purchase {
                 });
             }
             /** 更改行价格 */
-            private changePurchaseOrderItemPrice(priceList: number | ibas.Criteria): void {
+            private changePurchaseOrderItemPrice(priceList: number | ibas.Criteria, items?: bo.PurchaseOrderItem[]): void {
+                if (ibas.objects.isNull(items)) {
+                    items = this.editData.purchaseOrderItems.filterDeleted();
+                }
                 if (typeof priceList === "number" && ibas.numbers.valueOf(priceList) !== 0) {
                     let criteria: ibas.Criteria = new ibas.Criteria();
                     let condition: ibas.ICondition = criteria.conditions.create();
                     condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_PRICELIST;
                     condition.value = priceList.toString();
-                    for (let item of this.editData.purchaseOrderItems) {
+                    for (let item of items) {
                         condition = criteria.conditions.create();
                         condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_ITEMCODE;
                         condition.value = item.itemCode;
+                        condition.bracketOpen = 1;
                         if (criteria.conditions.length > 2) {
                             condition.relationship = ibas.emConditionRelationship.OR;
                         }
+                        condition = criteria.conditions.create();
+                        condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_UOM;
+                        condition.value = item.uom;
+                        condition.bracketClose = 1;
                     }
                     if (criteria.conditions.length < 2) {
                         return;
@@ -345,7 +353,7 @@ namespace purchase {
                     }
                     if (config.get(config.CONFIG_ITEM_FORCE_UPDATE_PRICE_FOR_PRICE_LIST_CHANGED, true) === true) {
                         // 强制刷新价格
-                        this.changePurchaseOrderItemPrice(criteria);
+                        this.changePurchaseOrderItemPrice(criteria, items);
                     } else {
                         this.messages({
                             type: ibas.emMessageType.QUESTION,
@@ -356,7 +364,7 @@ namespace purchase {
                             ],
                             onCompleted: (result) => {
                                 if (result === ibas.emMessageAction.YES) {
-                                    this.changePurchaseOrderItemPrice(criteria);
+                                    this.changePurchaseOrderItemPrice(criteria, items);
                                 }
                             }
                         });
@@ -368,8 +376,9 @@ namespace purchase {
                         criteria: priceList,
                         onCompleted: (opRslt) => {
                             for (let item of opRslt.resultObjects) {
-                                this.editData.purchaseOrderItems.forEach((value) => {
-                                    if (item.itemCode === value.itemCode) {
+                                items.forEach((value) => {
+                                    if (item.itemCode === value.itemCode
+                                        && (ibas.strings.isEmpty(value.uom) || item.uom === value.uom)) {
                                         if (item.taxed === ibas.emYesNo.YES) {
                                             value.unitPrice = 0;
                                             value.price = item.price;
@@ -1303,6 +1312,7 @@ namespace purchase {
                                 }
                             }
                         });
+                        that.changePurchaseOrderItemPrice(that.editData.priceList, [caller]);
                     }
                 });
             }

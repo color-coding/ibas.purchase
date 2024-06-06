@@ -1609,15 +1609,15 @@ namespace purchase {
                         PurchaseCreditNoteItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseCreditNoteItem.PROPERTY_QUANTITY_NAME, PurchaseCreditNoteItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseCreditNoteItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_UNITPRICE_NAME, PurchaseCreditNoteItem.PROPERTY_INVENTORYQUANTITY_NAME
+                        PurchaseCreditNoteItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_UNITPRICE_NAME, PurchaseCreditNoteItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseCreditNoteItem.PROPERTY_LINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_PRICE_NAME, PurchaseCreditNoteItem.PROPERTY_INVENTORYQUANTITY_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(PurchaseCreditNoteItem.PROPERTY_LINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_PRICE_NAME, PurchaseCreditNoteItem.PROPERTY_QUANTITY_NAME
                         , PurchaseCreditNoteItem.PROPERTY_TAXRATE_NAME, PurchaseCreditNoteItem.PROPERTY_TAXTOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseCreditNoteItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_PRETAXPRICE_NAME, PurchaseCreditNoteItem.PROPERTY_INVENTORYQUANTITY_NAME
+                        PurchaseCreditNoteItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseCreditNoteItem.PROPERTY_PRETAXPRICE_NAME, PurchaseCreditNoteItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(

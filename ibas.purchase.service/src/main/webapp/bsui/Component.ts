@@ -347,7 +347,7 @@ namespace purchase {
                 applySettings(this: TaxGroupSelect): TaxGroupSelect {
                     sap.extension.m.Select.prototype.applySettings.apply(this, arguments);
                     this.attachChange(undefined, function (event: sap.ui.base.Event): void {
-                        let source: any = event.getSource();
+                        let source: any = sap.ui.getCore().byId(event.getParameter("id"));
                         if (source instanceof purchase.ui.component.TaxGroupSelect) {
                             let select: any = source.getSelectedItem();
                             if (select instanceof purchase.ui.component.TaxGroupItem) {

@@ -1448,15 +1448,15 @@ namespace purchase {
                         DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME, DownPaymentRequestItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME, DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME
+                        DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRICE_NAME, DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRICE_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME
                         , DownPaymentRequestItem.PROPERTY_TAXRATE_NAME, DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME, DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME
+                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
