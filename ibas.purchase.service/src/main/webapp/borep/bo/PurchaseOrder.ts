@@ -1597,10 +1597,6 @@ namespace purchase {
                 this.setProperty(PurchaseOrderItem.PROPERTY_MATERIALSERIALS_NAME, value);
             }
 
-            get targetQuantity(): number {
-                return this.inventoryQuantity;
-            }
-
             /** 初始化数据 */
             protected init(): void {
                 this.purchaseOrderItemExtras = new PurchaseOrderItemExtras(this);
@@ -1626,15 +1622,18 @@ namespace purchase {
                         PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME, PurchaseOrderItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_UNITPRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
+                        PurchaseOrderItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_UNITPRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseOrderItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseOrderItem.PROPERTY_LINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(PurchaseOrderItem.PROPERTY_LINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseOrderItem.PROPERTY_QUANTITY_NAME
                         , PurchaseOrderItem.PROPERTY_TAXRATE_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXPRICE_NAME, PurchaseOrderItem.PROPERTY_QUANTITY_NAME
+                        PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseOrderItem.PROPERTY_PRETAXPRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseOrderItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseOrderItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(

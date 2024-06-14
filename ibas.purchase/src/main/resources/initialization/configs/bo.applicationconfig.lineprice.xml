@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ApplicationConfig>
+<ns:ApplicationConfig xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
+	<ConfigKey>documentLinePriceType</ConfigKey>
+	<ConfigDescription>单据行价格类型</ConfigDescription>
+	<ConfigGroup>de9278d9-4914-45a5-8418-9c609118d03f</ConfigGroup>
+	<ConfigValue>PurchasingUnit</ConfigValue>
+	<Settings>[{"Key":"PurchasingUnit","Text":"采购单位价格"},{"Key":"InventoryUnit","Text":"库存单位价格"}]</Settings>
+	<Category>ALL</Category>
+	<Activated>YES</Activated>
+</ns:ApplicationConfig>

@@ -18,6 +18,8 @@ namespace purchase {
         export const CONFIG_ITEM_FORCE_UPDATE_PRICE_FOR_PRICE_LIST_CHANGED: string = "forcedUpdateForPriceListChanged";
         /** 配置项目-允许改变基于单据币种 */
         export const CONFIG_ITEM_ALLOW_CHANGE_BASED_DOCUMENT_CURRENCY: string = "allowChangeBasedDocumentCurrency";
+        /** 配置项目-单据行价格类型 */
+        export const CONFIG_ITEM_DOCUMENT_LINE_PRICE_TYPE: string = "documentLinePriceType";
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -25,6 +27,17 @@ namespace purchase {
          */
         export function get<T>(key: string, defalut?: T): T {
             return ibas.config.get(ibas.strings.format("{0}|{1}", CONSOLE_ID, key), defalut);
+        }
+        let inventoryUnitLinePrice: boolean = undefined;
+        export function isInventoryUnitLinePrice(): boolean {
+            if (ibas.objects.isNull(inventoryUnitLinePrice)) {
+                if (ibas.strings.equalsIgnoreCase("InventoryUnit", get(CONFIG_ITEM_DOCUMENT_LINE_PRICE_TYPE))) {
+                    inventoryUnitLinePrice = true;
+                } else {
+                    inventoryUnitLinePrice = false;
+                }
+            }
+            return inventoryUnitLinePrice;
         }
     }
     export namespace bo {

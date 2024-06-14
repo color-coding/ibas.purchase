@@ -769,6 +769,8 @@ declare namespace businesspartner {
             amount: number;
             /** 剩余次数 */
             times: number;
+            /** 银行账户 */
+            bankAccount: string;
             /** 基于类型 */
             baseDocumentType: string;
             /** 基于标识 */
@@ -2979,6 +2981,12 @@ declare namespace businesspartner {
             get times(): number;
             /** 设置-剩余次数 */
             set times(value: number);
+            /** 映射的属性名称-银行账户 */
+            static PROPERTY_BANKACCOUNT_NAME: string;
+            /** 获取-银行账户 */
+            get bankAccount(): string;
+            /** 设置-银行账户 */
+            set bankAccount(value: string);
             /** 映射的属性名称-基于类型 */
             static PROPERTY_BASEDOCUMENTTYPE_NAME: string;
             /** 获取-基于类型 */

@@ -1510,15 +1510,18 @@ namespace purchase {
                         PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME, PurchaseQuoteItem.PROPERTY_UOMRATE_NAME),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseQuoteItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_UNITPRICE_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME
+                        PurchaseQuoteItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_UNITPRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseQuoteItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseQuoteItem.PROPERTY_LINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRICE_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME
-                        , PurchaseQuoteItem.PROPERTY_TAXRATE_NAME, PurchaseQuoteItem.PROPERTY_TAXTOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(PurchaseQuoteItem.PROPERTY_LINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseQuoteItem.PROPERTY_QUANTITY_NAME,
+                        PurchaseQuoteItem.PROPERTY_TAXRATE_NAME, PurchaseQuoteItem.PROPERTY_TAXTOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRETAXPRICE_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME
+                        PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRETAXPRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseQuoteItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(

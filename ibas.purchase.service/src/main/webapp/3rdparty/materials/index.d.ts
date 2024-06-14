@@ -1526,7 +1526,7 @@ declare namespace materials {
             /** 仓库 */
             warehouse: string;
             /** 数量 */
-            readonly targetQuantity: number;
+            readonly inventoryQuantity: number;
             /** 物料批次集合 */
             materialBatches: IMaterialBatchItems;
         }
@@ -2187,7 +2187,7 @@ declare namespace materials {
             /** 仓库 */
             warehouse: string;
             /** 数量 */
-            readonly targetQuantity: number;
+            readonly inventoryQuantity: number;
             /** 物料序列集合 */
             materialSerials: IMaterialSerialItems;
         }
@@ -2656,7 +2656,7 @@ declare namespace materials {
             /** 仓库 */
             warehouse: string;
             /** 库存数量 */
-            inventoryQuantity: number;
+            stockQuantity: number;
             /** 盘点数量 */
             countQuantity: number;
             /** 差额 */
@@ -4829,7 +4829,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get targetQuantity(): number;
+            get inventoryQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -5356,7 +5356,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get targetQuantity(): number;
+            get inventoryQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -5890,7 +5890,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get targetQuantity(): number;
+            get inventoryQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -9106,11 +9106,11 @@ declare namespace materials {
             /** 设置-仓库 */
             set warehouse(value: string);
             /** 映射的属性名称-库存数量 */
-            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            static PROPERTY_STOCKQUANTITY_NAME: string;
             /** 获取-库存数量 */
-            get inventoryQuantity(): number;
+            get stockQuantity(): number;
             /** 设置-库存数量 */
-            set inventoryQuantity(value: number);
+            set stockQuantity(value: number);
             /** 映射的属性名称-盘点数量 */
             static PROPERTY_COUNTQUANTITY_NAME: string;
             /** 获取-盘点数量 */
@@ -9177,7 +9177,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get targetQuantity(): number;
+            get inventoryQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];
@@ -12530,7 +12530,7 @@ declare namespace materials {
             get materialSerials(): MaterialSerialItems;
             /** 设置-物料序列集合 */
             set materialSerials(value: MaterialSerialItems);
-            get targetQuantity(): number;
+            get inventoryQuantity(): number;
             /** 初始化数据 */
             protected init(): void;
             /** 赋值物料 */
@@ -15459,12 +15459,15 @@ declare namespace materials {
             protected editData(data: bo.MaterialPriceList): void;
             /** 删除数据，参数：目标数据集合 */
             protected deleteData(data: bo.MaterialPriceList | bo.MaterialPriceList[]): void;
+            protected currentPriceList: bo.MaterialPriceList;
+            protected selectedPriceList(priceList: bo.MaterialPriceList): void;
             /** 查询价格 */
             protected fetchPriceItem(criteria: ibas.ICriteria): void;
             /** 保存价格清单项目 */
             protected savePriceItem(data: bo.MaterialPrice | bo.MaterialPrice[]): void;
             /** 导出价格 */
-            protected exportPriceItem(criteria: ibas.ICriteria): void;
+            protected exportPriceItem(): void;
+            /** 添加价格 */
             protected addPriceItem(items: bo.MaterialPrice[]): void;
         }
         /** 视图-物料价格清单 */
@@ -15475,6 +15478,8 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 显示数据 */
             showPriceList(datas: bo.MaterialPriceList[]): void;
+            /** 选中价格清单事件 */
+            selectedPriceListEvent: Function;
             /** 保存价格项目事件 */
             savePriceItemEvent: Function;
             /** 添加价格项目事件 */
