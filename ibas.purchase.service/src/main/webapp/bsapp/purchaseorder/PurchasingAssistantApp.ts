@@ -316,6 +316,16 @@ namespace purchase {
                     }
                 } else if (priceList instanceof ibas.Criteria) {
                     this.busy(true);
+                    // 增加业务伙伴条件
+                    if (materials.config.isEnableMaterialSpecialPrices() && !ibas.strings.isEmpty(this.purchaseOrder.supplierCode)) {
+                        if (priceList.conditions.length > 1) {
+                            priceList.conditions.firstOrDefault().bracketOpen += 1;
+                            priceList.conditions.lastOrDefault().bracketClose += 1;
+                        }
+                        let condition: ibas.ICondition = priceList.conditions.create();
+                        condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_SUPPLIER;
+                        condition.value = this.purchaseOrder.supplierCode;
+                    }
                     let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
                     boRepository.fetchMaterialPrice({
                         criteria: priceList,

@@ -97,10 +97,14 @@ namespace purchase {
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IPurchaseOrder>): void {
                         for (let selected of selecteds) {
-                            if (contract.payment.paymentItems.firstOrDefault(
-                                c => c.baseDocumentType === selected.objectCode
-                                    && c.baseDocumentEntry === selected.docEntry
-                                    && c.baseDocumentLineId === -1) !== null) {
+                            for (let item of contract.payment.paymentItems) {
+                                if (item.baseDocumentType === selected.objectCode
+                                    && item.baseDocumentEntry === selected.docEntry
+                                    && item.baseDocumentLineId === -1) {
+                                    selected.paidTotal += item.amount;
+                                }
+                            }
+                            if (selected.paidTotal >= selected.documentTotal) {
                                 continue;
                             }
                             let item: receiptpayment.bo.PaymentItem = contract.payment.paymentItems.create();
@@ -221,10 +225,14 @@ namespace purchase {
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IPurchaseDelivery>): void {
                         for (let selected of selecteds) {
-                            if (contract.payment.paymentItems.firstOrDefault(
-                                c => c.baseDocumentType === selected.objectCode
-                                    && c.baseDocumentEntry === selected.docEntry
-                                    && c.baseDocumentLineId === -1) !== null) {
+                            for (let item of contract.payment.paymentItems) {
+                                if (item.baseDocumentType === selected.objectCode
+                                    && item.baseDocumentEntry === selected.docEntry
+                                    && item.baseDocumentLineId === -1) {
+                                    selected.paidTotal += item.amount;
+                                }
+                            }
+                            if (selected.paidTotal >= selected.documentTotal) {
                                 continue;
                             }
                             let item: receiptpayment.bo.PaymentItem = contract.payment.paymentItems.create();
@@ -346,10 +354,14 @@ namespace purchase {
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.PurchaseInvoice>): void {
                         for (let selected of selecteds) {
-                            if (contract.payment.paymentItems.firstOrDefault(
-                                c => c.baseDocumentType === selected.objectCode
-                                    && c.baseDocumentEntry === selected.docEntry
-                                    && c.baseDocumentLineId === -1) !== null) {
+                            for (let item of contract.payment.paymentItems) {
+                                if (item.baseDocumentType === selected.objectCode
+                                    && item.baseDocumentEntry === selected.docEntry
+                                    && item.baseDocumentLineId === -1) {
+                                    selected.paidTotal += item.amount;
+                                }
+                            }
+                            if (selected.paidTotal >= selected.documentTotal) {
                                 continue;
                             }
                             if ((selected.documentTotal - selected.paidTotal - selected.downPaymentTotal) <= 0) {
@@ -474,10 +486,14 @@ namespace purchase {
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IDownPaymentRequest>): void {
                         for (let selected of selecteds) {
-                            if (contract.payment.paymentItems.firstOrDefault(
-                                c => c.baseDocumentType === selected.objectCode
-                                    && c.baseDocumentEntry === selected.docEntry
-                                    && c.baseDocumentLineId === -1) !== null) {
+                            for (let item of contract.payment.paymentItems) {
+                                if (item.baseDocumentType === selected.objectCode
+                                    && item.baseDocumentEntry === selected.docEntry
+                                    && item.baseDocumentLineId === -1) {
+                                    selected.paidTotal += item.amount;
+                                }
+                            }
+                            if (selected.paidTotal >= selected.documentTotal) {
                                 continue;
                             }
                             let item: receiptpayment.bo.PaymentItem = contract.payment.paymentItems.create();
@@ -601,10 +617,14 @@ namespace purchase {
                     criteria: criteria,
                     onCompleted(selecteds: ibas.IList<purchase.bo.IPurchaseReserveInvoice>): void {
                         for (let selected of selecteds) {
-                            if (contract.payment.paymentItems.firstOrDefault(
-                                c => c.baseDocumentType === selected.objectCode
-                                    && c.baseDocumentEntry === selected.docEntry
-                                    && c.baseDocumentLineId === -1) !== null) {
+                            for (let item of contract.payment.paymentItems) {
+                                if (item.baseDocumentType === selected.objectCode
+                                    && item.baseDocumentEntry === selected.docEntry
+                                    && item.baseDocumentLineId === -1) {
+                                    selected.paidTotal += item.amount;
+                                }
+                            }
+                            if (selected.paidTotal >= selected.documentTotal) {
                                 continue;
                             }
                             let item: receiptpayment.bo.PaymentItem = contract.payment.paymentItems.create();
