@@ -1297,42 +1297,87 @@ namespace purchase {
                 });
             }
 
-            private choosePurchaseOrderItemUnit(caller: bo.PurchaseOrderItem): void {
-                let that: this = this;
-                ibas.servicesManager.runChooseService<materials.bo.IUnit>({
-                    boCode: materials.bo.BO_CODE_UNIT,
-                    chooseType: ibas.emChooseType.SINGLE,
-                    criteria: [
-                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
-                    ],
-                    onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
-                        for (let selected of selecteds) {
-                            caller.uom = selected.name;
-                        }
-                        materials.app.changeMaterialsUnitRate({
-                            data: {
-                                get sourceUnit(): string {
-                                    return caller.uom;
-                                },
-                                get targetUnit(): string {
-                                    return caller.inventoryUOM;
-                                },
-                                get material(): string {
-                                    return caller.itemCode;
-                                },
-                                setUnitRate(rate: number): void {
-                                    caller.uomRate = rate;
+            private choosePurchaseOrderItemUnit(caller: bo.PurchaseOrderItem, criteria?: ibas.ICriteria): void {
+                if (ibas.objects.isNull(criteria)) {
+                    criteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = materials.bo.Unit.PROPERTY_ACTIVATED_NAME;
+                    condition.value = String(ibas.emYesNo.YES);
+                    if (this.editData.priceList > 0
+                        && config.get<boolean>(config.CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS, false) === true) {
+                        let pCriteria: ibas.ICriteria = new ibas.Criteria();
+                        condition = pCriteria.conditions.create();
+                        condition.alias = materials.bo.MaterialPriceList.PROPERTY_OBJECTKEY_NAME;
+                        condition.value = String(this.editData.priceList);
+                        let cCriteria: ibas.IChildCriteria = pCriteria.childCriterias.create();
+                        cCriteria.propertyPath = materials.bo.MaterialPriceList.PROPERTY_MATERIALPRICEITEMS_NAME;
+                        cCriteria.onlyHasChilds = true;
+                        condition = cCriteria.conditions.create();
+                        condition.alias = materials.bo.MaterialPriceItem.PROPERTY_ITEMCODE_NAME;
+                        condition.value = caller.itemCode;
+                        let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                        boRepository.fetchMaterialPriceList({
+                            criteria: pCriteria,
+                            onCompleted: (opRslt) => {
+                                let count: number = criteria.conditions.length;
+                                for (let item of opRslt.resultObjects) {
+                                    for (let sItem of item.materialPriceItems) {
+                                        if (ibas.objects.isNull(sItem.uom)) {
+                                            continue;
+                                        }
+                                        condition = criteria.conditions.create();
+                                        condition.alias = materials.bo.Unit.PROPERTY_NAME_NAME;
+                                        condition.value = sItem.uom;
+                                        if (criteria.conditions.length > count + 1) {
+                                            condition.relationship = ibas.emConditionRelationship.OR;
+                                        }
+                                    }
                                 }
-                            },
-                            onCompleted: (error) => {
-                                if (error instanceof Error) {
-                                    that.messages(error);
+                                if (criteria.conditions.length > count + 1) {
+                                    criteria.conditions[count].bracketOpen += 1;
+                                    criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
                                 }
+                                this.choosePurchaseOrderItemUnit(caller, criteria);
                             }
                         });
-                        that.changePurchaseOrderItemPrice(that.editData.priceList, [caller]);
+                    } else {
+                        this.choosePurchaseOrderItemUnit(caller, criteria);
                     }
-                });
+                } else {
+                    let that: this = this;
+                    ibas.servicesManager.runChooseService<materials.bo.IUnit>({
+                        boCode: materials.bo.BO_CODE_UNIT,
+                        chooseType: ibas.emChooseType.SINGLE,
+                        criteria: criteria,
+                        onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
+                            for (let selected of selecteds) {
+                                caller.uom = selected.name;
+                            }
+                            materials.app.changeMaterialsUnitRate({
+                                data: {
+                                    get sourceUnit(): string {
+                                        return caller.uom;
+                                    },
+                                    get targetUnit(): string {
+                                        return caller.inventoryUOM;
+                                    },
+                                    get material(): string {
+                                        return caller.itemCode;
+                                    },
+                                    setUnitRate(rate: number): void {
+                                        caller.uomRate = rate;
+                                    }
+                                },
+                                onCompleted: (error) => {
+                                    if (error instanceof Error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
+                            that.changePurchaseOrderItemPrice(that.editData.priceList, [caller]);
+                        }
+                    });
+                }
             }
             /** 预留物料订购 */
             private reserveMaterialsOrdered(): void {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ApplicationConfig>
+<ns:ApplicationConfig xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
+	<ConfigKey>onlyPriceListItemUnits</ConfigKey>
+	<ConfigDescription>仅使用价格清单里的单位</ConfigDescription>
+	<ConfigGroup>de9278d9-4914-45a5-8418-9c609118d03f</ConfigGroup>
+	<ConfigValue>false</ConfigValue>
+	<Settings>[{"Key":true,"Text":"是"},{"Key":false,"Text":"否"}]</Settings>
+	<Category>CLIENT</Category>
+	<Activated>YES</Activated>
+</ns:ApplicationConfig>
