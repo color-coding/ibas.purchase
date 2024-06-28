@@ -1135,6 +1135,7 @@ namespace purchase {
                                             item.tax = baItem.tax;
                                             item.taxRate = baItem.taxRate;
                                             item.price = baItem.price;
+                                            item.currency = baItem.currency;
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;

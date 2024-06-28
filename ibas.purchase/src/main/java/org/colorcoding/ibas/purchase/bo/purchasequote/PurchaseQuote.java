@@ -1804,35 +1804,6 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 		this.setProperty(PROPERTY_ITEMSLINETOTAL, value);
 	}
 
-	/**
-	 * 属性名称-项目的行税总计
-	 */
-	private static final String PROPERTY_ITEMSTAXTOTAL_NAME = "ItemsTaxTotal";
-
-	/**
-	 * 项目的行税总计 属性
-	 */
-	public static final IPropertyInfo<BigDecimal> PROPERTY_ITEMSTAXTOTAL = registerProperty(PROPERTY_ITEMSTAXTOTAL_NAME,
-			BigDecimal.class, MY_CLASS);
-
-	/**
-	 * 获取-项目的行税总计
-	 * 
-	 * @return 值
-	 */
-	public final BigDecimal getItemsTaxTotal() {
-		return this.getProperty(PROPERTY_ITEMSTAXTOTAL);
-	}
-
-	/**
-	 * 设置-项目的行税总计
-	 * 
-	 * @param value 值
-	 */
-	final void setItemsTaxTotal(BigDecimal value) {
-		this.setProperty(PROPERTY_ITEMSTAXTOTAL, value);
-	}
-
 	@Override
 	protected IBusinessRule[] registerRules() {
 		return new IBusinessRule[] {
@@ -1847,9 +1818,6 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_PURCHASEQUOTEITEMS,
 						PurchaseQuoteItem.PROPERTY_LINETOTAL),
-				// 计算行-税总计
-				new BusinessRuleSumElements(PROPERTY_ITEMSTAXTOTAL, PROPERTY_PURCHASEQUOTEITEMS,
-						PurchaseQuoteItem.PROPERTY_TAXTOTAL),
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),
