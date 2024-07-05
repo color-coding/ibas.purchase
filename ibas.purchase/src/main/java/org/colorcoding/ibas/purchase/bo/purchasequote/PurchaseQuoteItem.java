@@ -27,6 +27,7 @@ import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.sales.data.DataConvert;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
@@ -2370,7 +2371,7 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 
 					@Override
 					public String getWarehouse() {
-						return PurchaseQuoteItem.this.getWarehouse();
+						return DataConvert.STRING_VALUE_EMPTY;
 					}
 				}
 

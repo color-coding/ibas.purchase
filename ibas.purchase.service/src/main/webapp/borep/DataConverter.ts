@@ -290,10 +290,7 @@ namespace purchase {
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
                 if (ibas.objects.isNull(myItem)) {
-                    if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
-                        continue;
-                    }
-                    myItem = target.userFields.register(item.name, item.valueType);
+                    continue;
                 }
                 if (myItem.valueType !== item.valueType) {
                     continue;
@@ -411,6 +408,20 @@ namespace purchase {
                         }
                     }
                 });
+            }
+            // 复制自定义字段
+            for (let item of source.userFields.forEach()) {
+                let myItem: ibas.IUserField = target.userFields.get(item.name);
+                if (ibas.objects.isNull(myItem)) {
+                    if (ibas.booleans.valueOf(config.get(CONFIG_ITEM_ONLY_SET_EXISTING_USER_FIELDS_VALUE)) === true) {
+                        continue;
+                    }
+                    myItem = target.userFields.register(item.name, item.valueType);
+                }
+                if (myItem.valueType !== item.valueType) {
+                    continue;
+                }
+                myItem.value = item.value;
             }
         }
 
