@@ -19,6 +19,8 @@ declare namespace sales {
         const CONFIG_ITEM_ALLOW_CHANGE_BASED_DOCUMENT_CURRENCY: string;
         /** 配置项目-单据行价格类型 */
         const CONFIG_ITEM_DOCUMENT_LINE_PRICE_TYPE: string;
+        /** 配置项目-仅使用价格清单里的单位 */
+        const CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS: string;
         /**
          * 获取此模块配置
          * @param key 配置项

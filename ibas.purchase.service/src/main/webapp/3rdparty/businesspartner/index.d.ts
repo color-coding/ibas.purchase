@@ -207,6 +207,8 @@ declare namespace businesspartner {
             activated: ibas.emYesNo;
             /** 名称 */
             name: string;
+            /** 组 */
+            group: string;
             /** 街道 */
             street: string;
             /** 县/区 */
@@ -339,6 +341,8 @@ declare namespace businesspartner {
             activated: ibas.emYesNo;
             /** 名称 */
             name: string;
+            /** 组 */
+            group: string;
             /** 性别 */
             gender: emGender;
             /** 职位 */
@@ -1425,6 +1429,12 @@ declare namespace businesspartner {
             get name(): string;
             /** 设置-名称 */
             set name(value: string);
+            /** 映射的属性名称-组 */
+            static PROPERTY_GROUP_NAME: string;
+            /** 获取-组 */
+            get group(): string;
+            /** 设置-组 */
+            set group(value: string);
             /** 映射的属性名称-街道 */
             static PROPERTY_STREET_NAME: string;
             /** 获取-街道 */
@@ -1778,6 +1788,12 @@ declare namespace businesspartner {
             get name(): string;
             /** 设置-名称 */
             set name(value: string);
+            /** 映射的属性名称-组 */
+            static PROPERTY_GROUP_NAME: string;
+            /** 获取-组 */
+            get group(): string;
+            /** 设置-组 */
+            set group(value: string);
             /** 映射的属性名称-性别 */
             static PROPERTY_GENDER_NAME: string;
             /** 获取-性别 */

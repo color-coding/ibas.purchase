@@ -2418,6 +2418,11 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 		this.setClosedQuantity(Decimal.ZERO);
 	}
 
+	@Override
+	public BigDecimal getAmount() {
+		return this.getLineTotal();
+	}
+
 	/**
 	 * 父项
 	 */
@@ -2734,4 +2739,5 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 		});
 		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
+
 }

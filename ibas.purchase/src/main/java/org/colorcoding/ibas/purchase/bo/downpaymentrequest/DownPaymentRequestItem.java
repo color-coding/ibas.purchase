@@ -24,7 +24,7 @@ import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
-import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
+import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -1989,6 +1989,11 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	}
 
 	@Override
+	public BigDecimal getAmount() {
+		return this.getLineTotal();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
 				// 物料及仓库检查
@@ -2024,9 +2029,8 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 						return DownPaymentRequestItem.this.getWarehouse();
 					}
 				},
-				// 基于单据数量关闭
-				new IDocumentQuantityClosingContract() {
-
+				// 基于订单的完成金额
+				new IDocumentAmountClosingContract() {
 					@Override
 					public boolean checkDataStatus() {
 						if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
@@ -2035,7 +2039,7 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 										.equals(DownPaymentRequestItem.this.getBaseDocumentType())) {
 							return true;
 						}
-						return IDocumentQuantityClosingContract.super.checkDataStatus();
+						return IDocumentAmountClosingContract.super.checkDataStatus();
 					}
 
 					@Override
@@ -2044,8 +2048,8 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 					}
 
 					@Override
-					public BigDecimal getQuantity() {
-						return DownPaymentRequestItem.this.getQuantity();
+					public BigDecimal getAmount() {
+						return DownPaymentRequestItem.this.getLineTotal();
 					}
 
 					@Override

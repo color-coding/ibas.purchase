@@ -33,7 +33,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.data.Ledgers;
-import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
+import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2385,6 +2385,11 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 	IPurchaseReserveInvoice parent;
 
 	@Override
+	public BigDecimal getAmount() {
+		return this.getLineTotal();
+	}
+
+	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
 				// 物料及仓库检查
@@ -2455,7 +2460,7 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 
 				},
 				// 基于订单的完成数量
-				new IDocumentQuantityClosingContract() {
+				new IDocumentAmountClosingContract() {
 
 					@Override
 					public String getIdentifiers() {
@@ -2463,8 +2468,8 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 					}
 
 					@Override
-					public BigDecimal getQuantity() {
-						return PurchaseReserveInvoiceItem.this.getQuantity();
+					public BigDecimal getAmount() {
+						return PurchaseReserveInvoiceItem.this.getLineTotal();
 					}
 
 					@Override
@@ -2514,4 +2519,5 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 			return null;
 		}
 	}
+
 }

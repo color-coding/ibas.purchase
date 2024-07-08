@@ -7,7 +7,7 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.document.IDocumentClosingItem;
+import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItemParent;
 import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItemParent;
 
@@ -16,7 +16,7 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItemParen
  * 
  */
 public interface IPurchaseReserveInvoiceItem
-		extends IBODocumentLine, IMaterialBatchItemParent, IMaterialSerialItemParent, IDocumentClosingItem {
+		extends IBODocumentLine, IMaterialBatchItemParent, IMaterialSerialItemParent, IDocumentClosingAmountItem {
 
 	/**
 	 * 获取-编码

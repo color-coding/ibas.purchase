@@ -7,13 +7,13 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.document.IDocumentClosingItem;
+import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 
 /**
  * 预付款申请-行 接口
  * 
  */
-public interface IDownPaymentRequestItem extends IBODocumentLine, IDocumentClosingItem {
+public interface IDownPaymentRequestItem extends IBODocumentLine, IDocumentClosingAmountItem {
 
 	/**
 	 * 获取-凭证编号

@@ -45,7 +45,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequiredElements;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
-import org.colorcoding.ibas.document.IDocumentClosingItem;
+import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
@@ -2074,12 +2074,12 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 	}
 
 	@Override
-	public Iterator<IDocumentClosingItem> getQuantityItems() {
-		return new Iterator<IDocumentClosingItem>() {
+	public Iterator<IDocumentClosingQuantityItem> getQuantityItems() {
+		return new Iterator<IDocumentClosingQuantityItem>() {
 			int index = -1;
 
 			@Override
-			public IDocumentClosingItem next() {
+			public IDocumentClosingQuantityItem next() {
 				this.index += 1;
 				return PurchaseReturn.this.getPurchaseReturnItems().get(this.index);
 			}

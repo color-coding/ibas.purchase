@@ -15717,6 +15717,8 @@ declare namespace materials {
             protected exportPriceItem(): void;
             /** 添加价格 */
             protected addPriceItem(items: bo.MaterialPrice[]): void;
+            /** 选择价格项目单位 */
+            private choosePriceItemUnit;
         }
         /** 视图-物料价格清单 */
         interface IMaterialPriceListListView extends ibas.IBOListView {
@@ -15740,6 +15742,8 @@ declare namespace materials {
             exportPriceItemEvent: Function;
             /** 保存数据 */
             savePrices(datas: bo.MaterialPrice[]): void;
+            /** 选择价格项目单位事件 */
+            choosePriceItemUnitEvent: Function;
         }
         /** 权限元素-物料价格清单编辑 */
         const ELEMENT_MATERIAL_PRICE_LIST_EDIT: ibas.IElement;
@@ -15830,6 +15834,8 @@ declare namespace materials {
             protected exportPriceItem(): void;
             /** 添加价格 */
             protected addPriceItem(items: bo.MaterialSpecialPrice[]): void;
+            /** 选择价格项目单位 */
+            private choosePriceItemUnit;
         }
         /** 视图-物料特殊价格 */
         interface IMaterialSpecialPriceListView extends ibas.IBOListView {
@@ -15853,6 +15859,8 @@ declare namespace materials {
             exportPriceItemEvent: Function;
             /** 保存数据 */
             savePrices(datas: bo.MaterialSpecialPrice[]): void;
+            /** 选择价格项目单位事件 */
+            choosePriceItemUnitEvent: Function;
         }
     }
 }
@@ -18331,6 +18339,8 @@ declare namespace materials {
             private chooseInventoryTransferRequestLineDistributionRule;
             private turnToInventoryTransfer;
             private chooseInventoryTransferRequestLineMaterialVersion;
+            /** 预留物料库存 */
+            private reserveMaterialsInventory;
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestEditView extends ibas.IBOEditView {
@@ -18366,6 +18376,8 @@ declare namespace materials {
             toWarehouse: string;
             /** 转为库存转储申请事件 */
             turnToInventoryTransferEvent: Function;
+            /** 预留物料库存 */
+            reserveMaterialsInventoryEvent: Function;
         }
         /** 库存转储申请编辑服务映射 */
         class InventoryTransferRequestEditServiceMapping extends ibas.BOEditServiceMapping {

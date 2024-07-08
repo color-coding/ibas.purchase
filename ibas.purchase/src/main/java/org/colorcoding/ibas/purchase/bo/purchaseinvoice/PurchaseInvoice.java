@@ -49,7 +49,7 @@ import org.colorcoding.ibas.businesspartner.logic.IDocumentReconciliationContent
 import org.colorcoding.ibas.businesspartner.logic.IDocumentReconciliationContract;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
-import org.colorcoding.ibas.document.IDocumentClosingItem;
+import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
@@ -2389,12 +2389,12 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 	}
 
 	@Override
-	public Iterator<IDocumentClosingItem> getQuantityItems() {
-		return new Iterator<IDocumentClosingItem>() {
+	public Iterator<IDocumentClosingQuantityItem> getQuantityItems() {
+		return new Iterator<IDocumentClosingQuantityItem>() {
 			int index = -1;
 
 			@Override
-			public IDocumentClosingItem next() {
+			public IDocumentClosingQuantityItem next() {
 				this.index += 1;
 				return PurchaseInvoice.this.getPurchaseInvoiceItems().get(this.index);
 			}
