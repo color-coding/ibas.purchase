@@ -57,6 +57,7 @@ import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverse
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCostDiff;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -2148,6 +2149,17 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 
 					}
 				}
+				// 送货地址-运费
+				for (IShippingAddress line : PurchaseInvoice.this.getShippingAddresss()) {
+					// 税科目
+					jeContent = new JournalEntrySmartContent(line);
+					jeContent.setCategory(Category.Debit);
+					jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+					jeContent.setAmount(line.getTaxTotal());// 税总计
+					jeContent.setCurrency(line.getCurrency());
+					jeContent.setRate(line.getRate());
+					jeContents.add(jeContent);
+				}
 				// 预付款
 				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
 					// 应付账款
@@ -2245,6 +2257,17 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
 					}
+				}
+				// 送货地址-运费
+				for (IShippingAddress line : PurchaseInvoice.this.getShippingAddresss()) {
+					// 税科目
+					jeContent = new JournalEntrySmartContent(line);
+					jeContent.setCategory(Category.Debit);
+					jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+					jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+					jeContent.setCurrency(line.getCurrency());
+					jeContent.setRate(line.getRate());
+					jeContents.add(jeContent);
 				}
 				// 预付款
 				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {

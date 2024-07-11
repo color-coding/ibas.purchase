@@ -50,6 +50,7 @@ import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -2032,6 +2033,17 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 							jeContent.setCurrency(line.getCurrency());
 							jeContent.setRate(line.getRate());
 							jeContents.add(jeContent);
+							// 税科目
+							jeContent = new JournalEntrySmartContent(line);
+							jeContent.setCategory(Category.Debit);
+							jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+							jeContent.setAmount(line.getTaxTotal());// 税总计
+							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
+							jeContents.add(jeContent);
+						}
+						// 送货地址-运费
+						for (IShippingAddress line : PurchaseReserveInvoice.this.getShippingAddresss()) {
 							// 税科目
 							jeContent = new JournalEntrySmartContent(line);
 							jeContent.setCategory(Category.Debit);

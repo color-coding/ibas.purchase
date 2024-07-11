@@ -1011,6 +1011,23 @@ namespace purchase {
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 50
                                             }),
+                                        }).bindProperty("editable", {
+                                            parts: [
+                                                {
+                                                    path: "closedQuantity",
+                                                },
+                                                {
+                                                    path: "closedAmount",
+                                                },
+                                            ],
+                                            formatter(closedQuantity: number, closedAmount: number): boolean {
+                                                if (closedQuantity > 0) {
+                                                    return false;
+                                                } else if (closedAmount > 0) {
+                                                    return false;
+                                                }
+                                                return true;
+                                            }
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorderitem_itemdescription") }),
                                         new sap.extension.m.Input("", {

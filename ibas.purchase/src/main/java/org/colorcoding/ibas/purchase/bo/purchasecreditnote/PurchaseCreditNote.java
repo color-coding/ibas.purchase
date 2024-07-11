@@ -53,6 +53,7 @@ import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartConten
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
+import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -2085,6 +2086,17 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 								jeContent.setRate(line.getRate());
 								jeContents.add(jeContent);
 							}
+						}
+						// 送货地址-运费
+						for (IShippingAddress line : PurchaseCreditNote.this.getShippingAddresss()) {
+							// 税科目
+							jeContent = new JournalEntrySmartContent(line);
+							jeContent.setCategory(Category.Debit);
+							jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+							jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
+							jeContents.add(jeContent);
 						}
 						// 应付账款
 						jeContent = new JournalEntrySmartContent(PurchaseCreditNote.this);

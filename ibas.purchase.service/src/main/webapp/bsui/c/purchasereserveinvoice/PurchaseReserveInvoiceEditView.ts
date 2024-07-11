@@ -402,9 +402,21 @@ namespace purchase {
                                                 maxLength: 50
                                             })
                                         }).bindProperty("editable", {
-                                            path: "parentLineSign",
-                                            formatter(data: string): boolean {
-                                                return ibas.strings.isEmpty(data);
+                                            parts: [
+                                                {
+                                                    path: "closedQuantity",
+                                                },
+                                                {
+                                                    path: "closedAmount",
+                                                },
+                                            ],
+                                            formatter(closedQuantity: number, closedAmount: number): boolean {
+                                                if (closedQuantity > 0) {
+                                                    return false;
+                                                } else if (closedAmount > 0) {
+                                                    return false;
+                                                }
+                                                return true;
                                             }
                                         }),
                                     }),
