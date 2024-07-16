@@ -1519,7 +1519,7 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 	 * 预付款申请-行的集合属性
 	 * 
 	 */
-	public static final IPropertyInfo<IDownPaymentRequestItems> PROPERTY_DOWNPAYMNETREQUESTITEMS = registerProperty(
+	public static final IPropertyInfo<IDownPaymentRequestItems> PROPERTY_DOWNPAYMENTREQUESTITEMS = registerProperty(
 			PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, IDownPaymentRequestItems.class, MY_CLASS);
 
 	/**
@@ -1530,7 +1530,7 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 	@XmlElementWrapper(name = PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME)
 	@XmlElement(name = DownPaymentRequestItem.BUSINESS_OBJECT_NAME, type = DownPaymentRequestItem.class)
 	public final IDownPaymentRequestItems getDownPaymentRequestItems() {
-		return this.getProperty(PROPERTY_DOWNPAYMNETREQUESTITEMS);
+		return this.getProperty(PROPERTY_DOWNPAYMENTREQUESTITEMS);
 	}
 
 	/**
@@ -1539,7 +1539,7 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 	 * @param value 值
 	 */
 	public final void setDownPaymentRequestItems(IDownPaymentRequestItems value) {
-		this.setProperty(PROPERTY_DOWNPAYMNETREQUESTITEMS, value);
+		this.setProperty(PROPERTY_DOWNPAYMENTREQUESTITEMS, value);
 	}
 
 	/**
@@ -1624,11 +1624,11 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
-				new BusinessRuleRequiredElements(PROPERTY_DOWNPAYMNETREQUESTITEMS), // 要求有元素
-				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_DOWNPAYMNETREQUESTITEMS,
+				new BusinessRuleRequiredElements(PROPERTY_DOWNPAYMENTREQUESTITEMS), // 要求有元素
+				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_DOWNPAYMENTREQUESTITEMS,
 						PurchaseOrderItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
-				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_DOWNPAYMNETREQUESTITEMS,
+				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_DOWNPAYMENTREQUESTITEMS,
 						PurchaseOrderItem.PROPERTY_LINETOTAL),
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,

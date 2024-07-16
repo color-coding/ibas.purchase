@@ -845,11 +845,11 @@ namespace purchase {
                 condition.alias = bo.PurchaseDeliveryItem.PROPERTY_CANCELED_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emYesNo.NO.toString();
-                // 数量大于已清数量
+                // 已清金额小于总计
                 condition = cCriteria.conditions.create();
-                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
-                condition.comparedAlias = bo.PurchaseDeliveryItem.PROPERTY_CLOSEDQUANTITY_NAME;
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDAMOUNT_NAME;
+                condition.operation = ibas.emConditionOperation.LESS_THAN;
+                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_LINETOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseDelivery>({
@@ -1337,8 +1337,8 @@ namespace purchase {
                     let deliveryType: string = ibas.config.applyVariables(bo.PurchaseDelivery.BUSINESS_OBJECT_CODE);
                     let requestType: string = ibas.config.applyVariables(bo.DownPaymentRequest.BUSINESS_OBJECT_CODE);
                     for (let item of this.editData.purchaseInvoiceItems) {
-                        // 基于单据相同（订单，交货）
                         if (ibas.strings.equals(item.baseDocumentType, orderType) || ibas.strings.equals(item.baseDocumentType, deliveryType)) {
+                            // 基于订单、交货（零售业务）
                             condition = cCriteria.conditions.create();
                             condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
                             condition.value = item.baseDocumentType;
@@ -1351,39 +1351,32 @@ namespace purchase {
                             condition.value = item.baseDocumentEntry.toString();
                             condition.bracketClose = 1;
                         }
-                        // 原始单据相同（订单，交货）
-                        if (ibas.strings.equals(item.originalDocumentType, orderType) || ibas.strings.equals(item.originalDocumentType, deliveryType)) {
-                            condition = cCriteria.conditions.create();
-                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
-                            condition.value = item.originalDocumentType;
-                            condition.bracketOpen = 1;
-                            if (cCriteria.conditions.length > 2) {
-                                condition.relationship = ibas.emConditionRelationship.OR;
-                            }
-                            condition = cCriteria.conditions.create();
-                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTENTRY_NAME;
-                            condition.value = item.baseDocumentEntry.toString();
-                            condition.bracketClose = 1;
-                        }
-                        // 未基于单据（可不基于的预付款）
-                        if (ibas.strings.isEmpty(item.baseDocumentType)) {
-                            condition = cCriteria.conditions.create();
-                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
-                            condition.value = requestType;
-                            condition.bracketOpen = 1;
-                            if (cCriteria.conditions.length > 2) {
-                                condition.relationship = ibas.emConditionRelationship.OR;
-                            }
-                            condition = cCriteria.conditions.create();
-                            condition.bracketOpen = 1;
-                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
-                            condition.value = "";
-                            condition = cCriteria.conditions.create();
-                            condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
-                            condition.operation = ibas.emConditionOperation.IS_NULL;
+                        // 基于预付款申请
+                        condition = cCriteria.conditions.create();
+                        condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                        condition.value = requestType;
+                        condition.bracketOpen = 1;
+                        if (cCriteria.conditions.length > 2) {
                             condition.relationship = ibas.emConditionRelationship.OR;
-                            condition.bracketClose = 2;
                         }
+                        condition = cCriteria.conditions.create();
+                        condition.bracketOpen = 2;
+                        condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
+                        condition.value = "";
+                        condition = cCriteria.conditions.create();
+                        condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
+                        condition.operation = ibas.emConditionOperation.IS_NULL;
+                        condition.relationship = ibas.emConditionRelationship.OR;
+                        condition.bracketClose = 1;
+                        condition = cCriteria.conditions.create();
+                        condition.bracketOpen = 1;
+                        condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTTYPE_NAME;
+                        condition.value = item.baseDocumentType;
+                        condition.relationship = ibas.emConditionRelationship.OR;
+                        condition = cCriteria.conditions.create();
+                        condition.alias = receiptpayment.bo.PaymentItem.PROPERTY_ORIGINALDOCUMENTENTRY_NAME;
+                        condition.value = item.baseDocumentEntry.toString();
+                        condition.bracketClose = 3;
                     }
                 } else {
                     boRepository = new receiptpayment.bo.BORepositoryReceiptPayment();

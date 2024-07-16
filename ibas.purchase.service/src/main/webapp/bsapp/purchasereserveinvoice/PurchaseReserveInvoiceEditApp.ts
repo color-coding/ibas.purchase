@@ -695,11 +695,11 @@ namespace purchase {
                 condition.alias = bo.PurchaseOrderItem.PROPERTY_CANCELED_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emYesNo.NO.toString();
-                // 数量大于已清数量
+                // 已清金额小于总计
                 condition = cCriteria.conditions.create();
-                condition.alias = bo.PurchaseOrderItem.PROPERTY_LINETOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
-                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_CLOSEDAMOUNT_NAME;
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDAMOUNT_NAME;
+                condition.operation = ibas.emConditionOperation.LESS_THAN;
+                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_LINETOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseOrder>({

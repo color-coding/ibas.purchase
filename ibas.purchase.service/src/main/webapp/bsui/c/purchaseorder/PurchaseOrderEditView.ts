@@ -62,6 +62,8 @@ namespace purchase {
                 turnToPurchaseInvoiceEvent: Function;
                 /** 转为采购预留发票事件 */
                 turnToPurchaseReserveInvoiceEvent: Function;
+                /** 转为预付款申请事件 */
+                turnToDownPaymentRequestEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
                 /** 绘制视图 */
@@ -984,17 +986,6 @@ namespace purchase {
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {
-                                                text: ibas.i18n.prop("bo_purchasereserveinvoice"),
-                                                icon: "sap-icon://doc-attachment",
-                                                press: function (): void {
-                                                    that.fireViewEvents(that.turnToPurchaseReserveInvoiceEvent);
-                                                },
-                                                visible: shell.app.privileges.canRun({
-                                                    id: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_ID,
-                                                    name: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_NAME,
-                                                })
-                                            }),
-                                            new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchasereturn"),
                                                 icon: "sap-icon://doc-attachment",
                                                 press: function (): void {
@@ -1003,6 +994,28 @@ namespace purchase {
                                                 visible: shell.app.privileges.canRun({
                                                     id: purchase.app.PurchaseReturnFunc.FUNCTION_ID,
                                                     name: purchase.app.PurchaseReturnFunc.FUNCTION_NAME,
+                                                })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_downpaymentrequest"),
+                                                icon: "sap-icon://doc-attachment",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.turnToDownPaymentRequestEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: purchase.app.DownPaymentRequestFunc.FUNCTION_ID,
+                                                    name: purchase.app.DownPaymentRequestFunc.FUNCTION_NAME,
+                                                })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_purchasereserveinvoice"),
+                                                icon: "sap-icon://doc-attachment",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.turnToPurchaseReserveInvoiceEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_ID,
+                                                    name: purchase.app.PurchaseReserveInvoiceFunc.FUNCTION_NAME,
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {

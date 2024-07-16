@@ -42,6 +42,7 @@ namespace purchase {
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.chooseDownPaymentRequestItemDistributionRuleEvent = this.chooseDownPaymentRequestItemDistributionRule;
                 this.view.chooseDownPaymentRequestItemMaterialVersionEvent = this.chooseDownPaymentRequestItemMaterialVersion;
+                this.view.paymentDownPaymentRequestEvent = this.paymentDownPaymentRequest;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -1021,6 +1022,29 @@ namespace purchase {
                     }
                 });
             }
+            private paymentDownPaymentRequest(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty) {
+                    throw new Error(ibas.i18n.prop("shell_data_saved_first"));
+                }
+                let amount: number = this.editData.documentTotal - this.editData.paidTotal;
+                if (amount < 0 || (amount === 0 && this.editData.documentTotal !== 0)) {
+                    throw new Error(ibas.i18n.prop("purchase_paymented"));
+                }
+                ibas.servicesManager.runApplicationService<businesspartner.app.IReceiptContract, receiptpayment.bo.Payment>({
+                    proxy: new businesspartner.app.PaymentServiceProxy({
+                        businessPartnerType: businesspartner.bo.emBusinessPartnerType.SUPPLIER,
+                        businessPartnerCode: this.editData.supplierCode,
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        documentCurrency: this.editData.documentCurrency,
+                        documentTotal: amount,
+                        allowPartial: true
+                    }),
+                    onCompleted: (payment) => {
+                        this.proceeding(ibas.emMessageType.SUCCESS, ibas.i18n.prop("purchase_document_payment", payment.docEntry, payment.documentTotal, payment.documentCurrency));
+                    }
+                });
+            }
         }
         /** 视图-预付款申请 */
         export interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -1058,6 +1082,8 @@ namespace purchase {
             chooseDownPaymentRequestItemDistributionRuleEvent: Function;
             /** 选择预付款申请-行 物料版本 */
             chooseDownPaymentRequestItemMaterialVersionEvent: Function;
+            /** 预收款申请付款事件 */
+            paymentDownPaymentRequestEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

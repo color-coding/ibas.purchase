@@ -787,14 +787,15 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
-                        // 计算未发票数量
-                        let openQty: number = item.quantity - item.closedQuantity;
-                        if (openQty <= 0) {
+                        // 计算未清金额
+                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        if (openAmount <= 0) {
                             continue;
                         }
                         let myItem: PurchaseInvoiceItem = this.purchaseInvoiceItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        myItem.quantity = openQty;
+                        // 计算数量
+                        myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {

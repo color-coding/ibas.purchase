@@ -42,6 +42,8 @@ namespace purchase {
                 chooseSupplierAgreementsEvent: Function;
                 /** 选择预付款申请-行成本中心事件 */
                 chooseDownPaymentRequestItemDistributionRuleEvent: Function;
+                /** 预收款申请付款事件 */
+                paymentDownPaymentRequestEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
@@ -811,6 +813,17 @@ namespace purchase {
                                     type: sap.m.ButtonType.Transparent,
                                     menu: new sap.m.Menu("", {
                                         items: [
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("purchase_payment"),
+                                                icon: "sap-icon://simple-payment",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.paymentDownPaymentRequestEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: receiptpayment.app.PaymentFunc.FUNCTION_ID,
+                                                    name: receiptpayment.app.PaymentFunc.FUNCTION_NAME,
+                                                })
+                                            }),
                                         ],
                                     })
                                 }),

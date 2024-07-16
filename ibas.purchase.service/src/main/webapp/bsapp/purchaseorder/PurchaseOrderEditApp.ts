@@ -51,6 +51,7 @@ namespace purchase {
                 this.view.turnToPurchaseReturnEvent = this.turnToPurchaseReturn;
                 this.view.turnToPurchaseInvoiceEvent = this.turnToPurchaseInvoice;
                 this.view.turnToPurchaseReserveInvoiceEvent = this.turnToPurchaseReserveInvoice;
+                this.view.turnToDownPaymentRequestEvent = this.turnToDownPaymentRequest;
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
             }
             /** 视图显示后 */
@@ -1113,6 +1114,50 @@ namespace purchase {
                 });
 
             }
+            /** 转为预付款申请事件 */
+            protected turnToDownPaymentRequest(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseOrder({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseOrder(this.editData);
+                            this.view.showPurchaseOrderItems(this.editData.purchaseOrderItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.DownPaymentRequest = new bo.DownPaymentRequest();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
+
+                            let app: DownPaymentRequestEditApp = new DownPaymentRequestEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
+
+            }
             /** 选择一揽子协议事件 */
             private choosePurchaseOrderBlanketAgreement(): void {
                 if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
@@ -1569,6 +1614,8 @@ namespace purchase {
             turnToPurchaseInvoiceEvent: Function;
             /** 转为采购预留发票事件 */
             turnToPurchaseReserveInvoiceEvent: Function;
+            /** 转为预付款申请事件 */
+            turnToDownPaymentRequestEvent: Function;
             /** 预留物料订购 */
             reserveMaterialsOrderedEvent: Function;
             /** 默认仓库 */

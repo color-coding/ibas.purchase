@@ -40,6 +40,8 @@ namespace purchase {
                 chooseDownPaymentRequestItemMaterialVersionEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
+                /** 预收款申请付款事件 */
+                paymentDownPaymentRequestEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */

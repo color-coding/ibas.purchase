@@ -2459,7 +2459,7 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 					}
 
 				},
-				// 基于订单的完成数量
+				// 基于订单的完成金额
 				new IDocumentAmountClosingContract() {
 
 					@Override
