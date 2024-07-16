@@ -2089,6 +2089,14 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseCreditNote.this.getShippingAddresss()) {
+							// 运费科目
+							jeContent = new JournalEntrySmartContent(line);
+							jeContent.setCategory(Category.Debit);
+							jeContent.setLedger(Ledgers.LEDGER_PURCHASE_FREIGHT_COST_ACCOUNT);
+							jeContent.setAmount(line.getPreTaxExpense().negate());
+							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
+							jeContents.add(jeContent);
 							// 税科目
 							jeContent = new JournalEntrySmartContent(line);
 							jeContent.setCategory(Category.Debit);

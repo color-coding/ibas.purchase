@@ -765,10 +765,22 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereserveinvoice_shippingsexpensetotal") }),
                             new sap.extension.m.Input("", {
                                 editable: false,
-
                             }).bindProperty("bindingValue", {
-                                path: "shippingsExpenseTotal",
-                                type: new sap.extension.data.Sum()
+                                parts: [
+                                    {
+                                        path: "shippingsExpenseTotal",
+                                        type: new sap.extension.data.Sum()
+                                    },
+                                    {
+                                        path: "shippingsTaxTotal",
+                                        type: new sap.extension.data.Sum()
+                                    }
+                                ],
+                                formatter(total: number, tax: number): number {
+                                    return sap.extension.data.formatValue(sap.extension.data.Sum,
+                                        ibas.numbers.valueOf(total) - ibas.numbers.valueOf(tax)
+                                        , "string");
+                                },
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereserveinvoice_documenttaxtotal") }),
                             new sap.extension.m.Input("", {

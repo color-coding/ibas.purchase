@@ -2044,6 +2044,14 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseReserveInvoice.this.getShippingAddresss()) {
+							// 运费科目
+							jeContent = new JournalEntrySmartContent(line);
+							jeContent.setCategory(Category.Debit);
+							jeContent.setLedger(Ledgers.LEDGER_PURCHASE_FREIGHT_COST_ACCOUNT);
+							jeContent.setAmount(line.getPreTaxExpense());
+							jeContent.setCurrency(line.getCurrency());
+							jeContent.setRate(line.getRate());
+							jeContents.add(jeContent);
 							// 税科目
 							jeContent = new JournalEntrySmartContent(line);
 							jeContent.setCategory(Category.Debit);
