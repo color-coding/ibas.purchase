@@ -120,5 +120,6 @@
   "purchase_app_purchaserequest_to_": "转为",
   "purchase_app_line_has_been_processed": "已处理过[{0}, {1} - {2}]此条数据",
   "purchase_documents_no_amount_to_be_paid": "单据没有需要付款的金额",
+  "purchase_documents_only_associated": "仅关联单据",
   "purchase_closing_delimiter": "----结束----"
 }

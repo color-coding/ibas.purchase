@@ -1337,6 +1337,9 @@ namespace purchase {
                     let deliveryType: string = ibas.config.applyVariables(bo.PurchaseDelivery.BUSINESS_OBJECT_CODE);
                     let requestType: string = ibas.config.applyVariables(bo.DownPaymentRequest.BUSINESS_OBJECT_CODE);
                     for (let item of this.editData.purchaseInvoiceItems) {
+                        if (!(item.baseDocumentEntry > 0)) {
+                            continue;
+                        }
                         if (ibas.strings.equals(item.baseDocumentType, orderType) || ibas.strings.equals(item.baseDocumentType, deliveryType)) {
                             // 基于订单、交货（零售业务）
                             condition = cCriteria.conditions.create();
@@ -1378,7 +1381,7 @@ namespace purchase {
                         condition.value = item.baseDocumentEntry.toString();
                         condition.bracketClose = 3;
                     }
-                } else {
+                } else if (criteria.childCriterias.length > 0) {
                     boRepository = new receiptpayment.bo.BORepositoryReceiptPayment();
                 }
                 // 未取消的
@@ -1499,6 +1502,9 @@ namespace purchase {
                                             item.drawnTotal = amount;
                                         }
                                         amount -= item.drawnTotal;
+                                    }
+                                    if (amount <= 0) {
+                                        break;
                                     }
                                 }
                                 this.view.showPurchaseInvoiceDownPayments(this.editData.purchaseInvoiceDownPayments.filterDeleted());
