@@ -227,7 +227,7 @@ namespace purchase {
                 }
             }
             /** 选择采购贷项客户事件 */
-            private choosePurchaseCreditNoteSupplier(): void {
+            private choosePurchaseCreditNoteSupplier(filterConditions?: ibas.ICondition[]): void {
                 let items: bo.PurchaseCreditNoteItem[] = this.editData.purchaseCreditNoteItems.where(c =>
                     !ibas.strings.isEmpty(c.baseDocumentType) && c.isDeleted !== true
                 );
@@ -242,17 +242,26 @@ namespace purchase {
                         onCompleted: (action) => {
                             if (action === ibas.emMessageAction.YES) {
                                 this.removePurchaseCreditNoteItem(items);
-                                this.choosePurchaseCreditNoteSupplier();
+                                this.choosePurchaseCreditNoteSupplier(filterConditions);
                             }
                         }
                     });
                     return;
                 }
+                let conditions: ibas.IList<ibas.ICondition> = businesspartner.app.conditions.supplier.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
                 ibas.servicesManager.runChooseService<businesspartner.bo.ISupplier>({
                     boCode: businesspartner.bo.BO_CODE_SUPPLIER,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: businesspartner.app.conditions.supplier.create(),
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<businesspartner.bo.ISupplier>): void {
                         let selected: businesspartner.bo.ISupplier = selecteds.firstOrDefault();
                         that.editData.supplierCode = selected.code;
@@ -372,10 +381,18 @@ namespace purchase {
                 }
             }
             /** 选择采购贷项行物料事件 */
-            private choosePurchaseCreditNoteItemMaterial(caller: bo.PurchaseCreditNoteItem): void {
+            private choosePurchaseCreditNoteItemMaterial(caller: bo.PurchaseCreditNoteItem, filterConditions?: ibas.ICondition[]): void {
                 let that: this = this;
                 let condition: ibas.ICondition;
                 let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 // 添加价格清单条件
                 if (ibas.numbers.valueOf(this.editData.priceList) !== 0) {
                     condition = new ibas.Condition();
@@ -464,12 +481,21 @@ namespace purchase {
                 });
             }
             /** 选择采购贷项行仓库事件 */
-            private choosePurchaseCreditNoteItemWarehouse(caller: bo.PurchaseCreditNoteItem): void {
+            private choosePurchaseCreditNoteItemWarehouse(caller: bo.PurchaseCreditNoteItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.warehouse.create(this.editData.branch);
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
-                ibas.servicesManager.runChooseService<materials.bo.IWarehouse>({
-                    boCode: materials.bo.BO_CODE_WAREHOUSE,
+                ibas.servicesManager.runChooseService<materials.bo.Warehouse>({
+                    boCode: materials.bo.Warehouse.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: materials.app.conditions.warehouse.create(this.editData.branch),
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<materials.bo.IWarehouse>): void {
                         let index: number = that.editData.purchaseCreditNoteItems.indexOf(caller);
                         let item: bo.PurchaseCreditNoteItem = that.editData.purchaseCreditNoteItems[index];
@@ -824,14 +850,23 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(this.editData.shippingAddresss);
             }
-            private choosePurchaseCreditNoteItemUnit(caller: bo.PurchaseCreditNoteItem): void {
+            private choosePurchaseCreditNoteItemUnit(caller: bo.PurchaseCreditNoteItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = ibas.arrays.create(
+                    new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                );
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
                 ibas.servicesManager.runChooseService<materials.bo.IUnit>({
                     boCode: materials.bo.BO_CODE_UNIT,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: [
-                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
-                    ],
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
                         for (let selected of selecteds) {
                             caller.uom = selected.name;

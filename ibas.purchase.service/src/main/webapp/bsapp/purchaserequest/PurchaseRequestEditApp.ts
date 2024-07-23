@@ -347,10 +347,18 @@ namespace purchase {
                     });
                 }
             }
-            private choosePurchaseRequestItemMaterial(caller: bo.PurchaseRequestItem): void {
+            private choosePurchaseRequestItemMaterial(caller: bo.PurchaseRequestItem, filterConditions?: ibas.ICondition[]): void {
                 let that: this = this;
                 let condition: ibas.ICondition;
                 let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 // 添加价格清单条件
                 if (ibas.numbers.valueOf(this.editData.priceList) !== 0) {
                     condition = new ibas.Condition();
@@ -438,14 +446,23 @@ namespace purchase {
                 app.viewShower = this.viewShower;
                 app.run(data, this.editData);
             }
-            private choosePurchaseRequestItemUnit(caller: bo.PurchaseRequestItem): void {
+            private choosePurchaseRequestItemUnit(caller: bo.PurchaseRequestItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = ibas.arrays.create(
+                    new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                );
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
                 ibas.servicesManager.runChooseService<materials.bo.IUnit>({
                     boCode: materials.bo.BO_CODE_UNIT,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: [
-                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
-                    ],
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
                         for (let selected of selecteds) {
                             caller.uom = selected.name;

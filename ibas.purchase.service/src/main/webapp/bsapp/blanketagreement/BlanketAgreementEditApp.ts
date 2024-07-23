@@ -232,12 +232,21 @@ namespace purchase {
             }
             private supplier: businesspartner.bo.Supplier;
             /** 选择一揽子协议供应商事件 */
-            private chooseBlanketAgreementSupplier(): void {
+            private chooseBlanketAgreementSupplier(filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = businesspartner.app.conditions.supplier.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
                 ibas.servicesManager.runChooseService<businesspartner.bo.Supplier>({
                     boCode: businesspartner.bo.BO_CODE_SUPPLIER,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: businesspartner.app.conditions.supplier.create(),
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<businesspartner.bo.Supplier>): void {
                         let selected: businesspartner.bo.Supplier = selecteds.firstOrDefault();
                         that.editData.supplierCode = selected.code;
@@ -282,10 +291,18 @@ namespace purchase {
                 });
             }
             /** 选择一揽子协议物料事件 */
-            private chooseBlanketAgreementItemMaterial(caller: bo.BlanketAgreementItem): void {
+            private chooseBlanketAgreementItemMaterial(caller: bo.BlanketAgreementItem, filterConditions?: ibas.ICondition[]): void {
                 let that: this = this;
                 let condition: ibas.ICondition;
                 let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 // 采购物料
                 condition = new ibas.Condition();
                 condition.alias = materials.app.conditions.product.CONDITION_ALIAS_PURCHASE_ITEM;
@@ -341,14 +358,22 @@ namespace purchase {
                     }
                 });
             }
-            private chooseBlanketAgreementItemUnit(caller: bo.BlanketAgreementItem): void {
-                let that: this = this;
+            private chooseBlanketAgreementItemUnit(caller: bo.BlanketAgreementItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = ibas.arrays.create(
+                    new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                );
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 ibas.servicesManager.runChooseService<materials.bo.IUnit>({
                     boCode: materials.bo.BO_CODE_UNIT,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: [
-                        new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
-                    ],
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<materials.bo.IUnit>): void {
                         for (let selected of selecteds) {
                             caller.uom = selected.name;

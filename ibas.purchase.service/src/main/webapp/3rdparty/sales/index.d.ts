@@ -11582,6 +11582,8 @@ declare namespace sales {
             protected turnToSalesInvoice(): void;
             /** 转为销售预留发票 */
             protected turnToSalesReserveInvoice(): void;
+            /** 转为预付款申请 */
+            protected turnToDownPaymentRequest(): void;
             /** 选择一揽子协议事件 */
             private chooseSalesOrderBlanketAgreement;
             /** 选择销售订单-行 单位 */
@@ -11646,6 +11648,8 @@ declare namespace sales {
             turnToSalesInvoiceEvent: Function;
             /** 转为销售预留发票事件 */
             turnToSalesReserveInvoiceEvent: Function;
+            /** 转为预付款申请事件 */
+            turnToDownPaymentRequestEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
             /** 默认仓库 */
@@ -13560,6 +13564,8 @@ declare namespace sales {
             private chooseDownPaymentRequestItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseDownPaymentRequestItemDistributionRule;
+            /** 预收款申请收款 */
+            protected receiptDownPaymentRequest(): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -13597,6 +13603,8 @@ declare namespace sales {
             chooseDownPaymentRequestSalesDeliveryEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
+            /** 预收款申请收款事件 */
+            receiptDownPaymentRequestEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

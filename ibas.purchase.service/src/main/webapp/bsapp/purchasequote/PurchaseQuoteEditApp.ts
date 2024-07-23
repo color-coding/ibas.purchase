@@ -225,12 +225,21 @@ namespace purchase {
                     createData();
                 }
             }
-            private choosePurchaseQuoteSupplier(): void {
+            private choosePurchaseQuoteSupplier(filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = businesspartner.app.conditions.supplier.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
                 ibas.servicesManager.runChooseService<businesspartner.bo.ISupplier>({
                     boCode: businesspartner.bo.BO_CODE_SUPPLIER,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: businesspartner.app.conditions.supplier.create(),
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<businesspartner.bo.ISupplier>): void {
                         let selected: businesspartner.bo.ISupplier = selecteds.firstOrDefault();
                         that.editData.supplierCode = selected.code;
@@ -345,12 +354,21 @@ namespace purchase {
                     });
                 }
             }
-            private choosePurchaseQuoteItemWarehouse(caller: bo.PurchaseQuoteItem): void {
+            private choosePurchaseQuoteItemWarehouse(caller: bo.PurchaseQuoteItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.warehouse.create(this.editData.branch);
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 let that: this = this;
-                ibas.servicesManager.runChooseService<materials.bo.IWarehouse>({
-                    boCode: materials.bo.BO_CODE_WAREHOUSE,
+                ibas.servicesManager.runChooseService<materials.bo.Warehouse>({
+                    boCode: materials.bo.Warehouse.BUSINESS_OBJECT_CODE,
                     chooseType: ibas.emChooseType.SINGLE,
-                    criteria: materials.app.conditions.warehouse.create(this.editData.branch),
+                    criteria: conditions,
                     onCompleted(selecteds: ibas.IList<materials.bo.IWarehouse>): void {
                         let index: number = that.editData.purchaseQuoteItems.indexOf(caller);
                         let item: bo.PurchaseQuoteItem = that.editData.purchaseQuoteItems[index];
@@ -371,10 +389,26 @@ namespace purchase {
                     }
                 });
             }
-            private choosePurchaseQuoteItemMaterial(caller: bo.PurchaseQuoteItem): void {
+            private choosePurchaseQuoteItemMaterial(caller: bo.PurchaseQuoteItem, filterConditions?: ibas.ICondition[]): void {
                 let that: this = this;
                 let condition: ibas.ICondition;
                 let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create();
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
                 // 添加价格清单条件
                 if (ibas.numbers.valueOf(this.editData.priceList) !== 0) {
                     condition = new ibas.Condition();
@@ -911,7 +945,7 @@ namespace purchase {
                     }
                 });
             }
-            private choosePurchaseQuoteItemUnit(caller: bo.PurchaseQuoteItem, criteria?: ibas.ICriteria): void {
+            private choosePurchaseQuoteItemUnit(caller: bo.PurchaseQuoteItem, criteria?: ibas.ICriteria, filterConditions?: ibas.ICondition[]): void {
                 if (ibas.objects.isNull(criteria)) {
                     criteria = new ibas.Criteria();
                     let condition: ibas.ICondition = criteria.conditions.create();
@@ -958,6 +992,14 @@ namespace purchase {
                         this.choosePurchaseQuoteItemUnit(caller, criteria);
                     }
                 } else {
+                    // 添加输入条件
+                    if (filterConditions instanceof Array && filterConditions.length > 0) {
+                        if (criteria.conditions.length > 1) {
+                            criteria.conditions.firstOrDefault().bracketOpen++;
+                            criteria.conditions.lastOrDefault().bracketClose++;
+                        }
+                        criteria.conditions.add(filterConditions);
+                    }
                     let that: this = this;
                     ibas.servicesManager.runChooseService<materials.bo.IUnit>({
                         boCode: materials.bo.BO_CODE_UNIT,

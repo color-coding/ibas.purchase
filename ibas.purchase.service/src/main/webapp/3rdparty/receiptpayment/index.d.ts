@@ -3408,11 +3408,6 @@ declare namespace receiptpayment {
             /** 交易 */
             trade(amount: number): void | ibas.Waiter;
         }
-        class Waiter extends ibas.Waiter {
-            constructor(title: string);
-            title: string;
-            start(): void;
-        }
         /** 付款交易方式 */
         class PaymentTradingMethod implements IPaymentTradingMethod {
             /** 付款方式 */
@@ -3425,6 +3420,19 @@ declare namespace receiptpayment {
             icon?: string;
             /** 可用金额 */
             amount: number;
+        }
+        class Waiter extends ibas.Waiter {
+            constructor(title: string);
+            title: string;
+            start(): void;
+        }
+        class BusinessPartner {
+            /** 类型 */
+            type: businesspartner.bo.emBusinessPartnerType;
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
         }
     }
 }
@@ -3776,14 +3784,6 @@ declare namespace receiptpayment {
             /** 确定 */
             confirmEvent: Function;
         }
-        class BusinessPartner {
-            /** 类型 */
-            type: businesspartner.bo.emBusinessPartnerType;
-            /** 编码 */
-            code: string;
-            /** 名称 */
-            name: string;
-        }
         class ReceiptTarget {
             /** 待收总计 */
             total: number;
@@ -3817,6 +3817,92 @@ declare namespace receiptpayment {
         }
         /** 收款服务映射 */
         class ReceiptServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace receiptpayment {
+    namespace app {
+        /** 付款服务 */
+        class PaymentService extends ibas.ServiceWithResultApplication<IPaymentServiceView, businesspartner.app.IPaymentContract, bo.IPayment> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private target;
+            private businessPartner;
+            private paymentTradings;
+            /** 运行服务 */
+            runService(contract: businesspartner.app.IPaymentContract): void;
+            /** 移出付款交易 */
+            private removePaymentTrading;
+            /** 使用付款交易 */
+            private applyPaymentTrading;
+            private showPaymentTradings;
+            /** 确定 */
+            private confirm;
+        }
+        /** 视图-付款服务 */
+        interface IPaymentServiceView extends ibas.IBOView {
+            /** 显示业务伙伴 */
+            showBusinessPartner(data: BusinessPartner): void;
+            /** 显示付款目标 */
+            showTarget(data: PaymentTarget): void;
+            /** 显示付款交易方式 */
+            showTradingMethods(methods: IPaymentTradingMethod[]): void;
+            /** 显示付款交易 */
+            showPaymentTradings(tradings: PaymentTrading[], paid: number): void;
+            /** 移出付款交易 */
+            removePaymentTradingEvent: Function;
+            /** 使用付款交易 */
+            applyPaymentTradingEvent: Function;
+            /** 确定 */
+            confirmEvent: Function;
+        }
+        class PaymentTarget {
+            /** 待付总计 */
+            total: number;
+            /** 币种 */
+            currency: string;
+            /** 单据类型 */
+            documentType: string;
+            /** 单据编号 */
+            documentEntry: number;
+            /** 单据行号 */
+            documentLineId?: number;
+            /** 单据摘要 */
+            documentSummary?: string;
+            /** 允许部分付款 */
+            allowPartial?: boolean;
+            /** 允许超出付款 */
+            allowOver?: boolean;
+        }
+        class PaymentTrading {
+            /** 交易方式 */
+            trading: IPaymentTradingMethod;
+            /** 金额 */
+            amount: number;
+            /** 货币 */
+            currency: string;
+        }
+        /** 付款服务映射 */
+        class PaymentServiceMapping extends ibas.ServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */

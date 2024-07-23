@@ -54,7 +54,7 @@ namespace purchase {
                         content: [
                             new sap.ui.core.Title("", { text: ibas.i18n.prop("purchase_title_general") }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_suppliercode") }),
-                            new sap.extension.m.Input("", {
+                            new sap.extension.m.RepositoryInput("", {
                                 showValueHelp: true,
                                 valueHelpRequest: function (): void {
                                     that.fireViewEvents(that.choosePurchaseQuoteSupplierEvent);
@@ -65,6 +65,20 @@ namespace purchase {
                                         boCode: businesspartner.bo.Supplier.BUSINESS_OBJECT_CODE,
                                         linkValue: event.getParameter("value")
                                     });
+                                },
+                                describeValue: false,
+                                showSuggestion: true,
+                                repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                dataInfo: {
+                                    type: businesspartner.bo.Supplier,
+                                    key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
+                                    text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME
+                                },
+                                suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                    let selectedItem: any = event.getParameter("selectedItem");
+                                    if (!ibas.objects.isNull(selectedItem)) {
+                                        that.fireViewEvents(that.choosePurchaseQuoteSupplierEvent, this.itemConditions(selectedItem));
+                                    }
                                 }
                             }).bindProperty("bindingValue", {
                                 path: "supplierCode",
@@ -304,7 +318,7 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasequoteitem_itemcode"),
-                                        template: new sap.extension.m.Input("", {
+                                        template: new sap.extension.m.RepositoryInput("", {
                                             showValueHelp: true,
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.choosePurchaseQuoteItemMaterialEvent,
@@ -318,7 +332,24 @@ namespace purchase {
                                                     boCode: materials.bo.Material.BUSINESS_OBJECT_CODE,
                                                     linkValue: event.getParameter("value")
                                                 });
-                                            }
+                                            },
+                                            describeValue: false,
+                                            showSuggestion: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.Material,
+                                                key: materials.bo.Material.PROPERTY_CODE_NAME,
+                                                text: materials.bo.Material.PROPERTY_NAME_NAME
+                                            },
+                                            suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                                let selectedItem: any = event.getParameter("selectedItem");
+                                                if (!ibas.objects.isNull(selectedItem)) {
+                                                    that.fireViewEvents(that.choosePurchaseQuoteItemMaterialEvent, this.getBindingContext().getObject(), this.itemConditions(selectedItem));
+                                                }
+                                            },
+                                            criteria: [
+                                                new ibas.Condition(materials.app.conditions.product.CONDITION_ALIAS_PURCHASE_ITEM, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                                            ]
                                         }).bindProperty("bindingValue", {
                                             path: "itemCode",
                                             type: new sap.extension.data.Alphanumeric({
@@ -381,14 +412,31 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasequoteitem_uom"),
-                                        template: new sap.extension.m.Input("", {
+                                        template: new sap.extension.m.RepositoryInput("", {
                                             showValueHelp: true,
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.choosePurchaseQuoteItemUnitEvent,
                                                     // 获取当前对象
                                                     this.getBindingContext().getObject()
                                                 );
-                                            }
+                                            },
+                                            describeValue: false,
+                                            showSuggestion: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.Unit,
+                                                key: materials.bo.Unit.PROPERTY_NAME_NAME,
+                                                text: materials.bo.Unit.PROPERTY_NAME_NAME
+                                            },
+                                            suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                                let selectedItem: any = event.getParameter("selectedItem");
+                                                if (!ibas.objects.isNull(selectedItem)) {
+                                                    that.fireViewEvents(that.choosePurchaseQuoteItemUnitEvent, this.getBindingContext().getObject(), null, this.itemConditions(selectedItem));
+                                                }
+                                            },
+                                            criteria: [
+                                                new ibas.Condition(materials.bo.Unit.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                                            ]
                                         }).bindProperty("bindingValue", {
                                             path: "uom",
                                             type: new sap.extension.data.Alphanumeric({
