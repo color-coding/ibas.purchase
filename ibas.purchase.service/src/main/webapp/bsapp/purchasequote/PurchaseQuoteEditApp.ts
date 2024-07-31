@@ -523,6 +523,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseQuoteItems(this.editData.purchaseQuoteItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseQuoteItems.create();
+                    this.view.showPurchaseQuoteItems(this.editData.purchaseQuoteItems.filterDeleted());
                 } else {
                     this.choosePurchaseQuoteItemMaterial(undefined);
                 }

@@ -540,6 +540,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseCreditNoteItems(this.editData.purchaseCreditNoteItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseCreditNoteItems.create();
+                    this.view.showPurchaseCreditNoteItems(this.editData.purchaseCreditNoteItems.filterDeleted());
                 } else {
                     this.choosePurchaseCreditNoteItemMaterial(undefined);
                 }

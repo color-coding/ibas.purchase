@@ -294,7 +294,10 @@ namespace purchase {
                                                         })
                                                     }),
                                                 ]
-                                            })
+                                            }),
+                                            defaultAction(): void {
+                                                that.fireViewEvents(that.addPurchaseInvoiceItemEvent, []);
+                                            }
                                         }),
                                         new sap.m.Button("", {
                                             text: ibas.i18n.prop("shell_data_remove"),
@@ -479,12 +482,14 @@ namespace purchase {
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseinvoiceitem_itemdescription"),
-                                        width: "16rem",
-                                        template: new sap.extension.m.Text("", {
+                                        template: new sap.extension.m.Input("", {
                                         }).bindProperty("bindingValue", {
                                             path: "itemDescription",
-                                            type: new sap.extension.data.Alphanumeric()
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 100
+                                            })
                                         }),
+                                        width: "16rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseinvoiceitem_itemversion"),

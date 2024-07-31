@@ -564,6 +564,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseReserveInvoiceItems(this.editData.purchaseReserveInvoiceItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseReserveInvoiceItems.create();
+                    this.view.showPurchaseReserveInvoiceItems(this.editData.purchaseReserveInvoiceItems.filterDeleted());
                 } else {
                     this.choosePurchaseReserveInvoiceItemMaterial(undefined);
                 }

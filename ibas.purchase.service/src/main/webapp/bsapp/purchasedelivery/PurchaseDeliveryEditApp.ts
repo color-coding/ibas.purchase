@@ -591,6 +591,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseDeliveryItems.create();
+                    this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
                 } else {
                     this.choosePurchaseDeliveryItemMaterial(undefined);
                 }

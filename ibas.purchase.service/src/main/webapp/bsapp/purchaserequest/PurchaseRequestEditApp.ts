@@ -230,6 +230,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseRequestItems(this.editData.purchaseRequestItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseRequestItems.create();
+                    this.view.showPurchaseRequestItems(this.editData.purchaseRequestItems.filterDeleted());
                 } else {
                     this.choosePurchaseRequestItemMaterial(undefined);
                 }

@@ -521,6 +521,9 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
                     }
+                } else if (items instanceof Array) {
+                    this.editData.purchaseReturnItems.create();
+                    this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
                 } else {
                     this.choosePurchaseReturnItemMaterial(undefined);
                 }
