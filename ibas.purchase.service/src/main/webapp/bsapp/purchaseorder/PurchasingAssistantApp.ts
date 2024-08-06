@@ -221,7 +221,29 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 this.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_fetched_none"));
                             }
-                            this.view.showSalesOrders(opRslt.resultObjects);
+                            this.salesOrders = opRslt.resultObjects;
+                            for (let oItem of this.purchaseOrder.purchaseOrderItems) {
+                                if (oItem.isNew === false) {
+                                    continue;
+                                }
+                                for (let salesOrder of this.salesOrders) {
+                                    if (oItem.baseDocumentType !== salesOrder.objectCode) {
+                                        continue;
+                                    }
+                                    if (oItem.baseDocumentEntry !== salesOrder.docEntry) {
+                                        continue;
+                                    }
+                                    for (let sItem of salesOrder.salesOrderItems) {
+                                        if (oItem.baseDocumentLineId !== sItem.lineId) {
+                                            continue;
+                                        }
+                                        sItem.orderedQuantity += oItem.quantity;
+                                        break;
+                                    }
+                                    break;
+                                }
+                            }
+                            this.view.showSalesOrders(this.salesOrders);
                         } catch (error) {
                             this.messages(error);
                         }
@@ -374,6 +396,7 @@ namespace purchase {
                     });
                 }
             }
+            private salesOrders: ibas.ArrayList<sales.bo.SalesOrder>;
             /** 选择销售订单行事件 */
             private chooseSalesOrderItem(orderItem: sales.bo.SalesOrderItem[] | sales.bo.SalesOrderItem, merge: boolean): void {
                 let orderItems: ibas.IList<sales.bo.SalesOrderItem> = ibas.arrays.create(orderItem);
@@ -493,6 +516,22 @@ namespace purchase {
                         if (item.isNew) {
                             // 新建的移除集合
                             this.purchaseOrder.purchaseOrderItems.remove(item);
+                            for (let salesOrder of this.salesOrders) {
+                                if (item.baseDocumentType !== salesOrder.objectCode) {
+                                    continue;
+                                }
+                                if (item.baseDocumentEntry !== salesOrder.docEntry) {
+                                    continue;
+                                }
+                                for (let sItem of salesOrder.salesOrderItems) {
+                                    if (item.baseDocumentLineId !== sItem.lineId) {
+                                        continue;
+                                    }
+                                    sItem.orderedQuantity -= item.quantity;
+                                    break;
+                                }
+                                break;
+                            }
                         } else {
                             // 非新建标记删除
                             item.delete();
