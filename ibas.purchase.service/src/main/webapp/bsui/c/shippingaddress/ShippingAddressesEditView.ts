@@ -19,13 +19,18 @@ namespace purchase {
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
-                    this.formTop = new sap.ui.layout.form.SimpleForm("", {
+                    this.formTop = new sap.extension.layout.DataSimpleForm("", {
                         editable: true,
+                        userFieldsTitle: "",
+                        userFieldsMode: "input",
+                        dataInfo: {
+                            code: bo.ShippingAddress.BUSINESS_OBJECT_CODE,
+                        },
                         content: [
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_name") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/name",
+                                path: "name",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 30
                                 })
@@ -44,7 +49,7 @@ namespace purchase {
                             new sap.extension.m.EnumSelect("", {
                                 enumType: bo.emShippingStatus
                             }).bindProperty("bindingValue", {
-                                path: "/shippingStatus",
+                                path: "shippingStatus",
                                 type: new sap.extension.data.Enum({
                                     enumType: bo.emShippingStatus
                                 })
@@ -52,7 +57,7 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_consignee") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/consignee",
+                                path: "consignee",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 50
                                 })
@@ -60,7 +65,7 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_mobilephone") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/mobilePhone",
+                                path: "mobilePhone",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 20
                                 })
@@ -70,32 +75,32 @@ namespace purchase {
                                 countryVisible: true,
                                 zipCodeVisible: true,
                             }).bindProperty("country", {
-                                path: "/country",
+                                path: "country",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 100
                                 })
                             }).bindProperty("province", {
-                                path: "/province",
+                                path: "province",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 100
                                 })
                             }).bindProperty("city", {
-                                path: "/city",
+                                path: "city",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 100
                                 })
                             }).bindProperty("district", {
-                                path: "/district",
+                                path: "district",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 100
                                 })
                             }).bindProperty("street", {
-                                path: "/street",
+                                path: "street",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 100
                                 })
                             }).bindProperty("zipCode", {
-                                path: "/zipCode",
+                                path: "zipCode",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 10
                                 })
@@ -103,7 +108,7 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_trackingnumber") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/trackingNumber",
+                                path: "trackingNumber",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 60
                                 })
@@ -113,27 +118,27 @@ namespace purchase {
 
                                 fieldWidth: "70%",
                             }).bindProperty("bindingValue", {
-                                path: "/expense",
+                                path: "expense",
                                 type: new sap.extension.data.Sum()
                             }).bindProperty("description", {
-                                path: "/currency",
+                                path: "currency",
                                 type: new sap.extension.data.Alphanumeric()
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_tax") }),
                             new component.TaxGroupSelect("", {
                             }).bindProperty("bindingValue", {
-                                path: "/tax",
+                                path: "tax",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 8
                                 })
                             }).bindProperty("rate", {
-                                path: "/taxRate",
+                                path: "taxRate",
                                 type: new sap.extension.data.Rate()
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_remark1") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/remark1",
+                                path: "remark1",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 200
                                 })
@@ -141,7 +146,7 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_remark2") }),
                             new sap.extension.m.Input("", {
                             }).bindProperty("bindingValue", {
-                                path: "/remark2",
+                                path: "remark2",
                                 type: new sap.extension.data.Alphanumeric({
                                     maxLength: 200
                                 })
@@ -198,27 +203,36 @@ namespace purchase {
                 /** 显示数据 */
                 showShippingAddress(data: bo.ShippingAddress): void {
                     if (ibas.objects.isNull(data)) {
-                        for (let item of this.formTop.getContent()) {
-                            if (item instanceof sap.extension.m.Input) {
-                                item.setEditable(false);
-                            } else if (item instanceof sap.extension.m.AddressArea) {
-                                item.setEditable(false);
-                            } else if (item instanceof sap.extension.m.Select) {
-                                item.setEnabled(false);
+                        this.formTop.setModel(null);
+                        setTimeout(() => {
+                            for (let item of this.formTop.getContent()) {
+                                if (item instanceof sap.m.InputBase) {
+                                    item.setEditable(false);
+                                } else if (item instanceof sap.extension.core.EditableControl) {
+                                    item.setEditable(false);
+                                } else if (item instanceof sap.m.Select) {
+                                    item.setEnabled(false);
+                                } else if (item instanceof sap.m.ComboBoxBase) {
+                                    item.setEnabled(false);
+                                }
                             }
-                        }
+                        }, 200);
                     } else {
-                        for (let item of this.formTop.getContent()) {
-                            if (item instanceof sap.m.Input) {
-                                item.setEditable(true);
-                            } else if (item instanceof sap.extension.m.AddressArea) {
-                                item.setEditable(true);
-                            } else if (item instanceof sap.m.Select) {
-                                item.setEnabled(true);
+                        this.formTop.setModel(new sap.ui.model.json.JSONModel(data));
+                        setTimeout(() => {
+                            for (let item of this.formTop.getContent()) {
+                                if (item instanceof sap.m.InputBase) {
+                                    item.setEditable(true);
+                                } else if (item instanceof sap.extension.core.EditableControl) {
+                                    item.setEditable(true);
+                                } else if (item instanceof sap.m.Select) {
+                                    item.setEnabled(true);
+                                } else if (item instanceof sap.m.ComboBoxBase) {
+                                    item.setEnabled(true);
+                                }
                             }
-                        }
+                        }, 200);
                     }
-                    this.formTop.setModel(new sap.ui.model.json.JSONModel(data));
                 }
             }
         }

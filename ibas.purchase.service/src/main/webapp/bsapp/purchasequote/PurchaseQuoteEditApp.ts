@@ -401,14 +401,6 @@ namespace purchase {
                     }
                     conditions.add(filterConditions);
                 }
-                // 添加输入条件
-                if (filterConditions instanceof Array && filterConditions.length > 0) {
-                    if (conditions.length > 1) {
-                        conditions.firstOrDefault().bracketOpen++;
-                        conditions.lastOrDefault().bracketClose++;
-                    }
-                    conditions.add(filterConditions);
-                }
                 // 添加价格清单条件
                 if (ibas.numbers.valueOf(this.editData.priceList) !== 0) {
                     condition = new ibas.Condition();

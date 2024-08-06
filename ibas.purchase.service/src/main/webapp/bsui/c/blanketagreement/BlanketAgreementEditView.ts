@@ -61,6 +61,19 @@ namespace purchase {
                                     if (!ibas.objects.isNull(selectedItem)) {
                                         that.fireViewEvents(that.chooseBlanketAgreementSupplierEvent, this.itemConditions(selectedItem));
                                     }
+                                },
+                                editable: {
+                                    parts: [
+                                        {
+                                            path: "isNew",
+                                        },
+                                        {
+                                            path: "documentStatus",
+                                        }
+                                    ],
+                                    formatter(isNew: boolean, documentStatus: ibas.emDocumentStatus): boolean {
+                                        return isNew === false && documentStatus > ibas.emDocumentStatus.PLANNED ? false : true;
+                                    }
                                 }
                             }).bindProperty("bindingValue", {
                                 path: "supplierCode",

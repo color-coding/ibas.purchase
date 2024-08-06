@@ -109,6 +109,12 @@ namespace purchase {
                                                 }
                                             }),
                                             new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_materialinventory"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.choosePurchaseReturnItemMaterialEvent, undefined, materials.bo.BO_CODE_PRODUCT_INVENTORY);
+                                                }
+                                            }),
+                                            new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("bo_purchaseorder"),
                                                 press: function (): void {
                                                     that.fireViewEvents(that.choosePurchaseReturnPurchaseOrderEvent);
@@ -348,6 +354,19 @@ namespace purchase {
                                                                 boCode: businesspartner.bo.Supplier.BUSINESS_OBJECT_CODE,
                                                                 linkValue: event.getParameter("value")
                                                             });
+                                                        },
+                                                        editable: {
+                                                            parts: [
+                                                                {
+                                                                    path: "isNew",
+                                                                },
+                                                                {
+                                                                    path: "documentStatus",
+                                                                }
+                                                            ],
+                                                            formatter(isNew: boolean, documentStatus: ibas.emDocumentStatus): boolean {
+                                                                return isNew === false && documentStatus > ibas.emDocumentStatus.PLANNED ? false : true;
+                                                            }
                                                         }
                                                     }).bindProperty("bindingValue", {
                                                         path: "supplierCode",

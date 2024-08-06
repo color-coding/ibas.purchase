@@ -86,6 +86,19 @@ namespace purchase {
                                     if (!ibas.objects.isNull(selectedItem)) {
                                         that.fireViewEvents(that.choosePurchaseReturnSupplierEvent, this.itemConditions(selectedItem));
                                     }
+                                },
+                                editable: {
+                                    parts: [
+                                        {
+                                            path: "isNew",
+                                        },
+                                        {
+                                            path: "documentStatus",
+                                        }
+                                    ],
+                                    formatter(isNew: boolean, documentStatus: ibas.emDocumentStatus): boolean {
+                                        return isNew === false && documentStatus > ibas.emDocumentStatus.PLANNED ? false : true;
+                                    }
                                 }
                             }).bindProperty("bindingValue", {
                                 path: "supplierCode",
@@ -256,6 +269,12 @@ namespace purchase {
                                                         text: ibas.i18n.prop("shell_data_clone_line"),
                                                         press: function (): void {
                                                             that.fireViewEvents(that.addPurchaseReturnItemEvent, that.tablePurchaseReturnItem.getSelecteds());
+                                                        }
+                                                    }),
+                                                    new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("bo_materialinventory"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.choosePurchaseReturnItemMaterialEvent, undefined, materials.bo.BO_CODE_PRODUCT_INVENTORY);
                                                         }
                                                     }),
                                                     new sap.m.MenuItem("", {
