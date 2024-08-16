@@ -1263,6 +1263,8 @@ declare namespace materials {
             minimumOrderQuantity: number;
             /** 订购倍数 */
             orderMultiple: number;
+            /** 预留可超订购量 */
+            reserveExcessOrdered: ibas.emYesNo;
             /** 提前期（天） */
             leadTime: number;
             /** 序号管理 */
@@ -6177,6 +6179,12 @@ declare namespace materials {
             get orderMultiple(): number;
             /** 设置-订购倍数 */
             set orderMultiple(value: number);
+            /** 映射的属性名称-预留可超订购量 */
+            static PROPERTY_RESERVEEXCESSORDERED_NAME: string;
+            /** 获取-预留可超订购量 */
+            get reserveExcessOrdered(): ibas.emYesNo;
+            /** 设置-预留可超订购量 */
+            set reserveExcessOrdered(value: ibas.emYesNo);
             /** 映射的属性名称-提前期（天） */
             static PROPERTY_LEADTIME_NAME: string;
             /** 获取-提前期（天） */
@@ -14259,6 +14267,7 @@ declare namespace materials {
             protected deleteData(data: bo.Material | bo.Material[]): void;
             private materialGroup;
             private materialUnit;
+            private materialSubstitute;
         }
         /** 视图-物料 */
         interface IMaterialListView extends ibas.IBOListView {
@@ -14270,6 +14279,8 @@ declare namespace materials {
             materialGroupEvent: Function;
             /** 物料单位事件 */
             materialUnitEvent: Function;
+            /** 物料替代事件 */
+            materialSubstituteEvent: Function;
             /** 显示数据 */
             showData(datas: bo.Material[]): void;
         }
@@ -14776,8 +14787,8 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace app {
-        /** 列表应用-物料替代 */
-        class MaterialSubstituteListApp extends ibas.Application<IMaterialSubstituteListView> {
+        /** 应用-物料替代 */
+        class MaterialSubstituteEditApp extends ibas.Application<IMaterialSubstituteEditView> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -14800,7 +14811,7 @@ declare namespace materials {
             private chooseSubstituteVersion;
         }
         /** 视图-物料替代 */
-        interface IMaterialSubstituteListView extends ibas.IView {
+        interface IMaterialSubstituteEditView extends ibas.IView {
             /** 保存数据事件 */
             saveSubstituteEvent: Function;
             /** 添加数据事件 */
@@ -15003,6 +15014,63 @@ declare namespace materials {
             resetEvent: Function;
             /** 调拨事件 */
             transferToEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-物料替代 */
+        class MaterialSubstituteApp extends ibas.Application<IMaterialSubstituteView> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 关闭视图 */
+            close(): void;
+            protected substitutes: bo.MaterialSubstitutes;
+            protected removeMaterialSubstitute(data: materials.bo.MaterialSubstitute | materials.bo.MaterialSubstitute[]): void;
+            protected addMaterialSubstitute(data: bo.Material): void;
+            protected saveMaterialSubstitute(beSaveds: materials.bo.MaterialSubstitute[]): void;
+            protected fetchData(criteria: ibas.ICriteria): void;
+            protected fetchSubstitute(criteria?: ibas.ICriteria): void;
+            /** 选择物料版本 */
+            protected chooseSubstituteVersion(caller: bo.MaterialSubstitute): void;
+            /** 选择物料 */
+            protected chooseSubstituteMaterial(caller: bo.MaterialSubstitute): void;
+        }
+        /** 视图-物料替代 */
+        interface IMaterialSubstituteView extends ibas.IView {
+            /** 查询物料事件 */
+            fetchDataEvent: Function;
+            /** 查询数据事件 */
+            fetchSubstituteEvent: Function;
+            /** 保存数据事件 */
+            saveSubstituteEvent: Function;
+            /** 添加数据事件 */
+            addSubstituteEvent: Function;
+            /** 移除数据事件 */
+            removeSubstituteEvent: Function;
+            /** 显示数据 */
+            showSubstitutes(datas: bo.MaterialSubstitute[]): void;
+            /** 显示物料 */
+            showMaterials(data: bo.Material[]): void;
+            /** 选择物料版本事件 */
+            chooseSubstituteVersionEvent: Function;
+            /** 选择物料事件 */
+            chooseSubstituteMaterialEvent: Function;
         }
     }
 }

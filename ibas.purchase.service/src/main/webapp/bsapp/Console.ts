@@ -17,6 +17,7 @@
 /// <reference path="./blanketagreement/index.ts" />
 /// <reference path="./downpaymentrequest/index.ts" />
 /// <reference path="./purchasereserveinvoice/index.ts" />
+/// <reference path="./purchasereturnrequest/index.ts" />
 /// <reference path="./others/index.ts" />
 namespace purchase {
     export namespace app {
@@ -46,6 +47,7 @@ namespace purchase {
                 this.register(new PurchaseQuoteFunc());
                 this.register(new PurchaseOrderFunc());
                 this.register(new PurchaseDeliveryFunc());
+                this.register(new PurchaseReturnRequestFunc());
                 this.register(new PurchaseReturnFunc());
                 this.register(new PurchaseInvoiceFunc());
                 this.register(new PurchaseReserveInvoiceFunc());
@@ -82,6 +84,9 @@ namespace purchase {
                 this.register(new DownPaymentRequestEditServiceMapping());
                 this.register(new PurchaseReserveInvoiceChooseServiceMapping());
                 this.register(new PurchaseReserveInvoiceLinkServiceMapping());
+                this.register(new PurchaseReturnRequestChooseServiceMapping());
+                this.register(new PurchaseReturnRequestLinkServiceMapping());
+                this.register(new PurchaseReturnRequestEditServiceMapping());
                 // 注册常驻应用
                 // 收付款服务
                 // this.register(new PurchaseReturnReceiptServiceMapping()); 没这种情况

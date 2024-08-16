@@ -13,6 +13,7 @@ import org.colorcoding.ibas.purchase.bo.purchasequote.IPurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.IPurchaseRequest;
 import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.IPurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturn;
+import org.colorcoding.ibas.purchase.bo.purchasereturnrequest.IPurchaseReturnRequest;
 
 /**
  * Purchase仓库应用
@@ -188,6 +189,20 @@ public interface IBORepositoryPurchaseApp extends IBORepositoryApplication {
 	 */
 	IOperationResult<IPurchaseReserveInvoice> savePurchaseReserveInvoice(IPurchaseReserveInvoice bo);
 
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购退货请求
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseReturnRequest> fetchPurchaseReturnRequest(ICriteria criteria);
+
+	/**
+	 * 保存-采购退货请求
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	IOperationResult<IPurchaseReturnRequest> savePurchaseReturnRequest(IPurchaseReturnRequest bo);
 	// --------------------------------------------------------------------------------------------//
 
 }

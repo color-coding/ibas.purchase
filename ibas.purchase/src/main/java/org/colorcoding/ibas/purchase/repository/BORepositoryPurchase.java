@@ -24,6 +24,8 @@ import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.IPurchaseReserveI
 import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturn;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
+import org.colorcoding.ibas.purchase.bo.purchasereturnrequest.IPurchaseReturnRequest;
+import org.colorcoding.ibas.purchase.bo.purchasereturnrequest.PurchaseReturnRequest;
 
 /**
  * Purchase仓库
@@ -468,6 +470,48 @@ public class BORepositoryPurchase extends BORepositoryServiceApplication
 		return new OperationResult<IPurchaseReserveInvoice>(
 				this.savePurchaseReserveInvoice((PurchaseReserveInvoice) bo, this.getUserToken()));
 	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购退货请求
+	 * @param criteria 查询
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseReturnRequest> fetchPurchaseReturnRequest(ICriteria criteria, String token) {
+		return super.fetch(criteria, token, PurchaseReturnRequest.class);
+	}
+
+	/**
+	 * 查询-采购退货请求（提前设置用户口令）
+	 * @param criteria 查询
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseReturnRequest> fetchPurchaseReturnRequest(ICriteria criteria) {
+		return new OperationResult<IPurchaseReturnRequest>(
+				this.fetchPurchaseReturnRequest(criteria, this.getUserToken()));
+	}
+
+	/**
+	 * 保存-采购退货请求
+	 * @param bo 对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	public OperationResult<PurchaseReturnRequest> savePurchaseReturnRequest(PurchaseReturnRequest bo, String token) {
+		return super.save(bo, token);
+	}
+
+	/**
+	 * 保存-采购退货请求（提前设置用户口令）
+	 * @param bo 对象实例
+	 * @return 操作结果
+	 */
+	public IOperationResult<IPurchaseReturnRequest> savePurchaseReturnRequest(IPurchaseReturnRequest bo) {
+		return new OperationResult<IPurchaseReturnRequest>(
+				this.savePurchaseReturnRequest((PurchaseReturnRequest) bo, this.getUserToken()));
+	}
+
 	// --------------------------------------------------------------------------------------------//
 
 }

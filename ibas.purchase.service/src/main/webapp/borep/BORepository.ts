@@ -183,6 +183,20 @@ namespace purchase {
             savePurchaseReserveInvoice(saver: ibas.ISaveCaller<bo.PurchaseReserveInvoice>): void {
                 super.save(bo.PurchaseReserveInvoice.name, saver);
             }
+            /**
+             * 查询 采购退货请求
+             * @param fetcher 查询者
+             */
+            fetchPurchaseReturnRequest(fetcher: ibas.IFetchCaller<bo.PurchaseReturnRequest>): void {
+                super.fetch(bo.PurchaseReturnRequest.name, fetcher);
+            }
+            /**
+             * 保存 采购退货请求
+             * @param saver 保存者
+             */
+            savePurchaseReturnRequest(saver: ibas.ISaveCaller<bo.PurchaseReturnRequest>): void {
+                super.save(bo.PurchaseReturnRequest.name, saver);
+            }
 
         }
     }

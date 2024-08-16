@@ -14,8 +14,8 @@ import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDeliveryItem;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDeliveryItem;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.IPurchaseReturnItem;
-import org.colorcoding.ibas.purchase.data.DataConvert;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
+import org.colorcoding.ibas.sales.MyConfiguration;
 
 public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 
@@ -26,20 +26,29 @@ public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 
 	@Override
 	protected boolean caculate(String itemCode, String warehouse) {
+		String docType, deliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+		Integer docEntry, docLine;
 		if (this.getSourceData() instanceof IPurchaseReturnItem) {
 			IPurchaseReturnItem item = (IPurchaseReturnItem) this.getSourceData();
-			if (!DataConvert.isNullOrEmpty(item.getBaseDocumentType()) && item.getBaseDocumentEntry() > 0
-					&& item.getBaseDocumentLineId() > 0) {
+			docType = item.getBaseDocumentType();
+			docEntry = item.getBaseDocumentEntry();
+			docLine = item.getBaseDocumentLineId();
+			if (!deliveryCode.equals(docType)) {
+				docType = item.getOriginalDocumentType();
+				docEntry = item.getOriginalDocumentEntry();
+				docLine = item.getOriginalDocumentLineId();
+			}
+			if (deliveryCode.equals(docType) && docEntry > 0 && docLine > 0) {
 				Criteria criteria = new Criteria();
 				ICondition condition = criteria.getConditions().create();
 				condition.setAlias(PurchaseDelivery.PROPERTY_DOCENTRY.getName());
-				condition.setValue(item.getBaseDocumentEntry());
+				condition.setValue(docEntry);
 				IChildCriteria childCriteria = criteria.getChildCriterias().create();
 				childCriteria.setPropertyPath(PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS.getName());
 				childCriteria.setOnlyHasChilds(true);
 				condition = childCriteria.getConditions().create();
 				condition.setAlias(PurchaseDeliveryItem.PROPERTY_LINEID.getName());
-				condition.setValue(item.getBaseDocumentLineId());
+				condition.setValue(docLine);
 				BORepositoryPurchase boRepository = new BORepositoryPurchase();
 				boRepository.setRepository(this.getService().getRepository());
 				IOperationResult<IPurchaseDelivery> operationResult = boRepository.fetchPurchaseDelivery(criteria);
@@ -47,14 +56,14 @@ public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 					throw new BusinessLogicException(operationResult.getError());
 				}
 				for (IPurchaseDelivery baseDocument : operationResult.getResultObjects()) {
-					if (!item.getBaseDocumentType().equals(baseDocument.getObjectCode())) {
+					if (!docType.equals(baseDocument.getObjectCode())) {
 						continue;
 					}
-					if (item.getBaseDocumentEntry().compareTo(baseDocument.getDocEntry()) != 0) {
+					if (docEntry.compareTo(baseDocument.getDocEntry()) != 0) {
 						continue;
 					}
 					for (IPurchaseDeliveryItem baseLine : baseDocument.getPurchaseDeliveryItems()) {
-						if (item.getBaseDocumentLineId().compareTo(baseLine.getLineId()) != 0) {
+						if (docLine.compareTo(baseLine.getLineId()) != 0) {
 							continue;
 						}
 						this.setAmount(Decimal.multiply(this.getQuantity(), item.getPreTaxPrice()));

@@ -17,6 +17,7 @@
 /// <reference path="./bo/BlanketAgreement.ts" />
 /// <reference path="./bo/DownPaymentRequest.ts" />
 /// <reference path="./bo/PurchaseReserveInvoice.ts" />
+/// <reference path="./bo/PurchaseReturnRequest.ts" />
 /// <reference path="./DataConverter.ts" />
 /// <reference path="./BORepository.ts" />
 
@@ -36,5 +37,6 @@ namespace purchase {
         boFactory.register(BlanketAgreement.BUSINESS_OBJECT_CODE, BlanketAgreement);
         boFactory.register(DownPaymentRequest.BUSINESS_OBJECT_CODE, DownPaymentRequest);
         boFactory.register(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE, PurchaseReserveInvoice);
+        boFactory.register(PurchaseReturnRequest.BUSINESS_OBJECT_CODE, PurchaseReturnRequest);
     }
 }

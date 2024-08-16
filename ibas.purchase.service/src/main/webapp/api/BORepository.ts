@@ -128,6 +128,16 @@ namespace purchase {
              * @param saver 保存者
              */
             savePurchaseReserveInvoice(saver: ibas.ISaveCaller<bo.IPurchaseReserveInvoice>): void;
+            /**
+             * 查询 采购退货请求
+             * @param fetcher 查询者
+             */
+            fetchPurchaseReturnRequest(fetcher: ibas.IFetchCaller<bo.IPurchaseReturnRequest>): void;
+            /**
+             * 保存 采购退货请求
+             * @param saver 保存者
+             */
+            savePurchaseReturnRequest(saver: ibas.ISaveCaller<bo.IPurchaseReturnRequest>): void;
 
         }
     }

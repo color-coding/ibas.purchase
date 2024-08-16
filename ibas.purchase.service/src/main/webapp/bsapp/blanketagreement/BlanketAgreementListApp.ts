@@ -111,8 +111,16 @@ namespace purchase {
                 }
                 // 标记删除对象
                 beDeleteds.forEach((value) => {
-                    value.delete();
+                    if (value.referenced === ibas.emYesNo.YES) {
+                        this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_referenced", value.toString()));
+                    } else {
+                        value.delete();
+                    }
                 });
+                beDeleteds = ibas.arrays.create(beDeleteds.where(c => c.isDeleted === true));
+                if (beDeleteds.length === 0) {
+                    return;
+                }
                 let that: this = this;
                 this.messages({
                     type: ibas.emMessageType.QUESTION,

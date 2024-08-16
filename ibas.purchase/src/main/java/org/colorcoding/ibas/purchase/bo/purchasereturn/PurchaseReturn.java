@@ -2027,7 +2027,8 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 							if (line.getLineStatus() == emDocumentStatus.PLANNED) {
 								continue;
 							}
-							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())) {
+							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())
+									|| PurchaseDeliveryCode.equals(line.getOriginalDocumentType())) {
 								/** 基于交货 **/
 								// 库存科目
 								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line, line.getInventoryQuantity());

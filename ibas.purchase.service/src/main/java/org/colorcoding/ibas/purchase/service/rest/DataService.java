@@ -21,6 +21,7 @@ import org.colorcoding.ibas.purchase.bo.purchasequote.PurchaseQuote;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
 import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
+import org.colorcoding.ibas.purchase.bo.purchasereturnrequest.PurchaseReturnRequest;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
 /**
@@ -356,6 +357,37 @@ public class DataService extends BORepositoryPurchase {
 	public OperationResult<PurchaseReserveInvoice> savePurchaseReserveInvoice(PurchaseReserveInvoice bo,
 			@HeaderParam("authorization") String authorization, @QueryParam("token") String token) {
 		return super.savePurchaseReserveInvoice(bo, MyConfiguration.optToken(authorization, token));
+	}
+
+	// --------------------------------------------------------------------------------------------//
+	/**
+	 * 查询-采购退货请求
+	 * @param criteria 查询
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("fetchPurchaseReturnRequest")
+	public OperationResult<PurchaseReturnRequest> fetchPurchaseReturnRequest(Criteria criteria,
+			@HeaderParam("authorization") String authorization, @QueryParam("token") String token) {
+		return super.fetchPurchaseReturnRequest(criteria, MyConfiguration.optToken(authorization, token));
+	}
+
+	/**
+	 * 保存-采购退货请求
+	 * @param bo 对象实例
+	 * @param token 口令
+	 * @return 操作结果
+	 */
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("savePurchaseReturnRequest")
+	public OperationResult<PurchaseReturnRequest> savePurchaseReturnRequest(PurchaseReturnRequest bo,
+			@HeaderParam("authorization") String authorization, @QueryParam("token") String token) {
+		return super.savePurchaseReturnRequest(bo, MyConfiguration.optToken(authorization, token));
 	}
 
 	// --------------------------------------------------------------------------------------------//

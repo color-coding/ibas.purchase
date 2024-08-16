@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.choosePurchaseReturnItemMaterialSerialEvent = this.choosePurchaseReturnItemMaterialSerial;
                 this.view.choosePurchaseReturnPurchaseOrderEvent = this.choosePurchaseReturnPurchaseOrder;
                 this.view.choosePurchaseReturnPurchaseDeliveryEvent = this.choosePurchaseReturnPurchaseDelivery;
+                this.view.choosePurchaseReturnPurchaseReturnRequestEvent = this.choosePurchaseReturnPurchaseReturnRequest;
                 this.view.choosePurchaseReturnItemDistributionRuleEvent = this.choosePurchaseReturnItemDistributionRule;
                 this.view.choosePurchaseReturnItemMaterialVersionEvent = this.choosePurchaseReturnItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
@@ -149,8 +150,12 @@ namespace purchase {
                     actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
                     onCompleted(action: ibas.emMessageAction): void {
                         if (action === ibas.emMessageAction.YES) {
-                            that.editData.delete();
-                            that.saveData();
+                            if (that.editData.referenced === ibas.emYesNo.YES) {
+                                that.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_referenced", that.editData.toString()));
+                            } else {
+                                that.editData.delete();
+                                that.saveData();
+                            }
                         }
                     }
                 });
@@ -554,7 +559,11 @@ namespace purchase {
                             this.editData.purchaseReturnItems.remove(item);
                         } else {
                             // 非新建标记删除
-                            item.delete();
+                            if (item.referenced === ibas.emYesNo.YES) {
+                                this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_referenced", item.toString()));
+                            } else {
+                                item.delete();
+                            }
                         }
                     }
                 }
@@ -1051,6 +1060,117 @@ namespace purchase {
                     }
                 });
             }
+            /** 选择采购退货项目-采购收货事件 */
+            private choosePurchaseReturnPurchaseReturnRequest(): void {
+                if (ibas.objects.isNull(this.editData) || ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("bo_purchasereturn_suppliercode")
+                    ));
+                    return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                // 未取消的
+                condition.alias = bo.PurchaseDelivery.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 未删除的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseDelivery.PROPERTY_DELETED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 非计划的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseDelivery.PROPERTY_DOCUMENTSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                condition.value = ibas.emDocumentStatus.PLANNED.toString();
+                // 审批通过的或未进审批
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseDelivery.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.APPROVED.toString();
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseDelivery.PROPERTY_APPROVALSTATUS_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emApprovalStatus.UNAFFECTED.toString();
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
+                // 是否指定分支
+                if (!ibas.strings.isEmpty(this.editData.branch)) {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseDelivery.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = this.editData.branch;
+                } else {
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseDelivery.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.value = "";
+                    condition.bracketOpen = 1;
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseDelivery.PROPERTY_BRANCH_NAME;
+                    condition.operation = ibas.emConditionOperation.IS_NULL;
+                    condition.relationship = ibas.emConditionRelationship.OR;
+                    condition.bracketClose = 1;
+                }
+                // 当前供应商的
+                condition = criteria.conditions.create();
+                condition.alias = bo.PurchaseDelivery.PROPERTY_SUPPLIERCODE_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = this.editData.supplierCode;
+                // 指定了合同/协议
+                if (!ibas.strings.isEmpty(this.editData.agreements)) {
+                    let index: number = criteria.conditions.length;
+                    for (let item of this.editData.agreements.split(ibas.DATA_SEPARATOR)) {
+                        if (ibas.strings.isEmpty(item)) {
+                            continue;
+                        }
+                        condition = criteria.conditions.create();
+                        condition.alias = bo.PurchaseDelivery.PROPERTY_AGREEMENTS_NAME;
+                        condition.operation = ibas.emConditionOperation.CONTAIN;
+                        condition.value = item;
+                        if (criteria.conditions.length > (index + 1)) {
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                    }
+                    if (criteria.conditions.length > (index + 2)) {
+                        criteria.conditions[index].bracketOpen += 1;
+                        criteria.conditions[criteria.conditions.length - 1].bracketClose += 1;
+                    }
+                }
+                // 子项查询
+                let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
+                cCriteria.propertyPath = bo.PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME;
+                cCriteria.onlyHasChilds = true;
+                cCriteria.noChilds = false;
+                // 未取消的
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_CANCELED_NAME;
+                condition.operation = ibas.emConditionOperation.EQUAL;
+                condition.value = ibas.emYesNo.NO.toString();
+                // 数量大于已清数量
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME;
+                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.comparedAlias = bo.PurchaseReturnRequestItem.PROPERTY_CLOSEDQUANTITY_NAME;
+                // 调用选择服务
+                let that: this = this;
+                ibas.servicesManager.runChooseService<bo.PurchaseReturnRequest>({
+                    boCode: bo.PurchaseDelivery.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    criteria: criteria,
+                    onCompleted(selecteds: ibas.IList<bo.PurchaseReturnRequest>): void {
+                        for (let selected of selecteds) {
+                            if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
+                                continue;
+                            }
+                            that.editData.baseDocument(selected);
+                        }
+                        that.view.showPurchaseReturnItems(that.editData.purchaseReturnItems.filterDeleted());
+                    }
+                });
+            }
         }
         /** 视图-采购退货 */
         export interface IPurchaseReturnEditView extends ibas.IBOEditView {
@@ -1086,6 +1206,8 @@ namespace purchase {
             choosePurchaseReturnPurchaseOrderEvent: Function;
             /** 选择采购退货项目-采购交货事件 */
             choosePurchaseReturnPurchaseDeliveryEvent: Function;
+            /** 选择采购退货项目-采购退货申请事件 */
+            choosePurchaseReturnPurchaseReturnRequestEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 选择采购退货-行 成本中心事件 */

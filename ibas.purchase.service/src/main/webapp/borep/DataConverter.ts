@@ -87,6 +87,16 @@ namespace purchase {
                     } else if (property === bo.PurchaseReturnItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.toString(ibas.emYesNo, value);
                     }
+                } else if (boName === bo.PurchaseReturnRequest.name) {
+                    if (property === bo.PurchaseReturnRequest.PROPERTY_ROUNDING_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    }
+                } else if (boName === bo.PurchaseReturnRequestItem.name) {
+                    if (property === bo.PurchaseReturnRequestItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseReturnRequestItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.toString(ibas.emYesNo, value);
+                    }
                 } else if (boName === bo.PurchaseInvoice.name) {
                     if (property === bo.PurchaseInvoice.PROPERTY_ROUNDING_NAME) {
                         return ibas.enums.toString(ibas.emYesNo, value);
@@ -199,6 +209,16 @@ namespace purchase {
                     } else if (property === bo.PurchaseReturnItem.PROPERTY_SERIALMANAGEMENT_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
                     }
+                } else if (boName === bo.PurchaseReturnRequest.name) {
+                    if (property === bo.PurchaseReturn.PROPERTY_ROUNDING_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    }
+                } else if (boName === bo.PurchaseReturnRequestItem.name) {
+                    if (property === bo.PurchaseReturnRequestItem.PROPERTY_BATCHMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    } else if (property === bo.PurchaseReturnRequestItem.PROPERTY_SERIALMANAGEMENT_NAME) {
+                        return ibas.enums.valueOf(ibas.emYesNo, value);
+                    }
                 } else if (boName === bo.PurchaseInvoice.name) {
                     if (property === bo.PurchaseInvoice.PROPERTY_ROUNDING_NAME) {
                         return ibas.enums.valueOf(ibas.emYesNo, value);
@@ -266,8 +286,8 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocument(
-            target: PurchaseOrder | PurchaseDelivery | PurchaseReturn | PurchaseCreditNote | PurchaseInvoice | DownPaymentRequest | PurchaseReserveInvoice,
-            source: IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseCreditNote | IPurchaseInvoice | IPurchaseReserveInvoice
+            target: PurchaseOrder | PurchaseDelivery | PurchaseReturn | PurchaseCreditNote | PurchaseInvoice | DownPaymentRequest | PurchaseReserveInvoice | PurchaseReturnRequest,
+            source: IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseCreditNote | IPurchaseInvoice | IPurchaseReserveInvoice | PurchaseReturnRequest
         ): void {
             // 复制头信息
             target.contactPerson = source.contactPerson;
@@ -304,8 +324,8 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocumentItem(
-            target: IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReturnItem | IDownPaymentRequestItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem,
-            source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem
+            target: IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReturnItem | IDownPaymentRequestItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem,
+            source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem
         ): void {
             target.baseDocumentType = source.objectCode;
             target.baseDocumentEntry = source.docEntry;
@@ -362,7 +382,7 @@ namespace purchase {
         export function baseProduct(
             target: PurchaseQuoteItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem
                 | PurchaseRequestItem | PurchaseCreditNoteItem | PurchaseInvoiceItem | DownPaymentRequestItem
-                | PurchaseReserveInvoiceItem,
+                | PurchaseReserveInvoiceItem | PurchaseReturnRequestItem,
             source: materials.bo.IProduct
         ): void {
             target.itemCode = source.code;

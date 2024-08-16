@@ -166,8 +166,12 @@ namespace purchase {
                     actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
                     onCompleted(action: ibas.emMessageAction): void {
                         if (action === ibas.emMessageAction.YES) {
-                            that.editData.delete();
-                            that.saveData();
+                            if (that.editData.referenced === ibas.emYesNo.YES) {
+                                that.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_referenced", that.editData.toString()));
+                            } else {
+                                that.editData.delete();
+                                that.saveData();
+                            }
                         }
                     }
                 });
@@ -461,7 +465,11 @@ namespace purchase {
                             this.editData.downPaymentRequestItems.remove(item);
                         } else {
                             // 非新建标记删除
-                            item.delete();
+                            if (item.referenced === ibas.emYesNo.YES) {
+                                this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_referenced", item.toString()));
+                            } else {
+                                item.delete();
+                            }
                         }
                     }
                 }
