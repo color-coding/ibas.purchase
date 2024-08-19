@@ -717,19 +717,36 @@ namespace purchase {
                         bo.baseDocumentItem(myItem, item);
                         myItem.quantity = openQty;
                         // 复制批次
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        let closeQty: number = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let batch of item.materialBatches) {
+                            closeQty -= batch.quantity;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
                             myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = openQty * (item.uomRate > 0 ? item.uomRate : 1);
-                            if (myItem.materialBatches.total() >= openQty) {
+                            myBatch.quantity = batch.quantity;
+                            if (myBatch.quantity > openQty) {
+                                myBatch.quantity = openQty;
+                            }
+                            openQty -= myBatch.quantity;
+                            if (openQty <= 0) {
                                 break;
                             }
                         }
                         // 复制序列
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let serial of item.materialSerials) {
+                            closeQty -= 1;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
                             mySerial.serialCode = serial.serialCode;
-                            if (myItem.materialSerials.length >= openQty) {
+                            openQty -= 1;
+                            if (openQty <= 0) {
                                 break;
                             }
                         }
@@ -774,19 +791,36 @@ namespace purchase {
                         bo.baseDocumentItem(myItem, item);
                         myItem.quantity = openQty;
                         // 复制批次
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        let closeQty: number = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let batch of item.materialBatches) {
+                            closeQty -= batch.quantity;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
                             myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = openQty * (item.uomRate > 0 ? item.uomRate : 1);
-                            if (myItem.materialBatches.total() >= openQty) {
+                            myBatch.quantity = batch.quantity;
+                            if (myBatch.quantity > openQty) {
+                                myBatch.quantity = openQty;
+                            }
+                            openQty -= myBatch.quantity;
+                            if (openQty <= 0) {
                                 break;
                             }
                         }
                         // 复制序列
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let serial of item.materialSerials) {
+                            closeQty -= 1;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
                             mySerial.serialCode = serial.serialCode;
-                            if (myItem.materialSerials.length >= openQty) {
+                            openQty -= 1;
+                            if (openQty <= 0) {
                                 break;
                             }
                         }
