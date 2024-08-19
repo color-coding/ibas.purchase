@@ -14,6 +14,8 @@ namespace purchase {
                 deleteDataEvent: Function;
                 /** 新建数据事件，参数1：是否克隆 */
                 createDataEvent: Function;
+                /** 复制从数据事件 */
+                copyFromEvent: Function;
                 /** 编辑数据事件 */
                 editDataEvent: Function;
                 /** 绘制视图 */
@@ -39,6 +41,7 @@ namespace purchase {
                                 type: sap.m.ButtonType.Accept,
                                 text: ibas.i18n.prop("shell_data_new"),
                                 buttonMode: sap.m.MenuButtonMode.Split,
+                                menuPosition: sap.ui.core.Popup.Dock.EndBottom,
                                 useDefaultActionOnly: true,
                                 menu: new sap.m.Menu("", {}),
                                 defaultAction(): void {
@@ -126,6 +129,7 @@ namespace purchase {
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_tax") }),
                             new component.TaxGroupSelect("", {
+                                taxCategory: accounting.bo.emTaxGroupCategory.FREIGHT,
                             }).bindProperty("bindingValue", {
                                 path: "tax",
                                 type: new sap.extension.data.Alphanumeric({
@@ -166,10 +170,17 @@ namespace purchase {
                         ],
                         buttons: [
                             new sap.m.Button("", {
+                                text: ibas.i18n.prop("sales_copy_from"),
+                                type: sap.m.ButtonType.Transparent,
+                                press: function (): void {
+                                    that.fireViewEvents(that.copyFromEvent, (<any>that.formTop.getModel())?.getData());
+                                }
+                            }),
+                            new sap.m.Button("", {
                                 text: ibas.i18n.prop("shell_data_delete"),
                                 type: sap.m.ButtonType.Transparent,
                                 press: function (): void {
-                                    that.fireViewEvents(that.deleteDataEvent, (<any>that.formTop.getModel()).getData());
+                                    that.fireViewEvents(that.deleteDataEvent, (<any>that.formTop.getModel())?.getData());
                                 }
                             }),
                             new sap.m.Button("", {

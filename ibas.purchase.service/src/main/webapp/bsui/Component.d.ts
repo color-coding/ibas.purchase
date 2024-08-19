@@ -57,6 +57,8 @@ declare namespace purchase {
                 addItem(oItem: { code: string, name: string, rate: number }): this;
                 getRate(): number;
                 setRate(rate: number): this;
+                getTaxCategory(): accounting.bo.emTaxGroupCategory;
+                setTaxCategory(value: accounting.bo.emTaxGroupCategory): this;
             }
             class TaxGroupItem extends sap.ui.core.Item {
                 getRate(): number;

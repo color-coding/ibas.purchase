@@ -8652,7 +8652,7 @@ declare namespace sales {
 declare namespace sales {
     namespace bo {
         /** 送货地址 */
-        class ShippingAddress extends ibas.BOSimple<ShippingAddress> implements IShippingAddress {
+        export class ShippingAddress extends ibas.BOSimple<ShippingAddress> implements IShippingAddress {
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string;
             /** 构造函数 */
@@ -8885,8 +8885,15 @@ declare namespace sales {
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];
         }
+        /**
+         * 对象集合，开放父项
+         */
+        abstract class BusinessObjects<T extends ibas.IBusinessObject, P extends ibas.IBusinessObject> extends ibas.BusinessObjects<T, P> {
+            get parent(): P;
+            set parent(value: P);
+        }
         /** 送货地址 集合 */
-        class ShippingAddresss extends ibas.BusinessObjects<ShippingAddress, ISalesQuote | ISalesOrder | ISalesDelivery | ISalesReturn | ISalesReturnRequest | ISalesInvoice | ISalesCreditNote | ISalesReserveInvoice> implements IShippingAddresss {
+        export class ShippingAddresss extends BusinessObjects<ShippingAddress, ISalesQuote | ISalesOrder | ISalesDelivery | ISalesReturn | ISalesReturnRequest | ISalesInvoice | ISalesCreditNote | ISalesReserveInvoice> implements IShippingAddresss {
             /** 创建并添加子项 */
             create(): ShippingAddress;
             /** 添加子项后 子项属性赋值 */
@@ -8894,6 +8901,7 @@ declare namespace sales {
             /** 主表属性发生变化后 子项属性赋值  */
             protected onParentPropertyChanged(name: string): void;
         }
+        export {};
     }
 }
 /**
@@ -14145,6 +14153,8 @@ declare namespace sales {
             protected editAddress: bo.ShippingAddress;
             /** 编辑数据 */
             protected editData(data: bo.ShippingAddress): void;
+            /** 复制从数据事件 */
+            protected copyFrom(data?: bo.ShippingAddress): void;
             /** 关闭视图 */
             close(): void;
         }
@@ -14158,6 +14168,8 @@ declare namespace sales {
             deleteDataEvent: Function;
             /** 新建数据事件 */
             createDataEvent: Function;
+            /** 复制从数据事件 */
+            copyFromEvent: Function;
             /** 显示数据 */
             showShippingAddress(data: bo.ShippingAddress): void;
         }

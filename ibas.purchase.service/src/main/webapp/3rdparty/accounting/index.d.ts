@@ -112,7 +112,9 @@ declare namespace accounting {
             /** 销项税 */
             OUTPUT = 0,
             /** 进项税 */
-            INPUT = 1
+            INPUT = 1,
+            /** 运费税 */
+            FREIGHT = 2
         }
         /**
          * 费用状态

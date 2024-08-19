@@ -27,6 +27,7 @@ namespace purchase {
                 this.view.deleteDataEvent = this.deleteData;
                 this.view.createDataEvent = this.createData;
                 this.view.editDataEvent = this.editData;
+                this.view.copyFromEvent = this.copyFrom;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -80,6 +81,27 @@ namespace purchase {
             protected editData(data: bo.ShippingAddress): void {
                 this.view.showShippingAddress(data);
             }
+            protected copyFrom(data?: bo.ShippingAddress): void {
+                if (ibas.objects.isNull(data)) {
+                    data = this.editAddresses.create();
+                    this.editData(data);
+                }
+                let that: this = this;
+                ibas.servicesManager.runChooseService<businesspartner.bo.IAddress>({
+                    boCode: businesspartner.bo.BO_CODE_ADDRESS,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: [
+                        new ibas.Condition("businessPartner", ibas.emConditionOperation.EQUAL, this.editAddresses.parent.supplierCode),
+                        new ibas.Condition("ownerType", ibas.emConditionOperation.EQUAL, businesspartner.bo.emBusinessPartnerType.SUPPLIER),
+                        new ibas.Condition("activated", ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                    ],
+                    onCompleted(selecteds: ibas.IList<businesspartner.bo.IAddress>): void {
+                        let selected: businesspartner.bo.IAddress = selecteds.firstOrDefault();
+                        data.baseAddress(selected);
+                        that.editData(data);
+                    }
+                });
+            }
             /** 关闭视图 */
             close(): void {
                 super.close.apply(this, arguments);
@@ -99,6 +121,8 @@ namespace purchase {
             deleteDataEvent: Function;
             /** 新建数据事件 */
             createDataEvent: Function;
+            /** 复制从数据事件 */
+            copyFromEvent: Function;
             /** 显示数据 */
             showShippingAddress(data: bo.ShippingAddress): void;
         }

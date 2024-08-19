@@ -424,7 +424,24 @@ namespace purchase {
                 this.setProperty(ShippingAddress.PROPERTY_UPDATEACTIONID_NAME, value);
             }
 
-
+            /** 基于地址 */
+            baseAddress(address: businesspartner.bo.IAddress): void {
+                if (ibas.objects.isNull(address)) {
+                    return;
+                }
+                if (ibas.objects.typeOf(address).BUSINESS_OBJECT_CODE !== businesspartner.bo.BO_CODE_ADDRESS) {
+                    return;
+                }
+                this.name = address.name;
+                this.consignee = address.contacts;
+                this.street = address.street;
+                this.district = address.district;
+                this.city = address.city;
+                this.province = address.province;
+                this.country = address.country;
+                this.zipCode = address.zipCode;
+                this.mobilePhone = address.mobilePhone;
+            }
 
             /** 初始化数据 */
             protected init(): void {
@@ -448,9 +465,22 @@ namespace purchase {
             }
         }
 
+        /**
+         * 对象集合，开放父项
+         */
+        abstract class BusinessObjects<T extends ibas.IBusinessObject, P extends ibas.IBusinessObject> extends ibas.BusinessObjects<T, P> {
+
+            get parent(): P {
+                return super.parent;
+            }
+            set parent(value: P) {
+                super.parent = value;
+            }
+        }
+
         /** 送货地址 集合 */
         export class ShippingAddresss
-            extends ibas.BusinessObjects<ShippingAddress,
+            extends BusinessObjects<ShippingAddress,
             IPurchaseQuote | IPurchaseOrder | IPurchaseDelivery | IPurchaseReturn | IPurchaseReturnRequest
             | IPurchaseInvoice | IPurchaseCreditNote | IPurchaseReserveInvoice> implements IShippingAddresss {
 
