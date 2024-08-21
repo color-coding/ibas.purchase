@@ -3801,6 +3801,8 @@ declare namespace receiptpayment {
             allowPartial?: boolean;
             /** 允许超出收款 */
             allowOver?: boolean;
+            /** 分支 */
+            branch: string;
         }
         class ReceiptTrading {
             /** 交易方式 */
@@ -3892,6 +3894,8 @@ declare namespace receiptpayment {
             allowPartial?: boolean;
             /** 允许超出付款 */
             allowOver?: boolean;
+            /** 分支 */
+            branch: string;
         }
         class PaymentTrading {
             /** 交易方式 */

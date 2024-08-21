@@ -1083,6 +1083,7 @@ namespace purchase {
                         documentType: this.editData.objectCode,
                         documentEntry: this.editData.docEntry,
                         documentCurrency: this.editData.documentCurrency,
+                        branch: this.editData.branch,
                         documentTotal: amount,
                         allowPartial: true
                     }),

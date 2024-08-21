@@ -125,6 +125,8 @@ declare namespace businesspartner {
             documentTotal: number;
             /** 单据货币 */
             documentCurrency: string;
+            /** 分支 */
+            branch: string;
             /** 单据摘要 */
             documentSummary?: string;
             /** 允许部分收款 */
@@ -151,6 +153,8 @@ declare namespace businesspartner {
             documentTotal: number;
             /** 单据货币 */
             documentCurrency: string;
+            /** 分支 */
+            branch: string;
             /** 单据摘要 */
             documentSummary?: string;
             /** 允许部分付款 */
