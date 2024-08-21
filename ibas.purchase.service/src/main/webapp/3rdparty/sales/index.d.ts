@@ -21,6 +21,8 @@ declare namespace sales {
         const CONFIG_ITEM_DOCUMENT_LINE_PRICE_TYPE: string;
         /** 配置项目-仅使用价格清单里的单位 */
         const CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS: string;
+        /** 配置项目-价格计算锚定方式 */
+        const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -28,6 +30,7 @@ declare namespace sales {
          */
         function get<T>(key: string, defalut?: T): T;
         function isInventoryUnitLinePrice(): boolean;
+        function isPriceAnchoringAfterTax(): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */

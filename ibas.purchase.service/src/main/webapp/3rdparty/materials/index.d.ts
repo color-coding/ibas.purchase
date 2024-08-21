@@ -537,7 +537,7 @@ declare namespace materials {
                 /** 查询条件字段-虚拟物料 */
                 const CONDITION_ALIAS_PHANTOM_ITEM: string;
                 /** 默认查询条件 */
-                function create(): ibas.IList<ibas.ICondition>;
+                function create(date?: Date): ibas.IList<ibas.ICondition>;
             }
             namespace product {
                 /** 查询条件字段-仓库（关系为或） */
@@ -555,7 +555,7 @@ declare namespace materials {
                 /** 查询条件字段-物料类型 */
                 const CONDITION_ALIAS_ITEM_TYPE: string;
                 /** 默认查询条件 */
-                function create(): ibas.IList<ibas.ICondition>;
+                function create(date?: Date): ibas.IList<ibas.ICondition>;
             }
             namespace warehouse {
                 /** 默认查询条件 */
@@ -563,7 +563,7 @@ declare namespace materials {
             }
             namespace materialpricelist {
                 /** 默认查询条件 */
-                function create(): ibas.ICriteria;
+                function create(date?: Date): ibas.ICriteria;
             }
             namespace materialprice {
                 /** 查询条件字段-物料编码 */
@@ -582,6 +582,8 @@ declare namespace materials {
                 const CONDITION_ALIAS_CUSTOMER: string;
                 /** 查询条件字段-供应商 */
                 const CONDITION_ALIAS_SUPPLIER: string;
+                /** 默认查询条件 */
+                function create(date?: Date): ibas.ICriteria;
             }
             namespace materialquantity {
                 /** 查询条件字段-物料编码 */
@@ -2030,6 +2032,8 @@ declare namespace materials {
             uom: string;
             /** 价格 */
             price: number;
+            /** 货币 */
+            currency: string;
             /** 对象编号 */
             objectKey: number;
             /** 行号 */
@@ -7696,6 +7700,7 @@ declare namespace materials {
         class MaterialPriceItems extends ibas.BusinessObjects<MaterialPriceItem, MaterialPriceList> implements IMaterialPriceItems {
             /** 创建并添加子项 */
             create(): MaterialPriceItem;
+            protected afterAdd(item: MaterialPriceItem): void;
         }
         class MaterialPriceItem extends ibas.BOSimpleLine<MaterialPriceItem> implements IMaterialPriceItem {
             /** 构造函数 */
@@ -7718,6 +7723,12 @@ declare namespace materials {
             get price(): number;
             /** 设置-价格 */
             set price(value: number);
+            /** 映射的属性名称-货币 */
+            static PROPERTY_CURRENCY_NAME: string;
+            /** 获取-货币 */
+            get currency(): string;
+            /** 设置-货币 */
+            set currency(value: string);
             /** 映射的属性名称-对象编号 */
             static PROPERT_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */

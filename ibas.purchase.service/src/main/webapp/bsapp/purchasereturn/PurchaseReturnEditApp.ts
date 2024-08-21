@@ -283,12 +283,12 @@ namespace purchase {
                 });
             }
             /** 更改行价格 */
-            private changePurchaseReturnItemPrice(priceList: number | ibas.Criteria, items?: bo.PurchaseReturnItem[]): void {
+            private changePurchaseReturnItemPrice(priceList: number | ibas.ICriteria, items?: bo.PurchaseReturnItem[]): void {
                 if (ibas.objects.isNull(items)) {
                     items = this.editData.purchaseReturnItems.filterDeleted();
                 }
                 if (typeof priceList === "number" && ibas.numbers.valueOf(priceList) !== 0) {
-                    let criteria: ibas.Criteria = new ibas.Criteria();
+                    let criteria: ibas.ICriteria = materials.app.conditions.materialprice.create(this.editData.documentDate);
                     let condition: ibas.ICondition = criteria.conditions.create();
                     condition.alias = materials.app.conditions.materialprice.CONDITION_ALIAS_PRICELIST;
                     condition.value = priceList.toString();
@@ -407,7 +407,7 @@ namespace purchase {
             private choosePurchaseReturnItemMaterial(caller: bo.PurchaseReturnItem, type?: string, filterConditions?: ibas.ICondition[]): void {
                 let that: this = this;
                 let condition: ibas.ICondition;
-                let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create();
+                let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.product.create(this.editData.documentDate);
                 // 添加输入条件
                 if (filterConditions instanceof Array && filterConditions.length > 0) {
                     if (conditions.length > 1) {
