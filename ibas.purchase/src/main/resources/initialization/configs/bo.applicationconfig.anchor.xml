@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ApplicationConfig>
+<ns:ApplicationConfig xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
+	<ConfigKey>priceCalculationAnchoringMethod</ConfigKey>
+	<ConfigDescription>价格计算的锚定方式</ConfigDescription>
+	<ConfigGroup>de9278d9-4914-45a5-8418-9c609118d03f</ConfigGroup>
+	<ConfigValue>AfterTax</ConfigValue>
+	<Settings>[{"Key":"PreTax","Text":"税前价格"},{"Key":"AfterTax","Text":"税后价格"}]</Settings>
+	<Category>CLIENT</Category>
+	<Activated>YES</Activated>
+</ns:ApplicationConfig>

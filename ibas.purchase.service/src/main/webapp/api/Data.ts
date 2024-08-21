@@ -22,6 +22,8 @@ namespace purchase {
         export const CONFIG_ITEM_DOCUMENT_LINE_PRICE_TYPE: string = "documentLinePriceType";
         /** 配置项目-仅使用价格清单里的单位 */
         export const CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS: string = "onlyPriceListItemUnits";
+        /** 配置项目-价格计算锚定方式 */
+        export const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string = "priceCalculationAnchoringMethod";
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -40,6 +42,17 @@ namespace purchase {
                 }
             }
             return inventoryUnitLinePrice;
+        }
+        let priceAnchoringAfterTax: boolean = undefined;
+        export function isPriceAnchoringAfterTax(): boolean {
+            if (ibas.objects.isNull(priceAnchoringAfterTax)) {
+                if (ibas.strings.equalsIgnoreCase("PreTax", get(CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD))) {
+                    priceAnchoringAfterTax = false;
+                } else {
+                    priceAnchoringAfterTax = true;
+                }
+            }
+            return priceAnchoringAfterTax;
         }
     }
     export namespace bo {
