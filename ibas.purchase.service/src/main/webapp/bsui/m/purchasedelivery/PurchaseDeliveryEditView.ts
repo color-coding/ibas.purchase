@@ -789,12 +789,6 @@ namespace purchase {
                                                                 type: new sap.extension.data.Sum()
                                                             }).addStyleClass("sapUiTinyMarginEnd"),
                                                             new sap.extension.m.CurrencyRateSelect("", {
-                                                                editable: {
-                                                                    path: "priceList",
-                                                                    formatter(data: any): boolean {
-                                                                        return ibas.numbers.valueOf(data) === 0 ? true : false;
-                                                                    }
-                                                                },
                                                                 baseCurrency: accounting.config.currency("LOCAL"),
                                                                 currency: {
                                                                     path: "documentCurrency",

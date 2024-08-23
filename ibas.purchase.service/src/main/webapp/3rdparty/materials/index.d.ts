@@ -544,6 +544,8 @@ declare namespace materials {
                 const CONDITION_ALIAS_WAREHOUSE: string;
                 /** 查询条件字段-价格清单 */
                 const CONDITION_ALIAS_PRICELIST: string;
+                /** 查询条件字段-价格货币 */
+                const CONDITION_ALIAS_CURRENCY: string;
                 /** 查询条件字段-销售物料 */
                 const CONDITION_ALIAS_SALES_ITEM: string;
                 /** 查询条件字段-采购物料 */
@@ -574,6 +576,8 @@ declare namespace materials {
                 const CONDITION_ALIAS_ITEMSIGN: string;
                 /** 查询条件字段-价格清单 */
                 const CONDITION_ALIAS_PRICELIST: string;
+                /** 查询条件字段-价格货币 */
+                const CONDITION_ALIAS_CURRENCY: string;
                 /** 查询条件字段-单位 */
                 const CONDITION_ALIAS_UOM: string;
                 /** 查询条件字段-组 */
