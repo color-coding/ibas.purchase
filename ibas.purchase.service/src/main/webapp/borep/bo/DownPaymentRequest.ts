@@ -654,7 +654,11 @@ namespace purchase {
                         let myItem: DownPaymentRequestItem = this.downPaymentRequestItems.create();
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
-                        myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        }
                     }
                 }
                 if (ibas.objects.instanceOf(arguments[0], PurchaseDelivery)) {
@@ -689,7 +693,11 @@ namespace purchase {
                         let myItem: DownPaymentRequestItem = this.downPaymentRequestItems.create();
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
-                        myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        }
                     }
                 }
             }

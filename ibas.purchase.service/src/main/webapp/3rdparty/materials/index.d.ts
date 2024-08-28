@@ -25,6 +25,8 @@ declare namespace materials {
         const CONFIG_ITEM_DISPALY_MATERIAL_AVGPRICE_ISSUE: string;
         /** 配置项目-启用物料特殊价格 */
         const CONFIG_ITEM_ENABLE_MATERIAL_SPECIAL_PRICES: string;
+        /** 配置项目-单据行显示库存 */
+        const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -1315,6 +1317,8 @@ declare namespace materials {
             scrapValue: number;
             /** 计划员 */
             scheduler: string;
+            /** 关键件 */
+            keyComponent: ibas.emYesNo;
             /** 生效日期 */
             validDate: Date;
             /** 失效日期 */
@@ -1378,8 +1382,18 @@ declare namespace materials {
             onReserved: number;
             /** 单位 */
             uom: string;
+            /** 来源 */
+            source: string;
             /** 可用量（库存 + 已订购 - 已承诺 - 已预留） */
             onAvailable(): number;
+            /** 全部库存数量 */
+            totalHand: number;
+            /** 全部已承诺 */
+            totalCommited: number;
+            /** 全部已订购 */
+            totalOrdered: number;
+            /** 全部已预留 */
+            totalReserved: number;
         }
         /** 物料价格 */
         interface IMaterialPrice {
@@ -2519,6 +2533,8 @@ declare namespace materials {
             scrap: string;
             /** 计划员 */
             scheduler: string;
+            /** 关键件 */
+            keyComponent: ibas.emYesNo;
             /** 生效日期 */
             validDate: Date;
             /** 失效日期 */
@@ -6325,6 +6341,12 @@ declare namespace materials {
             get scheduler(): string;
             /** 设置-计划员 */
             set scheduler(value: string);
+            /** 映射的属性名称-关键件 */
+            static PROPERTY_KEYCOMPONENT_NAME: string;
+            /** 获取-关键件 */
+            get keyComponent(): ibas.emYesNo;
+            /** 设置-关键件 */
+            set keyComponent(value: ibas.emYesNo);
             /** 映射的属性名称-生效日期 */
             static PROPERTY_VALIDDATE_NAME: string;
             /** 获取-生效日期 */
@@ -6508,6 +6530,36 @@ declare namespace materials {
             get uom(): string;
             /** 设置-计量单位 */
             set uom(value: string);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_SOURCE_NAME: string;
+            /** 获取-数据源 */
+            get source(): string;
+            /** 设置-数据源 */
+            set source(value: string);
+            /** 映射的属性名称-库存 */
+            static PROPERTY_TOTALHAND_NAME: string;
+            /** 获取-库存 */
+            get totalHand(): number;
+            /** 设置-库存 */
+            set totalHand(value: number);
+            /** 映射的属性名称-库存 */
+            static PROPERTY_TOTALORDERED_NAME: string;
+            /** 获取-库存 */
+            get totalOrdered(): number;
+            /** 设置-库存 */
+            set totalOrdered(value: number);
+            /** 映射的属性名称-库存 */
+            static PROPERTY_TOTALCOMMITED_NAME: string;
+            /** 获取-库存 */
+            get totalCommited(): number;
+            /** 设置-库存 */
+            set totalCommited(value: number);
+            /** 映射的属性名称-已预留 */
+            static PROPERTY_TOTALRESERVED_NAME: string;
+            /** 获取-已预留 */
+            get totalReserved(): number;
+            /** 设置-已预留 */
+            set totalReserved(value: number);
             /** 字符串 */
             toString(): string;
             /** 获取查询 */
@@ -8537,6 +8589,12 @@ declare namespace materials {
             get scheduler(): string;
             /** 设置-计划员 */
             set scheduler(value: string);
+            /** 映射的属性名称-关键件 */
+            static PROPERTY_KEYCOMPONENT_NAME: string;
+            /** 获取-关键件 */
+            get keyComponent(): ibas.emYesNo;
+            /** 设置-关键件 */
+            set keyComponent(value: ibas.emYesNo);
             /** 映射的属性名称-生效日期 */
             static PROPERTY_VALIDDATE_NAME: string;
             /** 获取-生效日期 */

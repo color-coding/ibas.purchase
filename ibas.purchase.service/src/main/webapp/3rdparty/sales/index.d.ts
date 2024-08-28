@@ -23,6 +23,8 @@ declare namespace sales {
         const CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS: string;
         /** 配置项目-价格计算锚定方式 */
         const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string;
+        /** 配置项目-单据行显示库存 */
+        const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string;
         /**
          * 获取此模块配置
          * @param key 配置项

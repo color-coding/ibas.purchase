@@ -24,6 +24,8 @@ namespace purchase {
         export const CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS: string = "onlyPriceListItemUnits";
         /** 配置项目-价格计算锚定方式 */
         export const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string = "priceCalculationAnchoringMethod";
+        /** 配置项目-单据行显示库存 */
+        export const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string = "documentLineDisplayInventory";
         /**
          * 获取此模块配置
          * @param key 配置项

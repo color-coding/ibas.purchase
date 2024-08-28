@@ -812,7 +812,11 @@ namespace purchase {
                         let myItem: PurchaseInvoiceItem = this.purchaseInvoiceItems.create();
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
-                        myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        }
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {

@@ -64,6 +64,36 @@ declare namespace purchase {
                 getRate(): number;
                 setRate(rate: number): this;
             }
+            class InventoryQuantityText extends sap.m.Text {
+                /** 获取-产品编号 */
+                getItemCode(): string;
+                /** 设置-产品编号 */
+                setItemCode(value: string): InventoryQuantityText;
+                /** 获取-仓库 */
+                getWarehouse(): string;
+                /** 设置-仓库 */
+                setWarehouse(value: string): InventoryQuantityText;
+                /** 获取-单位换算率 */
+                getRate(): number;
+                /** 设置-单位换算率 */
+                setRate(value: number): InventoryQuantityText;
+                /** 获取-左数量 */
+                getLeftQuantity(): number;
+                /** 设置-左数量 */
+                setLeftQuantity(value: number): InventoryQuantityText;
+                /** 获取-右数量 */
+                getLeftQuantity(): number;
+                /** 设置-右数量 */
+                setLeftQuantity(value: number): InventoryQuantityText;
+                /** 触发库存内容变化事件 */
+                protected fireInventoryChange(param: { itemCode: string, warehouse: string }): void;
+                /** 更新文本内容 */
+                protected updateText(): void;
+                /** 获取-库存任务ID */
+                getInventoryTaskId(): number;
+                /** 设置-库存任务ID */
+                setInventoryTaskId(value: number): InventoryQuantityText;
+            }
         }
     }
 }

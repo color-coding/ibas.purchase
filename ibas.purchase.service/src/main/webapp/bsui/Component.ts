@@ -73,11 +73,6 @@ namespace purchase {
                 /** 加载可选值 */
                 loadItems(this: WarehouseSelect): WarehouseSelect {
                     if (this.getItems().length > 0) {
-                        if (arguments.length > 0) {
-
-                        } else {
-                            sap.extension.m.ComboBox.prototype.loadItems.apply(this, arguments);
-                        }
                         return this;
                     }
                     if (WAREHOUSE_CACHE.length > 0) {
@@ -418,6 +413,116 @@ namespace purchase {
                     },
                     events: {}
                 },
+            });
+            sap.m.Text.extend("purchase.ui.component.InventoryQuantityText", {
+                metadata: {
+                    properties: {
+                        itemCode: { type: "string", defalultValue: "" },
+                        warehouse: { type: "string", defalultValue: "" },
+                        rate: { type: "float", defalultValue: 1 },
+                        leftQuantity: { type: "float", defalultValue: 0 },
+                        rightQuantity: { type: "float", defalultValue: 0 },
+                        inventoryTaskId: { type: "int", defalultValue: 0 },
+                    },
+                    events: {
+                        "inventoryChange": {
+                            parameters: {
+                                itemCode: {
+                                    type: "string",
+                                },
+                                warehouse: {
+                                    type: "string",
+                                },
+                            }
+                        }
+                    }
+                },
+                renderer: {
+                },
+                setItemCode(this: InventoryQuantityText, value: string): InventoryQuantityText {
+                    this.setProperty("itemCode", value, false);
+                    this.fireInventoryChange({
+                        itemCode: this.getProperty("itemCode"),
+                        warehouse: this.getProperty("warehouse"),
+                    });
+                    return this;
+                },
+                setWarehouse(this: InventoryQuantityText, value: string): InventoryQuantityText {
+                    this.setProperty("warehouse", value, false);
+                    this.fireInventoryChange({
+                        itemCode: this.getProperty("itemCode"),
+                        warehouse: this.getProperty("warehouse"),
+                    });
+                    return this;
+                },
+                setRate(this: InventoryQuantityText, value: number): InventoryQuantityText {
+                    this.setProperty("rate", value, true);
+                    this.updateText();
+                    return this;
+                },
+                /** 重构设置 */
+                applySettings(this: InventoryQuantityText, mSettings: any, oScope?: any): InventoryQuantityText {
+                    if (!mSettings) {
+                        mSettings = {};
+                    }
+                    if (ibas.objects.isNull(mSettings.inventoryChange)) {
+                        mSettings.inventoryChange = function (event: sap.ui.base.Event): void {
+                            let source: any = event.getSource();
+                            if (source instanceof InventoryQuantityText) {
+                                let itemCode: string = event.getParameter("itemCode");
+                                let warehouse: string = event.getParameter("warehouse");
+                                if (ibas.strings.isEmpty(itemCode) || ibas.strings.isEmpty(warehouse)) {
+                                    return;
+                                }
+                                if (source.getInventoryTaskId() > 0) {
+                                    clearTimeout(source.getInventoryTaskId());
+                                }
+                                source.setInventoryTaskId(setTimeout(() => {
+                                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                                    let condition: ibas.ICondition = criteria.conditions.create();
+                                    condition.alias = materials.app.conditions.materialquantity.CONDITION_ALIAS_ITEMCODE;
+                                    condition.value = itemCode;
+                                    condition = criteria.conditions.create();
+                                    condition.alias = materials.app.conditions.materialquantity.CONDITION_ALIAS_WAREHOUSE;
+                                    condition.value = warehouse;
+                                    let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                                    boRepository.fetchMaterialQuantity({
+                                        criteria: criteria,
+                                        onCompleted: (opRslt) => {
+                                            let itemCode: string = source.getItemCode();
+                                            if (!opRslt.resultObjects.contain(c => c.itemCode === itemCode)) {
+                                                return;
+                                            }
+                                            let leftQuantity: number = 0;
+                                            let rightQuantity: number = 0;
+                                            for (let item of opRslt.resultObjects) {
+                                                leftQuantity += item.onHand;
+                                                rightQuantity += item.totalHand;
+                                            }
+                                            source.setLeftQuantity(leftQuantity);
+                                            source.setRightQuantity(rightQuantity);
+                                            source.updateText();
+                                        }
+                                    });
+                                }, 45));
+                            }
+                        };
+                    }
+                    return sap.m.Text.prototype.applySettings.apply(this, arguments);
+                },
+                updateText(): void {
+                    let leftQuantity: number = ibas.numbers.valueOf(this.getLeftQuantity());
+                    let rightQuantity: number = ibas.numbers.valueOf(this.getRightQuantity());
+                    let rate: number = ibas.numbers.valueOf(this.getRate());
+                    if (rate > 0) {
+                        leftQuantity = leftQuantity / rate;
+                        rightQuantity = rightQuantity / rate;
+                    }
+                    this.setText(ibas.strings.format("{0} / {1}",
+                        sap.extension.data.formatValue(sap.extension.data.Quantity, leftQuantity, "string"),
+                        sap.extension.data.formatValue(sap.extension.data.Quantity, rightQuantity, "string")
+                    ));
+                }
             });
         }
     }

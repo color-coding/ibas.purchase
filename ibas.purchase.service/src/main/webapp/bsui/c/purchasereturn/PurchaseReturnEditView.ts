@@ -588,6 +588,24 @@ namespace purchase {
                                         width: "8rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("purchase_document_inventoryquantity"),
+                                        template: new component.InventoryQuantityText("", {
+                                            itemCode: {
+                                                path: "itemCode",
+                                                type: new sap.extension.data.Alphanumeric()
+                                            },
+                                            warehouse: {
+                                                path: "warehouse",
+                                                type: new sap.extension.data.Alphanumeric()
+                                            },
+                                            rate: {
+                                                path: "uomRate",
+                                                type: new sap.extension.data.Rate()
+                                            }
+                                        }),
+                                        visible: config.get(config.CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY, false),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereturnitem_price"),
                                         template: new sap.extension.m.Input("", {
 
