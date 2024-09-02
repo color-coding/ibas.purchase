@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
+import org.colorcoding.ibas.accounting.logic.ITaxGroupCheckContract;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
@@ -2431,6 +2432,23 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
+				// 税及税率检查
+				new ITaxGroupCheckContract() {
+					@Override
+					public String getIdentifiers() {
+						return PurchaseDeliveryItem.this.getIdentifiers();
+					}
+
+					@Override
+					public String getTax() {
+						return PurchaseDeliveryItem.this.getTax();
+					}
+
+					@Override
+					public BigDecimal getTaxRate() {
+						return PurchaseDeliveryItem.this.getTaxRate();
+					}
+				},
 				// 物料及仓库检查
 				new IMaterialWarehouseCheckContract() {
 

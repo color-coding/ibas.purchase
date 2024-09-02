@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.colorcoding.ibas.accounting.logic.ITaxGroupCheckContract;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
@@ -1996,6 +1997,23 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 	@Override
 	public IBusinessLogicContract[] getContracts() {
 		return new IBusinessLogicContract[] {
+				// 税及税率检查
+				new ITaxGroupCheckContract() {
+					@Override
+					public String getIdentifiers() {
+						return DownPaymentRequestItem.this.getIdentifiers();
+					}
+
+					@Override
+					public String getTax() {
+						return DownPaymentRequestItem.this.getTax();
+					}
+
+					@Override
+					public BigDecimal getTaxRate() {
+						return DownPaymentRequestItem.this.getTaxRate();
+					}
+				},
 				// 物料及仓库检查
 				new IMaterialWarehouseCheckContract() {
 

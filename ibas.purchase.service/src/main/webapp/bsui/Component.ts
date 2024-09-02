@@ -369,7 +369,9 @@ namespace purchase {
                         if (ibas.numbers.valueOf(this.getRate()) !== select.getRate()
                             && value !== undefined && !ibas.strings.isEmpty(select.getKey())) {
                             setTimeout(() => {
-                                this.setRate(select.getRate());
+                                if (this.getBindingValue() === select.getKey()) {
+                                    this.setRate(select.getRate());
+                                }
                             }, 50);
                         }
                     }
