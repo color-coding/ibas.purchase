@@ -74,6 +74,7 @@ public class PurchaseReserveInvoiceItems extends BusinessObjects<IPurchaseReserv
 			if (item.isNew() && DataConvert.isNullOrEmpty(item.getBaseDocumentType())) {
 				item.setRate(this.getParent().getDocumentRate());
 				item.setCurrency(this.getParent().getDocumentCurrency());
+				item.setDeliveryDate(this.getParent().getDeliveryDate());
 			}
 		}
 	}

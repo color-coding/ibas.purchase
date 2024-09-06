@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE BORelationship>
+<ns2:BORelationship	xmlns:ns2="http://colorcoding.org/ibas/initialfantasy/bo">
+	<Code>${Company}_PH_PURCHRETURN</Code>
+	<Relation>DOCUMENT_BASED</Relation>
+	<AssociatedProperty>PurchaseReturnItems</AssociatedProperty>
+	<Target>${Company}_PH_PURCHRETNREQ</Target>
+	<Description>基于单据</Description>
+</ns2:BORelationship>

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
@@ -67,7 +68,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @BusinessObjectUnit(code = PurchaseReserveInvoice.BUSINESS_OBJECT_CODE)
 public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoice> implements IPurchaseReserveInvoice,
 		IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost,
-		IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseAmountOperator {
+		IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseAmountOperator, IJECPropertyValueGetter {
 
 	/**
 	 * 序列化版本标记
@@ -2042,6 +2043,17 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 							jeContent.setRate(line.getRate());
 							jeContents.add(jeContent);
 						}
+						// 单据折扣不是1
+						if (!Decimal.ONE.equals(PurchaseReserveInvoice.this.getDiscount())) {
+							for (JournalEntryContent item : jeContents) {
+								// 行税前总计和行税 × 折扣
+								if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
+										|| Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT.equals(item.getLedger())) {
+									item.setAmount(Decimal.multiply(item.getAmount(),
+											PurchaseReserveInvoice.this.getDiscount()));
+								}
+							}
+						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseReserveInvoice.this.getShippingAddresss()) {
 							// 运费科目
@@ -2075,6 +2087,28 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 				}
 
 		};
+	}
+
+	@Override
+	public Object getValue(String property) {
+		switch (property) {
+		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
+			return this.getObjectCode();
+		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
+			return this.getDataOwner();
+		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
+			return this.getOrganization();
+		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
+			return this.getOrderType();
+		case Ledgers.CONDITION_PROPERTY_PROJECT:
+			return this.getProject();
+		case Ledgers.CONDITION_PROPERTY_BRANCH:
+			return this.getBranch();
+		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
+			return this.getSupplierCode();
+		default:
+			return null;
+		}
 	}
 
 	@Override

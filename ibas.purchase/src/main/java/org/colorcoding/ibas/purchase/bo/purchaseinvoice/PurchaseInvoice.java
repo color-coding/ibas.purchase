@@ -2149,6 +2149,17 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 
 					}
 				}
+				// 单据折扣不是1
+				if (!Decimal.ONE.equals(PurchaseInvoice.this.getDiscount())) {
+					for (JournalEntryContent item : jeContents) {
+						// 行税前总计和行税 × 折扣
+						if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
+								|| Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT.equals(item.getLedger())
+								|| Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT.equals(item.getLedger())) {
+							item.setAmount(Decimal.multiply(item.getAmount(), PurchaseInvoice.this.getDiscount()));
+						}
+					}
+				}
 				// 送货地址-运费
 				for (IShippingAddress line : PurchaseInvoice.this.getShippingAddresss()) {
 					// 运费科目

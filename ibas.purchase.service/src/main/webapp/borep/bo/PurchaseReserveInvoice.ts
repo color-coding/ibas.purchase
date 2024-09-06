@@ -702,47 +702,18 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
-                        // 计算未发票数量
-                        let openQty: number = item.quantity - item.closedQuantity;
-                        if (openQty <= 0) {
+                        // 计算未清金额
+                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        if (openAmount <= 0) {
                             continue;
                         }
                         let myItem: PurchaseReserveInvoiceItem = this.purchaseReserveInvoiceItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        myItem.quantity = openQty;
-                        // 复制批次
-                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        let closeQty: number = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        for (let batch of item.materialBatches) {
-                            closeQty -= batch.quantity;
-                            if (closeQty >= 0 || openQty <= 0) {
-                                continue;
-                            }
-                            let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
-                            myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = batch.quantity;
-                            if (myBatch.quantity > openQty) {
-                                myBatch.quantity = openQty;
-                            }
-                            openQty -= myBatch.quantity;
-                            if (openQty <= 0) {
-                                break;
-                            }
-                        }
-                        // 复制序列
-                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        for (let serial of item.materialSerials) {
-                            closeQty -= 1;
-                            if (closeQty >= 0 || openQty <= 0) {
-                                continue;
-                            }
-                            let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
-                            mySerial.serialCode = serial.serialCode;
-                            openQty -= 1;
-                            if (openQty <= 0) {
-                                break;
-                            }
+                        // 计算数量
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
                         }
                     }
                     // 复制地址
@@ -777,6 +748,9 @@ namespace purchase {
                             item.rate = this.parent.documentRate;
                             item.currency = this.parent.documentCurrency;
                         }
+                    }
+                    if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
+                        item.deliveryDate = this.parent.deliveryDate;
                     }
                     if (ibas.strings.isEmpty(this.parent.documentCurrency)
                         && !ibas.strings.isEmpty(item.currency)) {

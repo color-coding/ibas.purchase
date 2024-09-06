@@ -850,6 +850,9 @@ namespace purchase {
                             item.currency = this.parent.documentCurrency;
                         }
                     }
+                    if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
+                        item.deliveryDate = this.parent.deliveryDate;
+                    }
                     if (ibas.strings.isEmpty(this.parent.documentCurrency)
                         && !ibas.strings.isEmpty(item.currency)) {
                         this.parent.documentCurrency = item.currency;

@@ -2087,6 +2087,18 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 								jeContents.add(jeContent);
 							}
 						}
+						// 单据折扣不是1
+						if (!Decimal.ONE.equals(PurchaseCreditNote.this.getDiscount())) {
+							for (JournalEntryContent item : jeContents) {
+								// 行税前总计和行税 × 折扣
+								if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
+										|| Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT.equals(item.getLedger())
+										|| Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT.equals(item.getLedger())) {
+									item.setAmount(
+											Decimal.multiply(item.getAmount(), PurchaseCreditNote.this.getDiscount()));
+								}
+							}
+						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseCreditNote.this.getShippingAddresss()) {
 							// 运费科目

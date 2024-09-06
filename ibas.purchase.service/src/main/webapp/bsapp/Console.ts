@@ -84,6 +84,7 @@ namespace purchase {
                 this.register(new DownPaymentRequestEditServiceMapping());
                 this.register(new PurchaseReserveInvoiceChooseServiceMapping());
                 this.register(new PurchaseReserveInvoiceLinkServiceMapping());
+                this.register(new PurchaseReserveInvoiceEditServiceMapping());
                 this.register(new PurchaseReturnRequestChooseServiceMapping());
                 this.register(new PurchaseReturnRequestLinkServiceMapping());
                 this.register(new PurchaseReturnRequestEditServiceMapping());

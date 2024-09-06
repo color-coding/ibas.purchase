@@ -1048,7 +1048,7 @@ namespace purchase {
                                                 press(this: sap.m.Button): void {
                                                     that.fireViewEvents(that.turnToPurchaseDeliveryEvent);
                                                 },
-                                                visible: shell.app.privileges.canRun({
+                                                visible: true ? false : shell.app.privileges.canRun({
                                                     id: purchase.app.PurchaseDeliveryFunc.FUNCTION_ID,
                                                     name: purchase.app.PurchaseDeliveryFunc.FUNCTION_NAME,
                                                 })
