@@ -561,7 +561,7 @@ namespace purchase {
                 });
             }
             /** 添加采购预留发票-行事件 */
-            private addPurchaseReserveInvoiceItem(items: bo.PurchaseReserveInvoiceItem[]): void {
+            private addPurchaseReserveInvoiceItem(items: bo.PurchaseReserveInvoiceItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -583,8 +583,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseReserveInvoiceItems(this.editData.purchaseReserveInvoiceItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.purchaseReserveInvoiceItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.purchaseReserveInvoiceItems.create();
+                    }
                     this.view.showPurchaseReserveInvoiceItems(this.editData.purchaseReserveInvoiceItems.filterDeleted());
                 } else {
                     this.choosePurchaseReserveInvoiceItemMaterial(undefined);

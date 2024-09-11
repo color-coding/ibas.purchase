@@ -214,7 +214,7 @@ namespace purchase {
                 }
             }
             /** 添加采购申请-行事件 */
-            private addPurchaseRequestItem(items: bo.PurchaseRequestItem[]): void {
+            private addPurchaseRequestItem(items: bo.PurchaseRequestItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -234,8 +234,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseRequestItems(this.editData.purchaseRequestItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.purchaseRequestItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.purchaseRequestItems.create();
+                    }
                     this.view.showPurchaseRequestItems(this.editData.purchaseRequestItems.filterDeleted());
                 } else {
                     this.choosePurchaseRequestItemMaterial(undefined);

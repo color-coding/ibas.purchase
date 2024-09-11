@@ -536,7 +536,7 @@ namespace purchase {
                 });
             }
             /** 添加采购贷项-行事件 */
-            private addPurchaseCreditNoteItem(items: bo.PurchaseCreditNoteItem[]): void {
+            private addPurchaseCreditNoteItem(items: bo.PurchaseCreditNoteItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -558,8 +558,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseCreditNoteItems(this.editData.purchaseCreditNoteItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.purchaseCreditNoteItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.purchaseCreditNoteItems.create();
+                    }
                     this.view.showPurchaseCreditNoteItems(this.editData.purchaseCreditNoteItems.filterDeleted());
                 } else {
                     this.choosePurchaseCreditNoteItemMaterial(undefined);

@@ -421,7 +421,7 @@ namespace purchase {
                 });
             }
             /** 添加预付款申请-行事件 */
-            private addDownPaymentRequestItem(items: bo.DownPaymentRequestItem[]): void {
+            private addDownPaymentRequestItem(items: bo.DownPaymentRequestItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -441,8 +441,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showDownPaymentRequestItems(this.editData.downPaymentRequestItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.downPaymentRequestItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.downPaymentRequestItems.create();
+                    }
                     this.view.showDownPaymentRequestItems(this.editData.downPaymentRequestItems.filterDeleted());
                 } else {
                     this.chooseDownPaymentRequestItemMaterial(undefined);

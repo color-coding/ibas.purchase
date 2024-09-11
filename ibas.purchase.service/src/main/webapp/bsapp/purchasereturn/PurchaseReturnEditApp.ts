@@ -528,7 +528,7 @@ namespace purchase {
                 });
             }
             /** 添加采购退货-行事件 */
-            private addPurchaseReturnItem(items: bo.PurchaseReturnItem[]): void {
+            private addPurchaseReturnItem(items: bo.PurchaseReturnItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -550,8 +550,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.purchaseReturnItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.purchaseReturnItems.create();
+                    }
                     this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
                 } else {
                     this.choosePurchaseReturnItemMaterial(undefined);

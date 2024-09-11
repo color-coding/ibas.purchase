@@ -573,6 +573,8 @@ declare namespace accounting {
             createActionId: string;
             /** 更新动作标识 */
             updateActionId: string;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
         }
     }
 }
@@ -2610,6 +2612,12 @@ declare namespace accounting {
             get updateActionId(): string;
             /** 设置-更新动作标识 */
             set updateActionId(value: string);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
             /** 初始化数据 */
             protected init(): void;
         }

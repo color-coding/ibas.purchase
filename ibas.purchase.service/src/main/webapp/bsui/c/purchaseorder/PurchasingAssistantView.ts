@@ -175,7 +175,7 @@ namespace purchase {
                                                 width: "8rem",
                                                 propertyName: "orderType",
                                                 dataInfo: {
-                                                    code: bo.PurchaseOrder.BUSINESS_OBJECT_CODE,
+                                                    code: sales.bo.SalesOrder.BUSINESS_OBJECT_CODE,
                                                 },
                                             }),
                                             new sap.m.Title("", {
@@ -1069,6 +1069,14 @@ namespace purchase {
                 private menuEditData: sap.m.MenuButton;
                 private branchInput: sap.extension.m.SelectionInput;
 
+                onDisplayed(): void {
+                    setTimeout(() => {
+                        if (this.selectType.getForceSelection() === true) {
+                            this.selectType.setForceSelection(false);
+                            this.selectType.setSelectedKey(null);
+                        }
+                    }, 600);
+                }
 
                 private selectWarehouse: component.WarehouseSelect;
                 get defaultWarehouse(): string {

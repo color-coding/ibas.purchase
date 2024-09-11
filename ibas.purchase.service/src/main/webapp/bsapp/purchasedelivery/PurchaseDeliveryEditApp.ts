@@ -587,7 +587,7 @@ namespace purchase {
                 });
             }
             /** 添加采购收货-行事件 */
-            private addPurchaseDeliveryItem(items: bo.PurchaseDeliveryItem[]): void {
+            private addPurchaseDeliveryItem(items: bo.PurchaseDeliveryItem[] | number): void {
                 if (items instanceof Array && items.length > 0) {
                     let builder: ibas.StringBuilder = new ibas.StringBuilder();
                     builder.append(ibas.i18n.prop("shell_data_new_line"));
@@ -609,8 +609,10 @@ namespace purchase {
                         this.proceeding(ibas.emMessageType.WARNING, builder.toString());
                         this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
                     }
-                } else if (items instanceof Array) {
-                    this.editData.purchaseDeliveryItems.create();
+                } else if (typeof items === "number" && items > 0) {
+                    for (let i: number = 0; i < items; i++) {
+                        this.editData.purchaseDeliveryItems.create();
+                    }
                     this.view.showPurchaseDeliveryItems(this.editData.purchaseDeliveryItems.filterDeleted());
                 } else {
                     this.choosePurchaseDeliveryItemMaterial(undefined);
