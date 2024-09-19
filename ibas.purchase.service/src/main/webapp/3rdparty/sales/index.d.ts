@@ -12363,6 +12363,7 @@ declare namespace sales {
             private chooseSalesDeliveryItemDistributionRule;
             /** 选择销售交货-销售预留发票事件 */
             private chooseSalesDeliverySalesReserveInvoice;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -12414,6 +12415,8 @@ declare namespace sales {
             turnToSalesReturnEvent: Function;
             /** 转为销售发票事件 */
             turnToSalesInvoiceEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -12666,6 +12669,7 @@ declare namespace sales {
             private reserveMaterialsInventory;
             private chooseCustomerAgreements;
             private chooseSalesOrderItemDistributionRule;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -12725,6 +12729,8 @@ declare namespace sales {
             turnToDownPaymentRequestEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13038,6 +13044,7 @@ declare namespace sales {
             private chooseSalesReturnItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesReturnItemDistributionRule;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -13083,6 +13090,8 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 转为销售贷项事件 */
             turnToSalesCreditNoteEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -13316,6 +13325,7 @@ declare namespace sales {
             private chooseSalesQuoteItemDistributionRule;
             /** 预留物料库存 */
             private reserveMaterialsInventory;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -13357,6 +13367,8 @@ declare namespace sales {
             turnToSalesOrderEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }
@@ -13659,6 +13671,7 @@ declare namespace sales {
             protected removeSalesInvoiceDownPayment(items: bo.SalesInvoiceDownPayment[]): void;
             /** 添加销售发票-预收款事件 */
             protected chooseSalesInvoiceDownPayment(): void;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -13714,6 +13727,8 @@ declare namespace sales {
             removeSalesInvoiceDownPaymentEvent: Function;
             /** 显示数据-销售发票-预收款 */
             showSalesInvoiceDownPayments(datas: bo.SalesInvoiceDownPayment[]): void;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13951,6 +13966,7 @@ declare namespace sales {
             private chooseSalesCreditNoteItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesCreditNoteItemDistributionRule;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -13994,6 +14010,8 @@ declare namespace sales {
             chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -14387,6 +14405,7 @@ declare namespace sales {
             private chooseBlanketAgreementItemMaterial;
             private chooseBlanketAgreementItemUnit;
             private chooseCustomerAgreements;
+            protected measuringMaterials(): void;
         }
         /** 视图-一揽子协议 */
         interface IBlanketAgreementEditView extends ibas.IBOEditView {
@@ -14412,6 +14431,8 @@ declare namespace sales {
             chooseBlanketAgreementItemUnitEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }
@@ -14643,6 +14664,7 @@ declare namespace sales {
             private chooseDownPaymentRequestItemDistributionRule;
             /** 预收款申请收款 */
             protected receiptDownPaymentRequest(): void;
+            protected measuringMaterials(): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -14682,6 +14704,8 @@ declare namespace sales {
             chooseCustomerAgreementsEvent: Function;
             /** 预收款申请收款事件 */
             receiptDownPaymentRequestEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -14811,6 +14835,7 @@ declare namespace sales {
             private chooseSalesReserveInvoiceItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesReserveInvoiceItemDistributionRule;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceEditView extends ibas.IBOEditView {
@@ -14860,6 +14885,8 @@ declare namespace sales {
             turnToSalesCreditNoteEvent: Function;
             /** 转为销售交货事件 */
             turnToSalesDeliveryEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -15098,6 +15125,7 @@ declare namespace sales {
             private chooseSalesReturnRequestItemMaterialVersion;
             private chooseCustomerAgreements;
             private chooseSalesReturnRequestItemDistributionRule;
+            protected measuringMaterials(): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestEditView extends ibas.IBOEditView {
@@ -15141,6 +15169,8 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 转为销售贷项事件 */
             turnToSalesReturnEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }

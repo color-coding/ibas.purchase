@@ -53,6 +53,7 @@ namespace purchase {
                 this.view.turnToPurchaseReserveInvoiceEvent = this.turnToPurchaseReserveInvoice;
                 this.view.turnToDownPaymentRequestEvent = this.turnToDownPaymentRequest;
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
+                this.view.measuringMaterialsEvent = this.measuringMaterials;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -1647,6 +1648,26 @@ namespace purchase {
                     }
                 });
             }
+            protected measuringMaterials(): void {
+                let lines: ibas.ArrayList<materials.app.IMaterialMeasurementContractLine> = new ibas.ArrayList<materials.app.IMaterialMeasurementContractLine>();
+                for (let item of this.editData.purchaseOrderItems) {
+                    lines.add({
+                        lineId: item.lineId,
+                        itemCode: item.itemCode,
+                        itemDescription: item.itemDescription,
+                        quantity: item.quantity,
+                        uom: item.uom,
+                    });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialMeasurementContract>({
+                    proxy: new materials.app.MaterialMeasurementServiceProxy({
+                        mode: "PURCHASE",
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        lines: lines,
+                    })
+                });
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseOrderEditView extends ibas.IBOEditView {
@@ -1706,6 +1727,8 @@ namespace purchase {
             turnToDownPaymentRequestEvent: Function;
             /** 预留物料订购 */
             reserveMaterialsOrderedEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

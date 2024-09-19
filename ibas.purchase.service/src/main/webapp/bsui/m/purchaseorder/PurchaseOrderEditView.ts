@@ -64,6 +64,8 @@ namespace purchase {
                 turnToDownPaymentRequestEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */

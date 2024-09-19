@@ -52,6 +52,8 @@ namespace purchase {
                 editShippingAddressesEvent: Function;
                 /** 转为采购贷项事件 */
                 turnToPurchaseCreditNoteEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */

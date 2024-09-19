@@ -44,6 +44,8 @@ namespace purchase {
                 choosePurchaseQuoteItemDistributionRuleEvent: Function;
                 /** 转为采购订单事件 */
                 turnToPurchaseOrderEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */

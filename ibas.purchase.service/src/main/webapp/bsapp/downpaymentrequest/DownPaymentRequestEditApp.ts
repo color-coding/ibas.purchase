@@ -43,6 +43,7 @@ namespace purchase {
                 this.view.chooseDownPaymentRequestItemDistributionRuleEvent = this.chooseDownPaymentRequestItemDistributionRule;
                 this.view.chooseDownPaymentRequestItemMaterialVersionEvent = this.chooseDownPaymentRequestItemMaterialVersion;
                 this.view.paymentDownPaymentRequestEvent = this.paymentDownPaymentRequest;
+                this.view.measuringMaterialsEvent = this.measuringMaterials;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -1094,6 +1095,26 @@ namespace purchase {
                     }
                 });
             }
+            protected measuringMaterials(): void {
+                let lines: ibas.ArrayList<materials.app.IMaterialMeasurementContractLine> = new ibas.ArrayList<materials.app.IMaterialMeasurementContractLine>();
+                for (let item of this.editData.downPaymentRequestItems) {
+                    lines.add({
+                        lineId: item.lineId,
+                        itemCode: item.itemCode,
+                        itemDescription: item.itemDescription,
+                        quantity: item.quantity,
+                        uom: item.uom,
+                    });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialMeasurementContract>({
+                    proxy: new materials.app.MaterialMeasurementServiceProxy({
+                        mode: "PURCHASE",
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        lines: lines,
+                    })
+                });
+            }
         }
         /** 视图-预付款申请 */
         export interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -1133,6 +1154,8 @@ namespace purchase {
             chooseDownPaymentRequestItemMaterialVersionEvent: Function;
             /** 预收款申请付款事件 */
             paymentDownPaymentRequestEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */

@@ -40,6 +40,7 @@ namespace purchase {
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
                 this.view.purchaseRequestToEvent = this.purchaseRequestTo;
+                this.view.measuringMaterialsEvent = this.measuringMaterials;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -779,6 +780,26 @@ namespace purchase {
                     }
                 });
             }
+            protected measuringMaterials(): void {
+                let lines: ibas.ArrayList<materials.app.IMaterialMeasurementContractLine> = new ibas.ArrayList<materials.app.IMaterialMeasurementContractLine>();
+                for (let item of this.editData.purchaseRequestItems) {
+                    lines.add({
+                        lineId: item.lineId,
+                        itemCode: item.itemCode,
+                        itemDescription: item.itemDescription,
+                        quantity: item.quantity,
+                        uom: item.uom,
+                    });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialMeasurementContract>({
+                    proxy: new materials.app.MaterialMeasurementServiceProxy({
+                        mode: "PURCHASE",
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        lines: lines,
+                    })
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -814,6 +835,8 @@ namespace purchase {
             showPurchaseRequestTos(datas: ibas.IServiceAgent[]): void;
             /** 采购申请转换事件 */
             purchaseRequestToEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
         }
         /** 采购申请编辑服务映射 */
         export class PurchaseRequestEditServiceMapping extends ibas.BOEditServiceMapping {

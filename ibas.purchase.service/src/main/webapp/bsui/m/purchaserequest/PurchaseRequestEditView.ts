@@ -36,6 +36,8 @@ namespace purchase {
                 reserveMaterialsOrderedEvent: Function;
                 /** 采购申请转换事件 */
                 purchaseRequestToEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

@@ -50,6 +50,8 @@ namespace purchase {
                 turnToPurchaseReturnEvent: Function;
                 /** 预留物料库存 */
                 reserveMaterialsInventoryEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */

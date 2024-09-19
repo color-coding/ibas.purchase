@@ -527,6 +527,23 @@ declare namespace materials {
         /** 物料库存转储添加服务代理 */
         class MaterialInventoryTransAddServiceProxy extends ibas.ServiceProxy<IInventoryTransferTarget> {
         }
+        /** 物料测量服务契约 */
+        interface IMaterialMeasurementContract extends ibas.IServiceContract {
+            mode: "INVENTORY" | "PURCHASE" | "SALES";
+            documentType: string;
+            documentEntry: number;
+            lines: IMaterialMeasurementContractLine[];
+        }
+        interface IMaterialMeasurementContractLine {
+            lineId: number;
+            itemCode: string;
+            itemDescription: string;
+            quantity: number;
+            uom: string;
+        }
+        /** 物料测量服务代理 */
+        class MaterialMeasurementServiceProxy extends ibas.ServiceProxy<IMaterialMeasurementContract> {
+        }
         /** 查询条件 */
         namespace conditions {
             namespace material {
@@ -1321,6 +1338,54 @@ declare namespace materials {
             scheduler: string;
             /** 关键件 */
             keyComponent: ibas.emYesNo;
+            /** 销售-长 */
+            salesLength: number;
+            /** 销售-宽 */
+            salesWidth: number;
+            /** 销售-高 */
+            salesHeight: number;
+            /** 销售-尺寸单位 */
+            salesSizeUnit: string;
+            /** 销售-体积 */
+            salesVolume: number;
+            /** 销售-体积单位 */
+            salesVolumeUnit: string;
+            /** 销售-重量 */
+            salesWeight: number;
+            /** 销售-重量单位 */
+            salesWeightUnit: string;
+            /** 采购-长 */
+            purchaseLength: number;
+            /** 采购-宽 */
+            purchaseWidth: number;
+            /** 采购-高 */
+            purchaseHeight: number;
+            /** 销售-尺寸单位 */
+            purchaseSizeUnit: string;
+            /** 采购-体积 */
+            purchaseVolume: number;
+            /** 采购-体积单位 */
+            purchaseVolumeUnit: string;
+            /** 采购-重量 */
+            purchaseWeight: number;
+            /** 采购-重量单位 */
+            purchaseWeightUnit: string;
+            /** 库存-长 */
+            inventoryLength: number;
+            /** 库存-宽 */
+            inventoryWidth: number;
+            /** 库存-高 */
+            inventoryHeight: number;
+            /** 销售-尺寸单位 */
+            inventorySizeUnit: string;
+            /** 库存-体积 */
+            inventoryVolume: number;
+            /** 采购-体积单位 */
+            inventoryVolumeUnit: string;
+            /** 库存-重量 */
+            inventoryWeight: number;
+            /** 库存-重量单位 */
+            inventoryWeightUnit: string;
             /** 生效日期 */
             validDate: Date;
             /** 失效日期 */
@@ -3179,6 +3244,8 @@ declare namespace materials {
             activated: ibas.emYesNo;
             /** 小数位数 */
             decimalPlaces: number;
+            /** 类别 */
+            category: string;
             /** 备注 */
             remarks: string;
         }
@@ -6429,6 +6496,150 @@ declare namespace materials {
             get keyComponent(): ibas.emYesNo;
             /** 设置-关键件 */
             set keyComponent(value: ibas.emYesNo);
+            /** 映射的属性名称-销售-长 */
+            static PROPERTY_SALESLENGTH_NAME: string;
+            /** 获取-销售-长 */
+            get salesLength(): number;
+            /** 设置-销售-长 */
+            set salesLength(value: number);
+            /** 映射的属性名称-销售-宽 */
+            static PROPERTY_SALESWIDTH_NAME: string;
+            /** 获取-销售-宽 */
+            get salesWidth(): number;
+            /** 设置-销售-宽 */
+            set salesWidth(value: number);
+            /** 映射的属性名称-销售-高 */
+            static PROPERTY_SALESHEIGHT_NAME: string;
+            /** 获取-销售-高 */
+            get salesHeight(): number;
+            /** 设置-销售-高 */
+            set salesHeight(value: number);
+            /** 映射的属性名称-销售-尺寸单位 */
+            static PROPERTY_SALESSIZEUNIT_NAME: string;
+            /** 获取-销售-尺寸单位 */
+            get salesSizeUnit(): string;
+            /** 设置-销售-尺寸单位 */
+            set salesSizeUnit(value: string);
+            /** 映射的属性名称-销售-体积 */
+            static PROPERTY_SALESVOLUME_NAME: string;
+            /** 获取-销售-体积 */
+            get salesVolume(): number;
+            /** 设置-销售-体积 */
+            set salesVolume(value: number);
+            /** 映射的属性名称-销售-体积单位 */
+            static PROPERTY_SALESVOLUMEUNIT_NAME: string;
+            /** 获取-销售-体积单位 */
+            get salesVolumeUnit(): string;
+            /** 设置-销售-体积单位 */
+            set salesVolumeUnit(value: string);
+            /** 映射的属性名称-销售-重量 */
+            static PROPERTY_SALESWEIGHT_NAME: string;
+            /** 获取-销售-重量 */
+            get salesWeight(): number;
+            /** 设置-销售-重量 */
+            set salesWeight(value: number);
+            /** 映射的属性名称-销售-重量单位 */
+            static PROPERTY_SALESWEIGHTUNIT_NAME: string;
+            /** 获取-销售-重量单位 */
+            get salesWeightUnit(): string;
+            /** 设置-销售-重量单位 */
+            set salesWeightUnit(value: string);
+            /** 映射的属性名称-采购-长 */
+            static PROPERTY_PURCHASELENGTH_NAME: string;
+            /** 获取-采购-长 */
+            get purchaseLength(): number;
+            /** 设置-采购-长 */
+            set purchaseLength(value: number);
+            /** 映射的属性名称-采购-宽 */
+            static PROPERTY_PURCHASEWIDTH_NAME: string;
+            /** 获取-采购-宽 */
+            get purchaseWidth(): number;
+            /** 设置-采购-宽 */
+            set purchaseWidth(value: number);
+            /** 映射的属性名称-采购-高 */
+            static PROPERTY_PURCHASEHEIGHT_NAME: string;
+            /** 获取-采购-高 */
+            get purchaseHeight(): number;
+            /** 设置-采购-高 */
+            set purchaseHeight(value: number);
+            /** 映射的属性名称-销售-尺寸单位 */
+            static PROPERTY_PURCHASESIZEUNIT_NAME: string;
+            /** 获取-销售-尺寸单位 */
+            get purchaseSizeUnit(): string;
+            /** 设置-销售-尺寸单位 */
+            set purchaseSizeUnit(value: string);
+            /** 映射的属性名称-采购-体积 */
+            static PROPERTY_PURCHASEVOLUME_NAME: string;
+            /** 获取-采购-体积 */
+            get purchaseVolume(): number;
+            /** 设置-采购-体积 */
+            set purchaseVolume(value: number);
+            /** 映射的属性名称-采购-体积单位 */
+            static PROPERTY_PURCHASEVOLUMEUNIT_NAME: string;
+            /** 获取-采购-体积单位 */
+            get purchaseVolumeUnit(): string;
+            /** 设置-采购-体积单位 */
+            set purchaseVolumeUnit(value: string);
+            /** 映射的属性名称-采购-重量 */
+            static PROPERTY_PURCHASEWEIGHT_NAME: string;
+            /** 获取-采购-重量 */
+            get purchaseWeight(): number;
+            /** 设置-采购-重量 */
+            set purchaseWeight(value: number);
+            /** 映射的属性名称-采购-重量单位 */
+            static PROPERTY_PURCHASEWEIGHTUNIT_NAME: string;
+            /** 获取-采购-重量单位 */
+            get purchaseWeightUnit(): string;
+            /** 设置-采购-重量单位 */
+            set purchaseWeightUnit(value: string);
+            /** 映射的属性名称-库存-长 */
+            static PROPERTY_INVENTORYLENGTH_NAME: string;
+            /** 获取-库存-长 */
+            get inventoryLength(): number;
+            /** 设置-库存-长 */
+            set inventoryLength(value: number);
+            /** 映射的属性名称-库存-宽 */
+            static PROPERTY_INVENTORYWIDTH_NAME: string;
+            /** 获取-库存-宽 */
+            get inventoryWidth(): number;
+            /** 设置-库存-宽 */
+            set inventoryWidth(value: number);
+            /** 映射的属性名称-库存-高 */
+            static PROPERTY_INVENTORYHEIGHT_NAME: string;
+            /** 获取-库存-高 */
+            get inventoryHeight(): number;
+            /** 设置-库存-高 */
+            set inventoryHeight(value: number);
+            /** 映射的属性名称-销售-尺寸单位 */
+            static PROPERTY_INVENTORYSIZEUNIT_NAME: string;
+            /** 获取-销售-尺寸单位 */
+            get inventorySizeUnit(): string;
+            /** 设置-销售-尺寸单位 */
+            set inventorySizeUnit(value: string);
+            /** 映射的属性名称-库存-体积 */
+            static PROPERTY_INVENTORYVOLUME_NAME: string;
+            /** 获取-库存-体积 */
+            get inventoryVolume(): number;
+            /** 设置-库存-体积 */
+            set inventoryVolume(value: number);
+            /** 映射的属性名称-采购-体积单位 */
+            static PROPERTY_INVENTORYVOLUMEUNIT_NAME: string;
+            /** 获取-采购-体积单位 */
+            get inventoryVolumeUnit(): string;
+            /** 设置-采购-体积单位 */
+            set inventoryVolumeUnit(value: string);
+            /** 映射的属性名称-库存-重量 */
+            static PROPERTY_INVENTORYWEIGHT_NAME: string;
+            /** 获取-库存-重量 */
+            get inventoryWeight(): number;
+            /** 设置-库存-重量 */
+            set inventoryWeight(value: number);
+            /** 映射的属性名称-库存-重量单位 */
+            static PROPERTY_INVENTORYWEIGHTUNIT_NAME: string;
+            /** 获取-库存-重量单位 */
+            get inventoryWeightUnit(): string;
+            /** 设置-库存-重量单位 */
+            set inventoryWeightUnit(value: string);
             /** 映射的属性名称-生效日期 */
             static PROPERTY_VALIDDATE_NAME: string;
             /** 获取-生效日期 */
@@ -10246,6 +10457,14 @@ declare namespace materials {
         class Unit extends ibas.BOSimple<Unit> implements IUnit {
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string;
+            /** 类别：尺寸 */
+            static CATEGORY_SIZE: string;
+            /** 类别：面积 */
+            static CATEGORY_SQUARE: string;
+            /** 类别：体积 */
+            static CATEGORY_VOLUME: string;
+            /** 类别：重量 */
+            static CATEGORY_WEIGHT: string;
             /** 构造函数 */
             constructor();
             /** 映射的属性名称-对象编号 */
@@ -10362,6 +10581,12 @@ declare namespace materials {
             get decimalPlaces(): number;
             /** 设置-小数位数 */
             set decimalPlaces(value: number);
+            /** 映射的属性名称-类别 */
+            static PROPERTY_CATEGORY_NAME: string;
+            /** 获取-类别 */
+            get category(): string;
+            /** 设置-类别 */
+            set category(value: string);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -13673,6 +13898,7 @@ declare namespace materials {
             private chooseGoodsIssueLineMaterialSerial;
             private chooseGoodsIssueLineDistributionRule;
             private chooseGoodsIssueLineMaterialVersion;
+            protected measuringMaterials(): void;
         }
         /** 视图-库存发货 */
         interface IGoodsIssueEditView extends ibas.IBOEditView {
@@ -13702,6 +13928,8 @@ declare namespace materials {
             chooseGoodsIssueLineDistributionRuleEvent: Function;
             /** 选择库存发货-行 物料版本 */
             chooseGoodsIssueLineMaterialVersionEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -13927,6 +14155,7 @@ declare namespace materials {
             private createGoodsReceiptLineMaterialSerial;
             private chooseGoodsReceiptLineDistributionRule;
             private chooseGoodsReceiptLineMaterialVersion;
+            protected measuringMaterials(): void;
         }
         /** 视图-库存收货 */
         interface IGoodsReceiptEditView extends ibas.IBOEditView {
@@ -13956,6 +14185,8 @@ declare namespace materials {
             chooseGoodsReceiptLineDistributionRuleEvent: Function;
             /** 选择库存收货-行 物料版本 */
             chooseGoodsReceiptLineMaterialVersionEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -14178,6 +14409,7 @@ declare namespace materials {
             private chooseInventoryTransferLineDistributionRule;
             private chooseInventoryTransferLineTransferRequest;
             private chooseInventoryTransferLineMaterialVersion;
+            protected measuringMaterials(): void;
         }
         /** 视图-库存转储 */
         interface IInventoryTransferEditView extends ibas.IBOEditView {
@@ -14213,6 +14445,8 @@ declare namespace materials {
             showServiceAgent(datas: ibas.IServiceAgent[]): void;
             /** 选择库存转储-行 物料版本 */
             chooseInventoryTransferLineMaterialVersionEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
             /** 从仓库 */
             fromWarehouse: string;
             /** 目标仓库 */
@@ -15430,6 +15664,107 @@ declare namespace materials {
             chooseSubstituteVersionEvent: Function;
             /** 选择物料事件 */
             chooseSubstituteMaterialEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        class MaterialMeasurement extends ibas.Bindable {
+            /** 模式 */
+            mode: "INVENTORY" | "PURCHASE" | "SALES";
+            /** 单据类型 */
+            documentType: string;
+            /** 单据编号 */
+            documentEntry: number;
+            /** 单据行号 */
+            documentLineId: number;
+            /** 单据物料编码 */
+            documentItemCode: string;
+            /** 单据物料描述 */
+            documentItemDescription: string;
+            /** 单据数量 */
+            documentQuantity: number;
+            /** 单据单位 */
+            documentUOM: string;
+            /** 单位库 */
+            units: ibas.IList<bo.Unit>;
+            get material(): bo.Material;
+            set material(value: bo.Material);
+            /** 获取-长 */
+            get length(): number;
+            /** 获取-宽 */
+            get width(): number;
+            /** 获取-销售-高 */
+            get height(): number;
+            /** 获取-销售-尺寸单位 */
+            get sizeUnit(): string;
+            /** 获取-销售-体积 */
+            get volume(): number;
+            set volume(value: number);
+            /** 获取-体积单位 */
+            get volumeUnit(): string;
+            set volumeUnit(value: string);
+            /** 获取-重量 */
+            get weight(): number;
+            set weight(value: number);
+            /** 获取-重量单位 */
+            get weightUnit(): string;
+            set weightUnit(value: string);
+            /** 数量 */
+            get quantity(): number;
+            set quantity(value: number);
+            /** 单位 */
+            get uom(): string;
+            set uom(value: string);
+            protected unitName(unit: string): string;
+            /**
+             * 计算体积
+             */
+            calculateVolume(): void;
+            /**
+             * 计算体积
+             */
+            calculateWeight(): void;
+        }
+        /** 选择应用-物料 */
+        class MaterialMeasurementService extends ibas.ServiceApplication<IMaterialMeasurementView, IMaterialMeasurementContract> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private measurements;
+            private units;
+            protected runService(contract: IMaterialMeasurementContract): void;
+            protected changeUnit(category: string, unit: string): void;
+        }
+        /** 视图-物料测量 */
+        interface IMaterialMeasurementView extends ibas.IView {
+            /** 显示数据 */
+            showDatas(datas: MaterialMeasurement[]): void;
+            /**
+             * 改变单位事件
+             */
+            changeUnitEvent: Function;
+        }
+        /**  物料测量服务映射 */
+        class MaterialMeasurementServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
         }
     }
 }
@@ -18852,6 +19187,7 @@ declare namespace materials {
             private chooseInventoryTransferRequestLineMaterialVersion;
             /** 预留物料库存 */
             private reserveMaterialsInventory;
+            protected measuringMaterials(): void;
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestEditView extends ibas.IBOEditView {
@@ -18881,14 +19217,16 @@ declare namespace materials {
             chooseInventoryTransferRequestLineDistributionRuleEvent: Function;
             /** 选择库存转储申请-行 物料版本 */
             chooseInventoryTransferRequestLineMaterialVersionEvent: Function;
-            /** 从仓库 */
-            fromWarehouse: string;
-            /** 目标仓库 */
-            toWarehouse: string;
             /** 转为库存转储申请事件 */
             turnToInventoryTransferEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
+            /** 测量物料 */
+            measuringMaterialsEvent: Function;
+            /** 从仓库 */
+            fromWarehouse: string;
+            /** 目标仓库 */
+            toWarehouse: string;
         }
         /** 库存转储申请编辑服务映射 */
         class InventoryTransferRequestEditServiceMapping extends ibas.BOEditServiceMapping {

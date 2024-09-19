@@ -28,6 +28,8 @@ namespace purchase {
                 chooseBlanketAgreementItemUnitEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

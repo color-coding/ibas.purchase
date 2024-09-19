@@ -42,6 +42,8 @@ namespace purchase {
                 chooseSupplierAgreementsEvent: Function;
                 /** 预收款申请付款事件 */
                 paymentDownPaymentRequestEvent: Function;
+                /** 测量物料 */
+                measuringMaterialsEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */
