@@ -330,6 +330,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售交货-行集合 */
             salesDeliveryItems: ISalesDeliveryItems;
             /** 送货地址集合 */
@@ -408,6 +412,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -474,6 +480,10 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -586,6 +596,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售订单-行集合 */
             salesOrderItems: ISalesOrderItems;
             /** 送货地址集合 */
@@ -662,6 +676,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -730,6 +746,10 @@ declare namespace sales {
             agreements: string;
             /** 已订购数量 */
             orderedQuantity: number;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 销售订单-行-额外信息集合 */
             salesOrderItemExtras: ISalesOrderItemExtras;
             /** 赋值产品 */
@@ -900,6 +920,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售退货-行集合 */
             salesReturnItems: ISalesReturnItems;
             /** 送货地址集合 */
@@ -976,6 +1000,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -1044,6 +1070,10 @@ declare namespace sales {
             agreements: string;
             /** 退货成本（本币） */
             returnCost: number;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1158,6 +1188,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售报价-行集合 */
             salesQuoteItems: ISalesQuoteItems;
         }
@@ -1228,6 +1262,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -1294,6 +1330,10 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 销售报价-行-额外信息集合 */
             salesQuoteItemExtras: ISalesQuoteItemExtras;
             /** 赋值产品 */
@@ -1464,6 +1504,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售贷项-行集合 */
             salesCreditNoteItems: ISalesCreditNoteItems;
             /** 送货地址集合 */
@@ -1542,6 +1586,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -1610,6 +1656,10 @@ declare namespace sales {
             agreements: string;
             /** 退货成本（本币） */
             returnCost: number;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1722,6 +1772,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
             /** 销售发票-预收款集合 */
@@ -1807,6 +1861,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -1873,6 +1929,10 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2197,6 +2257,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 数量 */
             quantity: number;
             /** 单位 */
@@ -2331,6 +2393,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 预收款申请-行集合 */
             downPaymentRequestItems: IDownPaymentRequestItems;
             /** 基于销售订单 */
@@ -2405,6 +2471,8 @@ declare namespace sales {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -2465,6 +2533,10 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同/协议 */
             agreements: string;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2577,6 +2649,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售预留发票-行集合 */
             salesReserveInvoiceItems: ISalesReserveInvoiceItems;
             /** 送货地址集合 */
@@ -2653,6 +2729,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -2719,6 +2797,10 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2831,6 +2913,10 @@ declare namespace sales {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 毛利价格清单 */
+            grossBase: number;
+            /** 毛利 */
+            grossProfit: number;
             /** 销售退货请求-行集合 */
             salesReturnRequestItems: ISalesReturnRequestItems;
             /** 送货地址集合 */
@@ -2907,6 +2993,8 @@ declare namespace sales {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 产品版本 */
             itemVersion: string;
             /** 序号管理 */
@@ -2975,6 +3063,10 @@ declare namespace sales {
             agreements: string;
             /** 退货成本（本币） */
             returnCost: number;
+            /** 毛利基础 */
+            grossBase: number;
+            /** 毛利价格 */
+            grossPrice: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -3775,6 +3867,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售交货-行集合 */
             static PROPERTY_SALESDELIVERYITEMS_NAME: string;
             /** 获取-销售交货-行集合 */
@@ -4028,6 +4132,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -4226,6 +4336,18 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -4551,6 +4673,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESORDERITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -4802,6 +4936,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -5006,6 +5146,18 @@ declare namespace sales {
             get orderedQuantity(): number;
             /** 设置-已订购数量 */
             set orderedQuantity(value: number);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-销售订单-行-额外信息集合 */
             static PROPERTY_SALESORDERITEMEXTRAS_NAME: string;
             /** 获取-销售订单-行-额外信息集合 */
@@ -5499,6 +5651,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESQUOTEITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -5728,6 +5892,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -5926,6 +6096,18 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-销售报价-行-额外信息集合 */
             static PROPERTY_SALESQUOTEITEMEXTRAS_NAME: string;
             /** 获取-销售报价-行-额外信息集合 */
@@ -6401,6 +6583,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售退货-行集合 */
             static PROPERTY_SALESRETURNITEMS_NAME: string;
             /** 获取-销售退货-行集合 */
@@ -6654,6 +6848,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -6858,6 +7058,18 @@ declare namespace sales {
             get returnCost(): number;
             /** 设置-退货成本（本币） */
             set returnCost(value: number);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -7183,6 +7395,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售贷项-行集合 */
             static PROPERTY_SALESCREDITNOTEITEMS_NAME: string;
             /** 获取-销售贷项-行集合 */
@@ -7435,6 +7659,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -7639,6 +7869,18 @@ declare namespace sales {
             get returnCost(): number;
             /** 设置-退货成本（本币） */
             set returnCost(value: number);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -7964,6 +8206,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售发票-行集合 */
             static PROPERTY_SALESINVOICEITEMS_NAME: string;
             /** 获取-销售发票-行集合 */
@@ -8232,6 +8486,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -8430,6 +8690,18 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -9352,6 +9624,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-数量 */
             static PROPERTY_QUANTITY_NAME: string;
             /** 获取-数量 */
@@ -9739,6 +10017,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-预收款申请-行集合 */
             static PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME: string;
             /** 获取-预收款申请-行集合 */
@@ -9968,6 +10258,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-物料标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -10148,6 +10444,18 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同/协议 */
             set agreements(value: string);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -10461,6 +10769,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售预留发票-行集合 */
             static PROPERTY_SALESRESERVEINVOICEITEMS_NAME: string;
             /** 获取-销售预留发票-行集合 */
@@ -10711,6 +11031,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -10909,6 +11235,18 @@ declare namespace sales {
             get agreements(): string;
             /** 设置-合同 */
             set agreements(value: string);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -11234,6 +11572,18 @@ declare namespace sales {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-毛利价格清单 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利价格清单 */
+            get grossBase(): number;
+            /** 设置-毛利价格清单 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利 */
+            static PROPERTY_GROSSPROFIT_NAME: string;
+            /** 获取-毛利 */
+            get grossProfit(): number;
+            /** 设置-毛利 */
+            set grossProfit(value: number);
             /** 映射的属性名称-销售退货请求-行集合 */
             static PROPERTY_SALESRETURNREQUESTITEMS_NAME: string;
             /** 获取-销售退货请求-行集合 */
@@ -11485,6 +11835,12 @@ declare namespace sales {
             get itemSign(): string;
             /** 设置-产品标识 */
             set itemSign(value: string);
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string;
+            /** 获取-目录编码 */
+            get catalogCode(): string;
+            /** 设置-目录编码 */
+            set catalogCode(value: string);
             /** 映射的属性名称-产品版本 */
             static PROPERTY_ITEMVERSION_NAME: string;
             /** 获取-产品版本 */
@@ -11689,6 +12045,18 @@ declare namespace sales {
             get returnCost(): number;
             /** 设置-退货成本（本币） */
             set returnCost(value: number);
+            /** 映射的属性名称-毛利基础 */
+            static PROPERTY_GROSSBASE_NAME: string;
+            /** 获取-毛利基础 */
+            get grossBase(): number;
+            /** 设置-毛利基础 */
+            set grossBase(value: number);
+            /** 映射的属性名称-毛利价格 */
+            static PROPERTY_GROSSPRICE_NAME: string;
+            /** 获取-毛利价格 */
+            get grossPrice(): number;
+            /** 设置-毛利价格 */
+            set grossPrice(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -12364,6 +12732,8 @@ declare namespace sales {
             /** 选择销售交货-销售预留发票事件 */
             private chooseSalesDeliverySalesReserveInvoice;
             protected measuringMaterials(): void;
+            protected chooseSalesDeliveryItemMaterialCatalog(caller: bo.SalesDeliveryItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -12405,6 +12775,8 @@ declare namespace sales {
             chooseSalesDeliveryBlanketAgreementEvent: Function;
             /** 选择销售交货-行 成本中心事件 */
             chooseSalesDeliveryItemDistributionRuleEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesDeliveryItemMaterialCatalogEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 销售交货收款事件 */
@@ -12417,6 +12789,8 @@ declare namespace sales {
             turnToSalesInvoiceEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -12670,6 +13044,8 @@ declare namespace sales {
             private chooseCustomerAgreements;
             private chooseSalesOrderItemDistributionRule;
             protected measuringMaterials(): void;
+            protected chooseSalesOrderItemMaterialCatalog(caller: bo.SalesOrderItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -12705,6 +13081,8 @@ declare namespace sales {
             chooseSalesOrderItemMaterialVersionEvent: Function;
             /** 选择销售订单-行 成本中心事件 */
             chooseSalesOrderItemDistributionRuleEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesOrderItemMaterialCatalogEvent: Function;
             /** 显示销售订单行额外信息事件 */
             showSalesOrderItemExtraEvent: Function;
             /** 选择销售订单-销售报价事件 */
@@ -12731,6 +13109,8 @@ declare namespace sales {
             reserveMaterialsInventoryEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13045,6 +13425,8 @@ declare namespace sales {
             private chooseCustomerAgreements;
             private chooseSalesReturnItemDistributionRule;
             protected measuringMaterials(): void;
+            protected chooseSalesReturnItemMaterialCatalog(caller: bo.SalesReturnItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -13078,6 +13460,8 @@ declare namespace sales {
             chooseSalesReturnItemMaterialSerialEvent: Function;
             /** 选择销售退货-行 物料版本 */
             chooseSalesReturnItemMaterialVersionEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesReturnItemMaterialCatalogEvent: Function;
             /** 选择销售退货-行 成本中心事件 */
             chooseSalesReturnItemDistributionRuleEvent: Function;
             /** 选择销售退货项目-销售订单事件 */
@@ -13092,6 +13476,8 @@ declare namespace sales {
             turnToSalesCreditNoteEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -13326,6 +13712,8 @@ declare namespace sales {
             /** 预留物料库存 */
             private reserveMaterialsInventory;
             protected measuringMaterials(): void;
+            protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -13357,6 +13745,8 @@ declare namespace sales {
             chooseSalesOrderItemDistributionRuleEvent: Function;
             /** 选择销售报价仓库事件 */
             chooseSalesQuoteItemWarehouseEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesQuoteItemMaterialCatalogEvent: Function;
             /** 选择销售报价单位事件 */
             chooseSalesQuoteItemUnitEvent: Function;
             /** 选择客户合同 */
@@ -13369,6 +13759,8 @@ declare namespace sales {
             reserveMaterialsInventoryEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }
@@ -13672,6 +14064,8 @@ declare namespace sales {
             /** 添加销售发票-预收款事件 */
             protected chooseSalesInvoiceDownPayment(): void;
             protected measuringMaterials(): void;
+            protected chooseSalesInvoiceItemMaterialCatalog(caller: bo.SalesInvoiceItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -13713,6 +14107,8 @@ declare namespace sales {
             chooseSalesInvoiceBlanketAgreementEvent: Function;
             /** 选择销售发票-行成本中心事件 */
             chooseSalesInvoiceItemDistributionRuleEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesInvoiceItemMaterialCatalogEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 销售发票收款事件 */
@@ -13729,6 +14125,8 @@ declare namespace sales {
             showSalesInvoiceDownPayments(datas: bo.SalesInvoiceDownPayment[]): void;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13967,6 +14365,8 @@ declare namespace sales {
             private chooseCustomerAgreements;
             private chooseSalesCreditNoteItemDistributionRule;
             protected measuringMaterials(): void;
+            protected chooseSalesCreditNoteItemMaterialCatalog(caller: bo.SalesCreditNoteItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -14000,6 +14400,8 @@ declare namespace sales {
             chooseSalesCreditNoteItemMaterialSerialEvent: Function;
             /** 选择销售贷项-行 物料版本 */
             chooseSalesCreditNoteItemMaterialVersionEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesCreditNoteItemMaterialCatalogEvent: Function;
             /** 选择销售贷项-销售退货事件 */
             chooseSalesCreditNoteSalesReturnEvent: Function;
             /** 选择销售贷项-销售发票事件 */
@@ -14012,6 +14414,8 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -14406,6 +14810,7 @@ declare namespace sales {
             private chooseBlanketAgreementItemUnit;
             private chooseCustomerAgreements;
             protected measuringMaterials(): void;
+            protected chooseBlanketAgreementItemMaterialCatalog(caller: bo.BlanketAgreementItem, filterConditions?: ibas.ICondition[]): void;
         }
         /** 视图-一揽子协议 */
         interface IBlanketAgreementEditView extends ibas.IBOEditView {
@@ -14429,6 +14834,8 @@ declare namespace sales {
             chooseBlanketAgreementItemMaterialEvent: Function;
             /** 选择一揽子协议行单位事件 */
             chooseBlanketAgreementItemUnitEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseBlanketAgreementItemMaterialCatalogEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 测量物料 */
@@ -14665,6 +15072,7 @@ declare namespace sales {
             /** 预收款申请收款 */
             protected receiptDownPaymentRequest(): void;
             protected measuringMaterials(): void;
+            protected chooseDownPaymentRequestItemMaterialCatalog(caller: bo.DownPaymentRequestItem, filterConditions?: ibas.ICondition[]): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -14692,6 +15100,8 @@ declare namespace sales {
             chooseDownPaymentRequestItemUnitEvent: Function;
             /** 选择预收款申请-行 成本中心事件 */
             chooseDownPaymentRequestItemDistributionRuleEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseDownPaymentRequestItemMaterialCatalogEvent: Function;
             /** 显示数据 */
             showDownPaymentRequestItems(datas: bo.DownPaymentRequestItem[]): void;
             /** 选择预收款申请-销售订单事件 */
@@ -14836,6 +15246,8 @@ declare namespace sales {
             private chooseCustomerAgreements;
             private chooseSalesReserveInvoiceItemDistributionRule;
             protected measuringMaterials(): void;
+            protected chooseSalesReserveInvoiceItemMaterialCatalog(caller: bo.SalesReserveInvoiceItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceEditView extends ibas.IBOEditView {
@@ -14869,6 +15281,8 @@ declare namespace sales {
             chooseSalesReserveInvoiceItemMaterialSerialEvent: Function;
             /** 选择销售预留发票-行 物料版本 */
             chooseSalesReserveInvoiceItemMaterialVersionEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesReserveInvoiceItemMaterialCatalogEvent: Function;
             /** 选择销售预留发票-销售订单事件 */
             chooseSalesReserveInvoiceSalesOrderEvent: Function;
             /** 选择销售预留发票-一揽子协议事件 */
@@ -14887,6 +15301,8 @@ declare namespace sales {
             turnToSalesDeliveryEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -15126,6 +15542,8 @@ declare namespace sales {
             private chooseCustomerAgreements;
             private chooseSalesReturnRequestItemDistributionRule;
             protected measuringMaterials(): void;
+            protected chooseSalesReturnRequestItemMaterialCatalog(caller: bo.SalesReturnRequestItem, filterConditions?: ibas.ICondition[]): void;
+            protected calculateGrossProfit(): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestEditView extends ibas.IBOEditView {
@@ -15159,6 +15577,8 @@ declare namespace sales {
             chooseSalesReturnRequestItemMaterialSerialEvent: Function;
             /** 选择销售退货请求-行 物料版本 */
             chooseSalesReturnRequestItemMaterialVersionEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            chooseSalesReturnRequestItemMaterialCatalogEvent: Function;
             /** 选择销售退货请求-行 成本中心事件 */
             chooseSalesReturnRequestItemDistributionRuleEvent: Function;
             /** 选择销售退货请求项目-销售交货事件 */
@@ -15171,6 +15591,8 @@ declare namespace sales {
             turnToSalesReturnEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算毛利润 */
+            calculateGrossProfitEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }

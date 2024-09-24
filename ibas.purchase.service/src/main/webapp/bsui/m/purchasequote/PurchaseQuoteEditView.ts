@@ -34,6 +34,8 @@ namespace purchase {
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
                 /** 选择采购报价-行 物料版本 */
                 choosePurchaseQuoteItemMaterialVersionEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                choosePurchaseQuoteItemMaterialCatalogEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 显示采购报价额外信息事件 */

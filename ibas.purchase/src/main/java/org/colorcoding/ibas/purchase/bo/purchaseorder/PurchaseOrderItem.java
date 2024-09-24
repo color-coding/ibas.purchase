@@ -1012,6 +1012,37 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 	}
 
 	/**
+	* 属性名称-目录编码
+	*/
+	private static final String PROPERTY_CATALOGCODE_NAME = "CatalogCode";
+
+	/**
+	* 目录编码 属性
+	*/
+	@DbField(name = "CatalogCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<String> PROPERTY_CATALOGCODE = registerProperty(PROPERTY_CATALOGCODE_NAME,
+			String.class, MY_CLASS);
+
+	/**
+	* 获取-目录编码
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_CATALOGCODE_NAME)
+	public final String getCatalogCode() {
+		return this.getProperty(PROPERTY_CATALOGCODE);
+	}
+
+	/**
+	* 设置-目录编码
+	* 
+	* @param value 值
+	*/
+	public final void setCatalogCode(String value) {
+		this.setProperty(PROPERTY_CATALOGCODE, value);
+	}
+
+	/**
 	 * 属性名称-物料版本
 	 */
 	private static final String PROPERTY_ITEMVERSION_NAME = "ItemVersion";

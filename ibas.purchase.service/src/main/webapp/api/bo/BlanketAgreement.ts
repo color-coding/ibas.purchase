@@ -159,6 +159,8 @@ namespace purchase {
             itemDescription: string;
             /** 产品标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 数量 */
             quantity: number;
             /** 单位 */

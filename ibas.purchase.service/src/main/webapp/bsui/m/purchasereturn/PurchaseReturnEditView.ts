@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseReturnItemWarehouseEvent: Function;
                 /** 选择采购退货-行 物料版本 */
                 choosePurchaseReturnItemMaterialVersionEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                choosePurchaseReturnItemMaterialCatalogEvent: Function;
                 /** 选择采购退货-行 单位 */
                 choosePurchaseReturnItemUnitEvent: Function;
                 /** 选择采购退货-行 物料序列事件 */

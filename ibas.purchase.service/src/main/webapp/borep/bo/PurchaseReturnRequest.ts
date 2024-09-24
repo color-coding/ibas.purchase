@@ -1219,6 +1219,17 @@ namespace purchase {
                 this.setProperty(PurchaseReturnRequestItem.PROPERTY_ITEMSIGN_NAME, value);
             }
 
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string = "CatalogCode";
+            /** 获取-目录编码 */
+            get catalogCode(): string {
+                return this.getProperty<string>(PurchaseReturnRequestItem.PROPERTY_CATALOGCODE_NAME);
+            }
+            /** 设置-目录编码 */
+            set catalogCode(value: string) {
+                this.setProperty(PurchaseReturnRequestItem.PROPERTY_CATALOGCODE_NAME, value);
+            }
+
             /** 映射的属性名称-物料版本 */
             static PROPERTY_ITEMVERSION_NAME: string = "ItemVersion";
             /** 获取-物料版本 */

@@ -324,6 +324,20 @@ public interface IBlanketAgreementItem extends IBODocumentLine, IDocumentClosing
 	void setItemSign(String value);
 
 	/**
+	* 获取-目录编码
+	* 
+	* @return 值
+	*/
+	String getCatalogCode();
+
+	/**
+	* 设置-目录编码
+	* 
+	* @param value 值
+	*/
+	void setCatalogCode(String value);
+
+	/**
 	 * 获取-数量
 	 * 
 	 * @return 值

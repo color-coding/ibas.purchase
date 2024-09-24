@@ -15,8 +15,8 @@ import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialReceiptPa
  * 采购发票-行 接口
  * 
  */
-public interface IPurchaseInvoiceItem
-		extends IBODocumentLine, IMaterialBatchReceiptParent, IMaterialSerialReceiptParent, IDocumentClosingQuantityItem {
+public interface IPurchaseInvoiceItem extends IBODocumentLine, IMaterialBatchReceiptParent,
+		IMaterialSerialReceiptParent, IDocumentClosingQuantityItem {
 
 	/**
 	 * 获取-编码
@@ -437,6 +437,20 @@ public interface IPurchaseInvoiceItem
 	 * @param value 值
 	 */
 	void setItemSign(String value);
+
+	/**
+	* 获取-目录编码
+	* 
+	* @return 值
+	*/
+	String getCatalogCode();
+
+	/**
+	* 设置-目录编码
+	* 
+	* @param value 值
+	*/
+	void setCatalogCode(String value);
 
 	/**
 	 * 获取-物料版本

@@ -808,6 +808,17 @@ namespace purchase {
                 this.setProperty(BlanketAgreementItem.PROPERTY_ITEMSIGN_NAME, value);
             }
 
+            /** 映射的属性名称-目录编码 */
+            static PROPERTY_CATALOGCODE_NAME: string = "CatalogCode";
+            /** 获取-目录编码 */
+            get catalogCode(): string {
+                return this.getProperty<string>(BlanketAgreementItem.PROPERTY_CATALOGCODE_NAME);
+            }
+            /** 设置-目录编码 */
+            set catalogCode(value: string) {
+                this.setProperty(BlanketAgreementItem.PROPERTY_CATALOGCODE_NAME, value);
+            }
+
             /** 映射的属性名称-数量 */
             static PROPERTY_QUANTITY_NAME: string = "Quantity";
             /** 获取-数量 */

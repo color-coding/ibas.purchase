@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseOrderItemMaterialBatchEvent: Function;
                 /** 选择采购订单-行 物料版本 */
                 choosePurchaseOrderItemMaterialVersionEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                choosePurchaseOrderItemMaterialCatalogEvent: Function;
                 /** 显示采购订单行额外信息事件 */
                 showPurchaseOrderItemExtraEvent: Function;
                 /** 选择采购订单-采购报价事件 */

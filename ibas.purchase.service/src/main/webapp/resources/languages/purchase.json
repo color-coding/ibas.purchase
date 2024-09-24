@@ -119,9 +119,10 @@
   "purchase_orderer_reservation": "Orderer Reservation",
   "purchase_app_materialorderedreservation_purchaseorder": "Purchase Order",
   "purchase_app_materialorderedreservation_purchaserequest": "Purchase Request",
-  "purchase_app_purchaserequest_to_": "Convert to",
+  "purchase_app_purchaserequest_to": "Convert to",
   "purchase_app_line_has_been_processed": "Data [{0}, {1} - {2}] has already been processed",
   "purchase_document_inventoryquantity": "Whs Qty/Total Qty",
   "purchase_documents_no_amount_to_be_paid": "No amount to be paid in document",
+  "purchase_please_choose_supplier_first": "Please choose supplier first",
   "purchase_closing_delimiter": "----End----"
 }

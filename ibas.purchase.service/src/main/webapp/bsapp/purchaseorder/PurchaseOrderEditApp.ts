@@ -44,6 +44,7 @@ namespace purchase {
                 this.view.choosePurchaseOrderBlanketAgreementEvent = this.choosePurchaseOrderBlanketAgreement;
                 this.view.choosePurchaseOrderItemDistributionRuleEvent = this.choosePurchaseOrderItemDistributionRule;
                 this.view.choosePurchaseOrderItemMaterialVersionEvent = this.choosePurchaseOrderItemMaterialVersion;
+                this.view.choosePurchaseOrderItemMaterialCatalogEvent = this.choosePurchaseOrderItemMaterialCatalog;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.editShippingAddressesEvent = this.editShippingAddresses;
                 this.view.showPurchaseOrderItemExtraEvent = this.showSaleOrderItemExtra;
@@ -1668,6 +1669,63 @@ namespace purchase {
                     })
                 });
             }
+            protected choosePurchaseOrderItemMaterialCatalog(caller: bo.PurchaseOrderItem, filterConditions?: ibas.ICondition[]): void {
+                if (ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("purchase_please_choose_supplier_first")
+                    ); return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                let condition: ibas.ICondition = criteria.conditions.create();
+                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_BUSINESSPARTNERTYPE_NAME;
+                condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                condition.value = this.editData.supplierCode;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_ITEMCODE_NAME;
+                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                condition.value = "";
+                condition.bracketOpen = 1;
+                condition = criteria.conditions.create();
+                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_ITEMCODE_NAME;
+                condition.operation = ibas.emConditionOperation.NOT_NULL;
+                condition.bracketClose = 1;
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (criteria.conditions.length > 1) {
+                        criteria.conditions.firstOrDefault().bracketOpen++;
+                        criteria.conditions.lastOrDefault().bracketClose++;
+                    }
+                    criteria.conditions.add(filterConditions);
+                }
+                // 调用选择服务
+                ibas.servicesManager.runChooseService<materials.bo.BusinessPartnerMaterialCatalog>({
+                    criteria: criteria,
+                    chooseType: ibas.emChooseType.MULTIPLE,
+                    boCode: materials.bo.BusinessPartnerMaterialCatalog.BUSINESS_OBJECT_CODE,
+                    onCompleted: (selecteds) => {
+                        let count: number = this.editData.purchaseOrderItems.length;
+                        for (let selected of selecteds) {
+                            if (ibas.strings.isEmpty(selected.itemCode)) {
+                                continue;
+                            }
+                            if (ibas.objects.isNull(caller)) {
+                                caller = this.editData.purchaseOrderItems.create();
+                            }
+                            caller.catalogCode = selected.catalogCode;
+                            condition = new ibas.Condition();
+                            condition.alias = materials.bo.Material.PROPERTY_CODE_NAME;
+                            condition.value = selected.itemCode;
+                            this.choosePurchaseOrderItemMaterial(caller, [condition]);
+                            caller = null;
+                        }
+                        if (this.editData.purchaseOrderItems.length > count) {
+                            this.view.showPurchaseOrderItems(this.editData.purchaseOrderItems.filterDeleted());
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseOrderEditView extends ibas.IBOEditView {
@@ -1711,6 +1769,8 @@ namespace purchase {
             choosePurchaseOrderItemDistributionRuleEvent: Function;
             /** 选择采购订单-行 物料版本 */
             choosePurchaseOrderItemMaterialVersionEvent: Function;
+            /** 选择一业务伙伴目录事件 */
+            choosePurchaseOrderItemMaterialCatalogEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 编辑地址事件 */

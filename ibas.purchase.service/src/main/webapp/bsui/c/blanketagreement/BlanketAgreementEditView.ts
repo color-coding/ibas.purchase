@@ -24,6 +24,8 @@ namespace purchase {
                 chooseBlanketAgreementContactPersonEvent: Function;
                 /** 选择一揽子协议行物料事件 */
                 chooseBlanketAgreementItemMaterialEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                chooseBlanketAgreementItemMaterialCatalogEvent: Function;
                 /** 选择一揽子协议行单位事件 */
                 chooseBlanketAgreementItemUnitEvent: Function;
                 /** 选择供应商合同 */
@@ -278,6 +280,101 @@ namespace purchase {
                                             path: "lineId",
                                             type: new sap.extension.data.Numeric()
                                         }),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_blanketagreementitem_catalogcode"),
+                                        template: new sap.extension.m.RepositoryInput("", {
+                                            showValueHelp: true,
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.chooseBlanketAgreementItemMaterialCatalogEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                            showValueLink: true,
+                                            valueLinkRequest: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                                let data: any = this.getBindingContext()?.getObject();
+                                                if (data instanceof bo.PurchaseOrderItem
+                                                    && !ibas.strings.isEmpty(data.itemCode)) {
+                                                    ibas.servicesManager.runLinkService({
+                                                        boCode: materials.bo.Material.BUSINESS_OBJECT_CODE,
+                                                        linkValue: data.itemCode,
+                                                    });
+                                                }
+                                            },
+                                            describeValue: false,
+                                            showSuggestion: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.BusinessPartnerMaterialCatalog,
+                                                key: materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_CATALOGCODE_NAME,
+                                                text: materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_CATALOGNAME_NAME
+                                            },
+                                            suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                                let selectedItem: any = event.getParameter("selectedItem");
+                                                if (!ibas.objects.isNull(selectedItem)) {
+                                                    that.fireViewEvents(that.chooseBlanketAgreementItemMaterialCatalogEvent, this.getBindingContext().getObject(), this.itemConditions(selectedItem));
+                                                }
+                                            },
+                                            criteria: function (source: sap.extension.m.RepositoryInput): ibas.ICriteria {
+                                                let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                let condition: ibas.ICondition = criteria.conditions.create();
+                                                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_BUSINESSPARTNERTYPE_NAME;
+                                                condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                                                condition = criteria.conditions.create();
+                                                condition.alias = materials.bo.BusinessPartnerMaterialCatalog.PROPERTY_BUSINESSPARTNERCODE_NAME;
+                                                condition.value = (<any>formTop.getContent()[2]).getValue();
+                                                return criteria;
+                                            },
+                                            valuePaste: function (this: sap.extension.m.Input, event: sap.ui.base.Event): void {
+                                                let source: any = <any>event.getSource();
+                                                let data: any = event.getParameter("data");
+                                                if (typeof data === "string") {
+                                                    if (data?.indexOf("\n") > 0) {
+                                                        sap.extension.tables.fillingCellsData(source, data,
+                                                            (rowCount) => {
+                                                                that.fireViewEvents(that.addBlanketAgreementItemEvent, rowCount);
+                                                                return true;
+                                                            },
+                                                            (cell, value) => {
+                                                                (<any>cell).setValue(value);
+                                                                (<any>cell).fireSuggest({ suggestValue: value, autoSelected: true });
+                                                            }
+                                                        );
+                                                    } else {
+                                                        setTimeout(() => {
+                                                            (<any>source).fireSuggest({ suggestValue: data, autoSelected: true });
+                                                        }, 10);
+                                                    }
+                                                    // 不执行后续事件
+                                                    event.preventDefault();
+                                                    event.cancelBubble();
+                                                }
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "catalogCode",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 50
+                                            })
+                                        }).bindProperty("editable", {
+                                            parts: [
+                                                {
+                                                    path: "closedQuantity",
+                                                },
+                                                {
+                                                    path: "closedAmount",
+                                                },
+                                            ],
+                                            formatter(closedQuantity: number, closedAmount: number): boolean {
+                                                if (closedQuantity > 0) {
+                                                    return false;
+                                                } else if (closedAmount > 0) {
+                                                    return false;
+                                                }
+                                                return true;
+                                            }
+                                        }),
+                                        visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_itemcode"),

@@ -230,7 +230,7 @@ namespace purchase {
                                         }),
                                         new sap.m.ToolbarSpacer(""),
                                         new sap.extension.m.MenuButton("", {
-                                            text: ibas.i18n.prop("purchase_app_purchaserequest_to_"),
+                                            text: ibas.i18n.prop("purchase_app_purchaserequest_to"),
                                             type: sap.m.ButtonType.Transparent,
                                             icon: "sap-icon://technical-object",
                                             menu: this.quickToMenu = new sap.m.Menu("", {

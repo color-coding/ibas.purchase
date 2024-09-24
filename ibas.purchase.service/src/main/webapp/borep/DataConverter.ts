@@ -342,6 +342,7 @@ namespace purchase {
             target.itemCode = source.itemCode;
             target.itemDescription = source.itemDescription;
             target.itemSign = source.itemSign;
+            target.catalogCode = source.catalogCode;
             target.itemVersion = source.itemVersion;
             target.batchManagement = source.batchManagement;
             target.serialManagement = source.serialManagement;

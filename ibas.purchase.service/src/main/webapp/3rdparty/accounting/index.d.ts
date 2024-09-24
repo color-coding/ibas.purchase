@@ -249,6 +249,24 @@ declare namespace accounting {
             rate: number;
         }[]) => void): void;
     }
+    namespace currency {
+        interface ICurrencyValue {
+            /** 货币 */
+            currency: string;
+            /** 金额 */
+            amount: number;
+        }
+        /**
+         * 兑换货币（默认币种为本币）
+         * @param sourceCurrency 原币种
+         * @param amount 金额
+         * @param targetCurrency 目标币种
+         * @param onCompeleted 兑换完成
+         * @param date 日期
+         */
+        function exchange(source: ICurrencyValue, targetCurrency: string, onCompeleted: (result: ICurrencyValue | Error) => void, date?: Date): void;
+        function exchange(sources: ICurrencyValue[], targetCurrency: string, onCompeleted: (results: ICurrencyValue[] | Error) => void, date?: Date): void;
+    }
 }
 /**
  * @license

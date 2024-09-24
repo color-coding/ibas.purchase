@@ -44,6 +44,8 @@ namespace purchase {
                 choosePurchaseDeliveryPurchaseReserveInvoiceEvent: Function;
                 /** 选择采购交货-行 物料版本 */
                 choosePurchaseDeliveryItemMaterialVersionEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                choosePurchaseDeliveryItemMaterialCatalogEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 收款采购交货 */

@@ -42,6 +42,8 @@ namespace purchase {
                 choosePurchaseCreditNoteItemDistributionRuleEvent: Function;
                 /** 选择采购贷项-行 物料版本 */
                 choosePurchaseCreditNoteItemMaterialVersionEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                choosePurchaseCreditNoteItemMaterialCatalogEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 编辑地址事件 */

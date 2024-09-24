@@ -464,6 +464,20 @@ public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentClosingQ
 	void setItemSign(String value);
 
 	/**
+	* 获取-目录编码
+	* 
+	* @return 值
+	*/
+	String getCatalogCode();
+
+	/**
+	* 设置-目录编码
+	* 
+	* @param value 值
+	*/
+	void setCatalogCode(String value);
+
+	/**
 	 * 获取-物料版本
 	 * 
 	 * @return 值

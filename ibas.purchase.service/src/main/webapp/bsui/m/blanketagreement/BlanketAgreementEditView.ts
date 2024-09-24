@@ -24,6 +24,8 @@ namespace purchase {
                 chooseBlanketAgreementContactPersonEvent: Function;
                 /** 选择一揽子协议行物料事件 */
                 chooseBlanketAgreementItemMaterialEvent: Function;
+                /** 选择一业务伙伴目录事件 */
+                chooseBlanketAgreementItemMaterialCatalogEvent: Function;
                 /** 选择一揽子协议行单位事件 */
                 chooseBlanketAgreementItemUnitEvent: Function;
                 /** 选择供应商合同 */

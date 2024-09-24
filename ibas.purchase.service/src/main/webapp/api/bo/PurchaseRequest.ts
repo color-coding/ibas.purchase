@@ -177,6 +177,8 @@ namespace purchase {
             itemDescription: string;
             /** 物料标识 */
             itemSign: string;
+            /** 目录编码 */
+            catalogCode: string;
             /** 物料版本 */
             itemVersion: string;
             /** 序号管理 */
