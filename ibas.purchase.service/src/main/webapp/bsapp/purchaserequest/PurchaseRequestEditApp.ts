@@ -41,6 +41,7 @@ namespace purchase {
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
                 this.view.purchaseRequestToEvent = this.purchaseRequestTo;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
+                this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -800,6 +801,42 @@ namespace purchase {
                     })
                 });
             }
+            protected viewHistoricalPrices(caller: bo.PurchaseRequestItem): void {
+                if (ibas.objects.isNull(caller)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_view")
+                    )); return;
+                }
+                if (ibas.strings.isEmpty(caller.itemCode)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("purchase_please_choose_material_first")
+                    ); return;
+                }
+                if (ibas.strings.isEmpty(caller.supplier)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("purchase_please_choose_supplier_first")
+                    ); return;
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialHistoricalPricesContract>({
+                    proxy: new materials.app.MaterialHistoricalPricesServiceProxy({
+                        businessPartnerType: businesspartner.bo.emBusinessPartnerType.SUPPLIER,
+                        businessPartnerCode: caller.supplier,
+                        businessPartnerName: undefined,
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        documentLineId: caller.lineId,
+                        documentDate: this.editData.documentDate,
+                        itemCode: caller.itemCode,
+                        itemDescription: caller.itemDescription,
+                        quantity: caller.quantity,
+                        uom: caller.uom,
+                        applyPrice: (price, currency) => {
+                            caller.preTaxPrice = price;
+                            caller.currency = currency;
+                        }
+                    })
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -835,8 +872,10 @@ namespace purchase {
             showPurchaseRequestTos(datas: ibas.IServiceAgent[]): void;
             /** 采购申请转换事件 */
             purchaseRequestToEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
         }
         /** 采购申请编辑服务映射 */
         export class PurchaseRequestEditServiceMapping extends ibas.BOEditServiceMapping {

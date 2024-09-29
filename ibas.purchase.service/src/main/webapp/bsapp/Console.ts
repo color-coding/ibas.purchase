@@ -100,6 +100,17 @@ namespace purchase {
                 // 订购服务
                 this.register(new MaterialOrderedReservationSourcePurchaseOrderServiceMapping());
                 this.register(new MaterialOrderedReservationSourcePurchaseRequestServiceMapping());
+                // 单据价格查询服务
+                this.register(new PurchaseRequestMaterialPriceServiceMapping());
+                this.register(new PurchaseQuoteMaterialPriceServiceMapping());
+                this.register(new PurchaseOrderMaterialPriceServiceMapping());
+                this.register(new PurchaseDeliveryMaterialPriceServiceMapping());
+                this.register(new PurchaseInvoiceMaterialPriceServiceMapping());
+                this.register(new PurchaseReserveInvoiceMaterialPriceServiceMapping());
+                this.register(new DownPaymentRequestMaterialPriceServiceMapping());
+                this.register(new PurchaseReturnRequestMaterialPriceServiceMapping());
+                this.register(new PurchaseReturnMaterialPriceServiceMapping());
+                this.register(new PurchaseCreditNoteMaterialPriceServiceMapping());
                 // 权限元素
                 this.register(ELEMENT_PURCHASE_ORDER_EXTRA);
                 this.register(ELEMENT_PURCHASE_QUOTE_EXTRA);

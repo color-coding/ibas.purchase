@@ -89,6 +89,7 @@
   "purchase_create_continue": "新建{0}，是否继续？",
   "purchase_copy_data_continue": "复制{0}，是否继续？",
   "purchase_copy_to": "复制到",
+  "purchase_material_price": "物料价格 - {0}",
   "purchase_assistant_customer": "客户:",
   "purchase_assistant_order": "订单编号:",
   "purchase_assistant_material": "物料:",
@@ -130,5 +131,6 @@
   "purchase_documents_no_amount_to_be_paid": "单据没有需要付款的金额",
   "purchase_documents_only_associated": "仅关联单据",
   "purchase_please_choose_supplier_first": "请先选择供应商",
+  "purchase_please_choose_material_first": "请先选择物料",
   "purchase_closing_delimiter": "----结束----"
 }

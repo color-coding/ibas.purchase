@@ -7,3 +7,4 @@
  */
 /// <reference path="./PaymentService.ts" />
 /// <reference path="./ReceiptService.ts" />
+/// <reference path="./MaterialPricesService.ts" />

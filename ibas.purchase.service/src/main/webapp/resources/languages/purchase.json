@@ -90,6 +90,7 @@
   "purchase_assistant_order": "Order Number:",
   "purchase_assistant_material": "Material:",
   "purchase_assistant_to": "To",
+  "purchase_material_price": "Material Price - {0}",
   "purchase_assistant_warehouse": "Warehouse:",
   "purchase_assistant_order_date": "Delivery Date:",
   "purchase_assistant_order_type": "Order Type:",
@@ -124,5 +125,6 @@
   "purchase_document_inventoryquantity": "Whs Qty/Total Qty",
   "purchase_documents_no_amount_to_be_paid": "No amount to be paid in document",
   "purchase_please_choose_supplier_first": "Please choose supplier first",
+  "purchase_please_choose_material_first": "Please choose material first",
   "purchase_closing_delimiter": "----End----"
 }

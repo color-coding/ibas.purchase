@@ -11639,6 +11639,8 @@ declare namespace sales {
             baseDocument(document: ISalesOrder): void;
             /** 基于销售交货 */
             baseDocument(document: ISalesDelivery): void;
+            /** 基于销售交货 */
+            baseDocument(document: ISalesInvoice): void;
         }
         /** 销售退货请求-行 集合 */
         class SalesReturnRequestItems extends ibas.BusinessObjects<SalesReturnRequestItem, SalesReturnRequest> implements ISalesReturnRequestItems {
@@ -12734,6 +12736,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesDeliveryItemMaterialCatalog(caller: bo.SalesDeliveryItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesDeliveryItem): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -12787,8 +12790,10 @@ declare namespace sales {
             turnToSalesReturnEvent: Function;
             /** 转为销售发票事件 */
             turnToSalesInvoiceEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -13046,6 +13051,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesOrderItemMaterialCatalog(caller: bo.SalesOrderItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesOrderItem): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -13107,8 +13113,10 @@ declare namespace sales {
             turnToDownPaymentRequestEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -13427,6 +13435,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesReturnItemMaterialCatalog(caller: bo.SalesReturnItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesReturnItem): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -13474,8 +13483,10 @@ declare namespace sales {
             editShippingAddressesEvent: Function;
             /** 转为销售贷项事件 */
             turnToSalesCreditNoteEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -13714,6 +13725,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -13757,8 +13769,10 @@ declare namespace sales {
             turnToSalesOrderEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认税组 */
@@ -14066,6 +14080,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesInvoiceItemMaterialCatalog(caller: bo.SalesInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesInvoiceItem): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -14123,8 +14138,10 @@ declare namespace sales {
             removeSalesInvoiceDownPaymentEvent: Function;
             /** 显示数据-销售发票-预收款 */
             showSalesInvoiceDownPayments(datas: bo.SalesInvoiceDownPayment[]): void;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -14367,6 +14384,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesCreditNoteItemMaterialCatalog(caller: bo.SalesCreditNoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesCreditNoteItem): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -14412,8 +14430,10 @@ declare namespace sales {
             chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -15073,6 +15093,7 @@ declare namespace sales {
             protected receiptDownPaymentRequest(): void;
             protected measuringMaterials(): void;
             protected chooseDownPaymentRequestItemMaterialCatalog(caller: bo.DownPaymentRequestItem, filterConditions?: ibas.ICondition[]): void;
+            protected viewHistoricalPrices(caller: bo.DownPaymentRequestItem): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -15114,8 +15135,10 @@ declare namespace sales {
             chooseCustomerAgreementsEvent: Function;
             /** 预收款申请收款事件 */
             receiptDownPaymentRequestEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -15248,6 +15271,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesReserveInvoiceItemMaterialCatalog(caller: bo.SalesReserveInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesReserveInvoiceItem): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceEditView extends ibas.IBOEditView {
@@ -15299,8 +15323,10 @@ declare namespace sales {
             turnToSalesCreditNoteEvent: Function;
             /** 转为销售交货事件 */
             turnToSalesDeliveryEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -15532,6 +15558,8 @@ declare namespace sales {
             private createSalesReturnRequestLineMaterialSerial;
             /** 选择销售退货请求项目-销售交货事件 */
             private chooseSalesReturnRequestSalesDelivery;
+            /** 选择销售退货请求项目-销售发票事件 */
+            private chooseSalesReturnRequestSalesInvoice;
             /** 选择联系人 */
             private chooseSalesReturnRequestContactPerson;
             private editShippingAddresses;
@@ -15544,6 +15572,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseSalesReturnRequestItemMaterialCatalog(caller: bo.SalesReturnRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
+            protected viewHistoricalPrices(caller: bo.SalesReturnRequestItem): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestEditView extends ibas.IBOEditView {
@@ -15583,14 +15612,18 @@ declare namespace sales {
             chooseSalesReturnRequestItemDistributionRuleEvent: Function;
             /** 选择销售退货请求项目-销售交货事件 */
             chooseSalesReturnRequestSalesDeliveryEvent: Function;
+            /** 选择销售退货请求项目-销售发票事件 */
+            chooseSalesReturnRequestSalesInvoiceEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 编辑地址事件 */
             editShippingAddressesEvent: Function;
             /** 转为销售贷项事件 */
             turnToSalesReturnEvent: Function;
-            /** 测量物料 */
+            /** 测量物料事件 */
             measuringMaterialsEvent: Function;
+            /** 查看物料历史价格事件 */
+            viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 默认仓库 */
@@ -15917,6 +15950,206 @@ declare namespace sales {
             protected onPicked(selecteds: ibas.IList<bo.SalesOrder>, onPicked?: (targets: materials.app.IPickListsTarget[]) => void): void;
         }
         class SalesOrderPackingServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace sales {
+    namespace app {
+        /** 单据价格-销售订单 */
+        class SalesOrderMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售订单 */
+        class SalesOrderMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-预收款申请 */
+        class DownPaymentRequestMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-预收款申请 */
+        class DownPaymentRequestMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售贷项 */
+        class SalesCreditNoteMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售退货请求 */
+        class SalesCreditNoteMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售交货 */
+        class SalesDeliveryMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售交货 */
+        class SalesDeliveryMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售发票 */
+        class SalesInvoiceMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售发票 */
+        class SalesInvoiceMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售报价 */
+        class SalesQuoteMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售报价 */
+        class SalesQuoteMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售预留发票 */
+        class SalesReserveInvoiceMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售预留发票 */
+        class SalesReserveInvoiceMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售退货 */
+        class SalesReturnMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售退货 */
+        class SalesReturnMaterialPriceServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+        /** 单据价格-销售退货请求 */
+        class SalesReturnRequestMaterialPriceService extends ibas.ServiceWithResultApplication<ibas.IView, materials.app.IDocumentMaterialPriceContract, materials.app.IDocumentMaterialPriceData[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: materials.app.IDocumentMaterialPriceContract): void;
+        }
+        /** 单据价格-销售退货请求 */
+        class SalesReturnRequestMaterialPriceServiceMapping extends ibas.ServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */

@@ -583,6 +583,94 @@ declare namespace materials {
         /** 物料毛利润服务代理 */
         class MaterialGrossProfitServiceProxy extends ibas.ServiceProxy<IMaterialGrossProfitContract> {
         }
+        /** 物料历史价格服务契约 */
+        interface IMaterialHistoricalPricesContract extends ibas.IServiceContract {
+            /** 业务伙伴类型 */
+            businessPartnerType: businesspartner.bo.emBusinessPartnerType;
+            /** 业务伙伴编码 */
+            businessPartnerCode: string;
+            /** 业务伙伴名称 */
+            businessPartnerName: string;
+            /** 单据类型 */
+            documentType: string;
+            /** 单据编号 */
+            documentEntry: number;
+            /** 单据行号 */
+            documentLineId?: number;
+            /** 单据日期 */
+            documentDate: Date;
+            /** 物料编码 */
+            itemCode: string;
+            /** 物料描述 */
+            itemDescription: string;
+            /** 数量 */
+            quantity: number;
+            /** 单位 */
+            uom: string;
+            /**
+             * 应用价格
+             * @param price 税前价格
+             * @param currency 货币
+             */
+            applyPrice?: (price: number, currency: string) => void;
+        }
+        /** 物料历史价格服务代理 */
+        class MaterialHistoricalPricesServiceProxy extends ibas.ServiceProxy<IMaterialHistoricalPricesContract> {
+        }
+        /** 单据物料价格服务契约 */
+        interface IDocumentMaterialPriceContract extends ibas.IServiceContract {
+            /** 业务伙伴类型 */
+            businessPartnerType: businesspartner.bo.emBusinessPartnerType;
+            /** 业务伙伴编码 */
+            businessPartnerCode?: string;
+            /** 单据日期 */
+            documentDate?: Date;
+            /** 结果数量 */
+            resultCount?: number;
+            /** 分支 */
+            branch?: string;
+            /** 物料编码 */
+            itemCode: string;
+            /** 查询完成时 */
+            onCompleted(results: Error | IDocumentMaterialPriceData[]): void;
+        }
+        interface IDocumentMaterialPriceData {
+            /** 业务伙伴类型 */
+            businessPartnerType: businesspartner.bo.emBusinessPartnerType;
+            /** 业务伙伴编码 */
+            businessPartnerCode: string;
+            /** 业务伙伴名称 */
+            businessPartnerName: string;
+            /** 单据类型 */
+            documentType: string;
+            /** 单据编号 */
+            documentEntry: number;
+            /** 单据日期 */
+            documentDate: Date;
+            /** 单据行号 */
+            documentLineId: number;
+            /** 物料编码 */
+            itemCode: string;
+            /** 物料描述 */
+            itemDescription: string;
+            /** 数量 */
+            quantity: number;
+            /** 单位 */
+            uom: string;
+            /** 价格 */
+            price: number;
+            /** 货币 */
+            currency: string;
+            /** 税前价格 */
+            preTaxPrice: number;
+            /** 折扣 */
+            discount: number;
+            /** 折前价格 */
+            unitPrice: number;
+        }
+        /** 单据物料价格服务代理 */
+        class DocumentMaterialPriceServiceProxy extends ibas.ServiceProxy<IDocumentMaterialPriceContract> {
+        }
         /** 查询条件 */
         namespace conditions {
             namespace material {
@@ -17046,6 +17134,84 @@ declare namespace materials {
             savePrices(datas: bo.MaterialSpecialPrice[]): void;
             /** 选择价格项目单位事件 */
             choosePriceItemUnitEvent: Function;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        class MaterialHistoricalPrice extends ibas.Bindable {
+            constructor(original: IMaterialHistoricalPricesContract);
+            get original(): IMaterialHistoricalPricesContract;
+            set original(value: IMaterialHistoricalPricesContract);
+            get businessPartnerType(): businesspartner.bo.emBusinessPartnerType;
+            set businessPartnerType(value: businesspartner.bo.emBusinessPartnerType);
+            get businessPartnerCode(): string;
+            set businessPartnerCode(value: string);
+            get businessPartnerName(): string;
+            set businessPartnerName(value: string);
+            get documentType(): string;
+            set documentType(value: string);
+            get documentEntry(): number;
+            set documentEntry(value: number);
+            get documentLineId(): number;
+            set documentLineId(value: number);
+            get documentDate(): Date;
+            set documentDate(value: Date);
+            get itemCode(): string;
+            set itemCode(value: string);
+            get itemDescription(): string;
+            set itemDescription(value: string);
+            get quantity(): number;
+            set quantity(value: number);
+            get uom(): string;
+            set uom(value: string);
+        }
+        /** 物料历史价格服务 */
+        class MaterialHistoricalPricesService extends ibas.ServiceApplication<IMaterialHistoricalPricesView, IMaterialHistoricalPricesContract> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            private contract;
+            protected runService(contract: IMaterialHistoricalPricesContract): void;
+            protected obtainDocumentAgents(bpType: businesspartner.bo.emBusinessPartnerType, resultCount?: number, bpCode?: string): void;
+            protected fetchDocumentDatas(agents: ibas.IServiceAgent[]): void;
+            protected apply(data: IDocumentMaterialPriceData): void;
+        }
+        /** 视图-物料历史价格 */
+        interface IMaterialHistoricalPricesView extends ibas.IView {
+            /** 应用价格事件 */
+            applyEvent: Function;
+            /** 显示单据数据 */
+            showDocument(data: MaterialHistoricalPrice): void;
+            /** 获取单据代理事件 */
+            obtainDocumentAgentsEvent: Function;
+            /** 显示单据服务代理 */
+            showDocumentAgents(agents: ibas.IServiceAgent[]): void;
+            /** 查询单据数据事件 */
+            fetchDocumentDatasEvent: Function;
+            /** 显示单据数据 */
+            showDocumentDatas(datas: IDocumentMaterialPriceData[]): void;
+        }
+        /**  物料历史价格服务映射 */
+        class MaterialHistoricalPricesServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
         }
     }
 }

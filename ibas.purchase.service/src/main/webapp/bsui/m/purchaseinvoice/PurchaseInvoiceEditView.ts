@@ -58,8 +58,10 @@ namespace purchase {
                 addPurchaseInvoiceDownPaymentEvent: Function;
                 /** 删除采购发票-预付款事件 */
                 removePurchaseInvoiceDownPaymentEvent: Function;
-                /** 测量物料 */
+                /** 测量物料事件 */
                 measuringMaterialsEvent: Function;
+                /** 查看物料历史价格事件 */
+                viewHistoricalPricesEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 默认税组 */
