@@ -4,6 +4,6 @@
 	<Code>${Company}_PH_PURCHINVOICE</Code>
 	<Relation>DOCUMENT_BASED</Relation>
 	<AssociatedProperty>PurchaseInvoiceItems</AssociatedProperty>
-	<Target>${Company}_SL_BLANKETAGT</Target>
+	<Target>${Company}_PH_BLANKETAGT</Target>
 	<Description>基于单据</Description>
 </ns2:BORelationship>

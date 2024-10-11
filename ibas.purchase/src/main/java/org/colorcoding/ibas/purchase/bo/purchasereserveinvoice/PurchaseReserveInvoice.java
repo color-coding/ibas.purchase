@@ -2112,6 +2112,12 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 	}
 
 	@Override
+	public boolean isSmartDocumentStatus() {
+		// 付款后的状态改变
+		return true;
+	}
+
+	@Override
 	public Iterator<IDocumentClosingAmountItem> getAmountItems() {
 		return new Iterator<IDocumentClosingAmountItem>() {
 			int index = -1;

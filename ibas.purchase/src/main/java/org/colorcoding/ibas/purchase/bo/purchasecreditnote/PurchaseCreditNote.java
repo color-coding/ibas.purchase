@@ -2157,6 +2157,12 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 	}
 
 	@Override
+	public boolean isSmartDocumentStatus() {
+		// 付款后的状态改变
+		return true;
+	}
+
+	@Override
 	public Iterator<IDocumentClosingQuantityItem> getQuantityItems() {
 		return new Iterator<IDocumentClosingQuantityItem>() {
 			int index = -1;

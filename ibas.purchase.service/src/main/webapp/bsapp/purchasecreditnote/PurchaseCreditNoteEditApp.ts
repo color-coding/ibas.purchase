@@ -767,11 +767,11 @@ namespace purchase {
                 condition.alias = bo.PurchaseInvoice.PROPERTY_DELETED_NAME;
                 condition.operation = ibas.emConditionOperation.EQUAL;
                 condition.value = ibas.emYesNo.NO.toString();
-                // 仅下达的
+                // 非计划的
                 condition = criteria.conditions.create();
                 condition.alias = bo.PurchaseInvoice.PROPERTY_DOCUMENTSTATUS_NAME;
-                condition.operation = ibas.emConditionOperation.EQUAL;
-                condition.value = ibas.emDocumentStatus.RELEASED.toString();
+                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                condition.value = ibas.emDocumentStatus.PLANNED.toString();
                 // 审批通过的或未进审批
                 condition = criteria.conditions.create();
                 condition.alias = bo.PurchaseInvoice.PROPERTY_APPROVALSTATUS_NAME;
