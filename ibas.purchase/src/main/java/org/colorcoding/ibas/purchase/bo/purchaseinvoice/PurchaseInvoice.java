@@ -38,6 +38,7 @@ import org.colorcoding.ibas.bobas.mapping.DbField;
 import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.ownership.IDataOwnership;
 import org.colorcoding.ibas.bobas.period.IPeriodData;
+import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleDocumentStatus;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMaxProperty;
@@ -2442,6 +2443,12 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 	public boolean isSmartDocumentStatus() {
 		// 付款后的状态改变
 		return true;
+	}
+
+	@Override
+	public void check() throws BusinessRuleException {
+		IDocumentPaidTotalOperator.super.check();
+		IDocumentCloseQuantityOperator.super.check();
 	}
 
 	@Override

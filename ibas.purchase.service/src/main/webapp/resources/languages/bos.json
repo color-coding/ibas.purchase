@@ -1353,7 +1353,7 @@
         "bo_purchasereserveinvoice_closing_delimiter": "----End----"
     },
     {
-        "bo_purchasereturnrequest": "Purchase Return",
+        "bo_purchasereturnrequest": "Purchase Return Request",
         "bo_purchasereturnrequest_docentry": "Document Entry",
         "bo_purchasereturnrequest_docnum": "Document Number",
         "bo_purchasereturnrequest_period": "Period",
