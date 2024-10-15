@@ -2594,7 +2594,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 
 			@Override
 			public BigDecimal getAmount() {
-				return PurchaseCreditNoteItem.this.getPreTaxLineTotal();
+				return PurchaseCreditNoteItem.this.getLineTotal();
 			}
 
 			@Override

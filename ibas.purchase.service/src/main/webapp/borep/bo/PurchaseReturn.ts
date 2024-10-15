@@ -711,6 +711,9 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
+                        if (!(item.closedQuantity > 0)) {
+                            continue;
+                        }
                         let myItem: PurchaseReturnItem = this.purchaseReturnItems.create();
                         bo.baseDocumentItem(myItem, item);
                         myItem.quantity = item.closedQuantity;

@@ -2559,7 +2559,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 
 			@Override
 			public BigDecimal getAmount() {
-				return PurchaseInvoiceItem.this.getPreTaxLineTotal();
+				return PurchaseInvoiceItem.this.getLineTotal();
 			}
 
 			@Override

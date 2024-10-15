@@ -1012,32 +1012,32 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 	}
 
 	/**
-	* 属性名称-目录编码
-	*/
+	 * 属性名称-目录编码
+	 */
 	private static final String PROPERTY_CATALOGCODE_NAME = "CatalogCode";
 
 	/**
-	* 目录编码 属性
-	*/
+	 * 目录编码 属性
+	 */
 	@DbField(name = "CatalogCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CATALOGCODE = registerProperty(PROPERTY_CATALOGCODE_NAME,
 			String.class, MY_CLASS);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_CATALOGCODE_NAME)
 	public final String getCatalogCode() {
 		return this.getProperty(PROPERTY_CATALOGCODE);
 	}
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	public final void setCatalogCode(String value) {
 		this.setProperty(PROPERTY_CATALOGCODE, value);
 	}
@@ -2607,35 +2607,6 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 			}
 
 		});
-		// 采购请求完成
-		contracts.add(new IDocumentQuantityClosingContract() {
-
-			@Override
-			public String getIdentifiers() {
-				return PurchaseOrderItem.this.getIdentifiers();
-			}
-
-			@Override
-			public BigDecimal getQuantity() {
-				return PurchaseOrderItem.this.getQuantity();
-			}
-
-			@Override
-			public String getBaseDocumentType() {
-				return PurchaseOrderItem.this.getBaseDocumentType();
-			}
-
-			@Override
-			public Integer getBaseDocumentEntry() {
-				return PurchaseOrderItem.this.getBaseDocumentEntry();
-			}
-
-			@Override
-			public Integer getBaseDocumentLineId() {
-				return PurchaseOrderItem.this.getBaseDocumentLineId();
-			}
-
-		});
 		// 一揽子协议
 		contracts.add(new IBlanketAgreementQuantityContract() {
 
@@ -2700,6 +2671,36 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 					// 采购&销售统一库存单位
 					return PurchaseOrderItem.this.getInventoryQuantity();
 				}
+			});
+		} else {
+			// 采购请求完成
+			contracts.add(new IDocumentQuantityClosingContract() {
+
+				@Override
+				public String getIdentifiers() {
+					return PurchaseOrderItem.this.getIdentifiers();
+				}
+
+				@Override
+				public BigDecimal getQuantity() {
+					return PurchaseOrderItem.this.getQuantity();
+				}
+
+				@Override
+				public String getBaseDocumentType() {
+					return PurchaseOrderItem.this.getBaseDocumentType();
+				}
+
+				@Override
+				public Integer getBaseDocumentEntry() {
+					return PurchaseOrderItem.this.getBaseDocumentEntry();
+				}
+
+				@Override
+				public Integer getBaseDocumentLineId() {
+					return PurchaseOrderItem.this.getBaseDocumentLineId();
+				}
+
 			});
 		}
 		// 订购预留关闭

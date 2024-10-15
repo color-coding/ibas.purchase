@@ -473,16 +473,6 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_blanketagreementitem_quantity"),
                                         template: new sap.extension.m.Input("", {
-                                            valuePaste: function (this: sap.extension.m.Input, event: sap.ui.base.Event): void {
-                                                let source: any = <any>event.getSource();
-                                                let data: any = event.getParameter("data");
-                                                if (typeof data === "string" && data?.indexOf("\n") > 0) {
-                                                    sap.extension.tables.fillingCellsData(source, data);
-                                                    // 不执行后续事件
-                                                    event.preventDefault();
-                                                    event.cancelBubble();
-                                                }
-                                            },
                                         }).bindProperty("bindingValue", {
                                             path: "quantity",
                                             type: new sap.extension.data.Quantity(),

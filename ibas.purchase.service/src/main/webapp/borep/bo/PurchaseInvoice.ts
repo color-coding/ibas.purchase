@@ -804,8 +804,8 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
-                        // 计算未清金额
-                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        // 计算未清金额 = 总计 - 完成数量金额 - 完成金额
+                        let openAmount: number = item.lineTotal - (item.closedQuantity * item.price) - item.closedAmount;
                         if (openAmount <= 0) {
                             continue;
                         }

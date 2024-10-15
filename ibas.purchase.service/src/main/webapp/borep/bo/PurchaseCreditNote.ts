@@ -703,8 +703,19 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
+                        // 计算未清金额 = 总计 - 完成金额
+                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        if (openAmount <= 0) {
+                            continue;
+                        }
                         let myItem: PurchaseCreditNoteItem = this.purchaseCreditNoteItems.create();
                         bo.baseDocumentItem(myItem, item);
+                        // 计算数量
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                        }
                         // 复制批次
                         for (let batch of item.materialBatches) {
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
@@ -790,18 +801,18 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
+                        // 计算未清金额 = 总计 - 完成金额
+                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        if (openAmount <= 0) {
+                            continue;
+                        }
                         let myItem: PurchaseCreditNoteItem = this.purchaseCreditNoteItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        // 复制批次
-                        for (let batch of item.materialBatches) {
-                            let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
-                            myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = batch.quantity;
-                        }
-                        // 复制序列
-                        for (let serial of item.materialSerials) {
-                            let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
-                            mySerial.serialCode = serial.serialCode;
+                        // 计算数量
+                        if (config.isInventoryUnitLinePrice()) {
+                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                        } else {
+                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
                         }
                     }
                     // 复制地址

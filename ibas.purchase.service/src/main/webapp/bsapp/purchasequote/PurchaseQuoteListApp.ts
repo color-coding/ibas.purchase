@@ -29,6 +29,7 @@ namespace purchase {
                 // 其他事件
                 this.view.editDataEvent = this.editData;
                 this.view.deleteDataEvent = this.deleteData;
+                this.view.changeDocumentStatusEvent = this.changeDocumentStatus;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -162,6 +163,84 @@ namespace purchase {
                     }
                 });
             }
+            private changeDocumentStatus(status: ibas.emDocumentStatus, datas: bo.PurchaseQuote[]): void {
+                if (!(datas?.length > 0)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_batch")
+                    )); return;
+                }
+                let criteria: ibas.ICriteria = new ibas.Criteria();
+                for (let item of datas) {
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = bo.PurchaseQuote.PROPERTY_DOCENTRY_NAME;
+                    condition.value = item.docEntry.toString();
+                    if (criteria.conditions.length > 0) {
+                        condition.relationship = ibas.emConditionRelationship.OR;
+                    }
+                }
+                this.busy(true);
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseQuote({
+                    criteria: criteria,
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            this.messages({
+                                type: ibas.emMessageType.QUESTION,
+                                title: ibas.i18n.prop(this.name),
+                                message: ibas.i18n.prop("purchase_multiple_order_status_change_to", opRslt.resultObjects.length, ibas.enums.describe(ibas.emDocumentStatus, status)),
+                                actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
+                                onCompleted: (action) => {
+                                    if (action !== ibas.emMessageAction.YES) {
+                                        this.busy(false);
+                                        return;
+                                    }
+                                    ibas.queues.execute(opRslt.resultObjects,
+                                        (data, next) => {
+                                            data.documentStatus = status;
+                                            if (data.isDirty === true) {
+                                                boRepository.savePurchaseQuote({
+                                                    beSaved: data,
+                                                    onCompleted: (opRslt) => {
+                                                        if (opRslt.resultCode !== 0) {
+                                                            next(new Error(opRslt.message));
+                                                        } else {
+                                                            this.proceeding(ibas.emMessageType.SUCCESS,
+                                                                ibas.i18n.prop("purchase_order_status_change_to",
+                                                                    data.docEntry, ibas.enums.describe(ibas.emDocumentStatus, data.documentStatus)
+                                                                )
+                                                            );
+                                                            let oData: bo.PurchaseQuote = datas.find(c => !ibas.objects.isNull(c) && c.docEntry === data.docEntry);
+                                                            if (!ibas.objects.isNull(oData)) {
+                                                                oData.documentStatus = data.documentStatus;
+                                                            }
+                                                            next();
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                next();
+                                            }
+                                        },
+                                        (error) => {
+                                            this.busy(false);
+                                            if (error instanceof Error) {
+                                                this.messages(error);
+                                            } else {
+                                                this.messages(ibas.emMessageType.SUCCESS, ibas.i18n.prop("shell_sucessful"));
+                                            }
+                                        }
+                                    );
+                                }
+                            });
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
+            }
         }
         /** 视图-采购订单 */
         export interface IPurchaseQuoteListView extends ibas.IBOListView {
@@ -171,6 +250,8 @@ namespace purchase {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.PurchaseQuote[]): void;
+            /** 改变订单状态 */
+            changeDocumentStatusEvent: Function;
         }
     }
 }

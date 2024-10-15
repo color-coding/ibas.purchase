@@ -660,16 +660,6 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchasereturnrequestitem_quantity"),
                                         template: new sap.extension.m.Input("", {
-                                            valuePaste: function (this: sap.extension.m.Input, event: sap.ui.base.Event): void {
-                                                let source: any = <any>event.getSource();
-                                                let data: any = event.getParameter("data");
-                                                if (typeof data === "string" && data?.indexOf("\n") > 0) {
-                                                    sap.extension.tables.fillingCellsData(source, data);
-                                                    // 不执行后续事件
-                                                    event.preventDefault();
-                                                    event.cancelBubble();
-                                                }
-                                            },
                                         }).bindProperty("bindingValue", {
                                             path: "quantity",
                                             type: new sap.extension.data.Quantity()
@@ -757,6 +747,21 @@ namespace purchase {
                                             },
                                         }).bindProperty("bindingValue", {
                                             path: "preTaxPrice",
+                                            type: new sap.extension.data.Price()
+                                        }),
+                                        visible: false,
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchasereturnrequestitem_unitprice"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpOnly: false,
+                                            valueHelpIconSrc: "sap-icon://time-overtime",
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "unitPrice",
                                             type: new sap.extension.data.Price()
                                         }),
                                         visible: false,
@@ -1184,7 +1189,7 @@ namespace purchase {
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {
-                                                text: ibas.strings.format("{0}&{1}", ibas.i18n.prop("bo_material_volume"), ibas.i18n.prop("bo_material_weight")),
+                                                text: ibas.strings.format("{0}&{1}", ibas.i18n.prop("bo_material_weight"), ibas.i18n.prop("bo_material_volume")),
                                                 icon: "sap-icon://measuring-point",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.measuringMaterialsEvent);

@@ -500,6 +500,21 @@ namespace purchase {
                                         visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchaserequestitem_unitprice"),
+                                        template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpOnly: false,
+                                            valueHelpIconSrc: "sap-icon://time-overtime",
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
+                                            },
+                                        }).bindProperty("bindingValue", {
+                                            path: "unitPrice",
+                                            type: new sap.extension.data.Price()
+                                        }),
+                                        visible: false,
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_supplier"),
                                         template: new sap.extension.m.SelectionInput("", {
                                             showValueHelp: true,
@@ -834,7 +849,7 @@ namespace purchase {
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {
-                                                text: ibas.strings.format("{0}&{1}", ibas.i18n.prop("bo_material_volume"), ibas.i18n.prop("bo_material_weight")),
+                                                text: ibas.strings.format("{0}&{1}", ibas.i18n.prop("bo_material_weight"), ibas.i18n.prop("bo_material_volume")),
                                                 icon: "sap-icon://measuring-point",
                                                 press: function (): void {
                                                     that.fireViewEvents(that.measuringMaterialsEvent);
