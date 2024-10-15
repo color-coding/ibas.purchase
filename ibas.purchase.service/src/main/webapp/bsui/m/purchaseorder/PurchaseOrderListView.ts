@@ -20,6 +20,8 @@ namespace purchase {
                 deleteDataEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
+                /** 改变订单状态 */
+                changeDocumentStatusEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
