@@ -18,6 +18,8 @@ namespace purchase {
                 editDataEvent: Function;
                 /** 删除数据事件，参数：删除对象集合 */
                 deleteDataEvent: Function;
+                /** 改变订单状态 */
+                changeDocumentStatusEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
