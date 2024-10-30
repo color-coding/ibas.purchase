@@ -693,6 +693,9 @@ namespace purchase {
                         if (item.canceled === ibas.emYesNo.YES) {
                             continue;
                         }
+                        if (item.deleted === ibas.emYesNo.YES) {
+                            continue;
+                        }
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
@@ -711,9 +714,9 @@ namespace purchase {
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
                         if (config.isInventoryUnitLinePrice()) {
-                            myItem.inventoryQuantity = ibas.numbers.round(openAmount / myItem.price);
+                            myItem.inventoryQuantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
                         } else {
-                            myItem.quantity = ibas.numbers.round(openAmount / myItem.price);
+                            myItem.quantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
                         }
                     }
                     // 复制地址

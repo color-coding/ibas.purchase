@@ -27,6 +27,8 @@ declare namespace materials {
         const CONFIG_ITEM_ENABLE_MATERIAL_SPECIAL_PRICES: string;
         /** 配置项目-单据行显示库存 */
         const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string;
+        /** 配置项目-启用非库存物料交易 */
+        const CONFIG_ITEM_ENABLE_NON_INVENTORY_ITEM_TRANSACTIONS: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -111,6 +113,8 @@ declare namespace materials {
         const BO_CODE_MATERIALNUMBERASSOCIATION: string;
         /** 业务对象编码-业务伙伴物料目录 */
         const BO_CODE_BUSINESSPARTNERMATERIALCATALOG: string;
+        /** 业务对象编码-计划组 */
+        const BO_CODE_SCHEDULINGGROUP: string;
         /** 物料类型 */
         enum emItemType {
             /** 物料 */
@@ -1463,6 +1467,8 @@ declare namespace materials {
             scrapValue: number;
             /** 计划员 */
             scheduler: string;
+            /** 计划组 */
+            schedulingGroup: string;
             /** 关键件 */
             keyComponent: ibas.emYesNo;
             /** 销售-长 */
@@ -2727,6 +2733,8 @@ declare namespace materials {
             scrap: string;
             /** 计划员 */
             scheduler: string;
+            /** 计划组 */
+            schedulingGroup: string;
             /** 关键件 */
             keyComponent: ibas.emYesNo;
             /** 生效日期 */
@@ -4451,6 +4459,58 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 计划组 */
+        interface ISchedulingGroup extends ibas.IBOMasterData {
+            /** 编码 */
+            code: string;
+            /** 名称 */
+            name: string;
+            /** 激活 */
+            activated: ibas.emYesNo;
+            /** 对象编号 */
+            docEntry: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 数据所有者 */
+            dataOwner: number;
+            /** 数据所属组织 */
+            organization: string;
+            /** 备注 */
+            remarks: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 业务仓库 */
         interface IBORepositoryMaterials extends ibas.IBORepositoryApplication {
             /**
@@ -4753,6 +4813,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveBusinessPartnerMaterialCatalog(saver: ibas.ISaveCaller<bo.IBusinessPartnerMaterialCatalog>): void;
+            /**
+             * 查询 计划组
+             * @param fetcher 查询者
+             */
+            fetchSchedulingGroup(fetcher: ibas.IFetchCaller<bo.ISchedulingGroup>): void;
+            /**
+             * 保存 计划组
+             * @param saver 保存者
+             */
+            saveSchedulingGroup(saver: ibas.ISaveCaller<bo.ISchedulingGroup>): void;
         }
         interface ICloseCaller<T> extends ibas.IMethodCaller<string> {
             /** 查询条件 */
@@ -6689,6 +6759,12 @@ declare namespace materials {
             get scheduler(): string;
             /** 设置-计划员 */
             set scheduler(value: string);
+            /** 映射的属性名称-计划组 */
+            static PROPERTY_SCHEDULINGGROUP_NAME: string;
+            /** 获取-计划组 */
+            get schedulingGroup(): string;
+            /** 设置-计划组 */
+            set schedulingGroup(value: string);
             /** 映射的属性名称-关键件 */
             static PROPERTY_KEYCOMPONENT_NAME: string;
             /** 获取-关键件 */
@@ -9083,6 +9159,12 @@ declare namespace materials {
             get scheduler(): string;
             /** 设置-计划员 */
             set scheduler(value: string);
+            /** 映射的属性名称-计划组 */
+            static PROPERTY_SCHEDULINGGROUP_NAME: string;
+            /** 获取-计划组 */
+            get schedulingGroup(): string;
+            /** 设置-计划组 */
+            set schedulingGroup(value: string);
             /** 映射的属性名称-关键件 */
             static PROPERTY_KEYCOMPONENT_NAME: string;
             /** 获取-关键件 */
@@ -13723,6 +13805,140 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace bo {
+        /** 计划组 */
+        class SchedulingGroup extends ibas.BOMasterData<SchedulingGroup> implements ISchedulingGroup {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编码 */
+            static PROPERTY_CODE_NAME: string;
+            /** 获取-编码 */
+            get code(): string;
+            /** 设置-编码 */
+            set code(value: string);
+            /** 映射的属性名称-名称 */
+            static PROPERTY_NAME_NAME: string;
+            /** 获取-名称 */
+            get name(): string;
+            /** 设置-名称 */
+            set name(value: string);
+            /** 映射的属性名称-激活 */
+            static PROPERTY_ACTIVATED_NAME: string;
+            /** 获取-激活 */
+            get activated(): ibas.emYesNo;
+            /** 设置-激活 */
+            set activated(value: ibas.emYesNo);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_DOCENTRY_NAME: string;
+            /** 获取-对象编号 */
+            get docEntry(): number;
+            /** 设置-对象编号 */
+            set docEntry(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-数据所有者 */
+            static PROPERTY_DATAOWNER_NAME: string;
+            /** 获取-数据所有者 */
+            get dataOwner(): number;
+            /** 设置-数据所有者 */
+            set dataOwner(value: number);
+            /** 映射的属性名称-数据所属组织 */
+            static PROPERTY_ORGANIZATION_NAME: string;
+            /** 获取-数据所属组织 */
+            get organization(): string;
+            /** 设置-数据所属组织 */
+            set organization(value: string);
+            /** 映射的属性名称-备注 */
+            static PROPERTY_REMARKS_NAME: string;
+            /** 获取-备注 */
+            get remarks(): string;
+            /** 设置-备注 */
+            set remarks(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /** 创建业务对象转换者 */
@@ -14154,6 +14370,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveBusinessPartnerMaterialCatalog(saver: ibas.ISaveCaller<bo.BusinessPartnerMaterialCatalog>): void;
+            /**
+             * 查询 计划组
+             * @param fetcher 查询者
+             */
+            fetchSchedulingGroup(fetcher: ibas.IFetchCaller<bo.SchedulingGroup>): void;
+            /**
+             * 保存 计划组
+             * @param saver 保存者
+             */
+            saveSchedulingGroup(saver: ibas.ISaveCaller<bo.SchedulingGroup>): void;
         }
         interface IChangeCaller extends ibas.IMethodCaller<string> {
             /** 改变内容 */
@@ -15236,6 +15462,7 @@ declare namespace materials {
             private materialGroup;
             private materialUnit;
             private materialSubstitute;
+            private schedulingGroup;
         }
         /** 视图-物料 */
         interface IMaterialListView extends ibas.IBOListView {
@@ -15247,6 +15474,8 @@ declare namespace materials {
             materialGroupEvent: Function;
             /** 物料单位事件 */
             materialUnitEvent: Function;
+            /** 计划组事件 */
+            schedulingGroupEvent: Function;
             /** 物料替代事件 */
             materialSubstituteEvent: Function;
             /** 显示数据 */
@@ -16818,6 +17047,157 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.MaterialGroup[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        class SchedulingGroupFunc extends ibas.ModuleFunction {
+            /** 功能标识 */
+            static FUNCTION_ID: string;
+            /** 功能名称 */
+            static FUNCTION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 默认功能 */
+            default(): ibas.IApplication<ibas.IView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 列表应用-计划组 */
+        class SchedulingGroupListApp extends ibas.BOListApplication<ISchedulingGroupListView, bo.SchedulingGroup> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.SchedulingGroup): void;
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.SchedulingGroup): void;
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.SchedulingGroup | bo.SchedulingGroup[]): void;
+        }
+        /** 视图-计划组 */
+        interface ISchedulingGroupListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.SchedulingGroup[]): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 选择应用-计划组 */
+        class SchedulingGroupChooseApp extends ibas.BOChooseService<ISchedulingGroupChooseView, bo.SchedulingGroup> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            /** 新建数据 */
+            protected newData(): void;
+        }
+        /** 视图-计划组 */
+        interface ISchedulingGroupChooseView extends ibas.IBOChooseView {
+            /** 显示数据 */
+            showData(datas: bo.SchedulingGroup[]): void;
+        }
+        /** 计划组选择服务映射 */
+        class SchedulingGroupChooseServiceMapping extends ibas.BOChooseServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IBOChooseService<bo.SchedulingGroup>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace materials {
+    namespace app {
+        /** 编辑应用-计划组 */
+        class SchedulingGroupEditApp extends ibas.BOEditApplication<ISchedulingGroupEditView, bo.SchedulingGroup> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            run(): void;
+            run(data: bo.SchedulingGroup): void;
+            /** 保存数据 */
+            protected saveData(): void;
+            /** 删除数据 */
+            protected deleteData(): void;
+            /** 新建数据，参数1：是否克隆 */
+            protected createData(clone: boolean): void;
+        }
+        /** 视图-计划组 */
+        interface ISchedulingGroupEditView extends ibas.IBOEditView {
+            /** 显示数据 */
+            showSchedulingGroup(data: bo.SchedulingGroup): void;
+            /** 删除数据事件 */
+            deleteDataEvent: Function;
+            /** 新建数据事件，参数1：是否克隆 */
+            createDataEvent: Function;
         }
     }
 }

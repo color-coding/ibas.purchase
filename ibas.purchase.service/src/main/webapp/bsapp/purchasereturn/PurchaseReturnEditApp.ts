@@ -50,6 +50,7 @@ namespace purchase {
                 this.view.turnToPurchaseCreditNoteEvent = this.turnToPurchaseCreditNote;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
                 this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
+                this.view.choosePaymentTermEvent = this.choosePaymentTerm;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -62,6 +63,17 @@ namespace purchase {
                 }
                 this.view.showPurchaseReturn(this.editData);
                 this.view.showPurchaseReturnItems(this.editData.purchaseReturnItems.filterDeleted());
+                // 计算到期日
+                if (this.editData.isNew === true && !ibas.strings.isEmpty(this.editData.paymentCode)) {
+                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                    condition.value = this.editData.paymentCode;
+                    condition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                    condition.value = ibas.emYesNo.YES.toString();
+                    this.choosePaymentTerm(criteria);
+                }
             }
             /** 运行,覆盖原方法 */
             run(): void;
@@ -263,6 +275,17 @@ namespace purchase {
                         that.editData.paymentCode = selected.paymentCode;
                         if (!ibas.strings.isEmpty(selected.warehouse)) {
                             that.view.defaultWarehouse = selected.warehouse;
+                        }
+                        // 计算到期日
+                        if (!ibas.strings.isEmpty(that.editData.paymentCode)) {
+                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                            let condition: ibas.ICondition = criteria.conditions.create();
+                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                            condition.value = that.editData.paymentCode;
+                            condition = criteria.conditions.create();
+                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                            condition.value = ibas.emYesNo.YES.toString();
+                            that.choosePaymentTerm(criteria);
                         }
                         // 供应商改变，清除旧地址
                         that.editData.shippingAddresss.clear();
@@ -1304,6 +1327,47 @@ namespace purchase {
                     })
                 });
             }
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void {
+                if (ibas.objects.isNull(criteria) || criteria.conditions.length === 0) {
+                    criteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                    condition.value = ibas.emYesNo.YES.toString();
+                    ibas.servicesManager.runChooseService<businesspartner.bo.PaymentTerm>({
+                        criteria: criteria,
+                        chooseType: ibas.emChooseType.SINGLE,
+                        boCode: businesspartner.bo.PaymentTerm.BUSINESS_OBJECT_CODE,
+                        onCompleted: (selecteds) => {
+                            for (let selected of selecteds) {
+                                this.editData.paymentCode = selected.code;
+                                if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.DOCUMENT_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.documentDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.POSTING_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.postingDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.SYSTEM_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(ibas.dates.today());
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    let boReposiorty: businesspartner.bo.BORepositoryBusinessPartner = new businesspartner.bo.BORepositoryBusinessPartner();
+                    boReposiorty.fetchPaymentTerm({
+                        criteria: criteria,
+                        onCompleted: (opRslt) => {
+                            for (let selected of opRslt.resultObjects) {
+                                if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.DOCUMENT_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.documentDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.POSTING_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.postingDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.SYSTEM_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(ibas.dates.today());
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         }
         /** 视图-采购退货 */
         export interface IPurchaseReturnEditView extends ibas.IBOEditView {
@@ -1357,6 +1421,8 @@ namespace purchase {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }

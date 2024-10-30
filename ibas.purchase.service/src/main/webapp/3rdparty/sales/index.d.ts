@@ -12737,6 +12737,7 @@ declare namespace sales {
             protected chooseSalesDeliveryItemMaterialCatalog(caller: bo.SalesDeliveryItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesDeliveryItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -12796,6 +12797,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13052,6 +13055,7 @@ declare namespace sales {
             protected chooseSalesOrderItemMaterialCatalog(caller: bo.SalesOrderItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesOrderItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -13119,6 +13123,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -13207,6 +13213,7 @@ declare namespace sales {
             protected deleteData(data: bo.SalesOrder | bo.SalesOrder[]): void;
             /** 预留物料库存 */
             private reserveMaterialsInventory;
+            private changeDocumentStatus;
         }
         /** 视图-销售订单 */
         interface ISalesOrderListView extends ibas.IBOListView {
@@ -13218,6 +13225,8 @@ declare namespace sales {
             showData(datas: bo.SalesOrder[]): void;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
+            /** 改变订单状态 */
+            changeDocumentStatusEvent: Function;
         }
     }
 }
@@ -13436,6 +13445,7 @@ declare namespace sales {
             protected chooseSalesReturnItemMaterialCatalog(caller: bo.SalesReturnItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -13489,6 +13499,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -13726,6 +13738,7 @@ declare namespace sales {
             protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -13775,6 +13788,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认税组 */
             defaultTaxGroup: string;
         }
@@ -14081,6 +14096,7 @@ declare namespace sales {
             protected chooseSalesInvoiceItemMaterialCatalog(caller: bo.SalesInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesInvoiceItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -14144,6 +14160,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -14385,6 +14403,7 @@ declare namespace sales {
             protected chooseSalesCreditNoteItemMaterialCatalog(caller: bo.SalesCreditNoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesCreditNoteItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -14436,6 +14455,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -15272,6 +15293,7 @@ declare namespace sales {
             protected chooseSalesReserveInvoiceItemMaterialCatalog(caller: bo.SalesReserveInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReserveInvoiceItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceEditView extends ibas.IBOEditView {
@@ -15329,6 +15351,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -15573,6 +15597,7 @@ declare namespace sales {
             protected chooseSalesReturnRequestItemMaterialCatalog(caller: bo.SalesReturnRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnRequestItem): void;
+            protected choosePaymentTerm(): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestEditView extends ibas.IBOEditView {
@@ -15626,6 +15651,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }

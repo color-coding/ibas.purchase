@@ -1093,6 +1093,8 @@ declare namespace accounting {
             updateDate: Date;
             /** 修改时间 */
             updateTime: number;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
             /** 版本 */
             logInst: number;
             /** 服务系列 */
@@ -1173,6 +1175,8 @@ declare namespace accounting {
             updateDate: Date;
             /** 修改时间 */
             updateTime: number;
+            /** 已引用 */
+            referenced: ibas.emYesNo;
             /** 版本 */
             logInst: number;
             /** 服务系列 */
@@ -4038,6 +4042,12 @@ declare namespace accounting {
             get updateTime(): number;
             /** 设置-修改时间 */
             set updateTime(value: number);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
             /** 映射的属性名称-版本 */
             static PROPERTY_LOGINST_NAME: string;
             /** 获取-版本 */
@@ -4269,6 +4279,12 @@ declare namespace accounting {
             get updateTime(): number;
             /** 设置-修改时间 */
             set updateTime(value: number);
+            /** 映射的属性名称-已引用 */
+            static PROPERTY_REFERENCED_NAME: string;
+            /** 获取-已引用 */
+            get referenced(): ibas.emYesNo;
+            /** 设置-已引用 */
+            set referenced(value: ibas.emYesNo);
             /** 映射的属性名称-版本 */
             static PROPERTY_LOGINST_NAME: string;
             /** 获取-版本 */

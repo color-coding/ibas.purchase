@@ -52,6 +52,8 @@ namespace purchase {
                 measuringMaterialsEvent: Function;
                 /** 查看物料历史价格事件 */
                 viewHistoricalPricesEvent: Function;
+                /** 选择付款条款事件 */
+                choosePaymentTermEvent: Function;
                 /** 默认仓库 */
                 defaultWarehouse: string;
                 /** 绘制视图 */

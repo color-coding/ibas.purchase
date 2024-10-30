@@ -1049,6 +1049,8 @@ declare namespace businesspartner {
             organization: string;
             /** 备注 */
             remarks: string;
+            /** 计算条款日期 */
+            calculateTermDate(baseOnDate: Date): Date;
         }
     }
 }
@@ -3666,6 +3668,8 @@ declare namespace businesspartner {
             set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
+            /** 计算条款日期 */
+            calculateTermDate(baseOnDate: Date): Date;
         }
     }
 }
