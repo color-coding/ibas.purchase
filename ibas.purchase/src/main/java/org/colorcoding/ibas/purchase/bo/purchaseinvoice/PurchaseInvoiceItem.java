@@ -2763,35 +2763,39 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 				return PurchaseInvoiceItem.this.getBaseDocumentLineId();
 			}
 		});
-		// 最后采购价格清单
-		contracts.add(new IMaterialPriceContract() {
+		if (MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_ENABLE_MATERIAL_PURCHASE_PRICE_RECORDING,
+				true)) {
+			// 最后采购价格清单
+			contracts.add(new IMaterialPriceContract() {
 
-			@Override
-			public String getIdentifiers() {
-				return PurchaseInvoiceItem.this.getIdentifiers();
-			}
+				@Override
+				public String getIdentifiers() {
+					return PurchaseInvoiceItem.this.getIdentifiers();
+				}
 
-			@Override
-			public Integer getPriceList() {
-				return MyConfiguration.DATA_MATERIALS_PURCHASE_PRICE_LIST;
-			}
+				@Override
+				public Integer getPriceList() {
+					return MyConfiguration.DATA_MATERIALS_PURCHASE_PRICE_LIST;
+				}
 
-			@Override
-			public String getItemCode() {
-				return PurchaseInvoiceItem.this.getItemCode();
-			}
+				@Override
+				public String getItemCode() {
+					return PurchaseInvoiceItem.this.getItemCode();
+				}
 
-			@Override
-			public BigDecimal getPrice() {
-				// 转为本币
-				return Decimal.multiply(PurchaseInvoiceItem.this.getPreTaxPrice(), PurchaseInvoiceItem.this.getRate());
-			}
+				@Override
+				public BigDecimal getPrice() {
+					// 转为本币
+					return Decimal.multiply(PurchaseInvoiceItem.this.getPreTaxPrice(),
+							PurchaseInvoiceItem.this.getRate());
+				}
 
-			@Override
-			public String getUOM() {
-				return PurchaseInvoiceItem.this.getUOM();
-			}
-		});
+				@Override
+				public String getUOM() {
+					return PurchaseInvoiceItem.this.getUOM();
+				}
+			});
+		}
 		return contracts.toArray(new IBusinessLogicContract[] {});
 	}
 
