@@ -103,24 +103,30 @@ namespace purchase {
                                 label: ibas.i18n.prop("bo_purchasecreditnote_documenttotal"),
                                 template: new sap.extension.m.Text("", {
                                 }).bindProperty("bindingValue", {
-                                    path: "documentTotal",
-                                    type: new sap.extension.data.Sum()
+                                    parts: [
+                                        {
+                                            path: "documentTotal",
+                                            type: new sap.extension.data.Sum()
+                                        }, {
+                                            path: "documentCurrency",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        }
+                                    ]
                                 }),
                             }),
                             new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchasecreditnote_paidtotal"),
                                 template: new sap.extension.m.Text("", {
                                 }).bindProperty("bindingValue", {
-                                    path: "paidTotal",
-                                    type: new sap.extension.data.Sum()
-                                }),
-                            }),
-                            new sap.extension.table.DataColumn("", {
-                                label: ibas.i18n.prop("bo_purchasecreditnote_documentcurrency"),
-                                template: new sap.extension.m.Text("", {
-                                }).bindProperty("bindingValue", {
-                                    path: "documentCurrency",
-                                    type: new sap.extension.data.Alphanumeric()
+                                    parts: [
+                                        {
+                                            path: "paidTotal",
+                                            type: new sap.extension.data.Sum()
+                                        }, {
+                                            path: "documentCurrency",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        }
+                                    ]
                                 }),
                             }),
                             new sap.extension.table.DataColumn("", {

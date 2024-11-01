@@ -683,19 +683,28 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "price",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_downpaymentrequestitem_linetotal"),
                                         template: new sap.extension.m.Input("", {
-
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "lineTotal",
                                             type: new sap.extension.data.Sum()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_downpaymentrequestitem_tax"),
@@ -719,10 +728,15 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "preTaxPrice",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                         visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
@@ -734,10 +748,15 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "unitPrice",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                         visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {

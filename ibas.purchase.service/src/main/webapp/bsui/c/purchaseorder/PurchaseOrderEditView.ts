@@ -153,20 +153,45 @@ namespace purchase {
                                 type: new sap.extension.data.Numeric()
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_pricelist") }),
-                            new sap.extension.m.RepositoryInput("", {
-                                showValueHelp: true,
-                                repository: materials.bo.BORepositoryMaterials,
-                                dataInfo: {
-                                    type: materials.bo.MaterialPriceList,
-                                    key: materials.bo.MaterialPriceList.PROPERTY_OBJECTKEY_NAME,
-                                    text: materials.bo.MaterialPriceList.PROPERTY_NAME_NAME
-                                },
-                                valueHelpRequest: function (): void {
-                                    that.fireViewEvents(that.choosePurchaseOrderPriceListEvent);
-                                },
-                            }).bindProperty("bindingValue", {
-                                path: "priceList",
-                                type: new sap.extension.data.Numeric()
+                            new sap.m.FlexBox("", {
+                                width: "100%",
+                                justifyContent: sap.m.FlexJustifyContent.Start,
+                                renderType: sap.m.FlexRendertype.Bare,
+                                alignContent: sap.m.FlexAlignContent.Center,
+                                alignItems: sap.m.FlexAlignItems.Center,
+                                items: [
+                                    new sap.extension.m.RepositoryInput("", {
+                                        width: "70%",
+                                        showValueHelp: true,
+                                        repository: materials.bo.BORepositoryMaterials,
+                                        dataInfo: {
+                                            type: materials.bo.MaterialPriceList,
+                                            key: materials.bo.MaterialPriceList.PROPERTY_OBJECTKEY_NAME,
+                                            text: materials.bo.MaterialPriceList.PROPERTY_NAME_NAME
+                                        },
+                                        valueHelpRequest: function (): void {
+                                            that.fireViewEvents(that.choosePurchaseOrderPriceListEvent);
+                                        },
+                                    }).bindProperty("bindingValue", {
+                                        path: "priceList",
+                                        type: new sap.extension.data.Numeric()
+                                    }).addStyleClass("sapUiTinyMarginEnd"),
+                                    new sap.extension.m.CurrencyRateSelect("", {
+                                        baseCurrency: accounting.config.currency("LOCAL"),
+                                        currency: {
+                                            path: "documentCurrency",
+                                            type: new sap.extension.data.Alphanumeric()
+                                        },
+                                        rate: {
+                                            path: "documentRate",
+                                            type: new sap.extension.data.Rate()
+                                        },
+                                        date: {
+                                            path: "documentDate",
+                                            type: new sap.extension.data.Date()
+                                        }
+                                    }),
+                                ]
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_ordertype") }),
                             new sap.extension.m.PropertySelect("", {
@@ -793,19 +818,28 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "price",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseorderitem_linetotal"),
                                         template: new sap.extension.m.Input("", {
-
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "lineTotal",
                                             type: new sap.extension.data.Sum()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseorderitem_tax"),
@@ -829,10 +863,15 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "preTaxPrice",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                         visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
@@ -844,10 +883,15 @@ namespace purchase {
                                             valueHelpRequest: function (): void {
                                                 that.fireViewEvents(that.viewHistoricalPricesEvent, this.getBindingContext().getObject());
                                             },
+                                            fieldWidth: "70%",
                                         }).bindProperty("bindingValue", {
                                             path: "unitPrice",
                                             type: new sap.extension.data.Price()
+                                        }).bindProperty("description", {
+                                            path: "currency",
+                                            type: new sap.extension.data.Alphanumeric()
                                         }),
+                                        width: "12rem",
                                         visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
