@@ -184,6 +184,30 @@ namespace purchase {
                                 path: "docEntry",
                                 type: new sap.extension.data.Numeric()
                             }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_docnum") }),
+                            new sap.extension.m.Input("", {
+                            }).bindProperty("bindingValue", {
+                                path: "docNum",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 20
+                                })
+                            }).bindProperty("editable", {
+                                path: "series",
+                                formatter(data: any): any {
+                                    return data > 0 ? false : true;
+                                }
+                            }),
+                            new sap.extension.m.SeriesSelect("", {
+                                objectCode: bo.BO_CODE_PURCHASEQUOTE,
+                            }).bindProperty("bindingValue", {
+                                path: "series",
+                                type: new sap.extension.data.Numeric()
+                            }).bindProperty("editable", {
+                                path: "isNew",
+                                formatter(data: any): any {
+                                    return data === false ? false : true;
+                                }
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_documentstatus") }),
                             new sap.extension.m.EnumSelect("", {
                                 enumType: ibas.emDocumentStatus

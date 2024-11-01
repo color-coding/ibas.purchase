@@ -391,6 +391,30 @@ namespace purchase {
                                                 editable: true,
                                                 width: "auto",
                                                 content: [
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_downpaymentrequest_docnum") }),
+                                                    new sap.extension.m.Input("", {
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "docNum",
+                                                        type: new sap.extension.data.Alphanumeric({
+                                                            maxLength: 20
+                                                        })
+                                                    }).bindProperty("editable", {
+                                                        path: "series",
+                                                        formatter(data: any): any {
+                                                            return data > 0 ? false : true;
+                                                        }
+                                                    }),
+                                                    new sap.extension.m.SeriesSelect("", {
+                                                        objectCode: bo.BO_CODE_DOWNPAYMNETREQUEST,
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "series",
+                                                        type: new sap.extension.data.Numeric()
+                                                    }).bindProperty("editable", {
+                                                        path: "isNew",
+                                                        formatter(data: any): any {
+                                                            return data === false ? false : true;
+                                                        }
+                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_downpaymentrequest_documentstatus") }),
                                                     new sap.extension.m.EnumSelect("", {
                                                         enumType: ibas.emDocumentStatus

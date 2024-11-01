@@ -354,28 +354,6 @@ namespace purchase {
                                             new sap.ui.layout.form.SimpleForm("", {
                                                 editable: true,
                                                 content: [
-                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_documentstatus") }),
-                                                    new sap.extension.m.EnumSelect("", {
-                                                        enumType: ibas.emDocumentStatus
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "documentStatus",
-                                                        type: new sap.extension.data.DocumentStatus()
-                                                    }),
-                                                    new sap.extension.m.TipsCheckBox("", {
-                                                        text: ibas.i18n.prop("bo_blanketagreement_canceled"),
-                                                        tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
-                                                    }).bindProperty("bindingValue", {
-                                                        path: "canceled",
-                                                        type: new sap.extension.data.YesNo()
-                                                    }).bindProperty("editable", {
-                                                        path: "approvalStatus",
-                                                        type: new sap.extension.data.ApprovalStatus(),
-                                                        formatter(data: ibas.emApprovalStatus): boolean {
-                                                            if (data === ibas.emApprovalStatus.PROCESSING) {
-                                                                return false;
-                                                            } return true;
-                                                        }
-                                                    }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_docnum") }),
                                                     new sap.extension.m.Input("", {
                                                     }).bindProperty("bindingValue", {
@@ -398,6 +376,28 @@ namespace purchase {
                                                         path: "isNew",
                                                         formatter(data: any): any {
                                                             return data === false ? false : true;
+                                                        }
+                                                    }),
+                                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_documentstatus") }),
+                                                    new sap.extension.m.EnumSelect("", {
+                                                        enumType: ibas.emDocumentStatus
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "documentStatus",
+                                                        type: new sap.extension.data.DocumentStatus()
+                                                    }),
+                                                    new sap.extension.m.TipsCheckBox("", {
+                                                        text: ibas.i18n.prop("bo_blanketagreement_canceled"),
+                                                        tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
+                                                    }).bindProperty("bindingValue", {
+                                                        path: "canceled",
+                                                        type: new sap.extension.data.YesNo()
+                                                    }).bindProperty("editable", {
+                                                        path: "approvalStatus",
+                                                        type: new sap.extension.data.ApprovalStatus(),
+                                                        formatter(data: ibas.emApprovalStatus): boolean {
+                                                            if (data === ibas.emApprovalStatus.PROCESSING) {
+                                                                return false;
+                                                            } return true;
                                                         }
                                                     }),
                                                     new sap.m.Label("", { text: ibas.i18n.prop("bo_blanketagreement_signdate") }),
