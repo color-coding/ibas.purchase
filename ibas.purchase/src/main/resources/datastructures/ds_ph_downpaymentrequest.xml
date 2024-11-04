@@ -41,6 +41,7 @@
     <Property Name="DocumentRate" Description="单据汇率" DataType="Decimal" DataSubType="Rate" EditSize="8" Mapped="DocRate"/>
     <Property Name="DocumentTotal" Description="单据总计" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="DocTotal"/>
     <Property Name="PaidTotal" Description="已付款总计" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="PaidTotal"/>
+    <Property Name="PaymentCode" Description="付款条款代码" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="PaymentCode"/>
     <Property Name="Rounding" Description="舍入" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Rounding"/>
     <Property Name="DiffAmount" Description="舍入差额" DataType="Decimal" DataSubType="Sum" EditSize="8" Mapped="RoundDiff"/>
     <Property Name="Project" Description="项目代码" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="Project"/>

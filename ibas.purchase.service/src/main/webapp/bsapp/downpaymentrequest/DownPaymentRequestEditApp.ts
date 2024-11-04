@@ -46,6 +46,7 @@ namespace purchase {
                 this.view.paymentDownPaymentRequestEvent = this.paymentDownPaymentRequest;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
                 this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
+                this.view.choosePaymentTermEvent = this.choosePaymentTerm;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -77,6 +78,17 @@ namespace purchase {
                             }
                         }
                     });
+                }
+                // 计算到期日
+                if (this.editData.isNew === true && !ibas.strings.isEmpty(this.editData.paymentCode)) {
+                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                    condition.value = this.editData.paymentCode;
+                    condition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                    condition.value = ibas.emYesNo.YES.toString();
+                    this.choosePaymentTerm(criteria);
                 }
             }
             /** 运行,覆盖原方法 */
@@ -281,6 +293,17 @@ namespace purchase {
                         }
                         if (!ibas.strings.isEmpty(selected.taxGroup)) {
                             that.view.defaultTaxGroup = selected.taxGroup;
+                        }
+                        // 计算到期日
+                        if (that.editData.isNew === true && !ibas.strings.isEmpty(that.editData.paymentCode)) {
+                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                            let condition: ibas.ICondition = criteria.conditions.create();
+                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                            condition.value = that.editData.paymentCode;
+                            condition = criteria.conditions.create();
+                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                            condition.value = ibas.emYesNo.YES.toString();
+                            that.choosePaymentTerm(criteria);
                         }
                     }
                 });
@@ -586,6 +609,27 @@ namespace purchase {
                             if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
                                 continue;
                             }
+                            if (!ibas.strings.isEmpty(selected.paymentCode) && that.editData.paymentCode !== selected.paymentCode) {
+                                that.messages({
+                                    type: ibas.emMessageType.QUESTION,
+                                    title: ibas.i18n.prop(that.name),
+                                    message: ibas.i18n.prop("purchase_change_item_paymentcode_continue"),
+                                    actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
+                                    onCompleted(action: ibas.emMessageAction): void {
+                                        if (action === ibas.emMessageAction.YES) {
+                                            that.editData.paymentCode = selected.paymentCode;
+                                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                                            let condition: ibas.ICondition = criteria.conditions.create();
+                                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                                            condition.value = that.editData.paymentCode;
+                                            condition = criteria.conditions.create();
+                                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                                            condition.value = ibas.emYesNo.YES.toString();
+                                            that.choosePaymentTerm(criteria);
+                                        }
+                                    }
+                                });
+                            }
                             that.editData.baseDocument(selected);
                         }
                         that.view.showDownPaymentRequestItems(that.editData.downPaymentRequestItems.filterDeleted());
@@ -696,6 +740,27 @@ namespace purchase {
                         for (let selected of selecteds) {
                             if (!ibas.strings.equals(that.editData.supplierCode, selected.supplierCode)) {
                                 continue;
+                            }
+                            if (!ibas.strings.isEmpty(selected.paymentCode) && that.editData.paymentCode !== selected.paymentCode) {
+                                that.messages({
+                                    type: ibas.emMessageType.QUESTION,
+                                    title: ibas.i18n.prop(that.name),
+                                    message: ibas.i18n.prop("purchase_change_item_paymentcode_continue"),
+                                    actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
+                                    onCompleted(action: ibas.emMessageAction): void {
+                                        if (action === ibas.emMessageAction.YES) {
+                                            that.editData.paymentCode = selected.paymentCode;
+                                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                                            let condition: ibas.ICondition = criteria.conditions.create();
+                                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                                            condition.value = that.editData.paymentCode;
+                                            condition = criteria.conditions.create();
+                                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                                            condition.value = ibas.emYesNo.YES.toString();
+                                            that.choosePaymentTerm(criteria);
+                                        }
+                                    }
+                                });
                             }
                             that.editData.baseDocument(selected);
                         }
@@ -1210,6 +1275,47 @@ namespace purchase {
                     })
                 });
             }
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void {
+                if (ibas.objects.isNull(criteria) || criteria.conditions.length === 0) {
+                    criteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_ACTIVATED_NAME;
+                    condition.value = ibas.emYesNo.YES.toString();
+                    ibas.servicesManager.runChooseService<businesspartner.bo.PaymentTerm>({
+                        criteria: criteria,
+                        chooseType: ibas.emChooseType.SINGLE,
+                        boCode: businesspartner.bo.PaymentTerm.BUSINESS_OBJECT_CODE,
+                        onCompleted: (selecteds) => {
+                            for (let selected of selecteds) {
+                                this.editData.paymentCode = selected.code;
+                                if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.DOCUMENT_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.documentDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.POSTING_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.postingDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.SYSTEM_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(ibas.dates.today());
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    let boReposiorty: businesspartner.bo.BORepositoryBusinessPartner = new businesspartner.bo.BORepositoryBusinessPartner();
+                    boReposiorty.fetchPaymentTerm({
+                        criteria: criteria,
+                        onCompleted: (opRslt) => {
+                            for (let selected of opRslt.resultObjects) {
+                                if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.DOCUMENT_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.documentDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.POSTING_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(this.editData.postingDate);
+                                } else if (selected.dueDateBaseOn === businesspartner.bo.emDueDateBaseOn.SYSTEM_DATE) {
+                                    this.editData.deliveryDate = selected.calculateTermDate(ibas.dates.today());
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         }
         /** 视图-预付款申请 */
         export interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -1249,6 +1355,8 @@ namespace purchase {
             chooseDownPaymentRequestItemMaterialVersionEvent: Function;
             /** 选择一业务伙伴目录事件 */
             chooseDownPaymentRequestItemMaterialCatalogEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 预收款申请付款事件 */
             paymentDownPaymentRequestEvent: Function;
             /** 测量物料事件 */

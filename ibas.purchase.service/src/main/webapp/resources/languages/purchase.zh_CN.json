@@ -116,6 +116,7 @@
   "purchase_remove_base_items_continue": "此操作会移出基于的行项目，是否继续？",
   "purchase_change_item_warehouse_continue": "是否更改单据行的仓库为[{0}]？",
   "purchase_change_item_price_continue": "价格清单已更新，是否更改单据行的价格？",
+  "purchase_change_item_paymentcode_continue": "是否使用基于单据的付款条款？",
   "purchase_invaild_status_not_support_turn_to_operation": "单据的状态无效，不支持此操作",
   "purchase_merge_purchasing_will_be_lost_association_relationship_continue": "合并采购将丢失与销售订单的关联，是否继续？",
   "purchase_multiple_order_status_change_to": "共[{0}]个订单，状态将修改为[{1}]，是否继续？",

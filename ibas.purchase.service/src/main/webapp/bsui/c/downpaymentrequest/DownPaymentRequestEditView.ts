@@ -40,6 +40,8 @@ namespace purchase {
                 chooseDownPaymentRequestBlanketAgreementEvent: Function;
                 /** 选择预付款申请-采购收货事件 */
                 chooseDownPaymentRequestPurchaseDeliveryEvent: Function;
+                /** 选择付款条款事件 */
+                choosePaymentTermEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 选择预付款申请-行成本中心事件 */

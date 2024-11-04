@@ -1150,6 +1150,7 @@
         "bo_downpaymentrequest_documentrate": "单据汇率",
         "bo_downpaymentrequest_documenttotal": "单据总计",
         "bo_downpaymentrequest_paidtotal": "已付款总计",
+        "bo_downpaymentrequest_paymentcode": "付款条款",
         "bo_downpaymentrequest_rounding": "舍入",
         "bo_downpaymentrequest_diffamount": "舍入差额",
         "bo_downpaymentrequest_project": "项目代码",

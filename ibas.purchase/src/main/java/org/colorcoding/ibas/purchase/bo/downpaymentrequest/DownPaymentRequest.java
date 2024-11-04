@@ -1286,6 +1286,37 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 	}
 
 	/**
+	 * 属性名称-付款条款代码
+	 */
+	private static final String PROPERTY_PAYMENTCODE_NAME = "PaymentCode";
+
+	/**
+	 * 付款条款代码 属性
+	 */
+	@DbField(name = "PaymentCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	public static final IPropertyInfo<String> PROPERTY_PAYMENTCODE = registerProperty(PROPERTY_PAYMENTCODE_NAME,
+			String.class, MY_CLASS);
+
+	/**
+	 * 获取-付款条款代码
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_PAYMENTCODE_NAME)
+	public final String getPaymentCode() {
+		return this.getProperty(PROPERTY_PAYMENTCODE);
+	}
+
+	/**
+	 * 设置-付款条款代码
+	 * 
+	 * @param value 值
+	 */
+	public final void setPaymentCode(String value) {
+		this.setProperty(PROPERTY_PAYMENTCODE, value);
+	}
+
+	/**
 	 * 设置-已付款总计
 	 * 
 	 * @param value 值

@@ -113,6 +113,7 @@
   "purchase_remove_base_items_continue": "This operation will remove base line items, continue?",
   "purchase_change_item_warehouse_continue": "Change warehouse of document line to [{0}]?",
   "purchase_change_item_price_continue": "Price list updated, change price of document line?",
+  "purchase_change_item_paymentcode_continue": "Use document based payment terms?",
   "purchase_invaild_status_not_support_turn_to_operation": "Invalid document status, operation not supported",
   "purchase_merge_purchasing_will_be_lost_association_relationship_continue": "Merging purchase will lose association with sales order, continue?",
   "purchase_multiple_order_status_change_to": "Total [{0}] orders, status will be changed to [{1}], continue?",

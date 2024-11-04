@@ -87,6 +87,8 @@ namespace purchase {
             documentTotal: number;
             /** 已付款总计 */
             paidTotal: number;
+            /** 付款条款 */
+            paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
             /** 舍入差额 */

@@ -42,6 +42,8 @@ namespace purchase {
                 chooseDownPaymentRequestItemMaterialCatalogEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
+                /** 选择付款条款事件 */
+                choosePaymentTermEvent: Function;
                 /** 预收款申请付款事件 */
                 paymentDownPaymentRequestEvent: Function;
                 /** 测量物料事件 */
