@@ -531,20 +531,30 @@ namespace purchase {
             }
             /** 设置-合同 */
             set agreements(value: string) {
-                this.setProperty(PurchaseQuote.PROPERTY_AGREEMENTS_NAME, value);
+                this.setProperty(PurchaseReturnRequest.PROPERTY_AGREEMENTS_NAME, value);
             }
 
             /** 映射的属性名称-分支 */
             static PROPERTY_BRANCH_NAME: string = "Branch";
             /** 获取-分支 */
             get branch(): string {
-                return this.getProperty<string>(PurchaseQuote.PROPERTY_BRANCH_NAME);
+                return this.getProperty<string>(PurchaseReturnRequest.PROPERTY_BRANCH_NAME);
             }
             /** 设置-分支 */
             set branch(value: string) {
-                this.setProperty(PurchaseQuote.PROPERTY_BRANCH_NAME, value);
+                this.setProperty(PurchaseReturnRequest.PROPERTY_BRANCH_NAME, value);
             }
 
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseReturnRequest.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseReturnRequest.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
 
             /** 映射的属性名称-采购退货请求-行集合 */
             static PROPERTY_PURCHASERETURNREQUESTITEMS_NAME: string = "PurchaseReturnRequestItems";
@@ -661,6 +671,10 @@ namespace purchase {
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseReturnRequest.PROPERTY_DOCUMENTTOTAL_NAME,
                         PurchaseReturnRequest.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseReturnRequest.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseReturnRequest.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequest.PROPERTY_INVERSEDISCOUNT_NAME
+                    ),
                 ];
             }
             /** 重置 */
@@ -1569,6 +1583,17 @@ namespace purchase {
                 this.setProperty(PurchaseReturnRequestItem.PROPERTY_AGREEMENTS_NAME, value);
             }
 
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
+
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
             /** 获取-物料批次集合 */
@@ -1631,6 +1656,10 @@ namespace purchase {
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
                         PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequestItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME
                     ),
                 ];
             }

@@ -436,17 +436,17 @@ public interface IPurchaseQuoteItem extends IBODocumentLine, IDocumentClosingQua
 	void setItemSign(String value);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	String getCatalogCode();
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	void setCatalogCode(String value);
 
 	/**
@@ -1120,6 +1120,20 @@ public interface IPurchaseQuoteItem extends IBODocumentLine, IDocumentClosingQua
 	 * @param value 值
 	 */
 	void setAgreements(String value);
+
+	/**
+	 * 获取-反向行折扣
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getInverseDiscount();
+
+	/**
+	 * 设置-反向行折扣
+	 * 
+	 * @param value 值
+	 */
+	void setInverseDiscount(BigDecimal value);
 
 	/**
 	 * 获取-采购报价-行-额外信息集合

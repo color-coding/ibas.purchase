@@ -105,6 +105,8 @@ namespace purchase {
             agreements: string;
             /** 分支 */
             branch: string;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 采购预留发票-行集合 */
             purchaseReserveInvoiceItems: IPurchaseReserveInvoiceItems;
             /** 送货地址集合 */
@@ -243,6 +245,8 @@ namespace purchase {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 反向行折扣 */
+            inverseDiscount: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }

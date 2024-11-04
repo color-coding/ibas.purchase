@@ -155,6 +155,8 @@ namespace purchase {
             /** 分支 */
             branch: string;
 
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 采购报价-行集合 */
             purchaseQuoteItems: IPurchaseQuoteItems;
 
@@ -348,6 +350,8 @@ namespace purchase {
 
             /** 合同 */
             agreements: string;
+            /** 反向行折扣 */
+            inverseDiscount: number;
 
             /** 采购报价-行-额外信息集合 */
             purchaseQuoteItemExtras: IPurchaseQuoteItemExtras;

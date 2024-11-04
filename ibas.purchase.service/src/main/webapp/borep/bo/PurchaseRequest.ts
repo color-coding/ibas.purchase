@@ -559,15 +559,20 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME
+                    ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME
+                    ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                        PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
                     // 单据总计 = 总计（含税）
-                    new BusinessRuleDeductionDocumentTotal(PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, undefined),
+                    new BusinessRuleDeductionDocumentTotal(
+                        PurchaseRequest.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, undefined
+                    ),
                 ];
             }
             /** 重置 */

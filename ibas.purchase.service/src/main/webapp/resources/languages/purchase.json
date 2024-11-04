@@ -83,6 +83,7 @@
   "purchase_business_rule_deduction_price_tax_total": "Deduct Price with Tax, Tax Total, and Total",
   "purchase_business_rule_deduction_discount": "Deduct Discount",
   "purchase_business_rule_deduction_line_total": "Deduct Line Total",
+  "purchase_business_rule_deduction_inverse_discount": "Deduction Inverse Discount",
   "purchase_create_continue": "Create {0}, continue?",
   "purchase_copy_data_continue": "Copy {0}, continue?",
   "purchase_copy_to": "Copy to",

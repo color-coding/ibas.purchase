@@ -86,6 +86,7 @@
   "purchase_business_rule_deduction_price_tax_total": "推导含税价格，税总计及总计",
   "purchase_business_rule_deduction_discount": "推导折扣",
   "purchase_business_rule_deduction_line_total": "推导行总计",
+  "purchase_business_rule_deduction_inverse_discount": "推导反折扣",
   "purchase_create_continue": "新建{0}，是否继续？",
   "purchase_copy_data_continue": "复制{0}，是否继续？",
   "purchase_copy_to": "复制到",

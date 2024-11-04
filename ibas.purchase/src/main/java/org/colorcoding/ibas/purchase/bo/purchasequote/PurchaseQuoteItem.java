@@ -30,6 +30,7 @@ import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.sales.data.DataConvert;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 
 /**
@@ -994,32 +995,32 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 	}
 
 	/**
-	* 属性名称-目录编码
-	*/
+	 * 属性名称-目录编码
+	 */
 	private static final String PROPERTY_CATALOGCODE_NAME = "CatalogCode";
 
 	/**
-	* 目录编码 属性
-	*/
+	 * 目录编码 属性
+	 */
 	@DbField(name = "CatalogCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CATALOGCODE = registerProperty(PROPERTY_CATALOGCODE_NAME,
 			String.class, MY_CLASS);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_CATALOGCODE_NAME)
 	public final String getCatalogCode() {
 		return this.getProperty(PROPERTY_CATALOGCODE);
 	}
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	public final void setCatalogCode(String value) {
 		this.setProperty(PROPERTY_CATALOGCODE, value);
 	}
@@ -2279,6 +2280,37 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 	}
 
 	/**
+	 * 属性名称-反向行折扣
+	 */
+	private static final String PROPERTY_INVERSEDISCOUNT_NAME = "InverseDiscount";
+
+	/**
+	 * 反向行折扣 属性
+	 */
+	@DbField(name = "InDiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_INVERSEDISCOUNT = registerProperty(
+			PROPERTY_INVERSEDISCOUNT_NAME, BigDecimal.class, MY_CLASS);
+
+	/**
+	 * 获取-反向行折扣
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_INVERSEDISCOUNT_NAME)
+	public final BigDecimal getInverseDiscount() {
+		return this.getProperty(PROPERTY_INVERSEDISCOUNT);
+	}
+
+	/**
+	 * 设置-反向行折扣
+	 * 
+	 * @param value 值
+	 */
+	public final void setInverseDiscount(BigDecimal value) {
+		this.setProperty(PROPERTY_INVERSEDISCOUNT, value);
+	}
+
+	/**
 	 * 属性名称-采购报价-行-额外信息
 	 */
 	private static final String PROPERTY_PURCHASEQUOTEITEMEXTRAS_NAME = "PurchaseQuoteItemExtras";
@@ -2350,6 +2382,8 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 				// 计算折扣前总计 = 数量 * 折扣前价格
 				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_UNITLINETOTAL, PROPERTY_UNITPRICE,
 						MyConfiguration.isInventoryUnitLinePrice() ? PROPERTY_INVENTORYQUANTITY : PROPERTY_QUANTITY),
+				// 反向折扣 = 1 - 折扣
+				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0

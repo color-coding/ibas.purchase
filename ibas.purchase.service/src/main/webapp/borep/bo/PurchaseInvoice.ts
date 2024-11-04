@@ -543,6 +543,16 @@ namespace purchase {
             set branch(value: string) {
                 this.setProperty(PurchaseInvoice.PROPERTY_BRANCH_NAME, value);
             }
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseInvoice.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseInvoice.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
 
             /** 映射的属性名称-采购发票-行集合 */
             static PROPERTY_PURCHASEINVOICEITEMS_NAME: string = "PurchaseInvoiceItems";
@@ -683,6 +693,10 @@ namespace purchase {
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
                     new BusinessRuleDeductionDocumentTotal(PurchaseInvoice.PROPERTY_DOCUMENTTOTAL_NAME,
                         PurchaseInvoice.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseInvoice.PROPERTY_DISCOUNT_NAME, PurchaseInvoice.PROPERTY_INVERSEDISCOUNT_NAME
+                    ),
                 ];
             }
             /** 重置 */
@@ -1601,6 +1615,16 @@ namespace purchase {
             set agreements(value: string) {
                 this.setProperty(PurchaseInvoiceItem.PROPERTY_AGREEMENTS_NAME, value);
             }
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseDeliveryItem.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseDeliveryItem.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
 
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
@@ -1664,6 +1688,10 @@ namespace purchase {
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
                         PurchaseInvoiceItem.PROPERTY_DISCOUNT_NAME, PurchaseInvoiceItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseInvoiceItem.PROPERTY_DISCOUNT_NAME, PurchaseInvoiceItem.PROPERTY_INVERSEDISCOUNT_NAME
                     ),
                 ];
             }

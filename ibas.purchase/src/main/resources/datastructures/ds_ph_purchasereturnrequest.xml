@@ -50,6 +50,7 @@
     <Property Name="OrderType" Description="单据类型" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OrderType"/>
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
+    <Property Name="InverseDiscount" Description="反向折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
   </Model>
   <Model Name="PurchaseReturnRequestItem" Description="采购退货请求-行" ModelType="DocumentLine" Mapped="${Company}_PH_PRR1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -113,6 +114,7 @@
     <Property Name="DistributionRule4" Description="成本中心4" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode4"/>
     <Property Name="DistributionRule5" Description="成本中心5" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode5"/>
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
+    <Property Name="InverseDiscount" Description="反向行折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
   </Model>
   <BusinessObject MappedModel="PurchaseReturnRequest" ShortName="${Company}_PH_PURCHRETNREQ">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseReturnRequestItem"/>

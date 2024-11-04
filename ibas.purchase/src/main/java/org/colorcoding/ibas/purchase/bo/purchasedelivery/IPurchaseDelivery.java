@@ -816,6 +816,20 @@ public interface IPurchaseDelivery extends IBODocument, IShippingAddressParent {
 	void setBranch(String value);
 
 	/**
+	 * 获取-反向折扣
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getInverseDiscount();
+
+	/**
+	 * 设置-反向折扣
+	 * 
+	 * @param value 值
+	 */
+	void setInverseDiscount(BigDecimal value);
+
+	/**
 	 * 获取-采购收货-行集合
 	 * 
 	 * @return 值

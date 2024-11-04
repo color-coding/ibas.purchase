@@ -58,6 +58,7 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 
 /**
  * 获取-采购预留发票
@@ -1747,6 +1748,37 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 	}
 
 	/**
+	 * 属性名称-反向折扣
+	 */
+	private static final String PROPERTY_INVERSEDISCOUNT_NAME = "InverseDiscount";
+
+	/**
+	 * 反向折扣 属性
+	 */
+	@DbField(name = "InDiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_INVERSEDISCOUNT = registerProperty(
+			PROPERTY_INVERSEDISCOUNT_NAME, BigDecimal.class, MY_CLASS);
+
+	/**
+	 * 获取-反向折扣
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_INVERSEDISCOUNT_NAME)
+	public final BigDecimal getInverseDiscount() {
+		return this.getProperty(PROPERTY_INVERSEDISCOUNT);
+	}
+
+	/**
+	 * 设置-反向折扣
+	 * 
+	 * @param value 值
+	 */
+	public final void setInverseDiscount(BigDecimal value) {
+		this.setProperty(PROPERTY_INVERSEDISCOUNT, value);
+	}
+
+	/**
 	 * 属性名称-采购预留发票-行
 	 */
 	private static final String PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME = "PurchaseReserveInvoiceItems";
@@ -1908,6 +1940,8 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
 				new BusinessRuleDeductionDocumentTotal(PROPERTY_DOCUMENTTOTAL, PROPERTY_DISCOUNTTOTAL,
 						PROPERTY_SHIPPINGSEXPENSETOTAL),
+				// 反向折扣 = 1 - 折扣
+				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};

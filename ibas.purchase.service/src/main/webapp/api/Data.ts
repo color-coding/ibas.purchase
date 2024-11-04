@@ -26,6 +26,8 @@ namespace purchase {
         export const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string = "priceCalculationAnchoringMethod";
         /** 配置项目-单据行显示库存 */
         export const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string = "documentLineDisplayInventory";
+        /** 配置项目-折扣呈现方式 */
+        export const CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD: string = "discountPresentationMethod";
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -55,6 +57,17 @@ namespace purchase {
                 }
             }
             return priceAnchoringAfterTax;
+        }
+        let inverseDiscount: boolean = undefined;
+        export function isInverseDiscount(): boolean {
+            if (ibas.objects.isNull(inverseDiscount)) {
+                if (ibas.strings.equalsIgnoreCase("Inverse", get(CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD))) {
+                    inverseDiscount = true;
+                } else {
+                    inverseDiscount = false;
+                }
+            }
+            return inverseDiscount;
         }
     }
     export namespace bo {

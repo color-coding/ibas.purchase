@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ApplicationConfig>
+<ns:ApplicationConfig xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
+	<ConfigKey>discountPresentationMethod</ConfigKey>
+	<ConfigDescription>折扣呈现方式</ConfigDescription>
+	<ConfigGroup>de9278d9-4914-45a5-8418-9c609118d03f</ConfigGroup>
+	<ConfigValue>Common</ConfigValue>
+	<Settings>[{"Key":"Common","Text":"普通"},{"Key":"Inverse","Text":"反向"}]</Settings>
+	<Category>CLIENT</Category>
+	<Activated>YES</Activated>
+</ns:ApplicationConfig>

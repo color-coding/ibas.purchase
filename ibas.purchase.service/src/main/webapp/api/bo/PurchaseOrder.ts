@@ -154,6 +154,8 @@ namespace purchase {
 
             /** 分支 */
             branch: string;
+            /** 反向折扣 */
+            inverseDiscount: number;
 
             /** 采购订单-行集合 */
             purchaseOrderItems: IPurchaseOrderItems;
@@ -351,6 +353,8 @@ namespace purchase {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 反向行折扣 */
+            inverseDiscount: number;
 
             /** 采购订单-行-额外信息集合 */
             purchaseOrderItemExtras: IPurchaseOrderItemExtras;

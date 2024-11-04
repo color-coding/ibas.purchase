@@ -543,6 +543,16 @@ namespace purchase {
             set branch(value: string) {
                 this.setProperty(PurchaseQuote.PROPERTY_BRANCH_NAME, value);
             }
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseQuote.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseQuote.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
 
 
 
@@ -606,19 +616,28 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_LINETOTAL_NAME
+                    ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseQuote.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseQuote.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_TAXTOTAL_NAME
+                    ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseQuote.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                        PurchaseQuote.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
                         PurchaseQuote.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseQuote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseQuote.PROPERTY_DISCOUNT_NAME
                     ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
-                    new BusinessRuleDeductionDocumentTotal(PurchaseQuote.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseQuote.PROPERTY_DISCOUNTTOTAL_NAME, undefined),
+                    new BusinessRuleDeductionDocumentTotal(
+                        PurchaseQuote.PROPERTY_DOCUMENTTOTAL_NAME, PurchaseQuote.PROPERTY_DISCOUNTTOTAL_NAME, undefined
+                    ),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseQuote.PROPERTY_DISCOUNT_NAME, PurchaseQuote.PROPERTY_INVERSEDISCOUNT_NAME
+                    ),
                 ];
             }
             /** 重置 */
@@ -1493,6 +1512,16 @@ namespace purchase {
             set agreements(value: string) {
                 this.setProperty(PurchaseQuoteItem.PROPERTY_AGREEMENTS_NAME, value);
             }
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string = "InverseDiscount";
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number {
+                return this.getProperty<number>(PurchaseQuoteItem.PROPERTY_INVERSEDISCOUNT_NAME);
+            }
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number) {
+                this.setProperty(PurchaseQuoteItem.PROPERTY_INVERSEDISCOUNT_NAME, value);
+            }
 
             /** 映射的属性名称-采购报价-行-额外信息集合 */
             static PROPERTY_PURCHASEQUOTEITEMEXTRAS_NAME: string = "PurchaseQuoteItemExtras";
@@ -1543,6 +1572,10 @@ namespace purchase {
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
                         PurchaseQuoteItem.PROPERTY_DISCOUNT_NAME, PurchaseQuoteItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseQuoteItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    ),
+                    // 计算正反折扣
+                    new BusinessRuleNegativeDiscount(
+                        PurchaseQuoteItem.PROPERTY_DISCOUNT_NAME, PurchaseQuoteItem.PROPERTY_INVERSEDISCOUNT_NAME
                     ),
                 ];
             }

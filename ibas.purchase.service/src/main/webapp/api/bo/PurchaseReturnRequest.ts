@@ -153,6 +153,8 @@ namespace purchase {
 
             /** 分支 */
             branch: string;
+            /** 反向折扣 */
+            inverseDiscount: number;
 
             /** 采购退货请求-行集合 */
             purchaseReturnRequestItems: IPurchaseReturnRequestItems;
@@ -355,6 +357,8 @@ namespace purchase {
 
             /** 合同 */
             agreements: string;
+            /** 反向行折扣 */
+            inverseDiscount: number;
 
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;

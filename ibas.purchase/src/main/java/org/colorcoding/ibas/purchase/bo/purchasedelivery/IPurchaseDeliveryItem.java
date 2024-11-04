@@ -440,17 +440,17 @@ public interface IPurchaseDeliveryItem extends IBODocumentLine, IMaterialBatchRe
 	void setItemSign(String value);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	String getCatalogCode();
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	void setCatalogCode(String value);
 
 	/**
@@ -1124,4 +1124,19 @@ public interface IPurchaseDeliveryItem extends IBODocumentLine, IMaterialBatchRe
 	 * @param value 值
 	 */
 	void setAgreements(String value);
+
+	/**
+	 * 获取-反向行折扣
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getInverseDiscount();
+
+	/**
+	 * 设置-反向行折扣
+	 * 
+	 * @param value 值
+	 */
+	void setInverseDiscount(BigDecimal value);
+
 }

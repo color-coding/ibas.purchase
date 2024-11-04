@@ -773,7 +773,7 @@ namespace purchase {
                         // 非折扣触发，算折扣
                         let result: number = afterDiscount / preDiscount;
                         // 差异小于近似位，则忽略
-                        if (ibas.numbers.isApproximated(discount, result, DECIMAL_PLACES_PERCENTAGE)) {
+                        if (ibas.numbers.isApproximated(discount, result, DECIMAL_PLACES_PERCENTAGE, 3)) {
                             return;
                         }
                         context.outputValues.set(this.discount, ibas.numbers.round(result, DECIMAL_PLACES_PERCENTAGE + 2));
@@ -900,6 +900,42 @@ namespace purchase {
         /** 业务规则-计算库存数量 */
         export class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {
 
+        }
+        /** 业务规则-反向折扣（1 - %） */
+        export class BusinessRuleNegativeDiscount extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param discount  属性-折扣
+             * @param inverseDiscount  属性-反折扣
+             */
+            constructor(discount: string, inverseDiscount: string) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_deduction_inverse_discount");
+                this.discount = discount;
+                this.inverseDiscount = inverseDiscount;
+                this.inputProperties.add(this.discount);
+                this.inputProperties.add(this.inverseDiscount);
+                this.affectedProperties.add(this.discount);
+                this.affectedProperties.add(this.inverseDiscount);
+            }
+            /** 折扣 */
+            discount: string;
+            /** 折扣前价格 */
+            inverseDiscount: string;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let discount: number = ibas.numbers.valueOf(context.inputValues.get(this.discount));
+                let inverseDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.inverseDiscount));
+
+                if (ibas.strings.equalsIgnoreCase(this.inverseDiscount, context.trigger)) {
+                    let result: number = 1 - inverseDiscount;
+                    if (!ibas.numbers.isApproximated(result, discount, DECIMAL_PLACES_PERCENTAGE, 3)) {
+                        context.outputValues.set(this.discount, ibas.numbers.round(result, DECIMAL_PLACES_PERCENTAGE));
+                    }
+                } else {
+
+                }
+            }
         }
     }
 }
