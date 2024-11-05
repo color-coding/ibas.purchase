@@ -594,13 +594,37 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME),
+                        DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME,
+                        (data: DownPaymentRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSTAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME),
+                        DownPaymentRequest.PROPERTY_ITEMSTAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        (data: DownPaymentRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                        DownPaymentRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        (data: DownPaymentRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
                         DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME, DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DISCOUNT_NAME
@@ -785,6 +809,14 @@ namespace purchase {
                             item.currency = currency;
                         }
                     }
+                }
+            }
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: DownPaymentRequestItem, name: string): void {
+                // 标记删除触发集合行变化
+                if (ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_DELETED_NAME)
+                    || ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_CANCELED_NAME)) {
+                    this.firePropertyChanged("length");
                 }
             }
         }

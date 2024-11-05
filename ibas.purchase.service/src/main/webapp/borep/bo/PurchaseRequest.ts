@@ -559,15 +559,36 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME
+                        PurchaseRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_LINETOTAL_NAME,
+                        (data: PurchaseRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
                     ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME
+                        PurchaseRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        (data: PurchaseRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
                     ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME, PurchaseRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        (data: PurchaseRequestItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
                     ),
                     // 单据总计 = 总计（含税）
                     new BusinessRuleDeductionDocumentTotal(
@@ -656,6 +677,14 @@ namespace purchase {
                             item.currency = currency;
                         }
                     }
+                }
+            }
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: PurchaseRequestItem, name: string): void {
+                // 标记删除触发集合行变化
+                if (ibas.strings.equalsIgnoreCase(name, PurchaseRequestItem.PROPERTY_DELETED_NAME)
+                    || ibas.strings.equalsIgnoreCase(name, PurchaseRequestItem.PROPERTY_CANCELED_NAME)) {
+                    this.firePropertyChanged("length");
                 }
             }
         }

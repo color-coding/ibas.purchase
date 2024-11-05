@@ -804,13 +804,37 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME,
+                        (data: PurchaseOrderItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseOrder.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseOrder.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_TAXTOTAL_NAME,
+                        (data: PurchaseOrderItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseOrder.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                        PurchaseOrder.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        (data: PurchaseOrderItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),
@@ -917,6 +941,14 @@ namespace purchase {
                             item.currency = currency;
                         }
                     }
+                }
+            }
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: PurchaseOrderItem, name: string): void {
+                // 标记删除触发集合行变化
+                if (ibas.strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_DELETED_NAME)
+                    || ibas.strings.equalsIgnoreCase(name, PurchaseOrderItem.PROPERTY_CANCELED_NAME)) {
+                    this.firePropertyChanged("length");
                 }
             }
         }

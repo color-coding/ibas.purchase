@@ -558,6 +558,14 @@ namespace purchase {
                 this.add(item);
                 return item;
             }
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: BlanketAgreementItem, name: string): void {
+                // 标记删除触发集合行变化
+                if (ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_DELETED_NAME)
+                    || ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_CANCELED_NAME)) {
+                    this.firePropertyChanged("length");
+                }
+            }
         }
 
         /** 一揽子协议-项目 */

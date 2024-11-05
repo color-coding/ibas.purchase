@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.purchasereturn;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1930,7 +1931,16 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 						PurchaseReturnItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_PURCHASERETURNITEMS,
-						PurchaseReturnItem.PROPERTY_LINETOTAL),
+						PurchaseReturnItem.PROPERTY_LINETOTAL, new Predicate<PurchaseReturnItem>() {
+							@Override
+							public boolean test(PurchaseReturnItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				// 计算运输-费用总计（含税）
 				new BusinessRuleSumElements(PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_SHIPPINGADDRESSS,
 						ShippingAddress.PROPERTY_EXPENSE),

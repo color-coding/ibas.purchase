@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.purchasereserveinvoice;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1930,7 +1931,16 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						PurchaseReserveInvoiceItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_PURCHASERESERVEINVOICEITEMS,
-						PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL),
+						PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL, new Predicate<PurchaseReserveInvoiceItem>() {
+							@Override
+							public boolean test(PurchaseReserveInvoiceItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				// 计算运输-费用总计（含税）
 				new BusinessRuleSumElements(PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_SHIPPINGADDRESSS,
 						ShippingAddress.PROPERTY_EXPENSE),

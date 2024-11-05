@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.purchaserequest;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1577,7 +1578,16 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest> implements 
 						PurchaseRequestItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_DOCUMENTTOTAL, PROPERTY_PURCHASEREQUESTITEMS,
-						PurchaseRequestItem.PROPERTY_LINETOTAL),
+						PurchaseRequestItem.PROPERTY_LINETOTAL, new Predicate<PurchaseRequestItem>() {
+							@Override
+							public boolean test(PurchaseRequestItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};
 	}

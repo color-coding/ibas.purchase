@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.purchasecreditnote;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1933,7 +1934,16 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 						PurchaseCreditNoteItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_PURCHASECREDITNOTEITEMS,
-						PurchaseCreditNoteItem.PROPERTY_LINETOTAL),
+						PurchaseCreditNoteItem.PROPERTY_LINETOTAL, new Predicate<PurchaseCreditNoteItem>() {
+							@Override
+							public boolean test(PurchaseCreditNoteItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				// 计算运输-费用总计（含税）
 				new BusinessRuleSumElements(PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_SHIPPINGADDRESSS,
 						ShippingAddress.PROPERTY_EXPENSE),

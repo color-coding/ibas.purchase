@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.purchasequote;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1849,7 +1850,16 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 						PurchaseQuoteItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_PURCHASEQUOTEITEMS,
-						PurchaseQuoteItem.PROPERTY_LINETOTAL),
+						PurchaseQuoteItem.PROPERTY_LINETOTAL, new Predicate<PurchaseQuoteItem>() {
+							@Override
+							public boolean test(PurchaseQuoteItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),

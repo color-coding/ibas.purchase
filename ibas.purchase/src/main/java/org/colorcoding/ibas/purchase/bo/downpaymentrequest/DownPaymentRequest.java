@@ -2,6 +2,7 @@ package org.colorcoding.ibas.purchase.bo.downpaymentrequest;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,7 +45,7 @@ import org.colorcoding.ibas.document.IDocumentCloseAmountOperator;
 import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrderItem;
+import org.colorcoding.ibas.sales.bo.downpaymentrequest.DownPaymentRequestItem;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
@@ -1658,10 +1659,19 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
 				new BusinessRuleRequiredElements(PROPERTY_DOWNPAYMENTREQUESTITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_DOWNPAYMENTREQUESTITEMS,
-						PurchaseOrderItem.PROPERTY_LINESTATUS), // 使用集合元素状态
+						DownPaymentRequestItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 				// 计算行-总计（含税）
 				new BusinessRuleSumElements(PROPERTY_ITEMSLINETOTAL, PROPERTY_DOWNPAYMENTREQUESTITEMS,
-						PurchaseOrderItem.PROPERTY_LINETOTAL),
+						DownPaymentRequestItem.PROPERTY_LINETOTAL, new Predicate<DownPaymentRequestItem>() {
+							@Override
+							public boolean test(DownPaymentRequestItem t) {
+								// 过滤，标记删除
+								if (t.getDeleted() == emYesNo.YES) {
+									return false;
+								}
+								return true;
+							}
+						}),
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),

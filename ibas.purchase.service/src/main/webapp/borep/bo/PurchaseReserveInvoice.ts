@@ -649,13 +649,37 @@ namespace purchase {
                 return [
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME),
+                        PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME,
+                        (data: PurchaseReserveInvoiceItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseReserveInvoice.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME,
+                        (data: PurchaseReserveInvoiceItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME),
+                        PurchaseReserveInvoice.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        (data: PurchaseReserveInvoiceItem): boolean => {
+                            // 不计标记删除项
+                            if (data.deleted === ibas.emYesNo.YES) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    ),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         PurchaseReserveInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),
@@ -818,6 +842,14 @@ namespace purchase {
                             item.currency = currency;
                         }
                     }
+                }
+            }
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: PurchaseReserveInvoiceItem, name: string): void {
+                // 标记删除触发集合行变化
+                if (ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_DELETED_NAME)
+                    || ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_CANCELED_NAME)) {
+                    this.firePropertyChanged("length");
                 }
             }
         }
