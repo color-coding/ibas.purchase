@@ -650,7 +650,7 @@ namespace purchase {
                         PurchaseCreditNote.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseCreditNote.PROPERTY_PURCHASECREDITNOTEITEMS_NAME, PurchaseCreditNoteItem.PROPERTY_LINETOTAL_NAME,
                         (data: PurchaseCreditNoteItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;
@@ -661,7 +661,7 @@ namespace purchase {
                         PurchaseCreditNote.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseCreditNote.PROPERTY_PURCHASECREDITNOTEITEMS_NAME, PurchaseCreditNoteItem.PROPERTY_TAXTOTAL_NAME,
                         (data: PurchaseCreditNoteItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;
@@ -672,7 +672,7 @@ namespace purchase {
                         PurchaseCreditNote.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseCreditNote.PROPERTY_PURCHASECREDITNOTEITEMS_NAME, PurchaseCreditNoteItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: PurchaseCreditNoteItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;

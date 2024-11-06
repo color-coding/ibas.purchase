@@ -1935,7 +1935,9 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 							@Override
 							public boolean test(PurchaseReserveInvoiceItem t) {
 								// 过滤，标记删除
-								if (t.getDeleted() == emYesNo.YES) {
+								if (!MyConfiguration.getConfigValue(
+										MyConfiguration.CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE, true)
+										&& t.getDeleted() == emYesNo.YES) {
 									return false;
 								}
 								return true;

@@ -1935,7 +1935,9 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 							@Override
 							public boolean test(PurchaseReturnItem t) {
 								// 过滤，标记删除
-								if (t.getDeleted() == emYesNo.YES) {
+								if (!MyConfiguration.getConfigValue(
+										MyConfiguration.CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE, true)
+										&& t.getDeleted() == emYesNo.YES) {
 									return false;
 								}
 								return true;

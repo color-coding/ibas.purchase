@@ -81,4 +81,7 @@ public class MyConfiguration extends org.colorcoding.ibas.initialfantasy.MyConfi
 
 	/** 配置项目-启用物料采购价格记录 */
 	public final static String CONFIG_ITEM_ENABLE_MATERIAL_PURCHASE_PRICE_RECORDING = "enableMaterialPurchasePriceRecording";
+
+	/** 配置项目-单据统计标记删除行 */
+	public final static String CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE = "documentStatisticsTagDeletedLine";
 }

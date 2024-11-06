@@ -1930,7 +1930,9 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 							@Override
 							public boolean test(PurchaseOrderItem t) {
 								// 过滤，标记删除
-								if (t.getDeleted() == emYesNo.YES) {
+								if (!MyConfiguration.getConfigValue(
+										MyConfiguration.CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE, true)
+										&& t.getDeleted() == emYesNo.YES) {
 									return false;
 								}
 								return true;

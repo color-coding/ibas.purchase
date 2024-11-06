@@ -652,7 +652,7 @@ namespace purchase {
                         PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;
@@ -663,7 +663,7 @@ namespace purchase {
                         PurchaseReserveInvoice.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;
@@ -674,7 +674,7 @@ namespace purchase {
                         PurchaseReserveInvoice.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
-                            if (data.deleted === ibas.emYesNo.YES) {
+                            if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
                                 return false;
                             }
                             return true;
