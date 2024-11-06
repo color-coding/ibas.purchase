@@ -931,11 +931,14 @@ namespace purchase {
                         }
                     } else if (ibas.strings.equalsIgnoreCase(name, PurchaseOrder.PROPERTY_DOCUMENTCURRENCY_NAME)) {
                         let currency: string = this.parent.documentCurrency;
+                        let sysSign: string = this.parent.objectCode.substring(0, this.parent.objectCode.lastIndexOf("_"));
                         for (let item of this) {
                             if (item.isLoading) {
                                 continue;
                             }
-                            if (!ibas.strings.isEmpty(item.baseDocumentType) && !ibas.strings.isEmpty(item.currency)) {
+                            // 基于销售时，可调整币种
+                            if (ibas.strings.isWith(item.baseDocumentType, sysSign, undefined)
+                                && (!ibas.strings.isEmpty(item.baseDocumentType) && !ibas.strings.isEmpty(item.currency))) {
                                 continue;
                             }
                             item.currency = currency;

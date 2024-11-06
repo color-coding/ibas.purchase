@@ -20,9 +20,9 @@ namespace purchase {
                 parseValue(oValue: any, sInternalType: string): any {
                     if (ibas.objects.isNull(oValue) || ibas.strings.isEmpty(oValue)) {
                         if (this instanceof sap.ui.model.type.Float) {
-                            oValue = "1";
+                            oValue = "100";
                         } else {
-                            oValue = 1;
+                            oValue = 100;
                         }
                     }
                     return super.parseValue(oValue, sInternalType);

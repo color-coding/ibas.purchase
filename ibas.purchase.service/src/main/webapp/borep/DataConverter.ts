@@ -323,7 +323,7 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocumentItem(
-            target: IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReturnItem | IDownPaymentRequestItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem,
+            target: PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem | DownPaymentRequestItem | PurchaseReserveInvoiceItem | PurchaseInvoiceItem | PurchaseReturnRequestItem | PurchaseCreditNoteItem,
             source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem
         ): void {
             target.baseDocumentType = source.objectCode;
@@ -350,6 +350,9 @@ namespace purchase {
             target.uomRate = source.uomRate;
             target.unitPrice = source.unitPrice;
             target.discount = source.discount;
+            if (!(target instanceof DownPaymentRequestItem)) {
+                target.inverseDiscount = source.inverseDiscount;
+            }
             target.tax = source.tax;
             target.taxRate = source.taxRate;
             target.price = source.price;

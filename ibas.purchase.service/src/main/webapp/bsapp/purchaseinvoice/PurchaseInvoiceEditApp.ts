@@ -1095,6 +1095,9 @@ namespace purchase {
                             target.supplierCode = this.editData.supplierCode;
                             target.supplierName = this.editData.supplierName;
                             target.baseDocument(this.editData);
+                            // 整单基于，则赋折扣、总计
+                            target.discount = this.editData.discount;
+                            target.documentTotal = this.editData.documentTotal;
 
                             let app: PurchaseCreditNoteEditApp = new PurchaseCreditNoteEditApp();
                             app.navigation = this.navigation;
