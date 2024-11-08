@@ -577,6 +577,7 @@ namespace purchase {
                 this.deliveryDate = ibas.dates.today();
                 this.rounding = ibas.emYesNo.YES;
                 this.discount = 1;
+                this.inverseDiscount = 0;
             }
 
             /** 映射的属性名称-项目的行总计 */
@@ -1568,6 +1569,7 @@ namespace purchase {
                 this.purchaseQuoteItemExtras = new PurchaseQuoteItemExtras(this);
                 this.currency = accounting.config.currency("LOCAL");
                 this.discount = 1;
+                this.inverseDiscount = 0;
                 this.taxRate = 0;
             }
             /** 赋值产品 */

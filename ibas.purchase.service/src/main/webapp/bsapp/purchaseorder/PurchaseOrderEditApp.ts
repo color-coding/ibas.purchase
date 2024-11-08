@@ -1036,9 +1036,11 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
-
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
                             let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;
@@ -1081,9 +1083,11 @@ namespace purchase {
                             target.supplierName = this.editData.supplierName;
                             target.baseDocument(this.editData);
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
-
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
                             let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;
@@ -1128,8 +1132,11 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
                             // 预付款查询
                             let condition: ibas.ICondition;
                             let criteria: ibas.ICriteria = new ibas.Criteria();
@@ -1198,8 +1205,11 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
 
                             let app: PurchaseReserveInvoiceEditApp = new PurchaseReserveInvoiceEditApp();
                             app.navigation = this.navigation;
@@ -1246,8 +1256,10 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
 
                             let app: DownPaymentRequestEditApp = new DownPaymentRequestEditApp();
                             app.navigation = this.navigation;

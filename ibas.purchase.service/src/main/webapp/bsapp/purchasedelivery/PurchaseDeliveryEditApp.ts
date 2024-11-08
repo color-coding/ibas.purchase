@@ -876,8 +876,11 @@ namespace purchase {
                             target.supplierName = this.editData.supplierName;
                             target.baseDocument(this.editData);
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
 
                             let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
                             app.navigation = this.navigation;
@@ -922,8 +925,11 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            target.discount = this.editData.discount;
-                            target.documentTotal = this.editData.documentTotal;
+                            if (target.itemsLineTotal === this.editData.itemsLineTotal
+                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
 
                             let app: PurchaseInvoiceEditApp = new PurchaseInvoiceEditApp();
                             app.navigation = this.navigation;
