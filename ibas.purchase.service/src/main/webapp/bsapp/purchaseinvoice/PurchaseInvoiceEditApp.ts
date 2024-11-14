@@ -1101,6 +1101,9 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
                             let app: PurchaseCreditNoteEditApp = new PurchaseCreditNoteEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;

@@ -778,6 +778,8 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
 
                             let app: PurchaseOrderEditApp = new PurchaseOrderEditApp();
                             app.navigation = this.navigation;

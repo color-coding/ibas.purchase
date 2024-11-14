@@ -812,6 +812,9 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
                             // 使用预留库存
                             materials.app.useReservedMaterialsInventory({
                                 targetType: this.editData.objectCode,

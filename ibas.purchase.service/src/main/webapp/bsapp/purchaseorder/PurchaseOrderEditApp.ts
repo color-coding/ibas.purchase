@@ -1041,6 +1041,9 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
                             let app: PurchaseDeliveryEditApp = new PurchaseDeliveryEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;
@@ -1088,6 +1091,9 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
                             let app: PurchaseReturnEditApp = new PurchaseReturnEditApp();
                             app.navigation = this.navigation;
                             app.viewShower = this.viewShower;
@@ -1137,6 +1143,9 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
                             // 预付款查询
                             let condition: ibas.ICondition;
                             let criteria: ibas.ICriteria = new ibas.Criteria();
@@ -1210,6 +1219,8 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
 
                             let app: PurchaseReserveInvoiceEditApp = new PurchaseReserveInvoiceEditApp();
                             app.navigation = this.navigation;
@@ -1260,6 +1271,8 @@ namespace purchase {
                                 target.discount = this.editData.discount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
 
                             let app: DownPaymentRequestEditApp = new DownPaymentRequestEditApp();
                             app.navigation = this.navigation;
