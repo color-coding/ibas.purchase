@@ -231,6 +231,10 @@ namespace purchase {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
 
             /** 采购申请-行-额外信息集合 */
             purchaseRequestItemExtras: IPurchaseRequestItemExtras;

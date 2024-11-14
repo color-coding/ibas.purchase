@@ -115,6 +115,9 @@
     <Property Name="DistributionRule5" Description="成本中心5" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="OcrCode5"/>
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="InverseDiscount" Description="反向行折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
+    <Property Name="PriceLC" Description="价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PriceLC"/>
+    <Property Name="UnitPriceLC" Description="折扣前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="UnitPriceLC"/>
+    <Property Name="PreTaxPriceLC" Description="税前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PreTaxPriceLC"/>
   </Model>
   <BusinessObject MappedModel="PurchaseCreditNote" ShortName="${Company}_PH_PURCHCREDIT">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseCreditNoteItem"/>

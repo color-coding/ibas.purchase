@@ -1552,6 +1552,39 @@ namespace purchase {
             set inverseDiscount(value: number) {
                 this.setProperty(PurchaseQuoteItem.PROPERTY_INVERSEDISCOUNT_NAME, value);
             }
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string = "PriceLC";
+            /** 获取-价格（本币） */
+            get priceLC(): number {
+                return this.getProperty<number>(PurchaseQuoteItem.PROPERTY_PRICELC_NAME);
+            }
+            /** 设置-价格（本币） */
+            set priceLC(value: number) {
+                this.setProperty(PurchaseQuoteItem.PROPERTY_PRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string = "UnitPriceLC";
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number {
+                return this.getProperty<number>(PurchaseQuoteItem.PROPERTY_UNITPRICELC_NAME);
+            }
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number) {
+                this.setProperty(PurchaseQuoteItem.PROPERTY_UNITPRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string = "PreTaxPriceLC";
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number {
+                return this.getProperty<number>(PurchaseQuoteItem.PROPERTY_PRETAXPRICELC_NAME);
+            }
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number) {
+                this.setProperty(PurchaseQuoteItem.PROPERTY_PRETAXPRICELC_NAME, value);
+            }
+
 
             /** 映射的属性名称-采购报价-行-额外信息集合 */
             static PROPERTY_PURCHASEQUOTEITEMEXTRAS_NAME: string = "PurchaseQuoteItemExtras";
@@ -1582,6 +1615,16 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算本币价格
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseQuoteItem.PROPERTY_UNITPRICELC_NAME, PurchaseQuoteItem.PROPERTY_UNITPRICE_NAME, PurchaseQuoteItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseQuoteItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseQuoteItem.PROPERTY_PRETAXPRICE_NAME, PurchaseQuoteItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseQuoteItem.PROPERTY_PRICELC_NAME, PurchaseQuoteItem.PROPERTY_PRICE_NAME, PurchaseQuoteItem.PROPERTY_RATE_NAME
+                    ),
                     // 计算库存数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
                         PurchaseQuoteItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseQuoteItem.PROPERTY_QUANTITY_NAME, PurchaseQuoteItem.PROPERTY_UOMRATE_NAME),

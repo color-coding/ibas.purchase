@@ -249,6 +249,12 @@ namespace purchase {
             agreements: string;
             /** 反向行折扣 */
             inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }

@@ -1497,6 +1497,38 @@ namespace purchase {
             set agreements(value: string) {
                 this.setProperty(DownPaymentRequestItem.PROPERTY_AGREEMENTS_NAME, value);
             }
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string = "PriceLC";
+            /** 获取-价格（本币） */
+            get priceLC(): number {
+                return this.getProperty<number>(DownPaymentRequestItem.PROPERTY_PRICELC_NAME);
+            }
+            /** 设置-价格（本币） */
+            set priceLC(value: number) {
+                this.setProperty(DownPaymentRequestItem.PROPERTY_PRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string = "UnitPriceLC";
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number {
+                return this.getProperty<number>(DownPaymentRequestItem.PROPERTY_UNITPRICELC_NAME);
+            }
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number) {
+                this.setProperty(DownPaymentRequestItem.PROPERTY_UNITPRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string = "PreTaxPriceLC";
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number {
+                return this.getProperty<number>(DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME);
+            }
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number) {
+                this.setProperty(DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME, value);
+            }
 
 
             /** 初始化数据 */
@@ -1516,6 +1548,16 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算本币价格
+                    new BusinessRuleDeductionCurrencyAmount(
+                        DownPaymentRequestItem.PROPERTY_UNITPRICELC_NAME, DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME, DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        DownPaymentRequestItem.PROPERTY_PRICELC_NAME, DownPaymentRequestItem.PROPERTY_PRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                    ),
                     // 计算库存数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
                         DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME, DownPaymentRequestItem.PROPERTY_UOMRATE_NAME),

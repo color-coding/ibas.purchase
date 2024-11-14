@@ -44,6 +44,7 @@ import org.colorcoding.ibas.purchase.logic.IMaterialOrderedReservationStatusCont
 import org.colorcoding.ibas.purchase.logic.IPurchaseOrderReservationCreateContract;
 import org.colorcoding.ibas.sales.bo.salesorder.SalesOrder;
 import org.colorcoding.ibas.sales.logic.ISalesOrderOrderContract;
+import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionCurrencyAmount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2329,6 +2330,99 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 	}
 
 	/**
+	* 属性名称-价格（本币）
+	*/
+	private static final String PROPERTY_PRICELC_NAME = "PriceLC";
+
+	/**
+	* 价格（本币） 属性
+	*/
+	@DbField(name = "PriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICELC = registerProperty(PROPERTY_PRICELC_NAME,
+			BigDecimal.class, MY_CLASS);
+
+	/**
+	* 获取-价格（本币）
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_PRICELC_NAME)
+	public final BigDecimal getPriceLC() {
+		return this.getProperty(PROPERTY_PRICELC);
+	}
+
+	/**
+	* 设置-价格（本币）
+	* 
+	* @param value 值
+	*/
+	public final void setPriceLC(BigDecimal value) {
+		this.setProperty(PROPERTY_PRICELC, value);
+	}
+
+	/**
+	* 属性名称-折扣前价格（本币）
+	*/
+	private static final String PROPERTY_UNITPRICELC_NAME = "UnitPriceLC";
+
+	/**
+	* 折扣前价格（本币） 属性
+	*/
+	@DbField(name = "UnitPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITPRICELC = registerProperty(PROPERTY_UNITPRICELC_NAME,
+			BigDecimal.class, MY_CLASS);
+
+	/**
+	* 获取-折扣前价格（本币）
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_UNITPRICELC_NAME)
+	public final BigDecimal getUnitPriceLC() {
+		return this.getProperty(PROPERTY_UNITPRICELC);
+	}
+
+	/**
+	* 设置-折扣前价格（本币）
+	* 
+	* @param value 值
+	*/
+	public final void setUnitPriceLC(BigDecimal value) {
+		this.setProperty(PROPERTY_UNITPRICELC, value);
+	}
+
+	/**
+	* 属性名称-税前价格（本币）
+	*/
+	private static final String PROPERTY_PRETAXPRICELC_NAME = "PreTaxPriceLC";
+
+	/**
+	* 税前价格（本币） 属性
+	*/
+	@DbField(name = "PreTaxPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICELC = registerProperty(PROPERTY_PRETAXPRICELC_NAME,
+			BigDecimal.class, MY_CLASS);
+
+	/**
+	* 获取-税前价格（本币）
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_PRETAXPRICELC_NAME)
+	public final BigDecimal getPreTaxPriceLC() {
+		return this.getProperty(PROPERTY_PRETAXPRICELC);
+	}
+
+	/**
+	* 设置-税前价格（本币）
+	* 
+	* @param value 值
+	*/
+	public final void setPreTaxPriceLC(BigDecimal value) {
+		this.setProperty(PROPERTY_PRETAXPRICELC, value);
+	}
+
+	/**
 	 * 属性名称-采购订单-行-额外信息
 	 */
 	private static final String PROPERTY_PURCHASEORDERITEMEXTRAS_NAME = "PurchaseOrderItemExtras";
@@ -2455,6 +2549,10 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_UOMRATE), // 不能低于0
+				// 计算本币价格
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_UNITPRICELC, PROPERTY_UNITPRICE, PROPERTY_RATE),
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRETAXPRICELC, PROPERTY_PRETAXPRICE, PROPERTY_RATE),
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRICELC, PROPERTY_PRICE, PROPERTY_RATE),
 				// 库存数量 = 数量 * 单位换算率
 				new BusinessRuleCalculateInventoryQuantity(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY,
 						PROPERTY_UOMRATE),

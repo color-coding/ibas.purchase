@@ -1626,6 +1626,38 @@ namespace purchase {
             set inverseDiscount(value: number) {
                 this.setProperty(PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME, value);
             }
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string = "PriceLC";
+            /** 获取-价格（本币） */
+            get priceLC(): number {
+                return this.getProperty<number>(PurchaseReturnRequestItem.PROPERTY_PRICELC_NAME);
+            }
+            /** 设置-价格（本币） */
+            set priceLC(value: number) {
+                this.setProperty(PurchaseReturnRequestItem.PROPERTY_PRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string = "UnitPriceLC";
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number {
+                return this.getProperty<number>(PurchaseReturnRequestItem.PROPERTY_UNITPRICELC_NAME);
+            }
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number) {
+                this.setProperty(PurchaseReturnRequestItem.PROPERTY_UNITPRICELC_NAME, value);
+            }
+
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string = "PreTaxPriceLC";
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number {
+                return this.getProperty<number>(PurchaseReturnRequestItem.PROPERTY_PRETAXPRICELC_NAME);
+            }
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number) {
+                this.setProperty(PurchaseReturnRequestItem.PROPERTY_PRETAXPRICELC_NAME, value);
+            }
 
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
@@ -1669,6 +1701,16 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算本币价格
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseReturnRequestItem.PROPERTY_UNITPRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_UNITPRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXPRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseReturnRequestItem.PROPERTY_PRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_PRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                    ),
                     // 计算库存数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
                         PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME, PurchaseReturnRequestItem.PROPERTY_UOMRATE_NAME),

@@ -355,6 +355,12 @@ namespace purchase {
             agreements: string;
             /** 反向行折扣 */
             inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
 
             /** 采购订单-行-额外信息集合 */
             purchaseOrderItemExtras: IPurchaseOrderItemExtras;

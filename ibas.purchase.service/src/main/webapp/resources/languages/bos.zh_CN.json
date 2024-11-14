@@ -121,6 +121,9 @@
         "bo_purchasecreditnoteitem_distributionrule4": "成本中心4",
         "bo_purchasecreditnoteitem_distributionrule5": "成本中心5",
         "bo_purchasecreditnoteitem_agreements": "合同/协议",
+        "bo_purchasecreditnoteitem_pricelc": "价格（本币）",
+        "bo_purchasecreditnoteitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasecreditnoteitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasecreditnote_closing_delimiter": "----结束----"
     },
     {
@@ -239,6 +242,9 @@
         "bo_purchaserequestitem_distributionrule4": "成本中心4",
         "bo_purchaserequestitem_distributionrule5": "成本中心5",
         "bo_purchaserequestitem_agreements": "合同/协议",
+        "bo_purchaserequestitem_pricelc": "价格（本币）",
+        "bo_purchaserequestitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchaserequestitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchaserequestitem_purchaserequestitemextras": "采购申请-行-额外信息集合",
         "bo_purchaserequestitemextra": "采购申请-行-额外信息",
         "bo_purchaserequestitemextra_docentry": "凭证编号",
@@ -389,6 +395,9 @@
         "bo_purchasedeliveryitem_distributionrule4": "成本中心4",
         "bo_purchasedeliveryitem_distributionrule5": "成本中心5",
         "bo_purchasedeliveryitem_agreements": "合同/协议",
+        "bo_purchasedeliveryitem_pricelc": "价格（本币）",
+        "bo_purchasedeliveryitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasedeliveryitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasedelivery_closing_delimiter": "----结束----"
     },
     {
@@ -514,6 +523,9 @@
         "bo_purchaseorderitem_distributionrule4": "成本中心4",
         "bo_purchaseorderitem_distributionrule5": "成本中心5",
         "bo_purchaseorderitem_agreements": "合同/协议",
+        "bo_purchaseorderitem_pricelc": "价格（本币）",
+        "bo_purchaseorderitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchaseorderitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchaseorderitem_purchaseorderitemextras": "销售订单-行-额外信息集合",
         "bo_purchaseorderitemextra": "销售订单-行-额外信息",
         "bo_purchaseorderitemextra_docentry": "凭证编号",
@@ -664,6 +676,9 @@
         "bo_purchasereturnitem_distributionrule4": "成本中心4",
         "bo_purchasereturnitem_distributionrule5": "成本中心5",
         "bo_purchasereturnitem_agreements": "合同/协议",
+        "bo_purchasereturnitem_pricelc": "价格（本币）",
+        "bo_purchasereturnitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasereturnitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasereturn_closing_delimiter": "----结束----"
     },
     {
@@ -788,6 +803,9 @@
         "bo_purchasequoteitem_distributionrule4": "成本中心4",
         "bo_purchasequoteitem_distributionrule5": "成本中心5",
         "bo_purchasequoteitem_agreements": "合同/协议",
+        "bo_purchasequoteitem_pricelc": "价格（本币）",
+        "bo_purchasequoteitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasequoteitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasequoteitem_purchasequoteitemextras": "销售报价-行-额外信息集合",
         "bo_purchasequoteitemextra": "销售报价-行-额外信息",
         "bo_purchasequoteitemextra_docentry": "凭证编号",
@@ -980,6 +998,9 @@
         "bo_purchaseinvoiceitem_distributionrule4": "成本中心4",
         "bo_purchaseinvoiceitem_distributionrule5": "成本中心5",
         "bo_purchaseinvoiceitem_agreements": "合同/协议",
+        "bo_purchaseinvoiceitem_pricelc": "价格（本币）",
+        "bo_purchaseinvoiceitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchaseinvoiceitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchaseinvoicedownpayment": "采购发票-预付款",
         "bo_purchaseinvoicedownpayment_docentry": "凭证编号",
         "bo_purchaseinvoicedownpayment_lineid": "行号",
@@ -1236,6 +1257,9 @@
         "bo_downpaymentrequestitem_distributionrule4": "成本中心4",
         "bo_downpaymentrequestitem_distributionrule5": "成本中心5",
         "bo_downpaymentrequestitem_agreements": "合同/协议",
+        "bo_downpaymentrequestitem_pricelc": "价格（本币）",
+        "bo_downpaymentrequestitem_unitpricelc": "折扣前价格（本币）",
+        "bo_downpaymentrequestitem_pretaxpricelc": "税前价格（本币）",
         "bo_downpaymentrequest_closing_delimiter": "----结束----"
     },
     {
@@ -1360,6 +1384,9 @@
         "bo_purchasereserveinvoiceitem_distributionrule4": "成本中心4",
         "bo_purchasereserveinvoiceitem_distributionrule5": "成本中心5",
         "bo_purchasereserveinvoiceitem_agreements": "合同/协议",
+        "bo_purchasereserveinvoiceitem_pricelc": "价格（本币）",
+        "bo_purchasereserveinvoiceitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasereserveinvoiceitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasereserveinvoice_closing_delimiter": "----结束----"
     },
     {
@@ -1484,6 +1511,9 @@
         "bo_purchasereturnrequestitem_distributionrule4": "成本中心4",
         "bo_purchasereturnrequestitem_distributionrule5": "成本中心5",
         "bo_purchasereturnrequestitem_agreements": "合同/协议",
+        "bo_purchasereturnrequestitem_pricelc": "价格（本币）",
+        "bo_purchasereturnrequestitem_unitpricelc": "折扣前价格（本币）",
+        "bo_purchasereturnrequestitem_pretaxpricelc": "税前价格（本币）",
         "bo_purchasereturnrequest_closing_delimiter": "----结束----"
     },
     {

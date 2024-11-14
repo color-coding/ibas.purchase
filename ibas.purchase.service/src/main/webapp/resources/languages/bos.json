@@ -122,6 +122,9 @@
         "bo_purchasecreditnoteitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasecreditnoteitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasecreditnoteitem_agreements": "Agreements",
+        "bo_purchasecreditnoteitem_pricelc": "Price (LC)",
+        "bo_purchasecreditnoteitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasecreditnoteitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasecreditnote_closing_delimiter": "---- End ----"
     },
     {
@@ -240,6 +243,9 @@
         "bo_purchaserequestitem_distributionrule4": "Distribution Rule 4",
         "bo_purchaserequestitem_distributionrule5": "Distribution Rule 5",
         "bo_purchaserequestitem_agreements": "Agreements",
+        "bo_purchaserequestitem_pricelc": "Price (LC)",
+        "bo_purchaserequestitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchaserequestitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchaserequestitem_purchaserequestitemextras": "Purchase Request - Item - Additional Information Collection",
         "bo_purchaserequestitemextra": "Purchase Request - Item - Additional Information",
         "bo_purchaserequestitemextra_docentry": "Document Entry",
@@ -390,6 +396,9 @@
         "bo_purchasedeliveryitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasedeliveryitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasedeliveryitem_agreements": "Agreements",
+        "bo_purchasedeliveryitem_pricelc": "Price (LC)",
+        "bo_purchasedeliveryitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasedeliveryitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasedelivery_closing_delimiter": "---- End ----"
     },
     {
@@ -516,6 +525,9 @@
         "bo_purchaseorderitem_distributionrule4": "Distribution Rule 4",
         "bo_purchaseorderitem_distributionrule5": "Distribution Rule 5",
         "bo_purchaseorderitem_agreements": "Agreements",
+        "bo_purchaseorderitem_pricelc": "Price (LC)",
+        "bo_purchaseorderitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchaseorderitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchaseorderitem_purchaseorderitemextras": "Purchase Order Item Extras Collection",
         "bo_purchaseorderitemextra": "Purchase Order Item Extra",
         "bo_purchaseorderitemextra_docentry": "Document Entry",
@@ -667,6 +679,9 @@
         "bo_purchasereturnitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasereturnitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasereturnitem_agreements": "Agreements",
+        "bo_purchasereturnitem_pricelc": "Price (LC)",
+        "bo_purchasereturnitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasereturnitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasereturn_closing_delimiter": "----End----"
     },
     {
@@ -791,6 +806,9 @@
         "bo_purchasequoteitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasequoteitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasequoteitem_agreements": "Agreements",
+        "bo_purchasequoteitem_pricelc": "Price (LC)",
+        "bo_purchasequoteitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasequoteitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasequoteitem_purchasequoteitemextras": "Purchase Quotation - Item - Extras Collection",
         "bo_purchasequoteitemextra": "Purchase Quotation - Item - Extra",
         "bo_purchasequoteitemextra_docentry": "Document Entry",
@@ -983,6 +1001,9 @@
         "bo_purchaseinvoiceitem_distributionrule4": "Distribution Rule 4",
         "bo_purchaseinvoiceitem_distributionrule5": "Distribution Rule 5",
         "bo_purchaseinvoiceitem_agreements": "Contracts/Agreements",
+        "bo_purchaseinvoiceitem_pricelc": "Price (LC)",
+        "bo_purchaseinvoiceitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchaseinvoiceitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchaseinvoicedownpayment": "Purchase Invoice - Down Payment",
         "bo_purchaseinvoicedownpayment_docentry": "Document Entry",
         "bo_purchaseinvoicedownpayment_lineid": "Line ID",
@@ -1238,6 +1259,9 @@
         "bo_downpaymentrequestitem_distributionrule4": "Distribution Rule 4",
         "bo_downpaymentrequestitem_distributionrule5": "Distribution Rule 5",
         "bo_downpaymentrequestitem_agreements": "Agreements",
+        "bo_downpaymentrequestitem_pricelc": "Price (LC)",
+        "bo_downpaymentrequestitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_downpaymentrequestitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_downpaymentrequest_closing_delimiter": "---- End ----"
     },
     {
@@ -1363,6 +1387,9 @@
         "bo_purchasereserveinvoiceitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasereserveinvoiceitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasereserveinvoiceitem_agreements": "Agreements",
+        "bo_purchasereserveinvoiceitem_pricelc": "Price (LC)",
+        "bo_purchasereserveinvoiceitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasereserveinvoiceitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasereserveinvoice_closing_delimiter": "----End----"
     },
     {
@@ -1488,6 +1515,9 @@
         "bo_purchasereturnrequestitem_distributionrule4": "Distribution Rule 4",
         "bo_purchasereturnrequestitem_distributionrule5": "Distribution Rule 5",
         "bo_purchasereturnrequestitem_agreements": "Agreements",
+        "bo_purchasereturnrequestitem_pricelc": "Price (LC)",
+        "bo_purchasereturnrequestitem_unitpricelc": "Price Before Discount (LC)",
+        "bo_purchasereturnrequestitem_pretaxpricelc": "Pretax Price (LC)",
         "bo_purchasereturnrequest_closing_delimiter": "----End----"
     },
     {

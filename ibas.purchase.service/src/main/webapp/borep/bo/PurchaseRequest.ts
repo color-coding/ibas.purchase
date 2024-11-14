@@ -1353,6 +1353,27 @@ namespace purchase {
             set agreements(value: string) {
                 this.setProperty(PurchaseRequestItem.PROPERTY_AGREEMENTS_NAME, value);
             }
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string = "PriceLC";
+            /** 获取-价格（本币） */
+            get priceLC(): number {
+                return this.getProperty<number>(PurchaseRequestItem.PROPERTY_PRICELC_NAME);
+            }
+            /** 设置-价格（本币） */
+            set priceLC(value: number) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_PRICELC_NAME, value);
+            }
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string = "PreTaxPriceLC";
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number {
+                return this.getProperty<number>(PurchaseRequestItem.PROPERTY_PRETAXPRICELC_NAME);
+            }
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_PRETAXPRICELC_NAME, value);
+            }
+
 
             /** 映射的属性名称-采购申请-行-额外信息集合 */
             static PROPERTY_PURCHASEREQUESTITEMEXTRAS_NAME: string = "PurchaseRequestItemExtras";
@@ -1381,6 +1402,13 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算本币价格
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseRequestItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseRequestItem.PROPERTY_PRETAXPRICE_NAME, PurchaseRequestItem.PROPERTY_RATE_NAME
+                    ),
+                    new BusinessRuleDeductionCurrencyAmount(
+                        PurchaseRequestItem.PROPERTY_PRICELC_NAME, PurchaseRequestItem.PROPERTY_PRICE_NAME, PurchaseRequestItem.PROPERTY_RATE_NAME
+                    ),
                     // 计算库存数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
                         PurchaseRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseRequestItem.PROPERTY_QUANTITY_NAME, PurchaseRequestItem.PROPERTY_UOMRATE_NAME),

@@ -243,6 +243,12 @@ namespace purchase {
             distributionRule5: string;
             /** 合同/协议 */
             agreements: string;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
 
