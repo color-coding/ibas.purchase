@@ -415,7 +415,9 @@ namespace purchase {
             } else {
                 target.price = source.price;
             }
-            target.currency = source.currency;
+            if (!ibas.strings.isEmpty(source.currency)) {
+                target.currency = source.currency;
+            }
             if (!ibas.strings.isEmpty(target.tax)) {
                 accounting.taxrate.assign(target.tax, (rate) => {
                     if (rate >= 0) {
@@ -747,10 +749,17 @@ namespace purchase {
                     }
                     let result: number = total / quantity;
                     // 差异小于近似位，则忽略
-                    if (ibas.numbers.isApproximated(price, result, DECIMAL_PLACES_PRICE)) {
+                    if (ibas.numbers.isApproximated(price, result,
+                        // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                        DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE)
+                    ) {
                         return;
                     }
-                    context.outputValues.set(this.price, ibas.numbers.round(result, DECIMAL_PLACES_PRICE + 2));
+                    if (price === 0 && DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM) {
+                        context.outputValues.set(this.price, ibas.numbers.round(result, DECIMAL_PLACES_SUM));
+                    } else {
+                        context.outputValues.set(this.price, ibas.numbers.round(result, DECIMAL_PLACES_PRICE + 2));
+                    }
                 } else {
                     let result: number = price * quantity;
                     // 差异小于近似位，则忽略
@@ -882,7 +891,10 @@ namespace purchase {
                     let rPreTotal: number = total / (1 + taxRate);
                     let rTaxTotal: number = total - rPreTotal;
                     // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rPrice, price, DECIMAL_PLACES_PRICE)) {
+                    if (!ibas.numbers.isApproximated(rPrice, price,
+                        // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                        DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE)
+                    ) {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, DECIMAL_PLACES_PRICE + 2));
                     }
                     if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)) {
@@ -990,7 +1002,7 @@ namespace purchase {
              */
             constructor(amountLC: string, amount: string, rate: string) {
                 super();
-                this.name = ibas.i18n.prop("sales_business_rule_deduction_currency_amount");
+                this.name = ibas.i18n.prop("purchase_business_rule_deduction_currency_amount");
                 this.amountLC = amountLC;
                 this.amount = amount;
                 this.rate = rate;
@@ -1013,17 +1025,21 @@ namespace purchase {
                 if (ibas.strings.equalsIgnoreCase(this.amountLC, context.trigger)) {
                     if (rate !== 0) {
                         let result: number = ibas.numbers.round(amountLC / rate, DECIMAL_PLACES_PRICE);
-                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PERCENTAGE)) {
+                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE)) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result, DECIMAL_PLACES_PRICE));
                         }
                     } else {
                         context.outputValues.set(this.amount, amountLC);
                     }
                 } else {
+                    let pricePlaces: number = amount.toString().split(".")[1]?.length;
+                    if (!(pricePlaces > 0) || !(pricePlaces < DECIMAL_PLACES_PRICE)) {
+                        pricePlaces = DECIMAL_PLACES_PRICE;
+                    }
                     if (rate !== 0) {
-                        let result: number = ibas.numbers.round(amount * rate, DECIMAL_PLACES_PRICE);
-                        if (!ibas.numbers.isApproximated(result, amountLC, DECIMAL_PLACES_PERCENTAGE)) {
-                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, DECIMAL_PLACES_PRICE));
+                        let result: number = ibas.numbers.round(amount * rate, pricePlaces);
+                        if (!ibas.numbers.isApproximated(result, amountLC, pricePlaces, 0)) {
+                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, pricePlaces));
                         }
                     } else {
                         context.outputValues.set(this.amountLC, amount);

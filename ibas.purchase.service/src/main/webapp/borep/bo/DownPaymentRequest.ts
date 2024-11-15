@@ -755,12 +755,10 @@ namespace purchase {
             protected afterAdd(item: DownPaymentRequestItem): void {
                 super.afterAdd(item);
                 if (!this.parent.isLoading) {
-                    if (item.isNew && !item.isLoading) {
-                        if (ibas.strings.isEmpty(item.baseDocumentType)) {
-                            item.agreements = this.parent.agreements;
-                            item.rate = this.parent.documentRate;
-                            item.currency = this.parent.documentCurrency;
-                        }
+                    if (item.isNew && ibas.strings.isEmpty(item.baseDocumentType)) {
+                        item.agreements = this.parent.agreements;
+                        item.rate = this.parent.documentRate;
+                        item.currency = this.parent.documentCurrency;
                     }
                     if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
                         item.deliveryDate = this.parent.deliveryDate;

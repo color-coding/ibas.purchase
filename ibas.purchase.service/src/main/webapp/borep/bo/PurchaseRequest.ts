@@ -626,12 +626,10 @@ namespace purchase {
             protected afterAdd(item: PurchaseRequestItem): void {
                 super.afterAdd(item);
                 if (!this.parent.isLoading) {
-                    if (item.isNew && !item.isLoading) {
-                        if (ibas.strings.isEmpty(item.baseDocumentType)) {
-                            item.agreements = this.parent.agreements;
-                            item.rate = this.parent.documentRate;
-                            item.currency = this.parent.documentCurrency;
-                        }
+                    if (item.isNew && ibas.strings.isEmpty(item.baseDocumentType)) {
+                        item.agreements = this.parent.agreements;
+                        item.rate = this.parent.documentRate;
+                        item.currency = this.parent.documentCurrency;
                     }
                     if (ibas.strings.isEmpty(this.parent.documentCurrency)
                         && !ibas.strings.isEmpty(item.currency)) {
