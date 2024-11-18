@@ -269,6 +269,19 @@ namespace purchase {
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseinvoice_documentdate") }),
                             new sap.extension.m.DatePicker("", {
+                                change(event: sap.ui.base.Event): void {
+                                    let source: any = event.getSource();
+                                    if (source instanceof sap.m.DatePicker) {
+                                        let data: any = source.getBindingContext().getObject();
+                                        if (data instanceof bo.PurchaseInvoice && !ibas.strings.isEmpty(data.paymentCode)) {
+                                            let criteria: ibas.ICriteria = new ibas.Criteria();
+                                            let condition: ibas.ICondition = criteria.conditions.create();
+                                            condition.alias = businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME;
+                                            condition.value = data.paymentCode;
+                                            that.fireViewEvents(that.choosePaymentTermEvent, criteria);
+                                        }
+                                    }
+                                }
                             }).bindProperty("bindingValue", {
                                 path: "documentDate",
                                 type: new sap.extension.data.Date()
