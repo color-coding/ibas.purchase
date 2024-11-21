@@ -2332,94 +2332,94 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	}
 
 	/**
-	* 属性名称-价格（本币）
-	*/
+	 * 属性名称-价格（本币）
+	 */
 	private static final String PROPERTY_PRICELC_NAME = "PriceLC";
 
 	/**
-	* 价格（本币） 属性
-	*/
+	 * 价格（本币） 属性
+	 */
 	@DbField(name = "PriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICELC = registerProperty(PROPERTY_PRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
 	/**
-	* 获取-价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-价格（本币）
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_PRICELC_NAME)
 	public final BigDecimal getPriceLC() {
 		return this.getProperty(PROPERTY_PRICELC);
 	}
 
 	/**
-	* 设置-价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	public final void setPriceLC(BigDecimal value) {
 		this.setProperty(PROPERTY_PRICELC, value);
 	}
 
 	/**
-	* 属性名称-折扣前价格（本币）
-	*/
+	 * 属性名称-折扣前价格（本币）
+	 */
 	private static final String PROPERTY_UNITPRICELC_NAME = "UnitPriceLC";
 
 	/**
-	* 折扣前价格（本币） 属性
-	*/
+	 * 折扣前价格（本币） 属性
+	 */
 	@DbField(name = "UnitPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITPRICELC = registerProperty(PROPERTY_UNITPRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
 	/**
-	* 获取-折扣前价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-折扣前价格（本币）
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_UNITPRICELC_NAME)
 	public final BigDecimal getUnitPriceLC() {
 		return this.getProperty(PROPERTY_UNITPRICELC);
 	}
 
 	/**
-	* 设置-折扣前价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-折扣前价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	public final void setUnitPriceLC(BigDecimal value) {
 		this.setProperty(PROPERTY_UNITPRICELC, value);
 	}
 
 	/**
-	* 属性名称-税前价格（本币）
-	*/
+	 * 属性名称-税前价格（本币）
+	 */
 	private static final String PROPERTY_PRETAXPRICELC_NAME = "PreTaxPriceLC";
 
 	/**
-	* 税前价格（本币） 属性
-	*/
+	 * 税前价格（本币） 属性
+	 */
 	@DbField(name = "PreTaxPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICELC = registerProperty(PROPERTY_PRETAXPRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
 	/**
-	* 获取-税前价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-税前价格（本币）
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_PRETAXPRICELC_NAME)
 	public final BigDecimal getPreTaxPriceLC() {
 		return this.getProperty(PROPERTY_PRETAXPRICELC);
 	}
 
 	/**
-	* 设置-税前价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-税前价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	public final void setPreTaxPriceLC(BigDecimal value) {
 		this.setProperty(PROPERTY_PRETAXPRICELC, value);
 	}
@@ -2551,6 +2551,10 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 				// 计算折扣前总计 = 数量 * 折扣前价格
 				new BusinessRuleDeductionPriceQtyTotal(PROPERTY_UNITLINETOTAL, PROPERTY_UNITPRICE,
 						MyConfiguration.isInventoryUnitLinePrice() ? PROPERTY_INVENTORYQUANTITY : PROPERTY_QUANTITY),
+				// 计算本币价格
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_UNITPRICELC, PROPERTY_UNITPRICE, PROPERTY_RATE),
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRETAXPRICELC, PROPERTY_PRETAXPRICE, PROPERTY_RATE),
+				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRICELC, PROPERTY_PRICE, PROPERTY_RATE),
 				// 反向折扣 = 1 - 折扣
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0

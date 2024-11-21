@@ -1899,6 +1899,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 		this.setDeliveryDate(DateTime.getToday());
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.setDiscount(Decimal.ONE);
+		this.setDocumentCurrency(org.colorcoding.ibas.accounting.MyConfiguration
+				.getConfigValue(org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_LOCAL_CURRENCY));
+		this.setDocumentRate(Decimal.ONE);
 
 	}
 
