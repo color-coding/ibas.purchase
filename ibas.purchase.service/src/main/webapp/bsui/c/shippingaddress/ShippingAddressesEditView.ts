@@ -128,16 +128,32 @@ namespace purchase {
                                 type: new sap.extension.data.Alphanumeric()
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_tax") }),
-                            new component.TaxGroupSelect("", {
-                                taxCategory: accounting.bo.emTaxGroupCategory.FREIGHT,
-                            }).bindProperty("bindingValue", {
-                                path: "tax",
-                                type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 8
-                                })
-                            }).bindProperty("rate", {
-                                path: "taxRate",
-                                type: new sap.extension.data.Rate()
+                            new sap.m.HBox("", {
+                                width: "100%",
+                                renderType: sap.m.FlexRendertype.Bare,
+                                alignItems: sap.m.FlexAlignItems.Center,
+                                alignContent: sap.m.FlexAlignContent.Center,
+                                justifyContent: sap.m.FlexJustifyContent.Start,
+                                items: [
+                                    new component.TaxGroupSelect("", {
+                                        width: "70%",
+                                        taxCategory: accounting.bo.emTaxGroupCategory.FREIGHT,
+                                    }).bindProperty("bindingValue", {
+                                        path: "tax",
+                                        type: new sap.extension.data.Alphanumeric({
+                                            maxLength: 8
+                                        })
+                                    }).bindProperty("rate", {
+                                        path: "taxRate",
+                                        type: new sap.extension.data.Rate()
+                                    }),
+                                    new sap.extension.m.Input("", {
+                                        width: "30%",
+                                    }).bindProperty("bindingValue", {
+                                        path: "taxRate",
+                                        type: new sap.extension.data.Percentage()
+                                    }).addStyleClass("sapUiTinyMarginBegin")
+                                ]
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_shippingaddress_remark1") }),
                             new sap.extension.m.Input("", {
@@ -225,6 +241,14 @@ namespace purchase {
                                     item.setEnabled(false);
                                 } else if (item instanceof sap.m.ComboBoxBase) {
                                     item.setEnabled(false);
+                                } else if (item instanceof sap.m.FlexBox) {
+                                    for (let sItem of item.getItems()) {
+                                        if (sItem instanceof sap.m.InputBase) {
+                                            sItem.setEditable(false);
+                                        } else if (sItem instanceof sap.m.Select) {
+                                            sItem.setEditable(false);
+                                        }
+                                    }
                                 }
                             }
                         }, 200);
@@ -240,6 +264,14 @@ namespace purchase {
                                     item.setEnabled(true);
                                 } else if (item instanceof sap.m.ComboBoxBase) {
                                     item.setEnabled(true);
+                                } else if (item instanceof sap.m.FlexBox) {
+                                    for (let sItem of item.getItems()) {
+                                        if (sItem instanceof sap.m.InputBase) {
+                                            sItem.setEditable(true);
+                                        } else if (sItem instanceof sap.m.Select) {
+                                            sItem.setEditable(true);
+                                        }
+                                    }
                                 }
                             }
                         }, 200);

@@ -21,6 +21,7 @@ import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReserv
 import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
+import org.colorcoding.ibas.purchase.data.DataConvert;
 
 @LogicContract(IPurchaseOrderReservationCreateContract.class)
 public class PurchaseOrderReservationCreateService
@@ -206,6 +207,11 @@ public class PurchaseOrderReservationCreateService
 		IMaterialOrderedReservationGroup reservationGroup = this.getBeAffected();
 		for (int i = reservationGroup.getItems().size() - 1; i >= 0; i--) {
 			item = reservationGroup.getItems().get(i);
+			// 不是逻辑创建的，跳过
+			if (DataConvert.isNullOrEmpty(item.getCauses()) || !item.getCauses().startsWith("FROM:")) {
+				continue;
+			}
+			// 回滚逻辑
 			if (item.getQuantity().compareTo(avaQuantity) >= 0) {
 				remQuantity = Decimal.ZERO.add(avaQuantity);
 				item.setQuantity(item.getQuantity().subtract(avaQuantity));
@@ -243,9 +249,14 @@ public class PurchaseOrderReservationCreateService
 					break;
 				}
 			}
-			if (item.getQuantity().compareTo(Decimal.ZERO) <= 0
-					&& item.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
-				item.delete();
+			if (remQuantity.compareTo(Decimal.ZERO) > 0) {
+				// 数量没有被消耗完(数量被改大)
+				item.setQuantity(remQuantity);
+			} else {
+				if (item.getQuantity().compareTo(Decimal.ZERO) <= 0
+						&& item.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
+					item.delete();
+				}
 			}
 			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
 				break;

@@ -12,6 +12,7 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.core.IBORepository;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
@@ -2183,14 +2184,14 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 				// 基于订单的完成金额
 				new IDocumentAmountClosingContract() {
 					@Override
-					public boolean checkDataStatus() {
+					public boolean checkDataStatus(IBORepository repository) {
 						if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
 								.equals(DownPaymentRequestItem.this.getBaseDocumentType())
 								|| MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
 										.equals(DownPaymentRequestItem.this.getBaseDocumentType())) {
 							return true;
 						}
-						return IDocumentAmountClosingContract.super.checkDataStatus();
+						return IDocumentAmountClosingContract.super.checkDataStatus(repository);
 					}
 
 					@Override

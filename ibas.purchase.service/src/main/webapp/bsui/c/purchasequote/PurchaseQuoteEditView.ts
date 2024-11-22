@@ -267,6 +267,34 @@ namespace purchase {
                                 path: "deliveryDate",
                                 type: new sap.extension.data.Date()
                             }),
+                            new sap.m.Label("", {
+                                visible: false,
+                                text: ibas.i18n.prop("bo_purchasequote_postingdate"),
+                            }),
+                            new sap.extension.m.DatePicker("", {
+                                visible: false,
+                            }).bindProperty("bindingValue", {
+                                path: "postingDate",
+                                type: new sap.extension.data.Date()
+                            }),
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_paymentcode") }),
+                            new sap.extension.m.RepositoryInput("", {
+                                showValueHelp: true,
+                                repository: businesspartner.bo.BORepositoryBusinessPartner,
+                                dataInfo: {
+                                    type: businesspartner.bo.PaymentTerm,
+                                    key: businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME,
+                                    text: businesspartner.bo.PaymentTerm.PROPERTY_NAME_NAME,
+                                },
+                                valueHelpRequest(): void {
+                                    that.fireViewEvents(that.choosePaymentTermEvent);
+                                }
+                            }).bindProperty("bindingValue", {
+                                path: "paymentCode",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 8
+                                }),
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_agreements") }),
                             new sap.extension.m.Input("", {
                                 showValueHelp: true,
@@ -280,8 +308,12 @@ namespace purchase {
                                     maxLength: 110
                                 }),
                             }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_consumer") }),
+                            new sap.m.Label("", {
+                                visible: false,
+                                text: ibas.i18n.prop("bo_purchasequote_consumer")
+                            }),
                             new sap.extension.m.Input("", {
+                                visible: false,
                             }).bindProperty("bindingValue", {
                                 path: "consumer",
                                 type: new sap.extension.data.Alphanumeric({
@@ -986,24 +1018,6 @@ namespace purchase {
                                         }
                                     }),
                                 ]
-                            }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasequote_paymentcode") }),
-                            new sap.extension.m.RepositoryInput("", {
-                                showValueHelp: true,
-                                repository: businesspartner.bo.BORepositoryBusinessPartner,
-                                dataInfo: {
-                                    type: businesspartner.bo.PaymentTerm,
-                                    key: businesspartner.bo.PaymentTerm.PROPERTY_CODE_NAME,
-                                    text: businesspartner.bo.PaymentTerm.PROPERTY_NAME_NAME,
-                                },
-                                valueHelpRequest(): void {
-                                    that.fireViewEvents(that.choosePaymentTermEvent);
-                                }
-                            }).bindProperty("bindingValue", {
-                                path: "paymentCode",
-                                type: new sap.extension.data.Alphanumeric({
-                                    maxLength: 8
-                                }),
                             }),
                         ]
                     });

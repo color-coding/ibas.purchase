@@ -25,6 +25,10 @@ declare namespace sales {
         const CONFIG_ITEM_PRICE_CALCULATION_ANCHORING_METHOD: string;
         /** 配置项目-单据行显示库存 */
         const CONFIG_ITEM_DOCUMENT_LINE_DISPLAY_INVENTORY: string;
+        /** 配置项目-折扣呈现方式 */
+        const CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD: string;
+        /** 配置项目-单据统计标记删除行 */
+        const CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -33,6 +37,8 @@ declare namespace sales {
         function get<T>(key: string, defalut?: T): T;
         function isInventoryUnitLinePrice(): boolean;
         function isPriceAnchoringAfterTax(): boolean;
+        function isInverseDiscount(): boolean;
+        function isStatisticsTagDeleted(): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -334,6 +340,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售交货-行集合 */
             salesDeliveryItems: ISalesDeliveryItems;
             /** 送货地址集合 */
@@ -484,6 +492,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -600,6 +616,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售订单-行集合 */
             salesOrderItems: ISalesOrderItems;
             /** 送货地址集合 */
@@ -750,6 +768,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 销售订单-行-额外信息集合 */
             salesOrderItemExtras: ISalesOrderItemExtras;
             /** 赋值产品 */
@@ -924,6 +950,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售退货-行集合 */
             salesReturnItems: ISalesReturnItems;
             /** 送货地址集合 */
@@ -1074,6 +1102,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1192,6 +1228,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售报价-行集合 */
             salesQuoteItems: ISalesQuoteItems;
         }
@@ -1334,6 +1372,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 销售报价-行-额外信息集合 */
             salesQuoteItemExtras: ISalesQuoteItemExtras;
             /** 赋值产品 */
@@ -1508,6 +1554,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售贷项-行集合 */
             salesCreditNoteItems: ISalesCreditNoteItems;
             /** 送货地址集合 */
@@ -1660,6 +1708,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -1776,6 +1832,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
             /** 销售发票-预收款集合 */
@@ -1933,6 +1991,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2379,6 +2445,8 @@ declare namespace sales {
             documentTotal: number;
             /** 已付款总计 */
             paidTotal: number;
+            /** 付款条款 */
+            paymentCode: string;
             /** 舍入 */
             rounding: ibas.emYesNo;
             /** 舍入差额 */
@@ -2537,6 +2605,12 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2653,6 +2727,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售预留发票-行集合 */
             salesReserveInvoiceItems: ISalesReserveInvoiceItems;
             /** 送货地址集合 */
@@ -2801,6 +2877,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -2917,6 +3001,8 @@ declare namespace sales {
             grossBase: number;
             /** 毛利 */
             grossProfit: number;
+            /** 反向折扣 */
+            inverseDiscount: number;
             /** 销售退货请求-行集合 */
             salesReturnRequestItems: ISalesReturnRequestItems;
             /** 送货地址集合 */
@@ -3067,6 +3153,14 @@ declare namespace sales {
             grossBase: number;
             /** 毛利价格 */
             grossPrice: number;
+            /** 反向行折扣 */
+            inverseDiscount: number;
+            /** 价格（本币） */
+            priceLC: number;
+            /** 折扣前价格（本币） */
+            unitPriceLC: number;
+            /** 税前价格（本币） */
+            preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
         }
@@ -3879,6 +3973,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售交货-行集合 */
             static PROPERTY_SALESDELIVERYITEMS_NAME: string;
             /** 获取-销售交货-行集合 */
@@ -4348,6 +4448,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -4685,6 +4809,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESORDERITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -5158,6 +5288,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-销售订单-行-额外信息集合 */
             static PROPERTY_SALESORDERITEMEXTRAS_NAME: string;
             /** 获取-销售订单-行-额外信息集合 */
@@ -5663,6 +5817,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售订单-行集合 */
             static PROPERTY_SALESQUOTEITEMS_NAME: string;
             /** 获取-销售订单-行集合 */
@@ -6108,6 +6268,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-销售报价-行-额外信息集合 */
             static PROPERTY_SALESQUOTEITEMEXTRAS_NAME: string;
             /** 获取-销售报价-行-额外信息集合 */
@@ -6595,6 +6779,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售退货-行集合 */
             static PROPERTY_SALESRETURNITEMS_NAME: string;
             /** 获取-销售退货-行集合 */
@@ -7070,6 +7260,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -7407,6 +7621,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售贷项-行集合 */
             static PROPERTY_SALESCREDITNOTEITEMS_NAME: string;
             /** 获取-销售贷项-行集合 */
@@ -7881,6 +8101,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -8218,6 +8462,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售发票-行集合 */
             static PROPERTY_SALESINVOICEITEMS_NAME: string;
             /** 获取-销售发票-行集合 */
@@ -8702,6 +8952,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -9487,6 +9761,8 @@ declare namespace sales {
         class BlanketAgreementItems extends ibas.BusinessObjects<BlanketAgreementItem, BlanketAgreement> implements IBlanketAgreementItems {
             /** 创建并添加子项 */
             create(): BlanketAgreementItem;
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: BlanketAgreementItem, name: string): void;
         }
         /** 一揽子协议-项目 */
         class BlanketAgreementItem extends ibas.BODocumentLine<BlanketAgreementItem> implements IBlanketAgreementItem {
@@ -9975,6 +10251,12 @@ declare namespace sales {
             get paidTotal(): number;
             /** 设置-已付款总计 */
             set paidTotal(value: number);
+            /** 映射的属性名称-付款条款 */
+            static PROPERTY_PAYMENTCODE_NAME: string;
+            /** 获取-付款条款 */
+            get paymentCode(): string;
+            /** 设置-付款条款 */
+            set paymentCode(value: string);
             /** 映射的属性名称-舍入 */
             static PROPERTY_ROUNDING_NAME: string;
             /** 获取-舍入 */
@@ -10073,6 +10355,8 @@ declare namespace sales {
             create(): DownPaymentRequestItem;
             protected afterAdd(item: DownPaymentRequestItem): void;
             protected onParentPropertyChanged(name: string): void;
+            /** 子项属性改变时 */
+            protected onItemPropertyChanged(item: DownPaymentRequestItem, name: string): void;
         }
         /** 预收款申请-行 */
         class DownPaymentRequestItem extends ibas.BODocumentLine<DownPaymentRequestItem> implements IDownPaymentRequestItem {
@@ -10456,6 +10740,24 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 初始化数据 */
             protected init(): void;
             /** 赋值产品 */
@@ -10781,6 +11083,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售预留发票-行集合 */
             static PROPERTY_SALESRESERVEINVOICEITEMS_NAME: string;
             /** 获取-销售预留发票-行集合 */
@@ -11247,6 +11555,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -11584,6 +11916,12 @@ declare namespace sales {
             get grossProfit(): number;
             /** 设置-毛利 */
             set grossProfit(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
             /** 映射的属性名称-销售退货请求-行集合 */
             static PROPERTY_SALESRETURNREQUESTITEMS_NAME: string;
             /** 获取-销售退货请求-行集合 */
@@ -12059,6 +12397,30 @@ declare namespace sales {
             get grossPrice(): number;
             /** 设置-毛利价格 */
             set grossPrice(value: number);
+            /** 映射的属性名称-反向行折扣 */
+            static PROPERTY_INVERSEDISCOUNT_NAME: string;
+            /** 获取-反向行折扣 */
+            get inverseDiscount(): number;
+            /** 设置-反向行折扣 */
+            set inverseDiscount(value: number);
+            /** 映射的属性名称-价格（本币） */
+            static PROPERTY_PRICELC_NAME: string;
+            /** 获取-价格（本币） */
+            get priceLC(): number;
+            /** 设置-价格（本币） */
+            set priceLC(value: number);
+            /** 映射的属性名称-折扣前价格（本币） */
+            static PROPERTY_UNITPRICELC_NAME: string;
+            /** 获取-折扣前价格（本币） */
+            get unitPriceLC(): number;
+            /** 设置-折扣前价格（本币） */
+            set unitPriceLC(value: number);
+            /** 映射的属性名称-税前价格（本币） */
+            static PROPERTY_PRETAXPRICELC_NAME: string;
+            /** 获取-税前价格（本币） */
+            get preTaxPriceLC(): number;
+            /** 设置-税前价格（本币） */
+            set preTaxPriceLC(value: number);
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string;
             /** 获取-物料批次集合 */
@@ -12109,9 +12471,16 @@ declare namespace sales {
          * @param target 目标
          * @param source 源
          */
-        function baseDocumentItem(target: ISalesOrderItem | ISalesDeliveryItem | ISalesReturnItem | ISalesCreditNoteItem | ISalesInvoiceItem | IDownPaymentRequestItem | ISalesReserveInvoiceItem | SalesReturnRequestItem, source: ISalesQuoteItem | ISalesOrderItem | ISalesDeliveryItem | ISalesReserveInvoiceItem | SalesReturnRequestItem): void;
+        function baseDocumentItem(target: SalesOrderItem | SalesDeliveryItem | SalesReturnItem | SalesCreditNoteItem | SalesInvoiceItem | DownPaymentRequestItem | SalesReserveInvoiceItem | SalesReturnRequestItem | SalesCreditNoteItem, source: ISalesQuoteItem | ISalesOrderItem | ISalesDeliveryItem | ISalesReserveInvoiceItem | SalesReturnRequestItem): void;
         function baseProduct(target: ISalesQuoteItem | ISalesOrderItem | ISalesDeliveryItem | ISalesReturnItem | ISalesInvoiceItem | ISalesCreditNoteItem | IDownPaymentRequestItem | ISalesReserveInvoiceItem | SalesReturnRequestItem, source: materials.bo.IProduct): void;
         function baseProductSuit(target: ISalesQuoteItems | ISalesOrderItems | ISalesDeliveryItems, source: bo.IProductSuitEx): ISalesQuoteItem[] | ISalesOrderItem[] | ISalesDeliveryItem[];
+        /**
+         * 设置单据类型
+         *     先判断目标单据是否有相同可选值
+         * @param target 目标单据
+         * @param source 源单据
+         */
+        function baseDocument_OrderType(target: SalesOrder | SalesDelivery | SalesReturn | SalesCreditNote | SalesInvoice | DownPaymentRequest | SalesReserveInvoice | SalesReturnRequest, source: ISalesQuote | ISalesOrder | ISalesDelivery | ISalesReturn | ISalesInvoice | ISalesReserveInvoice | SalesReturnRequest): void;
         /** 业务规则-推导税前税后价格 */
         class BusinessRuleDeductionTaxPrice extends ibas.BusinessRuleCommon {
             /**
@@ -12249,6 +12618,37 @@ declare namespace sales {
         }
         /** 业务规则-计算库存数量 */
         class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {
+        }
+        /** 业务规则-反向折扣（1 - %） */
+        class BusinessRuleNegativeDiscount extends ibas.BusinessRuleCommon {
+            /**
+             * 构造方法
+             * @param discount  属性-折扣
+             * @param inverseDiscount  属性-反折扣
+             */
+            constructor(discount: string, inverseDiscount: string);
+            /** 折扣 */
+            discount: string;
+            /** 折扣前价格 */
+            inverseDiscount: string;
+            /** 计算规则 */
+            protected compute(context: ibas.BusinessRuleContextCommon): void;
+        }
+        /**
+         * 推导币种金额
+         */
+        class BusinessRuleDeductionCurrencyAmount extends ibas.BusinessRuleCommon {
+            /**
+             * 构造
+             * @param amountLC 本币
+             * @param amount 交易币
+             * @param rate 汇率
+             */
+            constructor(amountLC: string, amount: string, rate: string);
+            amountLC: string;
+            amount: string;
+            rate: string;
+            protected compute(context: ibas.BusinessRuleContextCommon): void;
         }
     }
 }
@@ -12737,7 +13137,7 @@ declare namespace sales {
             protected chooseSalesDeliveryItemMaterialCatalog(caller: bo.SalesDeliveryItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesDeliveryItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryEditView extends ibas.IBOEditView {
@@ -13055,7 +13455,7 @@ declare namespace sales {
             protected chooseSalesOrderItemMaterialCatalog(caller: bo.SalesOrderItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesOrderItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderEditView extends ibas.IBOEditView {
@@ -13445,7 +13845,7 @@ declare namespace sales {
             protected chooseSalesReturnItemMaterialCatalog(caller: bo.SalesReturnItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnEditView extends ibas.IBOEditView {
@@ -13738,7 +14138,7 @@ declare namespace sales {
             protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -14096,7 +14496,7 @@ declare namespace sales {
             protected chooseSalesInvoiceItemMaterialCatalog(caller: bo.SalesInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesInvoiceItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceEditView extends ibas.IBOEditView {
@@ -14403,7 +14803,7 @@ declare namespace sales {
             protected chooseSalesCreditNoteItemMaterialCatalog(caller: bo.SalesCreditNoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesCreditNoteItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteEditView extends ibas.IBOEditView {
@@ -15115,6 +15515,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseDownPaymentRequestItemMaterialCatalog(caller: bo.DownPaymentRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected viewHistoricalPrices(caller: bo.DownPaymentRequestItem): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestEditView extends ibas.IBOEditView {
@@ -15160,6 +15561,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 选择付款条款事件 */
+            choosePaymentTermEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
             /** 默认税组 */
@@ -15293,7 +15696,7 @@ declare namespace sales {
             protected chooseSalesReserveInvoiceItemMaterialCatalog(caller: bo.SalesReserveInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReserveInvoiceItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceEditView extends ibas.IBOEditView {
@@ -15597,7 +16000,7 @@ declare namespace sales {
             protected chooseSalesReturnRequestItemMaterialCatalog(caller: bo.SalesReturnRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnRequestItem): void;
-            protected choosePaymentTerm(): void;
+            protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestEditView extends ibas.IBOEditView {

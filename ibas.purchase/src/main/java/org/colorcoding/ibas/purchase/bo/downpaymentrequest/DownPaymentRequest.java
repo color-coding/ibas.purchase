@@ -45,7 +45,6 @@ import org.colorcoding.ibas.document.IDocumentCloseAmountOperator;
 import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.sales.bo.downpaymentrequest.DownPaymentRequestItem;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 
