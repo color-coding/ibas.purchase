@@ -14,6 +14,10 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.ICondition;
+import org.colorcoding.ibas.bobas.common.ICriteria;
+import org.colorcoding.ibas.bobas.core.IBORepository;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
@@ -35,14 +39,17 @@ import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItems;
 import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
+import org.colorcoding.ibas.materials.bo.warehouse.Warehouse;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceContract;
 import org.colorcoding.ibas.materials.logic.IMaterialReceiptContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
+import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.MyConfiguration;
+import org.colorcoding.ibas.purchase.data.DataConvert;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionCurrencyAmount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
@@ -2823,6 +2830,29 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 			@Override
 			public Integer getBaseDocumentLineId() {
 				return PurchaseDeliveryItem.this.getBaseDocumentLineId();
+			}
+
+			@Override
+			public boolean checkDataStatus(IBORepository repository) {
+				if (!DataConvert.isNullOrEmpty(PurchaseDeliveryItem.this.getBaseDocumentType())) {
+					// 基于单据，入废品库，则不统计完成数量
+					if (!DataConvert.isNullOrEmpty(PurchaseDeliveryItem.this.getWarehouse())) {
+						ICriteria criteria = new Criteria();
+						criteria.setResultCount(1);
+						ICondition condition = criteria.getConditions().create();
+						condition.setAlias(Warehouse.PROPERTY_CODE.getName());
+						condition.setValue(PurchaseDeliveryItem.this.getWarehouse());
+						condition = criteria.getConditions().create();
+						condition.setAlias(Warehouse.PROPERTY_SCRAP.getName());
+						condition.setValue(emYesNo.YES);
+						BORepositoryMaterials boRepository = new BORepositoryMaterials();
+						boRepository.setRepository(repository);
+						if (boRepository.fetchWarehouse(criteria).getResultObjects().size() > 0) {
+							return false;
+						}
+					}
+				}
+				return IDocumentQuantityClosingContract.super.checkDataStatus(repository);
 			}
 
 		});

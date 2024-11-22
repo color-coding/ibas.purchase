@@ -350,6 +350,7 @@ namespace purchase {
             target.uom = source.uom;
             target.inventoryUOM = source.inventoryUOM;
             target.uomRate = source.uomRate;
+            target.rate = source.rate;
             target.unitPrice = source.unitPrice;
             target.discount = source.discount;
             if (!(target instanceof DownPaymentRequestItem)) {
@@ -909,7 +910,7 @@ namespace purchase {
                 } else if (ibas.strings.equalsIgnoreCase(this.taxTotal, context.trigger)) {
                     let rTotal: number = preTotal + taxTotal;
                     // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM)) {
+                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM - 1)) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal));
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.price, context.trigger)
@@ -942,11 +943,11 @@ namespace purchase {
                     let rTaxTotal: number = preTotal * taxRate;
                     let rTotal: number = preTotal + rTaxTotal;
                     // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM)) {
+                    if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM - 1)) {
                         // 税精度降低
                         context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal));
                     }
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM)) {
+                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM - 1)) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal));
                     }
                 }
@@ -1030,7 +1031,7 @@ namespace purchase {
                     || ibas.strings.equalsIgnoreCase(this.rate, context.trigger)) {
                     if (rate !== 0) {
                         let result: number = amountLC * rate;
-                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE)) {
+                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result));
                         }
                     } else {

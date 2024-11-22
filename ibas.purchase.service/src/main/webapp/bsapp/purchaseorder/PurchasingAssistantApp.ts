@@ -273,6 +273,7 @@ namespace purchase {
                         that.purchaseOrder.priceList = selected.priceList;
                         that.purchaseOrder.contactPerson = selected.contactPerson;
                         that.purchaseOrder.documentCurrency = selected.currency;
+                        that.purchaseOrder.paymentCode = selected.paymentCode;
                         if (!ibas.strings.isEmpty(selected.warehouse)) {
                             that.view.defaultWarehouse = selected.warehouse;
                         }
