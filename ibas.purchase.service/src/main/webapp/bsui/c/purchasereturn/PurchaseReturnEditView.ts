@@ -276,6 +276,16 @@ namespace purchase {
                                 path: "deliveryDate",
                                 type: new sap.extension.data.Date()
                             }),
+                            new sap.m.Label("", {
+                                visible: false,
+                                text: ibas.i18n.prop("bo_purchasereturn_postingdate"),
+                            }),
+                            new sap.extension.m.DatePicker("", {
+                                visible: false,
+                            }).bindProperty("bindingValue", {
+                                path: "postingDate",
+                                type: new sap.extension.data.Date()
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_agreements") }),
                             new sap.extension.m.Input("", {
                                 showValueHelp: true,
@@ -289,8 +299,12 @@ namespace purchase {
                                     maxLength: 110
                                 }),
                             }),
-                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasereturn_consumer") }),
+                            new sap.m.Label("", {
+                                visible: false,
+                                text: ibas.i18n.prop("bo_purchasereturn_consumer")
+                            }),
                             new sap.extension.m.Input("", {
+                                visible: false,
                             }).bindProperty("bindingValue", {
                                 path: "consumer",
                                 type: new sap.extension.data.Alphanumeric({

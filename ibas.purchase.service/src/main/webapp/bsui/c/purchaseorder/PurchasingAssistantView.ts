@@ -353,6 +353,30 @@ namespace purchase {
                     this.rightTop = new sap.ui.layout.form.SimpleForm("", {
                         editable: true,
                         content: [
+                            new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_docnum") }),
+                            new sap.extension.m.Input("", {
+                            }).bindProperty("bindingValue", {
+                                path: "/docNum",
+                                type: new sap.extension.data.Alphanumeric({
+                                    maxLength: 20
+                                })
+                            }).bindProperty("editable", {
+                                path: "/series",
+                                formatter(data: any): any {
+                                    return data > 0 ? false : true;
+                                }
+                            }),
+                            new sap.extension.m.SeriesSelect("", {
+                                objectCode: bo.BO_CODE_PURCHASEORDER,
+                            }).bindProperty("bindingValue", {
+                                path: "/series",
+                                type: new sap.extension.data.Numeric()
+                            }).bindProperty("editable", {
+                                path: "isNew",
+                                formatter(data: any): any {
+                                    return data === false ? false : true;
+                                }
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_supplier") }),
                             this.inputSupplier = new sap.extension.m.RepositoryInput("", {
                                 showValueHelp: true,
@@ -813,12 +837,14 @@ namespace purchase {
                                                         if (datas instanceof Array) {
                                                             for (let data of datas) {
                                                                 if (data instanceof sales.bo.SalesOrder) {
-                                                                    if (data.branch !== that.branchInput.getBindingValue()) {
-                                                                        that.application.viewShower.messages({
-                                                                            type: ibas.emMessageType.WARNING,
-                                                                            message: ibas.i18n.prop("purchase_assistant_order_branch_mismatching", data.docEntry),
-                                                                            title: that.title,
-                                                                        }); return;
+                                                                    if (accounting.config.isEnableBranch()) {
+                                                                        if (data.branch !== that.branchInput.getBindingValue()) {
+                                                                            that.application.viewShower.messages({
+                                                                                type: ibas.emMessageType.WARNING,
+                                                                                message: ibas.i18n.prop("purchase_assistant_order_branch_mismatching", data.docEntry),
+                                                                                title: that.title,
+                                                                            }); return;
+                                                                        }
                                                                     }
                                                                     items.add(data.salesOrderItems.filterDeleted());
                                                                 }
@@ -844,7 +870,7 @@ namespace purchase {
                                         showHeader: false,
                                         enableScrolling: true,
                                         layoutData: new sap.ui.layout.SplitterLayoutData("", {
-                                            size: "14rem",
+                                            size: "16rem",
                                             resizable: false,
                                         }),
                                         content: [
