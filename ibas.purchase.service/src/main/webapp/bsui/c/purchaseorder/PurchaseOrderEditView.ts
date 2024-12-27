@@ -809,7 +809,7 @@ namespace purchase {
                                             suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
                                                 let selectedItem: any = event.getParameter("selectedItem");
                                                 if (!ibas.objects.isNull(selectedItem)) {
-                                                    that.fireViewEvents(that.choosePurchaseOrderItemUnitEvent, this.getBindingContext().getObject(), null, this.itemConditions(selectedItem));
+                                                    that.fireViewEvents(that.choosePurchaseOrderItemUnitEvent, this.getBindingContext().getObject(), this.itemConditions(selectedItem));
                                                 }
                                             },
                                             criteria: [
