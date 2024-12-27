@@ -12,7 +12,6 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
-import org.colorcoding.ibas.bobas.core.IBORepository;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.Decimal;
@@ -26,13 +25,10 @@ import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
-import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.MyConfiguration;
-import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
-import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionCurrencyAmount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
@@ -2180,45 +2176,6 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 					public String getWarehouse() {
 						return DownPaymentRequestItem.this.getWarehouse();
 					}
-				},
-				// 基于订单的完成金额
-				new IDocumentAmountClosingContract() {
-					@Override
-					public boolean checkDataStatus(IBORepository repository) {
-						if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
-								.equals(DownPaymentRequestItem.this.getBaseDocumentType())
-								|| MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE)
-										.equals(DownPaymentRequestItem.this.getBaseDocumentType())) {
-							return true;
-						}
-						return IDocumentAmountClosingContract.super.checkDataStatus(repository);
-					}
-
-					@Override
-					public String getIdentifiers() {
-						return DownPaymentRequestItem.this.getIdentifiers();
-					}
-
-					@Override
-					public BigDecimal getAmount() {
-						return DownPaymentRequestItem.this.getLineTotal();
-					}
-
-					@Override
-					public String getBaseDocumentType() {
-						return DownPaymentRequestItem.this.getBaseDocumentType();
-					}
-
-					@Override
-					public Integer getBaseDocumentEntry() {
-						return DownPaymentRequestItem.this.getBaseDocumentEntry();
-					}
-
-					@Override
-					public Integer getBaseDocumentLineId() {
-						return DownPaymentRequestItem.this.getBaseDocumentLineId();
-					}
-
 				}
 
 		};

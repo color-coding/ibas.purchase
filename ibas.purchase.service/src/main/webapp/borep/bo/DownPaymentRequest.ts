@@ -9,6 +9,8 @@ namespace purchase {
     export namespace bo {
         /** 预付款申请 */
         export class DownPaymentRequest extends ibas.BODocument<DownPaymentRequest> implements IDownPaymentRequest {
+            /** 资源后缀 */
+            static resource_suffix: string = "ap";
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string = BO_CODE_DOWNPAYMNETREQUEST;
             /** 构造函数 */

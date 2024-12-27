@@ -849,18 +849,33 @@ namespace purchase {
                                 && c.baseDocumentLineId === item.lineId) !== null) {
                             continue;
                         }
-                        // 计算未清金额 = 总计 - 完成数量金额 - 完成金额
-                        let openAmount: number = item.lineTotal - (item.closedQuantity * item.price) - item.closedAmount;
-                        if (openAmount <= 0) {
-                            continue;
-                        }
-                        let myItem: PurchaseInvoiceItem = this.purchaseInvoiceItems.create();
-                        bo.baseDocumentItem(myItem, item);
-                        // 计算数量
-                        if (config.isInventoryUnitLinePrice()) {
-                            myItem.inventoryQuantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                        if (item.price === 0) {
+                            // 金额是0，赠品?
+                            if (item.closedQuantity >= item.quantity) {
+                                continue;
+                            }
+                            let myItem: PurchaseInvoiceItem = this.purchaseInvoiceItems.create();
+                            bo.baseDocumentItem(myItem, item);
+                            // 计算数量
+                            if (config.isInventoryUnitLinePrice()) {
+                                myItem.inventoryQuantity = item.quantity - item.closedQuantity;
+                            } else {
+                                myItem.quantity = item.quantity - item.closedQuantity;
+                            }
                         } else {
-                            myItem.quantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            // 计算未清金额 = 总计 - 完成数量金额 - 完成金额
+                            let openAmount: number = item.lineTotal - (item.closedQuantity * item.price) - item.closedAmount;
+                            if (openAmount <= 0) {
+                                continue;
+                            }
+                            let myItem: PurchaseInvoiceItem = this.purchaseInvoiceItems.create();
+                            bo.baseDocumentItem(myItem, item);
+                            // 计算数量
+                            if (config.isInventoryUnitLinePrice()) {
+                                myItem.inventoryQuantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            } else {
+                                myItem.quantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            }
                         }
                     }
                     // 复制地址
