@@ -680,16 +680,19 @@ namespace purchase {
              * @param docTotal 属性-单据总计
              * @param disTotal   属性-折扣总计
              * @param shipTotal  属性-运费总计
+             * @param diffAmount  属性-舍入
              */
-            constructor(docTotal: string, disTotal: string, shipTotal?: string) {
+            constructor(docTotal: string, disTotal: string, shipTotal?: string, diffAmount?: string) {
                 super();
                 this.name = ibas.i18n.prop("purchase_business_rule_deduction_document_total");
                 this.docTotal = docTotal;
                 this.disTotal = disTotal;
                 this.shipTotal = shipTotal;
+                this.diffAmount = diffAmount;
                 this.inputProperties.add(this.docTotal);
                 this.inputProperties.add(this.disTotal);
                 this.inputProperties.add(this.shipTotal);
+                this.inputProperties.add(this.diffAmount);
                 this.affectedProperties.add(this.disTotal);
                 this.affectedProperties.add(this.docTotal);
             }
@@ -699,18 +702,21 @@ namespace purchase {
             disTotal: string;
             /** 运费总计 */
             shipTotal: string;
+            /** 舍入 */
+            diffAmount: string;
             /** 计算规则 */
             protected compute(context: ibas.BusinessRuleContextCommon): void {
                 let docTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.docTotal));
                 let disTotal: number = ibas.numbers.valueOf(context.inputValues.get(this.disTotal));
+                let diffAmount: number = ibas.numbers.valueOf(context.inputValues.get(this.diffAmount));
                 let shipTotal: number = !ibas.strings.isEmpty(this.shipTotal) ? ibas.numbers.valueOf(context.inputValues.get(this.shipTotal)) : 0;
 
                 if (ibas.strings.equalsIgnoreCase(this.docTotal, context.trigger) && docTotal > 0) {
                     // 单据总计触发
-                    let result: number = docTotal - shipTotal;
+                    let result: number = docTotal - shipTotal - diffAmount;
                     context.outputValues.set(this.disTotal, ibas.numbers.round(result, DECIMAL_PLACES_SUM));
                 } else {
-                    let result: number = disTotal + shipTotal;
+                    let result: number = disTotal + shipTotal + diffAmount;
                     context.outputValues.set(this.docTotal, ibas.numbers.round(result, DECIMAL_PLACES_SUM));
                 }
             }
@@ -996,7 +1002,7 @@ namespace purchase {
             }
         }
         /**
-         * 推导币种金额
+         * 业务规则-推导币种金额
          */
         export class BusinessRuleDeductionCurrencyAmount extends ibas.BusinessRuleCommon {
             /**
@@ -1051,6 +1057,39 @@ namespace purchase {
                         }
                     } else {
                         context.outputValues.set(this.amountLC, amount);
+                    }
+                }
+            }
+        }
+        /**
+         * 业务规则-舍入差异
+         */
+        export class BusinessRuleRoundingAmount extends ibas.BusinessRuleCommon {
+            /**
+             * 构造
+             * @param rounding 舍入
+             * @param amount 差异金额
+             */
+            constructor(rounding: string, amount: string) {
+                super();
+                this.name = ibas.i18n.prop("purchase_business_rule_rounding_amount");
+                this.rounding = rounding;
+                this.amount = amount;
+                this.inputProperties.add(this.rounding);
+                this.inputProperties.add(this.amount);
+                this.affectedProperties.add(this.amount);
+            }
+
+            rounding: string;
+            amount: string;
+
+            protected compute(context: ibas.BusinessRuleContextCommon): void {
+                let rounding: ibas.emYesNo = context.inputValues.get(this.rounding);
+                let amount: number = ibas.numbers.valueOf(context.inputValues.get(this.amount));
+
+                if (rounding === ibas.emYesNo.NO) {
+                    if (amount !== 0) {
+                        context.outputValues.set(this.amount, 0);
                     }
                 }
             }

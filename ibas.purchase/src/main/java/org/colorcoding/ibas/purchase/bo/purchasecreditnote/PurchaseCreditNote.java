@@ -1955,9 +1955,9 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),
-				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
+				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）+ 舍入
 				new BusinessRuleDeductionDocumentTotal(PROPERTY_DOCUMENTTOTAL, PROPERTY_DISCOUNTTOTAL,
-						PROPERTY_SHIPPINGSEXPENSETOTAL),
+						PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_DIFFAMOUNT),
 				// 反向折扣 = 1 - 折扣
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
@@ -2168,6 +2168,14 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 							jeContent.setRate(line.getRate());
 							jeContents.add(jeContent);
 						}
+						// 舍入
+						jeContent = new JournalEntrySmartContent(PurchaseCreditNote.this);
+						jeContent.setCategory(Category.Debit);
+						jeContent.setLedger(Ledgers.LEDGER_COMMON_ROUNDING_ACCOUNT);
+						jeContent.setAmount(PurchaseCreditNote.this.getDiffAmount().negate());
+						jeContent.setCurrency(PurchaseCreditNote.this.getDocumentCurrency());
+						jeContent.setRate(PurchaseCreditNote.this.getDocumentRate());
+						jeContents.add(jeContent);
 						// 应付账款
 						jeContent = new JournalEntrySmartContent(PurchaseCreditNote.this);
 						jeContent.setCategory(Category.Credit);

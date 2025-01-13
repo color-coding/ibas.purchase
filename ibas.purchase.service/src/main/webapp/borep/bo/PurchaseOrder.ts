@@ -741,7 +741,7 @@ namespace purchase {
                 this.documentCurrency = accounting.config.currency("LOCAL");
                 this.documentDate = ibas.dates.today();
                 this.deliveryDate = ibas.dates.today();
-                this.rounding = ibas.emYesNo.YES;
+                this.rounding = ibas.emYesNo.NO;
                 this.discount = 1;
                 this.inverseDiscount = 0;
             }
@@ -803,6 +803,8 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算-舍入差异
+                    new BusinessRuleRoundingAmount(PurchaseOrder.PROPERTY_ROUNDING_NAME, PurchaseOrder.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME, PurchaseOrderItem.PROPERTY_LINETOTAL_NAME,
@@ -846,9 +848,10 @@ namespace purchase {
                     new BusinessRuleDeductionDiscountTotal(
                         PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseOrder.PROPERTY_DISCOUNT_NAME
                     ),
-                    // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
+                    // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
                     new BusinessRuleDeductionDocumentTotal(PurchaseOrder.PROPERTY_DOCUMENTTOTAL_NAME,
-                        PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME),
+                        PurchaseOrder.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseOrder.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseOrder.PROPERTY_DIFFAMOUNT_NAME
+                    ),
                     // 计算正反折扣
                     new BusinessRuleNegativeDiscount(
                         PurchaseOrder.PROPERTY_DISCOUNT_NAME, PurchaseOrder.PROPERTY_INVERSEDISCOUNT_NAME

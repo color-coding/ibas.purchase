@@ -1952,9 +1952,9 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 				// 折扣后总计 = 项目-行总计 * 折扣
 				new BusinessRuleDeductionDiscountTotal(PROPERTY_DISCOUNTTOTAL, PROPERTY_ITEMSLINETOTAL,
 						PROPERTY_DISCOUNT),
-				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
+				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）+ 舍入
 				new BusinessRuleDeductionDocumentTotal(PROPERTY_DOCUMENTTOTAL, PROPERTY_DISCOUNTTOTAL,
-						PROPERTY_SHIPPINGSEXPENSETOTAL),
+						PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_DIFFAMOUNT),
 				// 反向折扣 = 1 - 折扣
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0

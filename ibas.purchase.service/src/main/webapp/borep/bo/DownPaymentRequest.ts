@@ -554,7 +554,7 @@ namespace purchase {
                 this.documentCurrency = accounting.config.currency("LOCAL");
                 this.documentDate = ibas.dates.today();
                 this.deliveryDate = ibas.dates.today();
-                this.rounding = ibas.emYesNo.YES;
+                this.rounding = ibas.emYesNo.NO;
                 this.discount = 1;
             }
 
@@ -594,6 +594,8 @@ namespace purchase {
 
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
+                    // 计算-舍入差异
+                    new BusinessRuleRoundingAmount(DownPaymentRequest.PROPERTY_ROUNDING_NAME, DownPaymentRequest.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
                         DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME,
@@ -631,8 +633,10 @@ namespace purchase {
                     new BusinessRuleDeductionDiscountTotal(
                         DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME, DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DISCOUNT_NAME
                     ),
-                    // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）
-                    new BusinessRuleDeductionDocumentTotal(DownPaymentRequest.PROPERTY_DOCUMENTTOTAL_NAME, DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME),
+                    // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
+                    new BusinessRuleDeductionDocumentTotal(DownPaymentRequest.PROPERTY_DOCUMENTTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME, undefined, DownPaymentRequest.PROPERTY_DIFFAMOUNT_NAME
+                    ),
                 ];
             }
             /** 重置 */
