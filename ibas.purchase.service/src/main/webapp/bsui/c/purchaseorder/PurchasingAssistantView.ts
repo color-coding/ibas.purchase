@@ -43,7 +43,7 @@ namespace purchase {
                                             }),
                                             this.inputCustomer = new sap.m.MultiInput("", {
                                                 showValueHelp: true,
-                                                valueHelpOnly: true,
+                                                valueHelpOnly: false,
                                                 valueHelpRequest(event: sap.ui.base.Event): void {
                                                     let source: any = event.getSource();
                                                     ibas.servicesManager.runChooseService<businesspartner.bo.Customer>({
@@ -61,7 +61,110 @@ namespace purchase {
                                                             }
                                                         }
                                                     });
-                                                }
+                                                },
+                                                autocomplete: false,
+                                                filterSuggests: false,
+                                                showSuggestion: true,
+                                                maxSuggestionWidth: "auto",
+                                                suggest(event: sap.ui.base.Event): void {
+                                                    let source: sap.m.MultiInput = <any>sap.ui.getCore().byId(event.getParameter("id"));
+                                                    let value: string = event.getParameter("suggestValue");
+                                                    if ((<any>source)._lastSuggestValue) {
+                                                        if ((<any>source)._lastSuggestValue.trim() === value.trim()) {
+                                                            // 查询结果与上次一致，则使用优先使用已有的
+                                                            for (let item of source.getSuggestionItems()) {
+                                                                if (item.getKey() === value) {
+                                                                    source.setSelectedItem(item);
+                                                                    (<any>source).fireSuggestionItemSelected({
+                                                                        selectedItem: item
+                                                                    });
+                                                                    return;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    (<any>source)._lastSuggestValue = value;
+                                                    value = ibas.strings.replace(value, " ", "%");
+                                                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                    if (ibas.objects.isNull(criteria.noChilds)) {
+                                                        criteria.noChilds = true;
+                                                    }
+                                                    if (!(criteria.result > 0)) {
+                                                        criteria.result = Math.round(ibas.config.get(ibas.CONFIG_ITEM_CRITERIA_RESULT_COUNT, 30) / 3);
+                                                        if (!(criteria.result > 0)) {
+                                                            criteria.result = 10;
+                                                        }
+                                                    }
+                                                    if (criteria.conditions.length > 1) {
+                                                        criteria.conditions.firstOrDefault().bracketOpen++;
+                                                        criteria.conditions.lastOrDefault().bracketClose++;
+                                                    }
+                                                    let condition: ibas.ICondition = criteria.conditions.create();
+                                                    condition.bracketOpen = 1;
+                                                    condition.alias = businesspartner.bo.Customer.PROPERTY_CODE_NAME;
+                                                    condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                    condition.value = value;
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = businesspartner.bo.Customer.PROPERTY_NAME_NAME;
+                                                    condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                    condition.value = value;
+                                                    condition.relationship = ibas.emConditionRelationship.OR;
+                                                    condition.bracketClose = 1;
+                                                    let boReposiorty: businesspartner.bo.BORepositoryBusinessPartner = new businesspartner.bo.BORepositoryBusinessPartner();
+                                                    boReposiorty.fetchCustomer({
+                                                        criteria: criteria,
+                                                        onCompleted: (opRslt) => {
+                                                            if (opRslt.resultObjects.length === 0) {
+                                                                source.removeAllSuggestionItems();
+                                                            } else {
+                                                                let sugItems: sap.ui.core.Item[] = source.getSuggestionItems();
+                                                                if (sugItems.length > opRslt.resultObjects.length) {
+                                                                    for (let i: number = sugItems.length - 1; i >= 0; i--) {
+                                                                        sugItems.pop();
+                                                                    }
+                                                                }
+                                                                for (let i: number = 0; i < opRslt.resultObjects.length; i++) {
+                                                                    if (i >= sugItems.length) {
+                                                                        sugItems.push(new sap.ui.core.ListItem("", {
+                                                                            key: opRslt.resultObjects[i].code,
+                                                                            text: opRslt.resultObjects[i].code,
+                                                                            additionalText: opRslt.resultObjects[i].name,
+                                                                        }));
+                                                                    } else {
+                                                                        let sugItem: sap.ui.core.ListItem = <any>sugItems[i];
+                                                                        if (sugItem.getKey() !== opRslt.resultObjects[i].code) {
+                                                                            sugItem.setKey(opRslt.resultObjects[i].code);
+                                                                            sugItem.setText(opRslt.resultObjects[i].code);
+                                                                            sugItem.setAdditionalText(opRslt.resultObjects[i].name);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                source.removeAllSuggestionItems();
+                                                                for (let item of sugItems) {
+                                                                    source.addSuggestionItem(item);
+                                                                }
+                                                                if (source.getSuggestionItems().length === 1) {
+                                                                    let item: any = source.getSuggestionItems()[0];
+                                                                    source.setSelectedItem(item);
+                                                                    (<any>source).fireSuggestionItemSelected({
+                                                                        selectedItem: item
+                                                                    });
+                                                                } else if (source.getSuggestionItems().length > 1) {
+                                                                    // 多个可选值时，尝试选择完全一样的
+                                                                    for (let item of source.getSuggestionItems()) {
+                                                                        if (item.getKey() === value) {
+                                                                            source.setSelectedItem(item);
+                                                                            (<any>source).fireSuggestionItemSelected({
+                                                                                selectedItem: item
+                                                                            });
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                },
                                             }),
                                         ]
                                     }),
@@ -139,7 +242,7 @@ namespace purchase {
                                             }),
                                             this.inputMaterial = new sap.m.MultiInput("", {
                                                 showValueHelp: true,
-                                                valueHelpOnly: true,
+                                                valueHelpOnly: false,
                                                 valueHelpRequest(event: sap.ui.base.Event): void {
                                                     let source: sap.m.Input = <any>event.getSource();
                                                     ibas.servicesManager.runChooseService<materials.bo.Material>({
@@ -158,7 +261,110 @@ namespace purchase {
                                                             }
                                                         }
                                                     });
-                                                }
+                                                },
+                                                autocomplete: false,
+                                                filterSuggests: false,
+                                                showSuggestion: true,
+                                                maxSuggestionWidth: "auto",
+                                                suggest(event: sap.ui.base.Event): void {
+                                                    let source: sap.m.MultiInput = <any>sap.ui.getCore().byId(event.getParameter("id"));
+                                                    let value: string = event.getParameter("suggestValue");
+                                                    if ((<any>source)._lastSuggestValue) {
+                                                        if ((<any>source)._lastSuggestValue.trim() === value.trim()) {
+                                                            // 查询结果与上次一致，则使用优先使用已有的
+                                                            for (let item of source.getSuggestionItems()) {
+                                                                if (item.getKey() === value) {
+                                                                    source.setSelectedItem(item);
+                                                                    (<any>source).fireSuggestionItemSelected({
+                                                                        selectedItem: item
+                                                                    });
+                                                                    return;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    (<any>source)._lastSuggestValue = value;
+                                                    value = ibas.strings.replace(value, " ", "%");
+                                                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                                                    if (ibas.objects.isNull(criteria.noChilds)) {
+                                                        criteria.noChilds = true;
+                                                    }
+                                                    if (!(criteria.result > 0)) {
+                                                        criteria.result = Math.round(ibas.config.get(ibas.CONFIG_ITEM_CRITERIA_RESULT_COUNT, 30) / 3);
+                                                        if (!(criteria.result > 0)) {
+                                                            criteria.result = 10;
+                                                        }
+                                                    }
+                                                    if (criteria.conditions.length > 1) {
+                                                        criteria.conditions.firstOrDefault().bracketOpen++;
+                                                        criteria.conditions.lastOrDefault().bracketClose++;
+                                                    }
+                                                    let condition: ibas.ICondition = criteria.conditions.create();
+                                                    condition.bracketOpen = 1;
+                                                    condition.alias = materials.bo.Product.PROPERTY_CODE_NAME;
+                                                    condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                    condition.value = value;
+                                                    condition = criteria.conditions.create();
+                                                    condition.alias = materials.bo.Product.PROPERTY_NAME_NAME;
+                                                    condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                    condition.value = value;
+                                                    condition.relationship = ibas.emConditionRelationship.OR;
+                                                    condition.bracketClose = 1;
+                                                    let boReposiorty: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
+                                                    boReposiorty.fetchMaterial({
+                                                        criteria: criteria,
+                                                        onCompleted: (opRslt) => {
+                                                            if (opRslt.resultObjects.length === 0) {
+                                                                source.removeAllSuggestionItems();
+                                                            } else {
+                                                                let sugItems: sap.ui.core.Item[] = source.getSuggestionItems();
+                                                                if (sugItems.length > opRslt.resultObjects.length) {
+                                                                    for (let i: number = sugItems.length - 1; i >= 0; i--) {
+                                                                        sugItems.pop();
+                                                                    }
+                                                                }
+                                                                for (let i: number = 0; i < opRslt.resultObjects.length; i++) {
+                                                                    if (i >= sugItems.length) {
+                                                                        sugItems.push(new sap.ui.core.ListItem("", {
+                                                                            key: opRslt.resultObjects[i].code,
+                                                                            text: opRslt.resultObjects[i].code,
+                                                                            additionalText: opRslt.resultObjects[i].name,
+                                                                        }));
+                                                                    } else {
+                                                                        let sugItem: sap.ui.core.ListItem = <any>sugItems[i];
+                                                                        if (sugItem.getKey() !== opRslt.resultObjects[i].code) {
+                                                                            sugItem.setKey(opRslt.resultObjects[i].code);
+                                                                            sugItem.setText(opRslt.resultObjects[i].code);
+                                                                            sugItem.setAdditionalText(opRslt.resultObjects[i].name);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                source.removeAllSuggestionItems();
+                                                                for (let item of sugItems) {
+                                                                    source.addSuggestionItem(item);
+                                                                }
+                                                                if (source.getSuggestionItems().length === 1) {
+                                                                    let item: any = source.getSuggestionItems()[0];
+                                                                    source.setSelectedItem(item);
+                                                                    (<any>source).fireSuggestionItemSelected({
+                                                                        selectedItem: item
+                                                                    });
+                                                                } else if (source.getSuggestionItems().length > 1) {
+                                                                    // 多个可选值时，尝试选择完全一样的
+                                                                    for (let item of source.getSuggestionItems()) {
+                                                                        if (item.getKey() === value) {
+                                                                            source.setSelectedItem(item);
+                                                                            (<any>source).fireSuggestionItemSelected({
+                                                                                selectedItem: item
+                                                                            });
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                },
                                             }),
                                             this.checkSuppiler = new sap.m.CheckBox("", {
                                                 text: ibas.i18n.prop("purchase_assistant_filter_supplier")
@@ -380,15 +586,30 @@ namespace purchase {
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_supplier") }),
                             this.inputSupplier = new sap.extension.m.RepositoryInput("", {
                                 showValueHelp: true,
+                                valueHelpRequest: function (): void {
+                                    that.fireViewEvents(that.choosePurchaseOrderSupplierEvent);
+                                },
+                                showValueLink: true,
+                                valueLinkRequest: function (event: sap.ui.base.Event): void {
+                                    ibas.servicesManager.runLinkService({
+                                        boCode: businesspartner.bo.Supplier.BUSINESS_OBJECT_CODE,
+                                        linkValue: event.getParameter("value")
+                                    });
+                                },
+                                describeValue: false,
+                                showSuggestion: true,
                                 repository: businesspartner.bo.BORepositoryBusinessPartner,
                                 dataInfo: {
                                     type: businesspartner.bo.Supplier,
                                     key: businesspartner.bo.Supplier.PROPERTY_CODE_NAME,
                                     text: businesspartner.bo.Supplier.PROPERTY_NAME_NAME
                                 },
-                                valueHelpRequest: function (): void {
-                                    that.fireViewEvents(that.choosePurchaseOrderSupplierEvent);
-                                }
+                                suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                    let selectedItem: any = event.getParameter("selectedItem");
+                                    if (!ibas.objects.isNull(selectedItem)) {
+                                        that.fireViewEvents(that.choosePurchaseOrderSupplierEvent, this.itemConditions(selectedItem));
+                                    }
+                                },
                             }).bindProperty("bindingValue", {
                                 path: "/supplierCode",
                                 type: new sap.extension.data.Alphanumeric({
@@ -1070,7 +1291,17 @@ namespace purchase {
                                     })
                                 ]
                             }).addStyleClass("sapUiTinyMarginBegin sapUiTinyMarginEnd"),
-                        ]
+                        ],
+                        resize: function (oEvent: sap.ui.base.Event): void {
+                            try {
+                                if ((<any>oEvent.getSource()).getContentAreas()[0].getLayoutData().getSize().toString().indexOf("%") === -1) {
+                                    let rightlayoutWidth: number = ibas.numbers.valueOf((<any>oEvent.getSource()).getContentAreas()[1].getLayoutData().getSize().toString().replace("px", ""));
+                                    let rightlayoutProportion: number = ibas.numbers.round(rightlayoutWidth / window.innerWidth * 100, 2);
+                                    (<any>oEvent.getSource()).getContentAreas()[1].getLayoutData().setSize(rightlayoutProportion + "%");
+                                    (<any>oEvent.getSource()).getContentAreas()[0].getLayoutData().setSize(100 - rightlayoutProportion + "%");
+                                }
+                            } catch (error) { }
+                        }
                     });
                 }
 
