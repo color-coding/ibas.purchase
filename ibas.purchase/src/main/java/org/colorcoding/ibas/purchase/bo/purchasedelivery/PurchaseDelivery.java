@@ -2082,10 +2082,10 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 							}
 							if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getBaseDocumentType())) {
 								/** 基于预留发票 **/
-								// 库存科目
+								// 在途库存科目
 								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_STOCK_IN_TRANSIT_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
@@ -2136,10 +2136,10 @@ public class PurchaseDelivery extends BusinessObject<PurchaseDelivery> implement
 							}
 							if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getBaseDocumentType())) {
 								/** 基于预留发票 **/
-								// 库存科目
+								// 在途库存科目
 								jeContent = new MaterialsReceiptReverseCost(line, line.getInventoryQuantity(), true);
 								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_STOCK_IN_TRANSIT_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());

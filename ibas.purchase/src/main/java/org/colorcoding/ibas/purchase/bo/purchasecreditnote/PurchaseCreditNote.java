@@ -54,6 +54,7 @@ import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseinvoice.PurchaseInvoice;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
@@ -2070,7 +2071,10 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 						List<JournalEntryContent> jeContents = new ArrayList<>();
 						String PurchaseReturnCode = MyConfiguration.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE),
 								PurchaseInvoiceCode = MyConfiguration
-										.applyVariables(PurchaseInvoice.BUSINESS_OBJECT_CODE);
+										.applyVariables(PurchaseInvoice.BUSINESS_OBJECT_CODE),
+								PurchaseReserveInvoiceCode = MyConfiguration
+										.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
+						;
 						for (IPurchaseCreditNoteItem line : PurchaseCreditNote.this.getPurchaseCreditNoteItems()) {
 							if (line.getDeleted() == emYesNo.YES) {
 								continue;
@@ -2105,6 +2109,24 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 								jeContent = new JournalEntrySmartContent(line);
 								jeContent.setCategory(Category.Debit);
 								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+								// 税科目
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
+								jeContent.setAmount(line.getTaxTotal().negate());// 税总计
+								jeContent.setCurrency(line.getCurrency());
+								jeContent.setRate(line.getRate());
+								jeContents.add(jeContent);
+							} else if (PurchaseReserveInvoiceCode.equals(line.getBaseDocumentType())) {
+								/** 基于预留发票 **/
+								// 在途库存科目
+								jeContent = new JournalEntrySmartContent(line);
+								jeContent.setCategory(Category.Debit);
+								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_STOCK_IN_TRANSIT_ACCOUNT);
 								jeContent.setAmount(line.getPreTaxLineTotal().negate());// 税前总计
 								jeContent.setCurrency(line.getCurrency());
 								jeContent.setRate(line.getRate());
