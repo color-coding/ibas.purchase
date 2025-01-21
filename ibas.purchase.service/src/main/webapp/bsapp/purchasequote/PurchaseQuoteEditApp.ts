@@ -985,7 +985,7 @@ namespace purchase {
                     let condition: ibas.ICondition = criteria.conditions.create();
                     condition.alias = materials.bo.Unit.PROPERTY_ACTIVATED_NAME;
                     condition.value = String(ibas.emYesNo.YES);
-                    if (this.editData.priceList > 0
+                    if (ibas.numbers.valueOf(this.editData.priceList) !== 0
                         && config.get<boolean>(config.CONFIG_ITEM_ONLY_PRICE_LIST_ITEM_UNITS, false) === true) {
                         let pCriteria: ibas.ICriteria = new ibas.Criteria();
                         condition = pCriteria.conditions.create();

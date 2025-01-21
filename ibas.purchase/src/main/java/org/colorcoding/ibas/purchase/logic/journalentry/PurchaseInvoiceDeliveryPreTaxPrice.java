@@ -65,7 +65,7 @@ public class PurchaseInvoiceDeliveryPreTaxPrice extends MaterialsInventoryCost {
 						// 金额 = 数量 * 入库税前价格
 						BigDecimal amount = Decimal.multiply(this.getQuantity(), baseLine.getPreTaxPrice());
 						if (this.getAmount() != null && this.getAmount().scale() > 0) {
-							amount.setScale(this.getAmount().scale(), Decimal.ROUNDING_MODE_DEFAULT);
+							amount = amount.setScale(this.getAmount().scale(), Decimal.ROUNDING_MODE_DEFAULT);
 						}
 						this.setAmount(amount);
 						// 计算完成，退出
