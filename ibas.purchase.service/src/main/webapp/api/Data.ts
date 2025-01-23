@@ -30,6 +30,8 @@ namespace purchase {
         export const CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD: string = "discountPresentationMethod";
         /** 配置项目-单据统计标记删除行 */
         export const CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE: string = "documentStatisticsTagDeletedLine";
+        /** 配置项目-采购助手显示价格类型 */
+        export const CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE: string = "purchasingAssistantPriceType";
         /**
          * 获取此模块配置
          * @param key 配置项

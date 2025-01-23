@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ApplicationConfig>
+<ns:ApplicationConfig xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
+	<ConfigKey>purchasingAssistantPriceType</ConfigKey>
+	<ConfigDescription>采购助手显示价格类型</ConfigDescription>
+	<ConfigGroup>de9278d9-4914-45a5-8418-9c609118d03f</ConfigGroup>
+	<ConfigValue>Price</ConfigValue>
+	<Settings>[{"Key":"Price","Text":"价格"},{"Key":"PreTaxPrice","Text":"税前价格"},{"Key":"UnitPrice","Text":"折扣前价格"}]</Settings>
+	<Category>CLIENT</Category>
+	<Activated>YES</Activated>
+</ns:ApplicationConfig>

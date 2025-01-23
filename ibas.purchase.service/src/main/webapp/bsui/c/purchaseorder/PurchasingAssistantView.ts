@@ -1127,6 +1127,19 @@ namespace purchase {
                                                         width: "6rem",
                                                         hAlign: sap.ui.core.TextAlign.Begin,
                                                         header: ibas.i18n.prop("bo_purchaseorderitem_price"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "Price" ? true : false,
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_pretaxprice"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "PreTaxPrice" ? true : false,
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_unitprice"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "UnitPrice" ? true : false,
                                                     }),
                                                     new sap.extension.m.Column("", {
                                                         width: "6rem",
@@ -1137,6 +1150,19 @@ namespace purchase {
                                                         width: "6rem",
                                                         hAlign: sap.ui.core.TextAlign.Begin,
                                                         header: ibas.i18n.prop("bo_purchaseorderitem_linetotal"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "Price" ? true : false,
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_pretaxlinetotal"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "PreTaxPrice" ? true : false,
+                                                    }),
+                                                    new sap.extension.m.Column("", {
+                                                        width: "6rem",
+                                                        hAlign: sap.ui.core.TextAlign.Begin,
+                                                        header: ibas.i18n.prop("bo_purchaseorderitem_unitlinetotal"),
+                                                        visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "UnitPrice" ? true : false,
                                                     }),
                                                 ],
                                                 items: {
@@ -1179,9 +1205,21 @@ namespace purchase {
                                                                 type: new sap.extension.data.Alphanumeric()
                                                             }),
                                                             new sap.extension.m.Input("", {
-
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "Price" ? true : false,
                                                             }).bindProperty("bindingValue", {
                                                                 path: "price",
+                                                                type: new sap.extension.data.Price()
+                                                            }),
+                                                            new sap.extension.m.Input("", {
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "PreTaxPrice" ? true : false,
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "preTaxPrice",
+                                                                type: new sap.extension.data.Price()
+                                                            }),
+                                                            new sap.extension.m.Input("", {
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "UnitPrice" ? true : false,
+                                                            }).bindProperty("bindingValue", {
+                                                                path: "unitPrice",
                                                                 type: new sap.extension.data.Price()
                                                             }),
                                                             new component.TaxGroupSelect("", {
@@ -1202,7 +1240,30 @@ namespace purchase {
                                                                 unit: {
                                                                     path: "currency",
                                                                     type: new sap.extension.data.Alphanumeric(),
-                                                                }
+                                                                },
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "Price" ? true : false,
+                                                            }),
+                                                            new sap.extension.m.ObjectNumber("", {
+                                                                number: {
+                                                                    path: "preTaxLineTotal",
+                                                                    type: new sap.extension.data.Sum(),
+                                                                },
+                                                                unit: {
+                                                                    path: "currency",
+                                                                    type: new sap.extension.data.Alphanumeric(),
+                                                                },
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "PreTaxPrice" ? true : false,
+                                                            }),
+                                                            new sap.extension.m.ObjectNumber("", {
+                                                                number: {
+                                                                    path: "unitLineTotal",
+                                                                    type: new sap.extension.data.Sum(),
+                                                                },
+                                                                unit: {
+                                                                    path: "currency",
+                                                                    type: new sap.extension.data.Alphanumeric(),
+                                                                },
+                                                                visible: config.get<string>(config.CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE, "Price") === "UnitPrice" ? true : false,
                                                             }),
                                                         ]
                                                     }),
