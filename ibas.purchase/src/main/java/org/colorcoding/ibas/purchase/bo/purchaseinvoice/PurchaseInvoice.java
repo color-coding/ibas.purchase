@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.purchaseinvoice;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -2510,6 +2511,12 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 			return this.getBranch();
 		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
 			return this.getSupplierCode();
+		case Ledgers.CONDITION_PROPERTY_MATERIAL:
+			String[] items = new String[this.getPurchaseInvoiceItems().size()];
+			for (int i = 0; i < items.length; i++) {
+				items[i] = this.getPurchaseInvoiceItems().get(i).getItemCode();
+			}
+			return Arrays.toString(items);
 		default:
 			return null;
 		}
