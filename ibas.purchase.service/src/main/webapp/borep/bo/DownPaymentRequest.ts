@@ -699,9 +699,39 @@ namespace purchase {
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
                         if (config.isInventoryUnitLinePrice()) {
-                            myItem.inventoryQuantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            if (myItem.price > 0) {
+                                let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                )) {
+                                    myItem.inventoryQuantity = item.inventoryQuantity;
+                                } else {
+                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                        myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                    } else {
+                                        myItem.inventoryQuantity = result;
+                                    }
+                                }
+                            } else {
+                                myItem.inventoryQuantity = 0;
+                            }
                         } else {
-                            myItem.quantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            if (myItem.price > 0) {
+                                let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                if (ibas.numbers.isApproximated(result, item.quantity,
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                )) {
+                                    myItem.quantity = item.quantity;
+                                } else {
+                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                        myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                    } else {
+                                        myItem.quantity = result;
+                                    }
+                                }
+                            } else {
+                                myItem.quantity = 0;
+                            }
                         }
                     }
                 }
@@ -741,9 +771,39 @@ namespace purchase {
                         bo.baseDocumentItem(myItem, item);
                         // 计算数量
                         if (config.isInventoryUnitLinePrice()) {
-                            myItem.inventoryQuantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            if (myItem.price > 0) {
+                                let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                )) {
+                                    myItem.inventoryQuantity = item.inventoryQuantity;
+                                } else {
+                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                        myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                    } else {
+                                        myItem.inventoryQuantity = result;
+                                    }
+                                }
+                            } else {
+                                myItem.inventoryQuantity = 0;
+                            }
                         } else {
-                            myItem.quantity = myItem.price > 0 ? ibas.numbers.round(openAmount / myItem.price) : 0;
+                            if (myItem.price > 0) {
+                                let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                if (ibas.numbers.isApproximated(result, item.quantity,
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                )) {
+                                    myItem.quantity = item.quantity;
+                                } else {
+                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                        myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                    } else {
+                                        myItem.quantity = result;
+                                    }
+                                }
+                            } else {
+                                myItem.quantity = 0;
+                            }
                         }
                     }
                 }

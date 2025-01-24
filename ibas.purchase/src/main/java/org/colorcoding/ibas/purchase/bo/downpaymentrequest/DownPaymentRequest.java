@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.downpaymentrequest;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
@@ -44,6 +46,7 @@ import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseAmountOperator;
 import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
@@ -56,9 +59,10 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 @XmlType(name = DownPaymentRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = DownPaymentRequest.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = DownPaymentRequest.BUSINESS_OBJECT_CODE)
-public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> implements IDownPaymentRequest,
-		IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBOSeriesKey,
-		IBOUserFields, IDocumentPaidTotalOperator, IBusinessLogicsHost, IDocumentCloseAmountOperator {
+public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
+		implements IDownPaymentRequest, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
+		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator, IBusinessLogicsHost,
+		IDocumentCloseAmountOperator, IJECPropertyValueGetter {
 
 	/**
 	 * 序列化版本标记
@@ -1767,5 +1771,33 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest> imple
 				return true;
 			}
 		};
+	}
+
+	@Override
+	public Object getValue(String property) {
+		switch (property) {
+		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
+			return this.getObjectCode();
+		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
+			return this.getDataOwner();
+		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
+			return this.getOrganization();
+		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
+			return this.getOrderType();
+		case Ledgers.CONDITION_PROPERTY_PROJECT:
+			return this.getProject();
+		case Ledgers.CONDITION_PROPERTY_BRANCH:
+			return this.getBranch();
+		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
+			return this.getSupplierCode();
+		case Ledgers.CONDITION_PROPERTY_MATERIAL:
+			String[] items = new String[this.getDownPaymentRequestItems().size()];
+			for (int i = 0; i < items.length; i++) {
+				items[i] = this.getDownPaymentRequestItems().get(i).getItemCode();
+			}
+			return Arrays.toString(items);
+		default:
+			return null;
+		}
 	}
 }

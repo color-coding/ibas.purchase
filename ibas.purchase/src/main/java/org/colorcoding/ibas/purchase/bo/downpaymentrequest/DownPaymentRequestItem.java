@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.accounting.logic.ITaxGroupCheckContract;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
@@ -25,6 +26,7 @@ import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -39,8 +41,8 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = DownPaymentRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
-public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestItem>
-		implements IDownPaymentRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost {
+public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestItem> implements IDownPaymentRequestItem,
+		IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost, IJECPropertyValueGetter {
 
 	/**
 	 * 序列化版本标记
@@ -2179,5 +2181,33 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 				}
 
 		};
+	}
+
+	@Override
+	public Object getValue(String property) {
+		switch (property) {
+		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
+			return this.parent.getObjectCode();
+		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
+			return this.parent.getDataOwner();
+		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
+			return this.parent.getOrganization();
+		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
+			return this.parent.getOrderType();
+		case Ledgers.CONDITION_PROPERTY_PROJECT:
+			return this.parent.getProject();
+		case Ledgers.CONDITION_PROPERTY_BRANCH:
+			return this.parent.getBranch();
+		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
+			return this.parent.getSupplierCode();
+		case Ledgers.CONDITION_PROPERTY_MATERIAL:
+			return this.getItemCode();
+		case Ledgers.CONDITION_PROPERTY_WAREHOUSE:
+			return this.getWarehouse();
+		case Ledgers.CONDITION_PROPERTY_TAX:
+			return this.getTax();
+		default:
+			return null;
+		}
 	}
 }

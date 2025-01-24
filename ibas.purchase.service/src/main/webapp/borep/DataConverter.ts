@@ -770,11 +770,14 @@ namespace purchase {
                     context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                 } else {
                     let result: number = price * quantity;
-                    // 差异小于近似位，则忽略
-                    if (ibas.numbers.isApproximated(total, result, DECIMAL_PLACES_SUM, 0)) {
-                        return;
+                    if (quantity === 1) {
+                        context.outputValues.set(this.total, ibas.numbers.round(result));
+                    } else {
+                        // 差异小于近似位，则忽略
+                        if (!ibas.numbers.isApproximated(total, result, DECIMAL_PLACES_SUM, 0)) {
+                            context.outputValues.set(this.total, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
                     }
-                    context.outputValues.set(this.total, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                 }
             }
         }
@@ -819,7 +822,7 @@ namespace purchase {
                     if (ibas.numbers.isApproximated(afterDiscount, result, DECIMAL_PLACES_SUM)) {
                         return;
                     }
-                    context.outputValues.set(this.afterDiscount, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                    context.outputValues.set(this.afterDiscount, ibas.numbers.round(result));
                 } else if (afterDiscount === 0 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
                     context.outputValues.set(this.discount, 1);
                     context.outputValues.set(this.preDiscount, afterDiscount);
@@ -831,10 +834,14 @@ namespace purchase {
                         // 非折扣触发，算折扣
                         let result: number = afterDiscount / preDiscount;
                         // 差异小于近似位，则忽略
-                        if (ibas.numbers.isApproximated(discount, result, DECIMAL_PLACES_PERCENTAGE > 4 ? DECIMAL_PLACES_PERCENTAGE : 4, 0)) {
-                            return;
+                        if (!ibas.numbers.isApproximated(discount, result, DECIMAL_PLACES_PERCENTAGE > 4 ? DECIMAL_PLACES_PERCENTAGE : 4, 0)) {
+                            context.outputValues.set(this.discount, ibas.numbers.round(result, 9));
+                        } else {
+                            // 折扣是1，折前折后不等，则使用折前（折后触发）
+                            if (discount === 1 && preDiscount !== afterDiscount) {
+                                context.outputValues.set(this.afterDiscount, preDiscount);
+                            }
                         }
-                        context.outputValues.set(this.discount, ibas.numbers.round(result, 9));
                     }
                 }
             }
@@ -926,8 +933,12 @@ namespace purchase {
                     let rPreTotal: number = rTotal / (1 + taxRate);
                     let rTaxTotal: number = rTotal - rPreTotal;
                     // 价格 * 数量 = 总计，核心逻辑最优先使用
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
-                        context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                    if (quantity === 1) {
+                        context.outputValues.set(this.total, ibas.numbers.round(rTotal));
+                    } else {
+                        if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
+                            context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
                     }
                     // 差异小于近似位，则忽略
                     if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0)) {
@@ -952,7 +963,11 @@ namespace purchase {
                         context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                     }
                     if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
-                        context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        if (quantity === 1) {
+                            context.outputValues.set(this.total, ibas.numbers.round(rTotal));
+                        } else {
+                            context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
                     }
                 }
             }
