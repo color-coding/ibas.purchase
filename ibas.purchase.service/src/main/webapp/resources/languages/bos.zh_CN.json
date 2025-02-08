@@ -1136,7 +1136,7 @@
     },
     {
         "bo_downpaymentrequest": "预付款申请",
-        "bo_downpaymentrequest_ar": "预付款申请",
+        "bo_downpaymentrequest_ar": "预收款申请",
         "bo_downpaymentrequest_ap": "预付款申请",
         "bo_downpaymentrequest_docentry": "凭证编号",
         "bo_downpaymentrequest_docnum": "单据编码",
@@ -1195,6 +1195,8 @@
         "bo_downpaymentrequest_documentlinediscount": "预付款比例",
         "bo_downpaymentrequest_downpaymentrequestitems": "预付款申请-行集合",
         "bo_downpaymentrequestitem": "预付款申请-行",
+        "bo_downpaymentrequestitem_ar": "预收款申请-行",
+        "bo_downpaymentrequestitem_ap": "预付款申请-行",
         "bo_downpaymentrequestitem_docentry": "凭证编号",
         "bo_downpaymentrequestitem_lineid": "行号",
         "bo_downpaymentrequestitem_visorder": "显示顺序",

@@ -265,7 +265,7 @@ namespace purchase {
                     let formDownPaymentRequestItem: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
                         editable: true,
                         content: [
-                            new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_downpaymentrequestitem") }),
+                            new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_downpaymentrequestitem_ap") }),
                             this.tableDownPaymentRequestItem = new sap.extension.table.DataTable("", {
                                 enableSelectAll: false,
                                 visibleRowCount: sap.extension.table.visibleRowCount(8),

@@ -962,10 +962,10 @@ namespace purchase {
                     if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
                         context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                     }
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
-                        if (quantity === 1) {
-                            context.outputValues.set(this.total, ibas.numbers.round(rTotal));
-                        } else {
+                    if (quantity === 1) {
+                        context.outputValues.set(this.total, ibas.numbers.round(rTotal));
+                    } else {
+                        if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
                             context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                         }
                     }

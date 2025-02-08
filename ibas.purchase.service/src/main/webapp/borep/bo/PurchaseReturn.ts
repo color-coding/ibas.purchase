@@ -776,11 +776,18 @@ namespace purchase {
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
-                        // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
-                            continue;
+                        if (!ibas.strings.isEmpty(address.createActionId)) {
+                            // 不复制同事务的
+                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                                continue;
+                            }
                         }
                         let myAddress: IShippingAddress = address.clone();
+                        myAddress.createActionId = address.createActionId;
+                        // 不复制重名的
+                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                            myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
+                        }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
                     }
                 }
@@ -854,11 +861,18 @@ namespace purchase {
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
-                        // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
-                            continue;
+                        if (!ibas.strings.isEmpty(address.createActionId)) {
+                            // 不复制同事务的
+                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                                continue;
+                            }
                         }
                         let myAddress: IShippingAddress = address.clone();
+                        myAddress.createActionId = address.createActionId;
+                        // 不复制重名的
+                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                            myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
+                        }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
                     }
                 }
@@ -932,11 +946,18 @@ namespace purchase {
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
-                        // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
-                            continue;
+                        if (!ibas.strings.isEmpty(address.createActionId)) {
+                            // 不复制同事务的
+                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                                continue;
+                            }
                         }
                         let myAddress: IShippingAddress = address.clone();
+                        myAddress.createActionId = address.createActionId;
+                        // 不复制重名的
+                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                            myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
+                        }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
                     }
                 }

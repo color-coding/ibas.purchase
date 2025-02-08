@@ -129,7 +129,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -442,7 +442,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -598,7 +598,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -755,7 +755,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -911,7 +911,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -1067,7 +1067,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -1223,7 +1223,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }
@@ -1380,7 +1380,7 @@ namespace purchase {
                                         price: sItem.price,
                                         currency: sItem.currency,
                                         preTaxPrice: sItem.preTaxPrice,
-                                        discount: sItem.discount,
+                                        discount: config.isInverseDiscount() ? sItem.inverseDiscount : sItem.discount,
                                         unitPrice: sItem.unitPrice
                                     });
                                 }

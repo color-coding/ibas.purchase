@@ -45,6 +45,7 @@ import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuanti
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaseorder.PurchaseOrder;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.purchasereturn.PurchaseReturn;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionCurrencyAmount;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscount;
@@ -2576,6 +2577,11 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 				.equalsIgnoreCase(this.getOriginalDocumentType())) {
 			return;
 		}
+		// 基于采购预留发票不执行库存逻辑
+		if (MyConfiguration.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE)
+				.equalsIgnoreCase(this.getBaseDocumentType())) {
+			return;
+		}
 		// 批次检查
 		this.getMaterialBatches().check();
 		// 序列检查
@@ -2749,8 +2755,10 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 			}
 
 		});
-		// 不基于销售退货执行库存逻辑
-		if (!MyConfiguration.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE).equals(this.getBaseDocumentType())) {
+		// 不基于退货和预留发票，执行库存逻辑
+		if (!MyConfiguration.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE).equals(this.getBaseDocumentType())
+				&& !MyConfiguration.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE)
+						.equals(this.getBaseDocumentType())) {
 			// 物料发货
 			contracts.add(new IMaterialIssueContract() {
 

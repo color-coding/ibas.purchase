@@ -10013,6 +10013,8 @@ declare namespace sales {
     namespace bo {
         /** 预收款申请 */
         class DownPaymentRequest extends ibas.BODocument<DownPaymentRequest> implements IDownPaymentRequest {
+            /** 资源后缀 */
+            static resource_suffix: string;
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string;
             /** 构造函数 */
@@ -12542,14 +12544,17 @@ declare namespace sales {
              * @param docTotal 属性-单据总计
              * @param disTotal   属性-折扣总计
              * @param shipTotal  属性-运费总计
+             * @param diffAmount  属性-舍入
              */
-            constructor(docTotal: string, disTotal: string, shipTotal?: string);
+            constructor(docTotal: string, disTotal: string, shipTotal?: string, diffAmount?: string);
             /** 单据总计 */
             docTotal: string;
             /** 折扣总计 */
             disTotal: string;
             /** 运费总计 */
             shipTotal: string;
+            /** 舍入 */
+            diffAmount: string;
             /** 计算规则 */
             protected compute(context: ibas.BusinessRuleContextCommon): void;
         }
@@ -12648,6 +12653,20 @@ declare namespace sales {
             amountLC: string;
             amount: string;
             rate: string;
+            protected compute(context: ibas.BusinessRuleContextCommon): void;
+        }
+        /**
+         * 业务规则-舍入差异
+         */
+        class BusinessRuleRoundingAmount extends ibas.BusinessRuleCommon {
+            /**
+             * 构造
+             * @param rounding 舍入
+             * @param amount 差异金额
+             */
+            constructor(rounding: string, amount: string);
+            rounding: string;
+            amount: string;
             protected compute(context: ibas.BusinessRuleContextCommon): void;
         }
     }

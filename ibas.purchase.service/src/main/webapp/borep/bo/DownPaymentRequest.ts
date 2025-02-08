@@ -702,7 +702,7 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
                                 )) {
                                     myItem.inventoryQuantity = item.inventoryQuantity;
                                 } else {
@@ -719,7 +719,7 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.quantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
                                 )) {
                                     myItem.quantity = item.quantity;
                                 } else {
@@ -774,7 +774,7 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
                                 )) {
                                     myItem.inventoryQuantity = item.inventoryQuantity;
                                 } else {
@@ -791,7 +791,7 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.quantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY)
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
                                 )) {
                                     myItem.quantity = item.quantity;
                                 } else {

@@ -1565,6 +1565,8 @@ declare namespace materials {
             dataOwner: number;
             /** 数据所属组织 */
             organization: string;
+            /** 质检方案 */
+            qcSchema: string;
             /** 可用量（库存+已订购-已承诺） */
             onAvailable(): number;
         }
@@ -1705,7 +1707,7 @@ declare namespace materials {
 declare namespace materials {
     namespace bo {
         /** 物料批次项目 */
-        interface IMaterialBatchItem extends ibas.IBOSimple {
+        interface IMaterialBatchItem extends ibas.IBOSimple, ibas.IBOUserFields {
             /** 批次编码 */
             batchCode: string;
             /** 数量 */
@@ -2370,7 +2372,7 @@ declare namespace materials {
 declare namespace materials {
     namespace bo {
         /** 物料序列项目 */
-        interface IMaterialSerialItem extends ibas.IBOSimple {
+        interface IMaterialSerialItem extends ibas.IBOSimple, ibas.IBOUserFields {
             /** 序列编码 */
             serialCode: string;
             /** 基于类型 */
@@ -7051,6 +7053,12 @@ declare namespace materials {
             get organization(): string;
             /** 设置-数据所属组织 */
             set organization(value: string);
+            /** 映射的属性名称-质检方案 */
+            static PROPERTY_QCSCHEMA_NAME: string;
+            /** 获取-质检方案 */
+            get qcSchema(): string;
+            /** 设置-质检方案 */
+            set qcSchema(value: string);
             /** 初始化数据 */
             protected init(): void;
             /** 重置 */

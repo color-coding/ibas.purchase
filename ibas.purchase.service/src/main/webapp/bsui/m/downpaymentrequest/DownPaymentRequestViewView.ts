@@ -284,7 +284,7 @@ namespace purchase {
                                 ]
                             }),
                             new sap.uxap.ObjectPageSection("", {
-                                title: ibas.i18n.prop("bo_downpaymentrequestitem"),
+                                title: ibas.i18n.prop("bo_downpaymentrequestitem_ap"),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [
@@ -546,7 +546,7 @@ namespace purchase {
                     let editForm: sap.m.Dialog = <any>sap.ui.getCore().byId(this.id + "_editform");
                     if (!(editForm instanceof sap.m.Dialog)) {
                         editForm = new sap.m.Dialog(this.id + "_editform", {
-                            title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem"), data.lineId),
+                            title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem_ap"), data.lineId),
                             type: sap.m.DialogType.Standard,
                             state: sap.ui.core.ValueState.None,
                             stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
@@ -681,7 +681,7 @@ namespace purchase {
                                                 let index: number = datas.indexOf(form.getModel().getData());
                                                 index = index <= 0 ? datas.length - 1 : index - 1;
                                                 form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem"), datas[index].lineId));
+                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem_ap"), datas[index].lineId));
                                             } else {
                                                 that.application.viewShower.messages({
                                                     title: that.title,
@@ -703,7 +703,7 @@ namespace purchase {
                                                 let index: number = datas.indexOf(form.getModel().getData());
                                                 index = index >= datas.length - 1 ? 0 : index + 1;
                                                 form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem"), datas[index].lineId));
+                                                editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_downpaymentrequestitem_ap"), datas[index].lineId));
                                             } else {
                                                 that.application.viewShower.messages({
                                                     title: that.title,
