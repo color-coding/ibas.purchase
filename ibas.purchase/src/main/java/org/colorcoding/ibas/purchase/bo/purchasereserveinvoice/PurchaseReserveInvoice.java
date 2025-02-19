@@ -2165,6 +2165,10 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 			return this.getBranch();
 		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
 			return this.getSupplierCode();
+		case Ledgers.CONDITION_PROPERTY_REFERENCE_1:
+			return this.getReference1();
+		case Ledgers.CONDITION_PROPERTY_REFERENCE_2:
+			return this.getReference2();
 		case Ledgers.CONDITION_PROPERTY_MATERIAL:
 			String[] items = new String[this.getPurchaseReserveInvoiceItems().size()];
 			for (int i = 0; i < items.length; i++) {

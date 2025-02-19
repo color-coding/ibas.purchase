@@ -361,6 +361,10 @@ namespace purchase {
             target.price = source.price;
             target.currency = source.currency;
             target.quantity = source.quantity;
+            // 库存数量
+            if (source.inventoryQuantity > 0) {
+                target.inventoryQuantity = source.inventoryQuantity;
+            }
             if (!(source.closedQuantity > 0)) {
                 target.preTaxLineTotal = source.preTaxLineTotal;
                 target.taxTotal = source.taxTotal;
@@ -910,7 +914,7 @@ namespace purchase {
                         // 总计小数位小于价格小数位，会有舍入问题，估降低精度
                         (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
                     ) {
-                        context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
+                        context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                     }
                     if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)) {
                         context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));

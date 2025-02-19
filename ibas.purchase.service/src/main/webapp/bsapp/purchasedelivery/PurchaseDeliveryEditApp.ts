@@ -992,6 +992,10 @@ namespace purchase {
                                     sItem.uomRate = item.uomRate;
                                     sItem.batchManagement = item.batchManagement;
                                     sItem.serialManagement = item.serialManagement;
+                                    // 库存数量
+                                    if (item.inventoryQuantity > 0) {
+                                        sItem.inventoryQuantity = item.inventoryQuantity;
+                                    }
                                     let order: sales.bo.SalesOrder = salesOrders.firstOrDefault(
                                         c => !ibas.strings.isEmpty(item.originalDocumentType)
                                             && ibas.strings.equalsIgnoreCase(item.originalDocumentType, c.objectCode)
@@ -1013,51 +1017,19 @@ namespace purchase {
                                         let orderItem: sales.bo.SalesOrderItem = order.salesOrderItems.firstOrDefault(
                                             c => c.lineId === item.originalDocumentLineId);
                                         if (!ibas.objects.isNull(orderItem)) {
-                                            sItem.originalDocumentType = orderItem.baseDocumentType;
-                                            sItem.originalDocumentEntry = orderItem.baseDocumentEntry;
-                                            sItem.originalDocumentLineId = orderItem.baseDocumentLineId;
-
-                                            sItem.unitPrice = orderItem.unitPrice;
-                                            sItem.discount = orderItem.discount;
-                                            sItem.tax = orderItem.tax;
-                                            sItem.taxRate = orderItem.taxRate;
-                                            sItem.price = orderItem.price;
-                                            sItem.currency = orderItem.currency;
-                                            sItem.uom = orderItem.uom;
-                                            sItem.inventoryUOM = orderItem.inventoryUOM;
-                                            sItem.uomRate = orderItem.uomRate;
-
-                                            if (!(orderItem.closedQuantity > 0)) {
-                                                sItem.preTaxLineTotal = orderItem.preTaxLineTotal;
-                                                sItem.taxTotal = orderItem.taxTotal;
-                                                sItem.lineTotal = orderItem.lineTotal;
-                                            }
-                                            sItem.reference1 = orderItem.reference1;
-                                            sItem.reference2 = orderItem.reference2;
-                                            // 复制自定义字段
-                                            for (let uItem of orderItem.userFields.forEach()) {
-                                                let myItem: ibas.IUserField = sItem.userFields.get(uItem.name);
-                                                if (ibas.objects.isNull(myItem)) {
-                                                    myItem = sItem.userFields.register(uItem.name, uItem.valueType);
-                                                    // continue;
-                                                }
-                                                if (myItem.valueType !== uItem.valueType) {
-                                                    continue;
-                                                }
-                                                myItem.value = uItem.value;
-                                            }
-                                            // 复制批次
-                                            for (let batch of orderItem.materialBatches) {
-                                                let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
-                                                myBatch.batchCode = batch.batchCode;
-                                                myBatch.quantity = batch.quantity;
-                                            }
-                                            // 复制序列
-                                            for (let serial of orderItem.materialSerials) {
-                                                let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
-                                                mySerial.serialCode = serial.serialCode;
-                                            }
+                                            sales.bo.baseDocumentItem(sItem, orderItem);
                                         }
+                                    }
+                                    // 复制批次
+                                    for (let batch of item.materialBatches) {
+                                        let myBatch: materials.bo.IMaterialBatchItem = sItem.materialBatches.create();
+                                        myBatch.batchCode = batch.batchCode;
+                                        myBatch.quantity = batch.quantity;
+                                    }
+                                    // 复制序列
+                                    for (let serial of item.materialSerials) {
+                                        let mySerial: materials.bo.IMaterialSerialItem = sItem.materialSerials.create();
+                                        mySerial.serialCode = serial.serialCode;
                                     }
                                 }
                                 ibas.servicesManager.runEditService({

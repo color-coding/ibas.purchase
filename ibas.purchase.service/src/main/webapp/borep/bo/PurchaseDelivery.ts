@@ -760,10 +760,16 @@ namespace purchase {
                         }
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        myItem.quantity = openQty;
+                        let closeQty: number = 0;
+                        if (item.closedQuantity > 0) {
+                            myItem.quantity = openQty;
+                            openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                            closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        } else {
+                            openQty = myItem.inventoryQuantity;
+                            closeQty = 0;
+                        }
                         // 复制批次
-                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        let closeQty: number = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let batch of item.materialBatches) {
                             closeQty -= batch.quantity;
                             if (closeQty >= 0 || openQty <= 0) {
@@ -844,10 +850,16 @@ namespace purchase {
                         }
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        myItem.quantity = openQty;
+                        let closeQty: number = 0;
+                        if (item.closedQuantity > 0) {
+                            myItem.quantity = openQty;
+                            openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                            closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        } else {
+                            openQty = myItem.inventoryQuantity;
+                            closeQty = 0;
+                        }
                         // 复制批次
-                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
-                        let closeQty: number = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let batch of item.materialBatches) {
                             closeQty -= batch.quantity;
                             if (closeQty >= 0 || openQty <= 0) {
