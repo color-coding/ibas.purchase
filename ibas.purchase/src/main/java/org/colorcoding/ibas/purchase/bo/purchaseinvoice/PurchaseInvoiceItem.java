@@ -2726,6 +2726,9 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 					if (PurchaseInvoiceItem.this.isDeleted()) {
 						return true;
 					}
+					if (PurchaseInvoiceItem.this.getLineStatus() == emDocumentStatus.PLANNED) {
+						return true;
+					}
 					if (PurchaseInvoiceItem.this instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseInvoiceItem.this;
 						if (boTag.getCanceled() == emYesNo.YES) {

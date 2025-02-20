@@ -2665,6 +2665,9 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 				if (PurchaseDeliveryItem.this.isDeleted()) {
 					return true;
 				}
+				if (PurchaseDeliveryItem.this.getLineStatus() == emDocumentStatus.PLANNED) {
+					return true;
+				}
 				if (PurchaseDeliveryItem.this instanceof IBOTagCanceled) {
 					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseDeliveryItem.this;
 					if (boTag.getCanceled() == emYesNo.YES) {

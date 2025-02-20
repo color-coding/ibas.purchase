@@ -2767,6 +2767,9 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 					if (PurchaseCreditNoteItem.this.isDeleted()) {
 						return true;
 					}
+					if (PurchaseCreditNoteItem.this.getLineStatus() == emDocumentStatus.PLANNED) {
+						return true;
+					}
 					if (PurchaseCreditNoteItem.this instanceof IBOTagCanceled) {
 						IBOTagCanceled boTag = (IBOTagCanceled) PurchaseCreditNoteItem.this;
 						if (boTag.getCanceled() == emYesNo.YES) {

@@ -771,7 +771,7 @@ namespace purchase {
                     ) {
                         return;
                     }
-                    context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
+                    context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                 } else {
                     let result: number = price * quantity;
                     if (quantity === 1) {
@@ -942,6 +942,8 @@ namespace purchase {
                     } else {
                         if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
                             context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        } else if (taxRate === 0) {
+                            rPreTotal = total;
                         }
                     }
                     // 差异小于近似位，则忽略

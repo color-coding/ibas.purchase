@@ -2662,6 +2662,9 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 				if (PurchaseReturnItem.this.isDeleted()) {
 					return true;
 				}
+				if (PurchaseReturnItem.this.getLineStatus() == emDocumentStatus.PLANNED) {
+					return true;
+				}
 				if (PurchaseReturnItem.this instanceof IBOTagCanceled) {
 					IBOTagCanceled boTag = (IBOTagCanceled) PurchaseReturnItem.this;
 					if (boTag.getCanceled() == emYesNo.YES) {
