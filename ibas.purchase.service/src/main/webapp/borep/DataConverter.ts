@@ -351,29 +351,35 @@ namespace purchase {
             target.inventoryUOM = source.inventoryUOM;
             target.uomRate = source.uomRate;
             target.rate = source.rate;
-            target.unitPrice = source.unitPrice;
-            target.discount = source.discount;
-            if (!(target instanceof DownPaymentRequestItem)) {
-                target.inverseDiscount = source.inverseDiscount;
-            }
             target.tax = source.tax;
             target.taxRate = source.taxRate;
-            target.price = source.price;
             target.currency = source.currency;
-            target.quantity = source.quantity;
-            // 库存数量
-            if (source.inventoryQuantity > 0) {
-                target.inventoryQuantity = source.inventoryQuantity;
-            }
-            if (!(source.closedQuantity > 0)) {
-                target.preTaxLineTotal = source.preTaxLineTotal;
-                target.taxTotal = source.taxTotal;
-                target.lineTotal = source.lineTotal;
-            }
             target.warehouse = source.warehouse;
             target.deliveryDate = source.deliveryDate;
             target.reference1 = source.reference1;
             target.reference2 = source.reference2;
+            // 赋值价格
+            if (source.closedQuantity > 0 || source.discount !== 1) {
+                target.unitPrice = source.unitPrice;
+                target.discount = source.discount;
+                if (!(target instanceof DownPaymentRequestItem)) {
+                    target.inverseDiscount = source.inverseDiscount;
+                }
+                target.price = source.price;
+            }
+            // 赋值数量
+            target.quantity = source.quantity;
+            if (source.inventoryQuantity > 0) {
+                target.inventoryQuantity = source.inventoryQuantity;
+            }
+            // 赋值总计
+            if (!(source.closedQuantity > 0)) {
+                target.preTaxLineTotal = source.preTaxLineTotal;
+                target.taxTotal = source.taxTotal;
+                target.lineTotal = source.lineTotal;
+                target.preTaxLineTotal = source.preTaxLineTotal;
+                target.taxTotal = source.taxTotal;
+            }
             // 复制自定义字段
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
@@ -765,13 +771,13 @@ namespace purchase {
                     }
                     let result: number = total / quantity;
                     // 差异小于近似位，则忽略
-                    if (ibas.numbers.isApproximated(price, result,
+                    if (!ibas.numbers.isApproximated(price, result,
                         // 总计小数位小于价格小数位，会有舍入问题，估降低精度
                         (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
+                        || quantity === 1
                     ) {
-                        return;
+                        context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                     }
-                    context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                 } else {
                     let result: number = price * quantity;
                     if (quantity === 1) {
@@ -823,12 +829,15 @@ namespace purchase {
                     // 折扣触发，算成交价
                     let result: number = preDiscount * discount;
                     // 差异小于近似位，则忽略
-                    if (ibas.numbers.isApproximated(afterDiscount, result, DECIMAL_PLACES_SUM)) {
-                        return;
+                    if (!ibas.numbers.isApproximated(afterDiscount, result, DECIMAL_PLACES_SUM)
+                        || discount === 1) {
+                        context.outputValues.set(this.afterDiscount, ibas.numbers.round(result));
                     }
-                    context.outputValues.set(this.afterDiscount, ibas.numbers.round(result));
                 } else if (afterDiscount === 0 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
                     context.outputValues.set(this.discount, 1);
+                    context.outputValues.set(this.preDiscount, afterDiscount);
+                } else if (discount === 1 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
+                    // 折扣1时，折扣后触发，则使用折扣后，保持折扣1
                     context.outputValues.set(this.preDiscount, afterDiscount);
                 } else {
                     if (preDiscount <= 0 || isNaN(preDiscount)) {
@@ -913,19 +922,27 @@ namespace purchase {
                     if (!ibas.numbers.isApproximated(rPrice, price,
                         // 总计小数位小于价格小数位，会有舍入问题，估降低精度
                         (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
+                        // 核心逻辑最优先使用
+                        || quantity === 1
                     ) {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                     }
-                    if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)) {
-                        context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
-                    }
-                    if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM)) {
-                        context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                    // 总计 = 税前 + 税，等式不成立时才调整（手动调整税前和税）
+                    if (total !== (preTotal + taxTotal)) {
+                        if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)
+                            || quantity === 1) {
+                            context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
+                        if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM)
+                            || quantity === 1) {
+                            context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.taxTotal, context.trigger)) {
                     let rTotal: number = preTotal + taxTotal;
-                    // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
+                    // 差异小于近似位，则忽略。且差异金额大于0.04
+                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
+                        && Math.abs(rTotal - total) > 0.04) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.price, context.trigger)
@@ -971,7 +988,9 @@ namespace purchase {
                     if (quantity === 1) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal));
                     } else {
-                        if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
+                        // 差异小于近似位，则忽略。且差异金额大于0.04
+                        if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
+                            && Math.abs(rTotal - total) > 0.04) {
                             context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                         }
                     }
