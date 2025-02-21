@@ -351,29 +351,33 @@ namespace purchase {
             target.inventoryUOM = source.inventoryUOM;
             target.uomRate = source.uomRate;
             target.rate = source.rate;
-            target.unitPrice = source.unitPrice;
-            target.discount = source.discount;
-            if (!(target instanceof DownPaymentRequestItem)) {
-                target.inverseDiscount = source.inverseDiscount;
-            }
             target.tax = source.tax;
             target.taxRate = source.taxRate;
-            target.price = source.price;
             target.currency = source.currency;
+            target.warehouse = source.warehouse;
+            target.deliveryDate = source.deliveryDate;
+            target.reference1 = source.reference1;
+            target.reference2 = source.reference2;
+            // 赋值价格
+            if (source.closedQuantity > 0 || source.discount !== 1) {
+                target.unitPrice = source.unitPrice;
+                target.discount = source.discount;
+                if (!(target instanceof DownPaymentRequestItem)) {
+                    target.inverseDiscount = source.inverseDiscount;
+                }
+                target.price = source.price;
+            }
+            // 赋值数量
             target.quantity = source.quantity;
-            // 库存数量
             if (source.inventoryQuantity > 0) {
                 target.inventoryQuantity = source.inventoryQuantity;
             }
+            // 赋值总计
             if (!(source.closedQuantity > 0)) {
                 target.preTaxLineTotal = source.preTaxLineTotal;
                 target.taxTotal = source.taxTotal;
                 target.lineTotal = source.lineTotal;
             }
-            target.warehouse = source.warehouse;
-            target.deliveryDate = source.deliveryDate;
-            target.reference1 = source.reference1;
-            target.reference2 = source.reference2;
             // 复制自定义字段
             for (let item of source.userFields.forEach()) {
                 let myItem: ibas.IUserField = target.userFields.get(item.name);
@@ -830,6 +834,9 @@ namespace purchase {
                 } else if (afterDiscount === 0 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
                     context.outputValues.set(this.discount, 1);
                     context.outputValues.set(this.preDiscount, afterDiscount);
+                } else if (discount === 1 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
+                    // 折扣1时，折扣后触发，则使用折扣后，保持折扣1
+                    context.outputValues.set(this.preDiscount, afterDiscount);
                 } else {
                     if (preDiscount <= 0 || isNaN(preDiscount)) {
                         context.outputValues.set(this.discount, 1);
@@ -924,8 +931,9 @@ namespace purchase {
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.taxTotal, context.trigger)) {
                     let rTotal: number = preTotal + taxTotal;
-                    // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)) {
+                    // 差异小于近似位，则忽略。且差异金额大于0.04
+                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
+                        && Math.abs(rTotal - total) > 0.04) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.price, context.trigger)
