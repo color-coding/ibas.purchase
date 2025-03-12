@@ -1041,6 +1041,7 @@ namespace purchase {
                                 target.rounding = this.editData.rounding;
                                 target.diffAmount = this.editData.diffAmount;
                                 target.discount = this.editData.discount;
+                                target.inverseDiscount = this.editData.inverseDiscount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
                             // 设置单据类型
@@ -1093,6 +1094,7 @@ namespace purchase {
                                 target.rounding = this.editData.rounding;
                                 target.diffAmount = this.editData.diffAmount;
                                 target.discount = this.editData.discount;
+                                target.inverseDiscount = this.editData.inverseDiscount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
                             // 设置单据类型
@@ -1147,6 +1149,7 @@ namespace purchase {
                                 target.rounding = this.editData.rounding;
                                 target.diffAmount = this.editData.diffAmount;
                                 target.discount = this.editData.discount;
+                                target.inverseDiscount = this.editData.inverseDiscount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
                             // 设置单据类型
@@ -1225,6 +1228,7 @@ namespace purchase {
                                 target.rounding = this.editData.rounding;
                                 target.diffAmount = this.editData.diffAmount;
                                 target.discount = this.editData.discount;
+                                target.inverseDiscount = this.editData.inverseDiscount;
                                 target.documentTotal = this.editData.documentTotal;
                             }
                             // 设置单据类型
