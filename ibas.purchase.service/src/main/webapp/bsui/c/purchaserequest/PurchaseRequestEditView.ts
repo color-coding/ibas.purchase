@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseRequestItemMaterialVersionEvent: Function;
                 /** 选择采购申请-行成本中心事件 */
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
+                /** 选择采购申请-行 仓库 */
+                choosePurchaseRequestItemWarehouseEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 显示采购申请额外信息事件 */
@@ -443,6 +445,40 @@ namespace purchase {
                                         }),
                                         width: "8rem",
                                         visible: materials.config.isEnableMaterialVersions(),
+                                    }),
+                                    new sap.extension.table.DataColumn("", {
+                                        label: ibas.i18n.prop("bo_purchaserequestitem_warehouse"),
+                                        template: new sap.extension.m.RepositoryInput("", {
+                                            showValueHelp: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.Warehouse,
+                                                key: materials.bo.Warehouse.PROPERTY_CODE_NAME,
+                                                text: materials.bo.Warehouse.PROPERTY_NAME_NAME
+                                            },
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.choosePurchaseRequestItemWarehouseEvent,
+                                                    // 获取当前对象
+                                                    this.getBindingContext().getObject()
+                                                );
+                                            },
+                                            showSuggestion: true,
+                                            suggestionItemSelected: function (this: sap.extension.m.RepositoryInput, event: sap.ui.base.Event): void {
+                                                let selectedItem: any = event.getParameter("selectedItem");
+                                                if (!ibas.objects.isNull(selectedItem)) {
+                                                    that.fireViewEvents(that.choosePurchaseRequestItemWarehouseEvent, this.getBindingContext().getObject(), this.itemConditions(selectedItem));
+                                                }
+                                            },
+                                            criteria: [
+                                                new ibas.Condition(materials.bo.Warehouse.PROPERTY_ACTIVATED_NAME, ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
+                                            ]
+                                        }).bindProperty("bindingValue", {
+                                            path: "warehouse",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
+                                        }),
+                                        visible: false,
                                     }),
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaserequestitem_quantity"),

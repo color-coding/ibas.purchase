@@ -225,6 +225,7 @@
         "bo_purchaserequestitem_inventoryuom": "Inventory UoM",
         "bo_purchaserequestitem_uomrate": "UoM Rate",
         "bo_purchaserequestitem_inventoryquantity": "Inventory Quantity",
+        "bo_purchaserequestitem_warehouse": "Warehouse",
         "bo_purchaserequestitem_supplier": "Supplier",
         "bo_purchaserequestitem_price": "Price",
         "bo_purchaserequestitem_currency": "Currency",

@@ -24,6 +24,8 @@ namespace purchase {
                 choosePurchaseRequestItemMaterialEvent: Function;
                 /** 选择采购申请-行物料单位 */
                 choosePurchaseRequestItemUnitEvent: Function;
+                /** 选择采购申请-行 仓库 */
+                choosePurchaseRequestItemWarehouseEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 显示采购申请额外信息事件 */
@@ -760,6 +762,30 @@ namespace purchase {
                                             type: new sap.extension.data.Alphanumeric({
                                                 maxLength: 10
                                             }),
+                                        }),
+                                        new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_warehouse") }),
+                                        new sap.extension.m.RepositoryInput("", {
+                                            showValueHelp: true,
+                                            repository: materials.bo.BORepositoryMaterials,
+                                            dataInfo: {
+                                                type: materials.bo.Warehouse,
+                                                key: materials.bo.Warehouse.PROPERTY_CODE_NAME,
+                                                text: materials.bo.Warehouse.PROPERTY_NAME_NAME
+                                            },
+                                            valueHelpRequest: function (this: sap.extension.m.Input): void {
+                                                let model: any = this.getModel();
+                                                if (model instanceof sap.extension.model.JSONModel) {
+                                                    let data: any = model.getData();
+                                                    if (data) {
+                                                        that.fireViewEvents(that.choosePurchaseRequestItemWarehouseEvent, data);
+                                                    }
+                                                }
+                                            }
+                                        }).bindProperty("bindingValue", {
+                                            path: "warehouse",
+                                            type: new sap.extension.data.Alphanumeric({
+                                                maxLength: 8
+                                            })
                                         }),
                                         new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaserequestitem_quantity") }),
                                         new sap.extension.m.Input("", {

@@ -407,6 +407,7 @@ namespace purchase {
             target.serialManagement = source.serialManagement;
             target.batchManagement = source.batchManagement;
             if (!(target instanceof PurchaseRequestItem)) {
+                // 采购申请，不主动赋值
                 target.warehouse = source.warehouse;
                 if (ibas.strings.isEmpty(source.warehouse)) {
                     if (!ibas.strings.isEmpty(source.defaultWarehouse)) {

@@ -195,6 +195,8 @@ namespace purchase {
             uomRate: number;
             /** 库存数量 */
             inventoryQuantity: number;
+            /** 仓库 */
+            warehouse: string;
             /** 供应商 */
             supplier: string;
             /** 价格 */

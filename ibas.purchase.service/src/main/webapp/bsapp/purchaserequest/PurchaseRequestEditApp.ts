@@ -35,6 +35,7 @@ namespace purchase {
                 this.view.choosePurchaseRequestItemMaterialEvent = this.choosePurchaseRequestItemMaterial;
                 this.view.showPurchaseRequestItemExtraEvent = this.showPurchaseRequestItemExtra;
                 this.view.choosePurchaseRequestItemUnitEvent = this.choosePurchaseRequestItemUnit;
+                this.view.choosePurchaseRequestItemWarehouseEvent = this.choosePurchaseRequestItemWarehouse;
                 this.view.choosePurchaseRequestItemDistributionRuleEvent = this.choosePurchaseRequestItemDistributionRule;
                 this.view.choosePurchaseRequestItemMaterialVersionEvent = this.choosePurchaseRequestItemMaterialVersion;
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
@@ -539,7 +540,7 @@ namespace purchase {
                         itemDescription: item.itemDescription,
                         quantity: ibas.numbers.valueOf(item.quantity) - ibas.numbers.valueOf(item.closedQuantity),
                         uom: item.uom,
-                        warehouse: undefined, // 不提供仓库信息，不触发占用逻辑
+                        warehouse: !ibas.strings.isEmpty(item.warehouse) ? item.warehouse : undefined, // 不提供仓库信息，不触发占用逻辑
                         deliveryDate: item.requestDate instanceof Date ? item.requestDate : this.editData.deliveryDate,
                     });
                 }
@@ -759,6 +760,41 @@ namespace purchase {
                     }
                 }
             }
+            private choosePurchaseRequestItemWarehouse(caller: bo.PurchaseRequestItem, filterConditions?: ibas.ICondition[]): void {
+                let conditions: ibas.IList<ibas.ICondition> = materials.app.conditions.warehouse.create(this.editData.branch);
+                // 添加输入条件
+                if (filterConditions instanceof Array && filterConditions.length > 0) {
+                    if (conditions.length > 1) {
+                        conditions.firstOrDefault().bracketOpen++;
+                        conditions.lastOrDefault().bracketClose++;
+                    }
+                    conditions.add(filterConditions);
+                }
+                let that: this = this;
+                ibas.servicesManager.runChooseService<materials.bo.Warehouse>({
+                    boCode: materials.bo.Warehouse.BUSINESS_OBJECT_CODE,
+                    chooseType: ibas.emChooseType.SINGLE,
+                    criteria: conditions,
+                    onCompleted(selecteds: ibas.IList<materials.bo.IWarehouse>): void {
+                        let index: number = that.editData.purchaseRequestItems.indexOf(caller);
+                        let item: bo.PurchaseRequestItem = that.editData.purchaseRequestItems[index];
+                        // 选择返回数量多余触发数量时,自动创建新的项目
+                        let created: boolean = false;
+                        for (let selected of selecteds) {
+                            if (ibas.objects.isNull(item)) {
+                                item = that.editData.purchaseRequestItems.create();
+                                created = true;
+                            }
+                            item.warehouse = selected.code;
+                            item = null;
+                        }
+                        if (created) {
+                            // 创建了新的行项目
+                            that.view.showPurchaseRequestItems(that.editData.purchaseRequestItems.filterDeleted());
+                        }
+                    }
+                });
+            }
             private choosePurchaseRequestItemMaterialVersion(caller: bo.PurchaseRequestItem): void {
                 let criteria: ibas.ICriteria = new ibas.Criteria();
                 let condition: ibas.ICondition = criteria.conditions.create();
@@ -856,6 +892,8 @@ namespace purchase {
             choosePurchaseRequestItemMaterialEvent: Function;
             /** 选择采购申请-行物料单位 */
             choosePurchaseRequestItemUnitEvent: Function;
+            /** 选择采购申请-行 仓库 */
+            choosePurchaseRequestItemWarehouseEvent: Function;
             /** 选择供应商合同 */
             chooseSupplierAgreementsEvent: Function;
             /** 显示采购申请额外信息事件 */

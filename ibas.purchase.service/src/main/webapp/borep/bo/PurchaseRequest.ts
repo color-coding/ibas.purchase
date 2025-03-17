@@ -1154,6 +1154,17 @@ namespace purchase {
                 this.setProperty(PurchaseRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
 
+            /** 映射的属性名称-仓库 */
+            static PROPERTY_WAREHOUSE_NAME: string = "Warehouse";
+            /** 获取-仓库 */
+            get warehouse(): string {
+                return this.getProperty<string>(PurchaseRequestItem.PROPERTY_WAREHOUSE_NAME);
+            }
+            /** 设置-仓库 */
+            set warehouse(value: string) {
+                this.setProperty(PurchaseRequestItem.PROPERTY_WAREHOUSE_NAME, value);
+            }
+
             /** 映射的属性名称-供应商 */
             static PROPERTY_SUPPLIER_NAME: string = "Supplier";
             /** 获取-供应商 */

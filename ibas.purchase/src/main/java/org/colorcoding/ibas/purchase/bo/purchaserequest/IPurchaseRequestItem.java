@@ -625,6 +625,20 @@ public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentClosingQ
 	void setInventoryQuantity(BigDecimal value);
 
 	/**
+	 * 获取-仓库
+	 * 
+	 * @return 值
+	 */
+	String getWarehouse();
+
+	/**
+	 * 设置-仓库
+	 * 
+	 * @param value 值
+	 */
+	void setWarehouse(String value);
+
+	/**
 	 * 获取-供应商
 	 * 
 	 * @return 值

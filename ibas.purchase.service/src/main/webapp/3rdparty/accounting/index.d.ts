@@ -7791,14 +7791,16 @@ declare namespace accounting {
             /** 新建数据，参数1：是否克隆 */
             protected createData(clone: boolean): void;
             /** 添加日记账分录-行事件 */
-            protected addJournalEntryLine(type: "ACCOUNT" | "BUSINESSPARTNER"): void;
+            protected addJournalEntryLine(type: "ACCOUNT" | "CUSTOMER" | "SUPPLIER"): void;
             /** 删除日记账分录-行事件 */
             protected removeJournalEntryLine(items: bo.JournalEntryLine[]): void;
             /** 选择日记账分录-行科目 */
-            protected chooseJournalEntryLineAccount(caller: bo.JournalEntryLine): void;
+            protected chooseJournalEntryLineAccount(caller: bo.JournalEntryLine, control: boolean): void;
             /** 选择日记账分录-行业务伙伴/科目 */
-            protected chooseJournalEntryLineShortName(caller: bo.JournalEntryLine): void;
-            private chooseJournalEntryLineDistributionRule;
+            protected chooseJournalEntryLineShortName(caller: bo.JournalEntryLine, type?: "ACCOUNT" | "CUSTOMER" | "SUPPLIER"): void;
+            protected chooseJournalEntryLineDistributionRule(type: emDimensionType, caller: bo.JournalEntryLine): void;
+            /** 冲销分录 */
+            protected reverseJournalEntry(): void;
         }
         /** 视图-日记账分录 */
         interface IJournalEntryEditView extends ibas.IBOEditView {
@@ -7820,6 +7822,8 @@ declare namespace accounting {
             chooseJournalEntryLineShortNameEvent: Function;
             /** 选择日记账分录-行成本中心事件 */
             chooseJournalEntryLineDistributionRuleEvent: Function;
+            /** 冲销分录事件 */
+            reverseJournalEntryEvent: Function;
         }
     }
 }

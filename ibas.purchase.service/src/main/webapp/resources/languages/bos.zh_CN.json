@@ -224,6 +224,7 @@
         "bo_purchaserequestitem_inventoryuom": "库存单位",
         "bo_purchaserequestitem_uomrate": "单位换算率",
         "bo_purchaserequestitem_inventoryquantity": "库存数量",
+        "bo_purchaserequestitem_warehouse": "仓库",
         "bo_purchaserequestitem_supplier": "供应商",
         "bo_purchaserequestitem_price": "价格",
         "bo_purchaserequestitem_currency": "货币",
