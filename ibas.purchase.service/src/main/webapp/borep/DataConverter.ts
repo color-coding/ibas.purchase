@@ -664,6 +664,10 @@ namespace purchase {
                         context.outputValues.set(this.discount, 1);
                         context.outputValues.set(this.total, 0);
                     } else {
+                        // 计算前统一小数位
+                        preTotal = ibas.numbers.round(preTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined);
+                        total = ibas.numbers.round(total, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined);
+                        // 计算折扣
                         let result: number = total / preTotal;
                         // 差异小于近似位，则忽略
                         if (ibas.numbers.isApproximated(discount, result, DECIMAL_PLACES_PERCENTAGE > 4 ? DECIMAL_PLACES_PERCENTAGE : 4, 0)) {
@@ -770,14 +774,34 @@ namespace purchase {
                     if (quantity <= 0) {
                         return;
                     }
-                    let result: number = total / quantity;
-                    // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(price, result,
-                        // 总计小数位小于价格小数位，会有舍入问题，估降低精度
-                        (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
-                        || quantity === 1
-                    ) {
-                        context.outputValues.set(this.price, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
+                    let rPrice: number = total / quantity;
+                    if (quantity === 1) {
+                        // 核心逻辑最优先使用
+                        context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
+                    } else {
+                        // 差异小于近似位，则忽略
+                        if (!ibas.numbers.isApproximated(rPrice, price,
+                            // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                            (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
+                        ) {
+                            if (TRUNCATE_DECIMALS) {
+                                // 需要截取小数，且价格小数位大于总计的
+                                let pValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_PRICE);
+                                let sValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_SUM);
+                                if (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM) {
+                                    if ((pValue - sValue) < (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE))) {
+                                        // 按价格截取的小数与总计的差异，小于0.0004则使用总计的
+                                        context.outputValues.set(this.price, sValue);
+                                    } else {
+                                        context.outputValues.set(this.price, pValue);
+                                    }
+                                } else {
+                                    context.outputValues.set(this.price, pValue);
+                                }
+                            } else {
+                                context.outputValues.set(this.price, ibas.numbers.round(rPrice, 9));
+                            }
+                        }
                     }
                 } else {
                     let result: number = price * quantity;
@@ -919,15 +943,36 @@ namespace purchase {
                     let rPrice: number = total / quantity;
                     let rPreTotal: number = total / (1 + taxRate);
                     let rTaxTotal: number = total - rPreTotal;
-                    // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rPrice, price,
-                        // 总计小数位小于价格小数位，会有舍入问题，估降低精度
-                        (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
+
+                    if (quantity === 1) {
                         // 核心逻辑最优先使用
-                        || quantity === 1
-                    ) {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
+                    } else {
+                        // 差异小于近似位，则忽略
+                        if (!ibas.numbers.isApproximated(rPrice, price,
+                            // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                            (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE))
+                        ) {
+                            if (TRUNCATE_DECIMALS) {
+                                // 需要截取小数，且价格小数位大于总计的
+                                let pValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_PRICE);
+                                let sValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_SUM);
+                                if (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM) {
+                                    if ((pValue - sValue) < (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE))) {
+                                        // 按价格截取的小数与总计的差异，小于0.0004则使用总计的
+                                        context.outputValues.set(this.price, sValue);
+                                    } else {
+                                        context.outputValues.set(this.price, pValue);
+                                    }
+                                } else {
+                                    context.outputValues.set(this.price, pValue);
+                                }
+                            } else {
+                                context.outputValues.set(this.price, ibas.numbers.round(rPrice, 9));
+                            }
+                        }
                     }
+
                     // 总计 = 税前 + 税，等式不成立时才调整（手动调整税前和税）
                     if (total !== (preTotal + taxTotal)) {
                         if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)
