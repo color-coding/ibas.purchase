@@ -760,8 +760,8 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
-                                )) {
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                    || result > item.inventoryQuantity) {
                                     myItem.inventoryQuantity = item.inventoryQuantity;
                                 } else {
                                     if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -777,8 +777,8 @@ namespace purchase {
                             if (myItem.price > 0) {
                                 let result: number = ibas.numbers.round(openAmount / myItem.price);
                                 if (ibas.numbers.isApproximated(result, item.quantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0
-                                )) {
+                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                    || result > item.quantity) {
                                     myItem.quantity = item.quantity;
                                 } else {
                                     if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
