@@ -293,7 +293,8 @@ namespace purchase {
             target.contactPerson = source.contactPerson;
             target.documentDate = ibas.dates.today();
             target.postingDate = ibas.dates.today();
-            if (ibas.dates.equals(target.deliveryDate, target.documentDate)) {
+            target.deliveryDate = ibas.dates.today();
+            if ((source instanceof PurchaseQuote && target instanceof PurchaseOrder)) {
                 target.deliveryDate = source.deliveryDate;
             }
             target.reference1 = source.reference1;
