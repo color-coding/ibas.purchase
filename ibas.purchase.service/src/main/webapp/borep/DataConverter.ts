@@ -293,7 +293,8 @@ namespace purchase {
             target.contactPerson = source.contactPerson;
             target.documentDate = ibas.dates.today();
             target.postingDate = ibas.dates.today();
-            if (ibas.dates.equals(target.deliveryDate, target.documentDate)) {
+            target.deliveryDate = ibas.dates.today();
+            if ((source instanceof PurchaseQuote && target instanceof PurchaseOrder)) {
                 target.deliveryDate = source.deliveryDate;
             }
             target.reference1 = source.reference1;
@@ -1126,7 +1127,7 @@ namespace purchase {
                 }
                 if (ibas.strings.equalsIgnoreCase(this.amountLC, context.trigger)
                     || ibas.strings.equalsIgnoreCase(this.rate, context.trigger)) {
-                    if (rate !== 0) {
+                    if (rate !== 1) {
                         let result: number = amountLC * rate;
                         if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
@@ -1139,10 +1140,10 @@ namespace purchase {
                     if (!(pricePlaces > 0) || !(pricePlaces < DECIMAL_PLACES_PRICE)) {
                         pricePlaces = DECIMAL_PLACES_PRICE;
                     }
-                    if (rate !== 0) {
+                    if (rate !== 1) {
                         let result: number = amount / rate;
                         if (!ibas.numbers.isApproximated(result, amountLC, pricePlaces, 0)) {
-                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
+                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, TRUNCATE_DECIMALS ? pricePlaces : undefined));
                         }
                     } else {
                         context.outputValues.set(this.amountLC, amount);
