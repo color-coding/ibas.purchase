@@ -755,40 +755,42 @@ namespace purchase {
                         }
                         let myItem: PurchaseCreditNoteItem = this.purchaseCreditNoteItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        // 计算数量
-                        if (config.isInventoryUnitLinePrice()) {
-                            if (myItem.price > 0) {
-                                let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                    || result > item.inventoryQuantity) {
-                                    myItem.inventoryQuantity = item.inventoryQuantity;
-                                } else {
-                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
-                                        myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                        if (openAmount !== item.lineTotal) {
+                            // 未清金额不等于总额，计算数量
+                            if (config.isInventoryUnitLinePrice()) {
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.inventoryQuantity) {
+                                        myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
-                                        myItem.inventoryQuantity = result;
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.inventoryQuantity = result;
+                                        }
                                     }
+                                } else {
+                                    myItem.inventoryQuantity = 0;
                                 }
                             } else {
-                                myItem.inventoryQuantity = 0;
-                            }
-                        } else {
-                            if (myItem.price > 0) {
-                                let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                if (ibas.numbers.isApproximated(result, item.quantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                    || result > item.quantity) {
-                                    myItem.quantity = item.quantity;
-                                } else {
-                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
-                                        myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.quantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.quantity) {
+                                        myItem.quantity = item.quantity;
                                     } else {
-                                        myItem.quantity = result;
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.quantity = result;
+                                        }
                                     }
+                                } else {
+                                    myItem.quantity = 0;
                                 }
-                            } else {
-                                myItem.quantity = 0;
                             }
                         }
                         // 复制批次
@@ -903,40 +905,42 @@ namespace purchase {
                         }
                         let myItem: PurchaseCreditNoteItem = this.purchaseCreditNoteItems.create();
                         bo.baseDocumentItem(myItem, item);
-                        // 计算数量
-                        if (config.isInventoryUnitLinePrice()) {
-                            if (myItem.price > 0) {
-                                let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                    || result > item.inventoryQuantity) {
-                                    myItem.inventoryQuantity = item.inventoryQuantity;
-                                } else {
-                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
-                                        myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                        if (openAmount !== item.lineTotal) {
+                            // 未清金额不等于总额，计算数量
+                            if (config.isInventoryUnitLinePrice()) {
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.inventoryQuantity) {
+                                        myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
-                                        myItem.inventoryQuantity = result;
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.inventoryQuantity = result;
+                                        }
                                     }
+                                } else {
+                                    myItem.inventoryQuantity = 0;
                                 }
                             } else {
-                                myItem.inventoryQuantity = 0;
-                            }
-                        } else {
-                            if (myItem.price > 0) {
-                                let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                if (ibas.numbers.isApproximated(result, item.quantity,
-                                    ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                    || result > item.quantity) {
-                                    myItem.quantity = item.quantity;
-                                } else {
-                                    if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
-                                        myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.quantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.quantity) {
+                                        myItem.quantity = item.quantity;
                                     } else {
-                                        myItem.quantity = result;
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.quantity = result;
+                                        }
                                     }
+                                } else {
+                                    myItem.quantity = 0;
                                 }
-                            } else {
-                                myItem.quantity = 0;
                             }
                         }
                     }
