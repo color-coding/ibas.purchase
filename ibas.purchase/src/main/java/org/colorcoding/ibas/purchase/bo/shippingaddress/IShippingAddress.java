@@ -635,4 +635,18 @@ public interface IShippingAddress extends IBOSimple {
 	 */
 	void setUpdateActionId(String value);
 
+	/**
+	* 获取-来源编号
+	* 
+	* @return 值
+	*/
+	Integer getSourceKey();
+
+	/**
+	* 设置-来源编号
+	* 
+	* @param value 值
+	*/
+	void setSourceKey(Integer value);
+
 }

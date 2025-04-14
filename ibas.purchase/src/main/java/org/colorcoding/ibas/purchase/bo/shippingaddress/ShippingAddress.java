@@ -1341,6 +1341,37 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	}
 
 	/**
+	* 属性名称-来源编号
+	*/
+	private static final String PROPERTY_SOURCEKEY_NAME = "SourceKey";
+
+	/**
+	* 来源编号 属性
+	*/
+	@DbField(name = "SourceKey", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<Integer> PROPERTY_SOURCEKEY = registerProperty(PROPERTY_SOURCEKEY_NAME,
+			Integer.class, MY_CLASS);
+
+	/**
+	* 获取-来源编号
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_SOURCEKEY_NAME)
+	public final Integer getSourceKey() {
+		return this.getProperty(PROPERTY_SOURCEKEY);
+	}
+
+	/**
+	* 设置-来源编号
+	* 
+	* @param value 值
+	*/
+	public final void setSourceKey(Integer value) {
+		this.setProperty(PROPERTY_SOURCEKEY, value);
+	}
+
+	/**
 	 * 初始化数据
 	 */
 	@Override

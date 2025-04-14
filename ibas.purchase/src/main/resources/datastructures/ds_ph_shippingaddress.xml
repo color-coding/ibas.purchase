@@ -39,6 +39,7 @@
     <Property Name="UpdateUserSign" Description="修改用户" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="Updator"/>
     <Property Name="CreateActionId" Description="创建动作标识" DataType="Alphanumeric" DataSubType="Default" EditSize="36" Mapped="CreateActId"/>
     <Property Name="UpdateActionId" Description="更新动作标识" DataType="Alphanumeric" DataSubType="Default" EditSize="36" Mapped="UpdateActId"/>
+    <Property Name="SourceKey" Description="来源编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="SourceKey"/>
   </Model>
   <BusinessObject MappedModel="ShippingAddress" ShortName="${Company}_PH_SHIPADDRESS"/>
 </Domain>

@@ -874,6 +874,7 @@
         "bo_shippingaddress_updateusersign": "修改用户",
         "bo_shippingaddress_createactionid": "创建动作标识",
         "bo_shippingaddress_updateactionid": "更新动作标识",
+        "bo_shippingaddress_sourcekey": "来源编号",
         "bo_shippingaddress_closing_delimiter": "----结束----"
     },
     {

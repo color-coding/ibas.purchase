@@ -424,6 +424,18 @@ namespace purchase {
                 this.setProperty(ShippingAddress.PROPERTY_UPDATEACTIONID_NAME, value);
             }
 
+
+            /** 映射的属性名称-来源编号 */
+            static PROPERTY_SOURCEKEY_NAME: string = "SourceKey";
+            /** 获取-来源编号 */
+            get sourceKey(): number {
+                return this.getProperty<number>(ShippingAddress.PROPERTY_SOURCEKEY_NAME);
+            }
+            /** 设置-来源编号 */
+            set sourceKey(value: number) {
+                this.setProperty(ShippingAddress.PROPERTY_SOURCEKEY_NAME, value);
+            }
+
             /** 基于地址 */
             baseAddress(address: businesspartner.bo.IAddress): void {
                 if (ibas.objects.isNull(address)) {

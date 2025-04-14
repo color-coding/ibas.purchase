@@ -122,6 +122,8 @@ namespace purchase {
             /** 更新动作标识 */
             updateActionId: string;
 
+            /** 来源编号 */
+            sourceKey: number;
 
         }
 
