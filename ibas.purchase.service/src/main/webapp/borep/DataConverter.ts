@@ -1129,7 +1129,8 @@ namespace purchase {
                     || ibas.strings.equalsIgnoreCase(this.rate, context.trigger)) {
                     if (rate !== 1) {
                         let result: number = amountLC * rate;
-                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)) {
+                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)
+                            && (Math.abs(result - amount) > (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE)))) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                         }
                     } else {

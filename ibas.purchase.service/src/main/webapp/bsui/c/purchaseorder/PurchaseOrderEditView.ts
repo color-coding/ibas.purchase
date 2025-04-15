@@ -267,12 +267,24 @@ namespace purchase {
                                 path: "canceled",
                                 type: new sap.extension.data.YesNo()
                             }).bindProperty("editable", {
-                                path: "approvalStatus",
-                                type: new sap.extension.data.ApprovalStatus(),
-                                formatter(data: ibas.emApprovalStatus): boolean {
-                                    if (data === ibas.emApprovalStatus.PROCESSING) {
+                                parts: [
+                                    {
+                                        path: "approvalStatus",
+                                        type: new sap.extension.data.ApprovalStatus(),
+                                    },
+                                    {
+                                        path: "documentStatus",
+                                        type: new sap.extension.data.DocumentStatus(),
+                                    }
+                                ],
+                                formatter(apStatus: ibas.emApprovalStatus, docStatus: ibas.emDocumentStatus): boolean {
+                                    if (apStatus === ibas.emApprovalStatus.PROCESSING) {
                                         return false;
-                                    } return true;
+                                    }
+                                    if (docStatus === ibas.emDocumentStatus.PLANNED) {
+                                        return false;
+                                    }
+                                    return true;
                                 }
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchaseorder_documentdate") }),

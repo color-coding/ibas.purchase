@@ -47,6 +47,7 @@ import org.colorcoding.ibas.document.IDocumentCloseAmountOperator;
 import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
@@ -1663,6 +1664,7 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_DOWNPAYMENTREQUESTITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_DOWNPAYMENTREQUESTITEMS,
 						DownPaymentRequestItem.PROPERTY_LINESTATUS), // 使用集合元素状态

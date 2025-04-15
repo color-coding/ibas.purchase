@@ -42,6 +42,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
@@ -1918,6 +1919,7 @@ public class PurchaseReturnRequest extends BusinessObject<PurchaseReturnRequest>
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_PURCHASERETURNREQUESTITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_PURCHASERETURNREQUESTITEMS,
 						PurchaseReturnRequestItem.PROPERTY_LINESTATUS), // 使用集合元素状态

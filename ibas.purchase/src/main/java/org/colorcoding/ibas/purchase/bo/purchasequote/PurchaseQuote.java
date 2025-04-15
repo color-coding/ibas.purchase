@@ -40,6 +40,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSumElements;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.ISupplierAndFloorListCheckContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
@@ -1848,6 +1849,7 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote> implements IPur
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_PURCHASEQUOTEITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_PURCHASEQUOTEITEMS,
 						PurchaseQuoteItem.PROPERTY_LINESTATUS), // 使用集合元素状态

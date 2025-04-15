@@ -58,6 +58,7 @@ import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCost;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCostDiff;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
@@ -2001,6 +2002,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice> implements 
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_PURCHASEINVOICEITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_PURCHASEINVOICEITEMS,
 						PurchaseInvoiceItem.PROPERTY_LINESTATUS), // 使用集合元素状态

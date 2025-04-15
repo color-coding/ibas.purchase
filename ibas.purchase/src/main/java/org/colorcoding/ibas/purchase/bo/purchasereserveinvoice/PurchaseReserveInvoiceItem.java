@@ -38,6 +38,7 @@ import org.colorcoding.ibas.materials.logic.IDocumentAmountClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.logic.IBlanketAgreementQuantityContract;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionCurrencyAmount;
@@ -2511,6 +2512,7 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_UOMRATE), // 不能低于0
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_LINESTATUS), // 阻止取消单据
 				// 计算本币价格
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_UNITPRICELC, PROPERTY_UNITPRICE, PROPERTY_RATE),
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRETAXPRICELC, PROPERTY_PRETAXPRICE, PROPERTY_RATE),

@@ -37,6 +37,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
+import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.data.emAgreementMethod;
 import org.colorcoding.ibas.purchase.data.emAgreementType;
@@ -1571,6 +1572,7 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement>
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_SUPPLIERCODE), // 要求有值
+				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_BLANKETAGREEMENTITEMS,
 						BlanketAgreementItem.PROPERTY_LINESTATUS), // 使用集合元素状态
 		};
