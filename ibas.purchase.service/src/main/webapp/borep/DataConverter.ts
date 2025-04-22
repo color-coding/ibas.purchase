@@ -378,8 +378,8 @@ namespace purchase {
                 target.preTaxLineTotal = source.preTaxLineTotal;
                 target.taxTotal = source.taxTotal;
                 target.lineTotal = source.lineTotal;
-                target.preTaxLineTotal = source.preTaxLineTotal;
                 target.taxTotal = source.taxTotal;
+                target.preTaxLineTotal = source.preTaxLineTotal;
                 // 总计小数位小于价格时，价格赋值
                 if (DECIMAL_PLACES_SUM < DECIMAL_PLACES_PRICE) {
                     if (Math.abs(target.unitPrice - source.unitPrice) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
@@ -984,7 +984,7 @@ namespace purchase {
                     }
 
                     // 总计 = 税前 + 税，等式不成立时才调整（手动调整税前和税）
-                    if (total !== (preTotal + taxTotal)) {
+                    if (total !== ibas.numbers.round(preTotal + taxTotal)) {
                         if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM)
                             || quantity === 1) {
                             context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
@@ -1037,17 +1037,26 @@ namespace purchase {
                 } else if (ibas.strings.equalsIgnoreCase(this.preTotal, context.trigger)) {
                     let rTaxTotal: number = preTotal * taxRate;
                     let rTotal: number = preTotal + rTaxTotal;
-                    // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
-                        context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                    // 税前 + 税 与 价格 * 数量，差异小时，使用明显值
+                    if (ibas.numbers.round(Math.abs(rTotal - (price * quantity)), DECIMAL_PLACES_SUM) <= (Math.pow(0.1, DECIMAL_PLACES_SUM))) {
+                        rTotal = price * quantity;
                     }
-                    if (quantity === 1) {
-                        context.outputValues.set(this.total, ibas.numbers.round(rTotal));
+                    if (Math.abs(rTotal - total) <= 0.04 && total === ibas.numbers.round(preTotal + taxTotal)) {
+                        // 总计 = 税前总计 + 税，此情况不重新计算，用来处理对票问题
+                        return;
                     } else {
-                        // 差异小于近似位，则忽略。且差异金额大于0.04
-                        if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
-                            && Math.abs(rTotal - total) > 0.04) {
-                            context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        // 差异小于近似位，则忽略
+                        if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
+                            context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
+                        if (quantity === 1) {
+                            context.outputValues.set(this.total, ibas.numbers.round(rTotal));
+                        } else {
+                            // 差异小于近似位，则忽略。且差异金额大于0.04
+                            if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
+                                && Math.abs(rTotal - total) > 0.04) {
+                                context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                            }
                         }
                     }
                 }
