@@ -366,6 +366,48 @@ public interface IBlanketAgreementItem extends IBODocumentLine, IDocumentClosing
 	void setUOM(String value);
 
 	/**
+	 * 获取-库存单位
+	 * 
+	 * @return 值
+	 */
+	String getInventoryUOM();
+
+	/**
+	 * 设置-库存单位
+	 * 
+	 * @param value 值
+	 */
+	void setInventoryUOM(String value);
+
+	/**
+	 * 获取-单位换算率
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getUOMRate();
+
+	/**
+	 * 设置-单位换算率
+	 * 
+	 * @param value 值
+	 */
+	void setUOMRate(BigDecimal value);
+
+	/**
+	 * 获取-库存数量
+	 * 
+	 * @return 值
+	 */
+	BigDecimal getInventoryQuantity();
+
+	/**
+	 * 设置-库存数量
+	 * 
+	 * @param value 值
+	 */
+	void setInventoryQuantity(BigDecimal value);
+
+	/**
 	 * 获取-价格
 	 * 
 	 * @return 值

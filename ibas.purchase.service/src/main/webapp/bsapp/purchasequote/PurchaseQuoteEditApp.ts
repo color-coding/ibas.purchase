@@ -951,15 +951,20 @@ namespace purchase {
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
-                                            beChangeds.add({
-                                                caller: item,
-                                                sourceUnit: item.uom,
-                                                targetUnit: item.inventoryUOM,
-                                                material: item.itemCode,
-                                                setUnitRate(this: bo.PurchaseQuoteItem, value: number): void {
-                                                    this.uomRate = value;
-                                                }
-                                            });
+                                            if (!ibas.strings.isEmpty(baItem.inventoryUOM)) {
+                                                item.inventoryUOM = baItem.inventoryUOM;
+                                                item.uomRate = baItem.uomRate;
+                                            } else {
+                                                beChangeds.add({
+                                                    caller: item,
+                                                    sourceUnit: item.uom,
+                                                    targetUnit: item.inventoryUOM,
+                                                    material: item.itemCode,
+                                                    setUnitRate(this: bo.PurchaseQuoteItem, value: number): void {
+                                                        this.uomRate = value;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                     if (beChangeds.length > 0) {
