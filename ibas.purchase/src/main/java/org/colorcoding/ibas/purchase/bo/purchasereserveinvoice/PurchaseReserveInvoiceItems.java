@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.bobas.bo.BusinessObjects;
 import org.colorcoding.ibas.bobas.common.ICriteria;
-import org.colorcoding.ibas.materials.data.DataConvert;
+import org.colorcoding.ibas.bobas.common.Strings;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
 /**
@@ -71,7 +71,7 @@ public class PurchaseReserveInvoiceItems extends BusinessObjects<IPurchaseReserv
 		}
 		// 记录父项的值
 		if (!this.getParent().isLoading()) {
-			if (item.isNew() && DataConvert.isNullOrEmpty(item.getBaseDocumentType())) {
+			if (item.isNew() && Strings.isNullOrEmpty(item.getBaseDocumentType())) {
 				item.setRate(this.getParent().getDocumentRate());
 				item.setCurrency(this.getParent().getDocumentCurrency());
 				item.setDeliveryDate(this.getParent().getDeliveryDate());
@@ -94,10 +94,10 @@ public class PurchaseReserveInvoiceItems extends BusinessObjects<IPurchaseReserv
 	protected void onParentPropertyChanged(PropertyChangeEvent evt) {
 		super.onParentPropertyChanged(evt);
 		if (PurchaseReserveInvoice.PROPERTY_DOCUMENTCURRENCY.getName().equals(evt.getPropertyName())) {
-			this.where(c -> DataConvert.isNullOrEmpty(c.getBaseDocumentType()))
+			this.where(c -> Strings.isNullOrEmpty(c.getBaseDocumentType()))
 					.forEach(c -> c.setCurrency(this.getParent().getDocumentCurrency()));
 		} else if (PurchaseReserveInvoice.PROPERTY_DOCUMENTRATE.getName().equals(evt.getPropertyName())) {
-			this.where(c -> DataConvert.isNullOrEmpty(c.getBaseDocumentType()))
+			this.where(c -> Strings.isNullOrEmpty(c.getBaseDocumentType()))
 					.forEach(c -> c.setRate(this.getParent().getDocumentRate()));
 		}
 	}

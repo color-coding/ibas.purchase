@@ -13,12 +13,12 @@ import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
@@ -1027,7 +1027,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxRate(String value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1036,7 +1036,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxRate(int value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1045,7 +1045,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxRate(double value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1085,7 +1085,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxTotal(String value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1094,7 +1094,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxTotal(int value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1103,7 +1103,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setTaxTotal(double value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1143,7 +1143,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(String value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1152,7 +1152,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(int value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1161,7 +1161,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(double value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1201,7 +1201,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(String value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1210,7 +1210,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(int value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1219,7 +1219,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(double value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1361,20 +1361,20 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_ITEMCODE), // 要求有值
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_QUANTITY), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRICE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_QUANTITY), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRICE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_RATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_LINETOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXRATE), // 不能低于0
 				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_LINESTATUS), // 阻止取消单据
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
 				new BusinessRuleDeductionPriceTaxTotal(PROPERTY_LINETOTAL, PROPERTY_PRICE, PROPERTY_QUANTITY,
 						PROPERTY_TAXRATE, PROPERTY_TAXTOTAL, PROPERTY_PRETAXLINETOTAL, PROPERTY_PRETAXPRICE),
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_LINETOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXTOTAL), // 不能低于0
 		};
 	}
 }
