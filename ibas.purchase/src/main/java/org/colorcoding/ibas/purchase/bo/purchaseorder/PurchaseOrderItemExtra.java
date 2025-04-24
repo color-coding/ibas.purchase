@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
 /**
@@ -770,7 +770,7 @@ public class PurchaseOrderItemExtra extends BusinessObject<PurchaseOrderItemExtr
 	 * @param value 值
 	 */
 	public final void setQuantity(String value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -779,7 +779,7 @@ public class PurchaseOrderItemExtra extends BusinessObject<PurchaseOrderItemExtr
 	 * @param value 值
 	 */
 	public final void setQuantity(int value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -788,7 +788,7 @@ public class PurchaseOrderItemExtra extends BusinessObject<PurchaseOrderItemExtr
 	 * @param value 值
 	 */
 	public final void setQuantity(double value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**

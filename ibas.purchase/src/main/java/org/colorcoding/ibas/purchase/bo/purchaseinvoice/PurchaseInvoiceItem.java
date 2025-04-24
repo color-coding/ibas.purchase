@@ -17,14 +17,14 @@ import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
@@ -1176,7 +1176,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setQuantity(String value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1185,7 +1185,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setQuantity(int value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1194,7 +1194,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setQuantity(double value) {
-		this.setQuantity(Decimal.valueOf(value));
+		this.setQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1389,7 +1389,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPrice(String value) {
-		this.setPrice(Decimal.valueOf(value));
+		this.setPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1398,7 +1398,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPrice(int value) {
-		this.setPrice(Decimal.valueOf(value));
+		this.setPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1407,7 +1407,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPrice(double value) {
-		this.setPrice(Decimal.valueOf(value));
+		this.setPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1478,7 +1478,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setRate(String value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1487,7 +1487,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setRate(int value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1496,7 +1496,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setRate(double value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1536,7 +1536,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setLineTotal(String value) {
-		this.setLineTotal(Decimal.valueOf(value));
+		this.setLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1545,7 +1545,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setLineTotal(int value) {
-		this.setLineTotal(Decimal.valueOf(value));
+		this.setLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1554,7 +1554,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setLineTotal(double value) {
-		this.setLineTotal(Decimal.valueOf(value));
+		this.setLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1625,7 +1625,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedQuantity(String value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
+		this.setClosedQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1634,7 +1634,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedQuantity(int value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
+		this.setClosedQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1643,7 +1643,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedQuantity(double value) {
-		this.setClosedQuantity(Decimal.valueOf(value));
+		this.setClosedQuantity(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1683,7 +1683,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setDiscount(String value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1692,7 +1692,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setDiscount(int value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1701,7 +1701,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setDiscount(double value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1741,7 +1741,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedAmount(String value) {
-		this.setClosedAmount(Decimal.valueOf(value));
+		this.setClosedAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1750,7 +1750,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedAmount(int value) {
-		this.setClosedAmount(Decimal.valueOf(value));
+		this.setClosedAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1759,7 +1759,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setClosedAmount(double value) {
-		this.setClosedAmount(Decimal.valueOf(value));
+		this.setClosedAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1799,7 +1799,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setUnitPrice(String value) {
-		this.setUnitPrice(Decimal.valueOf(value));
+		this.setUnitPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1808,7 +1808,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setUnitPrice(int value) {
-		this.setUnitPrice(Decimal.valueOf(value));
+		this.setUnitPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1817,7 +1817,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setUnitPrice(double value) {
-		this.setUnitPrice(Decimal.valueOf(value));
+		this.setUnitPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1919,7 +1919,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxRate(String value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1928,7 +1928,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxRate(int value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1937,7 +1937,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxRate(double value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1977,7 +1977,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxTotal(String value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1986,7 +1986,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxTotal(int value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1995,7 +1995,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setTaxTotal(double value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2035,7 +2035,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(String value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2044,7 +2044,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(int value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2053,7 +2053,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxPrice(double value) {
-		this.setPreTaxPrice(Decimal.valueOf(value));
+		this.setPreTaxPrice(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2093,7 +2093,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(String value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2102,7 +2102,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(int value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2111,7 +2111,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	 * @param value 值
 	 */
 	public final void setPreTaxLineTotal(double value) {
-		this.setPreTaxLineTotal(Decimal.valueOf(value));
+		this.setPreTaxLineTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -2493,7 +2493,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 		if (MyConfiguration.isInventoryUnitLinePrice()) {
 			return this.getPreTaxPrice();
 		}
-		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate());
+		return Decimals.divide(this.getPreTaxPrice(), this.getUOMRate());
 	}
 
 	@Override
@@ -2515,9 +2515,9 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 		this.setMaterialBatches(new MaterialBatchItems(this));
 		this.setMaterialSerials(new MaterialSerialItems(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
-		this.setDiscount(Decimal.ONE);
-		this.setTaxRate(Decimal.ZERO);
-		this.setUOMRate(Decimal.ONE);
+		this.setDiscount(Decimals.VALUE_ONE);
+		this.setTaxRate(Decimals.VALUE_ZERO);
+		this.setUOMRate(Decimals.VALUE_ONE);
 	}
 
 	@Override
@@ -2525,16 +2525,16 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_ITEMCODE), // 要求有值
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_QUANTITY), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRICE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_UNITPRICE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXPRICE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_RATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_UOMRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_CLOSEDQUANTITY), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_CLOSEDAMOUNT), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_QUANTITY), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRICE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_UNITPRICE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNT), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRETAXPRICE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_RATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_UOMRATE), // 不能低于0
 				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_LINESTATUS), // 阻止取消单据
 				// 计算本币价格
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_UNITPRICELC, PROPERTY_UNITPRICE, PROPERTY_RATE),
@@ -2558,10 +2558,10 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRICELC, PROPERTY_PRICE, PROPERTY_RATE),
 				// 反向折扣 = 1 - 折扣
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_LINETOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_INVENTORYQUANTITY), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_LINETOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRETAXLINETOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXTOTAL), // 不能低于0
 		};
 	}
 
@@ -2586,8 +2586,8 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 	@Override
 	public void reset() {
 		super.reset();
-		this.setClosedAmount(Decimal.ZERO);
-		this.setClosedQuantity(Decimal.ZERO);
+		this.setClosedAmount(Decimals.VALUE_ZERO);
+		this.setClosedQuantity(Decimals.VALUE_ZERO);
 	}
 
 	/**
@@ -2851,7 +2851,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 					if (MyConfiguration.isInventoryUnitLinePrice()) {
 						return PurchaseInvoiceItem.this.getPreTaxPrice();
 					}
-					return Decimal.divide(PurchaseInvoiceItem.this.getPreTaxPrice(),
+					return Decimals.divide(PurchaseInvoiceItem.this.getPreTaxPrice(),
 							PurchaseInvoiceItem.this.getUOMRate());
 				}
 
@@ -2927,7 +2927,7 @@ public class PurchaseInvoiceItem extends BusinessObject<PurchaseInvoiceItem> imp
 				@Override
 				public BigDecimal getPrice() {
 					// 转为本币
-					return Decimal.multiply(PurchaseInvoiceItem.this.getPreTaxPrice(),
+					return Decimals.multiply(PurchaseInvoiceItem.this.getPreTaxPrice(),
 							PurchaseInvoiceItem.this.getRate());
 				}
 

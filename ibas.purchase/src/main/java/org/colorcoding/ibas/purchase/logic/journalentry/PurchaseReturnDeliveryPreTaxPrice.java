@@ -3,10 +3,10 @@ package org.colorcoding.ibas.purchase.logic.journalentry;
 import java.math.BigDecimal;
 
 import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.common.IChildCriteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.IPurchaseDelivery;
@@ -49,26 +49,27 @@ public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 				condition = childCriteria.getConditions().create();
 				condition.setAlias(PurchaseDeliveryItem.PROPERTY_LINEID.getName());
 				condition.setValue(docLine);
-				BORepositoryPurchase boRepository = new BORepositoryPurchase();
-				boRepository.setRepository(this.getService().getRepository());
-				IOperationResult<IPurchaseDelivery> operationResult = boRepository.fetchPurchaseDelivery(criteria);
-				if (operationResult.getError() != null) {
-					throw new BusinessLogicException(operationResult.getError());
-				}
-				for (IPurchaseDelivery baseDocument : operationResult.getResultObjects()) {
-					if (!docType.equals(baseDocument.getObjectCode())) {
-						continue;
+				try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
+					boRepository.setTransaction(this.getService().getTransaction());
+					IOperationResult<IPurchaseDelivery> operationResult = boRepository.fetchPurchaseDelivery(criteria);
+					if (operationResult.getError() != null) {
+						throw new BusinessLogicException(operationResult.getError());
 					}
-					if (docEntry.compareTo(baseDocument.getDocEntry()) != 0) {
-						continue;
-					}
-					for (IPurchaseDeliveryItem baseLine : baseDocument.getPurchaseDeliveryItems()) {
-						if (docLine.compareTo(baseLine.getLineId()) != 0) {
+					for (IPurchaseDelivery baseDocument : operationResult.getResultObjects()) {
+						if (!docType.equals(baseDocument.getObjectCode())) {
 							continue;
 						}
-						this.setAmount(Decimal.multiply(this.getQuantity(), item.getPreTaxPrice()));
-						// 计算完成，退出
-						return true;
+						if (docEntry.compareTo(baseDocument.getDocEntry()) != 0) {
+							continue;
+						}
+						for (IPurchaseDeliveryItem baseLine : baseDocument.getPurchaseDeliveryItems()) {
+							if (docLine.compareTo(baseLine.getLineId()) != 0) {
+								continue;
+							}
+							this.setAmount(Decimals.multiply(this.getQuantity(), item.getPreTaxPrice()));
+							// 计算完成，退出
+							return true;
+						}
 					}
 				}
 			}

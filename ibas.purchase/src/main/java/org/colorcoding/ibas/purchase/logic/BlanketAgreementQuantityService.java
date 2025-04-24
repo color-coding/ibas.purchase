@@ -5,17 +5,17 @@ import java.math.BigDecimal;
 import org.colorcoding.ibas.bobas.common.ConditionOperation;
 import org.colorcoding.ibas.bobas.common.ConditionRelationship;
 import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.i18n.I18N;
-import org.colorcoding.ibas.bobas.logic.BusinessLogic;
-import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
-import org.colorcoding.ibas.bobas.mapping.LogicContract;
 import org.colorcoding.ibas.bobas.message.Logger;
 import org.colorcoding.ibas.bobas.message.MessageLevel;
+import org.colorcoding.ibas.bobas.logic.BusinessLogic;
+import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
+import org.colorcoding.ibas.bobas.logic.LogicContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.blanketagreement.BlanketAgreement;
 import org.colorcoding.ibas.purchase.bo.blanketagreement.IBlanketAgreement;
@@ -62,15 +62,16 @@ public class BlanketAgreementQuantityService
 		condition.setOperation(ConditionOperation.EQUAL);
 		condition.setValue(contract.getBaseDocumentEntry());
 
-		IBlanketAgreement order = this.fetchBeAffected(criteria, IBlanketAgreement.class);
+		IBlanketAgreement order = this.fetchBeAffected(IBlanketAgreement.class, criteria);
 		if (order == null) {
-			BORepositoryPurchase boRepository = new BORepositoryPurchase();
-			boRepository.setRepository(super.getRepository());
-			IOperationResult<IBlanketAgreement> operationResult = boRepository.fetchBlanketAgreement(criteria);
-			if (operationResult.getError() != null) {
-				throw new BusinessLogicException(operationResult.getError());
+			try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
+				boRepository.setTransaction(this.getTransaction());
+				IOperationResult<IBlanketAgreement> operationResult = boRepository.fetchBlanketAgreement(criteria);
+				if (operationResult.getError() != null) {
+					throw new BusinessLogicException(operationResult.getError());
+				}
+				order = operationResult.getResultObjects().firstOrDefault();
 			}
-			order = operationResult.getResultObjects().firstOrDefault();
 		}
 		if (order == null) {
 			throw new BusinessLogicException(I18N.prop("msg_sl_not_found_order", contract.getBaseDocumentType(),
@@ -94,7 +95,7 @@ public class BlanketAgreementQuantityService
 			// 物料协议
 			BigDecimal quantity = orderItem.getClosedQuantity();
 			if (quantity == null) {
-				quantity = Decimal.ZERO;
+				quantity = Decimals.VALUE_ZERO;
 			}
 			quantity = quantity.add(contract.getQuantity());
 			orderItem.setClosedQuantity(quantity);
@@ -102,12 +103,12 @@ public class BlanketAgreementQuantityService
 			// 货币协议
 			BigDecimal amount = orderItem.getClosedAmount();
 			if (amount == null) {
-				amount = Decimal.ZERO;
+				amount = Decimals.VALUE_ZERO;
 			}
 			amount = amount.add(contract.getAmount());
 			orderItem.setClosedAmount(amount);
 		}
-		if (orderItem.getClosedQuantity().compareTo(Decimal.ZERO) > 0) {
+		if (orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) > 0) {
 			orderItem.setReferenced(emYesNo.YES);
 		}
 	}
@@ -127,7 +128,7 @@ public class BlanketAgreementQuantityService
 			// 物料协议
 			BigDecimal quantity = orderItem.getClosedQuantity();
 			if (quantity == null) {
-				quantity = Decimal.ZERO;
+				quantity = Decimals.VALUE_ZERO;
 			}
 			quantity = quantity.subtract(contract.getQuantity());
 			orderItem.setClosedQuantity(quantity);
@@ -135,12 +136,12 @@ public class BlanketAgreementQuantityService
 			// 货币协议
 			BigDecimal amount = orderItem.getClosedAmount();
 			if (amount == null) {
-				amount = Decimal.ZERO;
+				amount = Decimals.VALUE_ZERO;
 			}
 			amount = amount.subtract(contract.getAmount());
 			orderItem.setClosedAmount(amount);
 		}
-		if (orderItem.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
+		if (orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
 			orderItem.setReferenced(emYesNo.NO);
 		}
 	}

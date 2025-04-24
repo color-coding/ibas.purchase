@@ -17,22 +17,23 @@ import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.BusinessObjectUnit;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.common.DateTimes;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
-import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.ownership.IDataOwnership;
 import org.colorcoding.ibas.bobas.period.IPeriodData;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
@@ -1587,14 +1588,14 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 		super.initialize();// 基类初始化，不可去除
 		this.setDownPaymentRequestItems(new DownPaymentRequestItems(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
-		this.setPostingDate(DateTime.getToday());
-		this.setDocumentDate(DateTime.getToday());
-		this.setDeliveryDate(DateTime.getToday());
+		this.setPostingDate(DateTimes.today());
+		this.setDocumentDate(DateTimes.today());
+		this.setDeliveryDate(DateTimes.today());
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
-		this.setDiscount(Decimal.ONE);
+		this.setDiscount(Decimals.VALUE_ONE);
 		this.setDocumentCurrency(org.colorcoding.ibas.accounting.MyConfiguration
 				.getConfigValue(org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_LOCAL_CURRENCY));
-		this.setDocumentRate(Decimal.ONE);
+		this.setDocumentRate(Decimals.VALUE_ONE);
 
 	}
 
@@ -1661,9 +1662,9 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_SUPPLIERCODE), // 要求有值
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNT), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
 				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_DOWNPAYMENTREQUESTITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_DOWNPAYMENTREQUESTITEMS,
@@ -1688,15 +1689,15 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 				// 单据总计 = 折扣后总计（含税）+ 运输-总计（含税）+ 舍入
 				new BusinessRuleDeductionDocumentTotal(PROPERTY_DOCUMENTTOTAL, PROPERTY_DISCOUNTTOTAL,
 						PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_DIFFAMOUNT),
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};
 	}
 
 	@Override
 	public void reset() {
 		super.reset();
-		this.setPaidTotal(Decimal.ZERO);
+		this.setPaidTotal(Decimals.VALUE_ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getDownPaymentRequestItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}

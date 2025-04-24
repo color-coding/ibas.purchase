@@ -5,23 +5,23 @@ import java.math.BigDecimal;
 import org.colorcoding.ibas.bobas.common.ConditionOperation;
 import org.colorcoding.ibas.bobas.common.ConditionRelationship;
 import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.data.Decimal;
+import org.colorcoding.ibas.bobas.common.Strings;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.logic.BusinessLogic;
-import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
-import org.colorcoding.ibas.bobas.mapping.LogicContract;
 import org.colorcoding.ibas.bobas.message.Logger;
 import org.colorcoding.ibas.bobas.message.MessageLevel;
+import org.colorcoding.ibas.bobas.logic.BusinessLogic;
+import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
+import org.colorcoding.ibas.bobas.logic.LogicContract;
 import org.colorcoding.ibas.materials.bo.materialinventory.IMaterialOrderedReservation;
 import org.colorcoding.ibas.materials.bo.materialinventory.MaterialOrderedReservation;
 import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
-import org.colorcoding.ibas.purchase.data.DataConvert;
 
 @LogicContract(IPurchaseOrderReservationCreateContract.class)
 public class PurchaseOrderReservationCreateService
@@ -57,61 +57,62 @@ public class PurchaseOrderReservationCreateService
 		condition.setOperation(ConditionOperation.EQUAL);
 		condition.setValue(contract.getDocumentLineId());
 
-		IMaterialOrderedReservationGroup reservationGroup = this.fetchBeAffected(criteria,
-				IMaterialOrderedReservationGroup.class);
+		IMaterialOrderedReservationGroup reservationGroup = this.fetchBeAffected(IMaterialOrderedReservationGroup.class,
+				criteria);
 		if (reservationGroup == null) {
-			BORepositoryMaterials boRepository = new BORepositoryMaterials();
-			boRepository.setRepository(super.getRepository());
-			IOperationResult<IMaterialOrderedReservation> operationResult = boRepository
-					.fetchMaterialOrderedReservation(criteria);
-			if (operationResult.getError() != null) {
-				throw new BusinessLogicException(operationResult.getError());
-			}
-			IMaterialOrderedReservation reservation;
-			reservationGroup = new MaterialOrderedReservationGroup();
-			reservationGroup.setSourceDocumentType(contract.getDocumentType());
-			reservationGroup.setSourceDocumentEntry(contract.getDocumentEntry());
-			reservationGroup.setSourceDocumentLineId(contract.getDocumentLineId());
-			for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
-				// 判断内存中是否已有
-				reservation = this.fetchBeAffected(item.getCriteria(), IMaterialOrderedReservation.class);
-				if (reservation == null) {
-					// 使用数据库的
-					reservationGroup.getItems().add(item);
-				} else {
-					// 使用内存的
-					reservationGroup.getItems().add(reservation);
+			try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {
+				boRepository.setTransaction(this.getTransaction());
+				IOperationResult<IMaterialOrderedReservation> operationResult = boRepository
+						.fetchMaterialOrderedReservation(criteria);
+				if (operationResult.getError() != null) {
+					throw new BusinessLogicException(operationResult.getError());
 				}
-			}
-			// 加载原因数据
-			criteria = new Criteria();
-			condition = criteria.getConditions().create();
-			condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTTYPE.getName());
-			condition.setOperation(ConditionOperation.EQUAL);
-			condition.setValue(contract.getBaseDocumentType());
-			condition = criteria.getConditions().create();
-			condition.setRelationship(ConditionRelationship.AND);
-			condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTENTRY.getName());
-			condition.setOperation(ConditionOperation.EQUAL);
-			condition.setValue(contract.getBaseDocumentEntry());
-			condition = criteria.getConditions().create();
-			condition.setRelationship(ConditionRelationship.AND);
-			condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTLINEID.getName());
-			condition.setOperation(ConditionOperation.EQUAL);
-			condition.setValue(contract.getBaseDocumentLineId());
-			operationResult = boRepository.fetchMaterialOrderedReservation(criteria);
-			if (operationResult.getError() != null) {
-				throw new BusinessLogicException(operationResult.getError());
-			}
-			for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
-				// 判断内存中是否已有
-				reservation = this.fetchBeAffected(item.getCriteria(), IMaterialOrderedReservation.class);
-				if (reservation == null) {
-					// 使用数据库的
-					reservationGroup.getCausalDatas().add(item);
-				} else {
-					// 使用内存的
-					reservationGroup.getCausalDatas().add(reservation);
+				IMaterialOrderedReservation reservation;
+				reservationGroup = new MaterialOrderedReservationGroup();
+				reservationGroup.setSourceDocumentType(contract.getDocumentType());
+				reservationGroup.setSourceDocumentEntry(contract.getDocumentEntry());
+				reservationGroup.setSourceDocumentLineId(contract.getDocumentLineId());
+				for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
+					// 判断内存中是否已有
+					reservation = this.fetchBeAffected(IMaterialOrderedReservation.class, item.getCriteria());
+					if (reservation == null) {
+						// 使用数据库的
+						reservationGroup.getItems().add(item);
+					} else {
+						// 使用内存的
+						reservationGroup.getItems().add(reservation);
+					}
+				}
+				// 加载原因数据
+				criteria = new Criteria();
+				condition = criteria.getConditions().create();
+				condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTTYPE.getName());
+				condition.setOperation(ConditionOperation.EQUAL);
+				condition.setValue(contract.getBaseDocumentType());
+				condition = criteria.getConditions().create();
+				condition.setRelationship(ConditionRelationship.AND);
+				condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTENTRY.getName());
+				condition.setOperation(ConditionOperation.EQUAL);
+				condition.setValue(contract.getBaseDocumentEntry());
+				condition = criteria.getConditions().create();
+				condition.setRelationship(ConditionRelationship.AND);
+				condition.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTLINEID.getName());
+				condition.setOperation(ConditionOperation.EQUAL);
+				condition.setValue(contract.getBaseDocumentLineId());
+				operationResult = boRepository.fetchMaterialOrderedReservation(criteria);
+				if (operationResult.getError() != null) {
+					throw new BusinessLogicException(operationResult.getError());
+				}
+				for (IMaterialOrderedReservation item : operationResult.getResultObjects()) {
+					// 判断内存中是否已有
+					reservation = this.fetchBeAffected(IMaterialOrderedReservation.class, item.getCriteria());
+					if (reservation == null) {
+						// 使用数据库的
+						reservationGroup.getCausalDatas().add(item);
+					} else {
+						// 使用内存的
+						reservationGroup.getCausalDatas().add(reservation);
+					}
 				}
 			}
 		}
@@ -126,7 +127,7 @@ public class PurchaseOrderReservationCreateService
 		IMaterialOrderedReservation gItem;
 		BigDecimal remQuantity, avaQuantity = contract.getQuantity();
 		for (IMaterialOrderedReservation item : reservationGroup.getCausalDatas()) {
-			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
+			if (avaQuantity.compareTo(Decimals.VALUE_ZERO) <= 0) {
 				break;
 			}
 			if (item.getTargetDocumentType() == null) {
@@ -136,7 +137,7 @@ public class PurchaseOrderReservationCreateService
 				continue;
 			}
 			remQuantity = item.getQuantity().subtract(item.getClosedQuantity());
-			if (remQuantity.compareTo(Decimal.ZERO) <= 0) {
+			if (remQuantity.compareTo(Decimals.VALUE_ZERO) <= 0) {
 				continue;
 			}
 			gItem = reservationGroup.getItems()
@@ -152,7 +153,7 @@ public class PurchaseOrderReservationCreateService
 				gItem.setTargetDocumentClosed(item.getTargetDocumentClosed());
 				gItem.setSourceDocumentClosed(item.getSourceDocumentClosed());
 				gItem.setStatus(item.getStatus());
-				gItem.setQuantity(Decimal.ZERO);
+				gItem.setQuantity(Decimals.VALUE_ZERO);
 				gItem.setCauses(causes);
 				reservationGroup.getItems().add(gItem);
 			} else {
@@ -193,7 +194,7 @@ public class PurchaseOrderReservationCreateService
 			if (gItem.getTargetDocumentClosed() == emYesNo.YES || gItem.getSourceDocumentClosed() == emYesNo.YES) {
 				gItem.setStatus(emBOStatus.CLOSED);
 			}
-			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
+			if (avaQuantity.compareTo(Decimals.VALUE_ZERO) <= 0) {
 				// 无可用量
 				break;
 			}
@@ -208,18 +209,18 @@ public class PurchaseOrderReservationCreateService
 		for (int i = reservationGroup.getItems().size() - 1; i >= 0; i--) {
 			item = reservationGroup.getItems().get(i);
 			// 不是逻辑创建的，跳过
-			if (DataConvert.isNullOrEmpty(item.getCauses()) || !item.getCauses().startsWith("FROM:")) {
+			if (Strings.isNullOrEmpty(item.getCauses()) || !item.getCauses().startsWith("FROM:")) {
 				continue;
 			}
 			// 回滚逻辑
 			if (item.getQuantity().compareTo(avaQuantity) >= 0) {
-				remQuantity = Decimal.ZERO.add(avaQuantity);
+				remQuantity = Decimals.VALUE_ZERO.add(avaQuantity);
 				item.setQuantity(item.getQuantity().subtract(avaQuantity));
-				avaQuantity = Decimal.ZERO;
+				avaQuantity = Decimals.VALUE_ZERO;
 			} else {
-				remQuantity = Decimal.ZERO.add(item.getQuantity());
+				remQuantity = Decimals.VALUE_ZERO.add(item.getQuantity());
 				avaQuantity = avaQuantity.subtract(item.getQuantity());
-				item.setQuantity(Decimal.ZERO);
+				item.setQuantity(Decimals.VALUE_ZERO);
 			}
 			for (IMaterialOrderedReservation oItem : reservationGroup.getCausalDatas()) {
 				if (!String.format("FROM:%s-%s-%s", oItem.getSourceDocumentType(), oItem.getSourceDocumentEntry(),
@@ -235,30 +236,30 @@ public class PurchaseOrderReservationCreateService
 				if (oItem.getTargetDocumentLineId().compareTo(item.getTargetDocumentLineId()) != 0) {
 					continue;
 				}
-				if (oItem.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
+				if (oItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
 					continue;
 				}
 				if (oItem.getClosedQuantity().compareTo(remQuantity) >= 0) {
 					oItem.setClosedQuantity(oItem.getClosedQuantity().subtract(remQuantity));
-					remQuantity = Decimal.ZERO;
+					remQuantity = Decimals.VALUE_ZERO;
 				} else {
 					remQuantity = remQuantity.subtract(oItem.getClosedQuantity());
-					oItem.setClosedQuantity(Decimal.ZERO);
+					oItem.setClosedQuantity(Decimals.VALUE_ZERO);
 				}
-				if (remQuantity.compareTo(Decimal.ZERO) <= 0) {
+				if (remQuantity.compareTo(Decimals.VALUE_ZERO) <= 0) {
 					break;
 				}
 			}
-			if (remQuantity.compareTo(Decimal.ZERO) > 0) {
+			if (remQuantity.compareTo(Decimals.VALUE_ZERO) > 0) {
 				// 数量没有被消耗完(数量被改大)
 				item.setQuantity(remQuantity);
 			} else {
-				if (item.getQuantity().compareTo(Decimal.ZERO) <= 0
-						&& item.getClosedQuantity().compareTo(Decimal.ZERO) <= 0) {
+				if (item.getQuantity().compareTo(Decimals.VALUE_ZERO) <= 0
+						&& item.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
 					item.delete();
 				}
 			}
-			if (avaQuantity.compareTo(Decimal.ZERO) <= 0) {
+			if (avaQuantity.compareTo(Decimals.VALUE_ZERO) <= 0) {
 				break;
 			}
 		}

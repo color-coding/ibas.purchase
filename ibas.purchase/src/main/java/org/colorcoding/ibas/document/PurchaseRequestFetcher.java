@@ -4,7 +4,7 @@ import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
+import org.colorcoding.ibas.bobas.bo.BusinessObjectUnit;
 import org.colorcoding.ibas.purchase.bo.purchaserequest.PurchaseRequest;
 
 @BusinessObjectUnit(code = PurchaseRequest.BUSINESS_OBJECT_CODE)

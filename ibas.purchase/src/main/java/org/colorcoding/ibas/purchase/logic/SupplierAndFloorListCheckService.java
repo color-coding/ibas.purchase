@@ -6,7 +6,7 @@ import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
-import org.colorcoding.ibas.bobas.mapping.LogicContract;
+import org.colorcoding.ibas.bobas.logic.LogicContract;
 import org.colorcoding.ibas.materials.bo.materialpricelist.IMaterialPriceList;
 import org.colorcoding.ibas.materials.bo.materialpricelist.MaterialPriceList;
 import org.colorcoding.ibas.materials.repository.BORepositoryMaterials;
@@ -48,14 +48,15 @@ public class SupplierAndFloorListCheckService extends org.colorcoding.ibas.busin
 				condition.setOperation(ConditionOperation.EQUAL);
 				condition.setValue(mContract.getPriceList());
 
-				BORepositoryMaterials boRepository = new BORepositoryMaterials();
-				boRepository.setRepository(super.getRepository());
-				IMaterialPriceList priceList = boRepository.fetchMaterialPriceList(criteria).getResultObjects()
-						.firstOrDefault();
-				if (priceList != null && priceList.getFloorList() != null
-						&& priceList.getFloorList().compareTo(0) > 0) {
-					mContract.setFloorList(priceList.getFloorList());
-					done = true;
+				try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {
+					boRepository.setTransaction(this.getTransaction());
+					IMaterialPriceList priceList = boRepository.fetchMaterialPriceList(criteria).getResultObjects()
+							.firstOrDefault();
+					if (priceList != null && priceList.getFloorList() != null
+							&& priceList.getFloorList().compareTo(0) > 0) {
+						mContract.setFloorList(priceList.getFloorList());
+						done = true;
+					}
 				}
 			}
 			if (!done && this.getBeAffected().getFloorList() != null

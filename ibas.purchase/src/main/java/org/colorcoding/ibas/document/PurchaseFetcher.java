@@ -1,7 +1,7 @@
 package org.colorcoding.ibas.document;
 
-import org.colorcoding.ibas.bobas.core.IBORepository;
 import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
+import org.colorcoding.ibas.bobas.repository.ITransaction;
 import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 
 public abstract class PurchaseFetcher<T extends IDocumentOperatingTarget> implements IDocumentFetcher<T> {
@@ -16,8 +16,8 @@ public abstract class PurchaseFetcher<T extends IDocumentOperatingTarget> implem
 	}
 
 	@Override
-	public void setRepository(IBORepository repository) {
-		this.getRepository().setRepository(repository);
+	public void setTransaction(ITransaction transaction) {
+		this.getRepository().setTransaction(transaction);
 	}
 
 	protected String userToken() {
