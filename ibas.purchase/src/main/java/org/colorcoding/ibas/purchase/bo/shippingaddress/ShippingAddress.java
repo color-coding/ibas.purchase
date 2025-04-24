@@ -12,10 +12,10 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
-import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
+import org.colorcoding.ibas.bobas.common.Decimals;
+import org.colorcoding.ibas.bobas.bo.BusinessObjectUnit;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleSubtraction;
@@ -591,7 +591,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setExpense(String value) {
-		this.setExpense(Decimal.valueOf(value));
+		this.setExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -600,7 +600,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setExpense(int value) {
-		this.setExpense(Decimal.valueOf(value));
+		this.setExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -609,7 +609,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setExpense(double value) {
-		this.setExpense(Decimal.valueOf(value));
+		this.setExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -680,7 +680,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setRate(String value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -689,7 +689,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setRate(int value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -698,7 +698,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setRate(double value) {
-		this.setRate(Decimal.valueOf(value));
+		this.setRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -800,7 +800,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxRate(String value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -809,7 +809,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxRate(int value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -818,7 +818,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxRate(double value) {
-		this.setTaxRate(Decimal.valueOf(value));
+		this.setTaxRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -858,7 +858,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxTotal(String value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -867,7 +867,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxTotal(int value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -876,7 +876,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setTaxTotal(double value) {
-		this.setTaxTotal(Decimal.valueOf(value));
+		this.setTaxTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -916,7 +916,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setPreTaxExpense(String value) {
-		this.setPreTaxExpense(Decimal.valueOf(value));
+		this.setPreTaxExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -925,7 +925,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setPreTaxExpense(int value) {
-		this.setPreTaxExpense(Decimal.valueOf(value));
+		this.setPreTaxExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -934,7 +934,7 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	 * @param value 值
 	 */
 	public final void setPreTaxExpense(double value) {
-		this.setPreTaxExpense(Decimal.valueOf(value));
+		this.setPreTaxExpense(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1385,14 +1385,14 @@ public class ShippingAddress extends BusinessObject<ShippingAddress> implements 
 	@Override
 	protected IBusinessRule[] registerRules() {
 		return new IBusinessRule[] { // 注册的业务规则
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXRATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_EXPENSE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PRETAXEXPENSE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_EXPENSE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PRETAXEXPENSE), // 不能低于0
 				// 计算税前费用 = 税后费用 * 税率
 				new BusinessRuleDeductionTaxPrice(PROPERTY_TAXRATE, PROPERTY_PRETAXEXPENSE, PROPERTY_EXPENSE),
 				// 计算税总额 = 税后费用 - 税前费用
 				new BusinessRuleSubtraction(PROPERTY_TAXTOTAL, PROPERTY_EXPENSE, PROPERTY_PRETAXEXPENSE),
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_TAXTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_TAXTOTAL), // 不能低于0
 
 		};
 	}
