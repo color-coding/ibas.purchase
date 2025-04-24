@@ -15,23 +15,24 @@ import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.bobas.approval.IApprovalData;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.BusinessObjectUnit;
 import org.colorcoding.ibas.bobas.bo.IBOSeriesKey;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.common.DateTimes;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.data.Decimal;
 import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDirection;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
+import org.colorcoding.ibas.bobas.db.DbField;
+import org.colorcoding.ibas.bobas.db.DbFieldType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
-import org.colorcoding.ibas.bobas.mapping.BusinessObjectUnit;
-import org.colorcoding.ibas.bobas.mapping.DbField;
-import org.colorcoding.ibas.bobas.mapping.DbFieldType;
 import org.colorcoding.ibas.bobas.ownership.IDataOwnership;
 import org.colorcoding.ibas.bobas.period.IPeriodData;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
@@ -1154,7 +1155,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscount(String value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1163,7 +1164,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscount(int value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1172,7 +1173,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscount(double value) {
-		this.setDiscount(Decimal.valueOf(value));
+		this.setDiscount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1212,7 +1213,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscountTotal(String value) {
-		this.setDiscountTotal(Decimal.valueOf(value));
+		this.setDiscountTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1221,7 +1222,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscountTotal(int value) {
-		this.setDiscountTotal(Decimal.valueOf(value));
+		this.setDiscountTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1230,7 +1231,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiscountTotal(double value) {
-		this.setDiscountTotal(Decimal.valueOf(value));
+		this.setDiscountTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1301,7 +1302,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentRate(String value) {
-		this.setDocumentRate(Decimal.valueOf(value));
+		this.setDocumentRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1310,7 +1311,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentRate(int value) {
-		this.setDocumentRate(Decimal.valueOf(value));
+		this.setDocumentRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1319,7 +1320,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentRate(double value) {
-		this.setDocumentRate(Decimal.valueOf(value));
+		this.setDocumentRate(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1359,7 +1360,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentTotal(String value) {
-		this.setDocumentTotal(Decimal.valueOf(value));
+		this.setDocumentTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1368,7 +1369,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentTotal(int value) {
-		this.setDocumentTotal(Decimal.valueOf(value));
+		this.setDocumentTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1377,7 +1378,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDocumentTotal(double value) {
-		this.setDocumentTotal(Decimal.valueOf(value));
+		this.setDocumentTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1417,7 +1418,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setPaidTotal(String value) {
-		this.setPaidTotal(Decimal.valueOf(value));
+		this.setPaidTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1426,7 +1427,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setPaidTotal(int value) {
-		this.setPaidTotal(Decimal.valueOf(value));
+		this.setPaidTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1435,7 +1436,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setPaidTotal(double value) {
-		this.setPaidTotal(Decimal.valueOf(value));
+		this.setPaidTotal(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1568,7 +1569,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiffAmount(String value) {
-		this.setDiffAmount(Decimal.valueOf(value));
+		this.setDiffAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1577,7 +1578,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiffAmount(int value) {
-		this.setDiffAmount(Decimal.valueOf(value));
+		this.setDiffAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1586,7 +1587,7 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 * @param value 值
 	 */
 	public final void setDiffAmount(double value) {
-		this.setDiffAmount(Decimal.valueOf(value));
+		this.setDiffAmount(Decimals.valueOf(value));
 	}
 
 	/**
@@ -1848,14 +1849,14 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 		this.setPurchaseOrderItems(new PurchaseOrderItems(this));
 		this.setShippingAddresss(new ShippingAddresss(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
-		this.setPostingDate(DateTime.getToday());
-		this.setDocumentDate(DateTime.getToday());
-		this.setDeliveryDate(DateTime.getToday());
+		this.setPostingDate(DateTimes.today());
+		this.setDocumentDate(DateTimes.today());
+		this.setDeliveryDate(DateTimes.today());
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
-		this.setDiscount(Decimal.ONE);
+		this.setDiscount(Decimals.VALUE_ONE);
 		this.setDocumentCurrency(org.colorcoding.ibas.accounting.MyConfiguration
 				.getConfigValue(org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_LOCAL_CURRENCY));
-		this.setDocumentRate(Decimal.ONE);
+		this.setDocumentRate(Decimals.VALUE_ONE);
 
 	}
 
@@ -1922,9 +1923,9 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 		return new IBusinessRule[] {
 				// 注册的业务规则
 				new BusinessRuleRequired(PROPERTY_SUPPLIERCODE), // 要求有值
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNT), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNT), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DOCUMENTRATE), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_PAIDTOTAL), // 不能低于0
 				new BusinessRulePreventCancelDocument(PROPERTY_CANCELED, PROPERTY_DOCUMENTSTATUS), // 阻止取消单据
 				new BusinessRuleRequiredElements(PROPERTY_PURCHASEORDERITEMS), // 要求有元素
 				new BusinessRuleDocumentStatus(PROPERTY_DOCUMENTSTATUS, PROPERTY_PURCHASEORDERITEMS,
@@ -1954,15 +1955,15 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 						PROPERTY_SHIPPINGSEXPENSETOTAL, PROPERTY_DIFFAMOUNT),
 				// 反向折扣 = 1 - 折扣
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
-				new BusinessRuleMinValue<BigDecimal>(Decimal.ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
+				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
 		};
 	}
 
 	@Override
 	public void reset() {
 		super.reset();
-		this.setPaidTotal(Decimal.ZERO);
+		this.setPaidTotal(Decimals.VALUE_ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getPurchaseOrderItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
 	}
