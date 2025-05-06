@@ -1146,14 +1146,10 @@ namespace purchase {
                         context.outputValues.set(this.amount, amountLC);
                     }
                 } else {
-                    let pricePlaces: number = amount.toString().split(".")[1]?.length;
-                    if (!(pricePlaces > 0) || !(pricePlaces < DECIMAL_PLACES_PRICE)) {
-                        pricePlaces = DECIMAL_PLACES_PRICE;
-                    }
                     if (rate !== 1) {
                         let result: number = amount / rate;
-                        if (!ibas.numbers.isApproximated(result, amountLC, pricePlaces, 0)) {
-                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, TRUNCATE_DECIMALS ? pricePlaces : undefined));
+                        if (!ibas.numbers.isApproximated(result, amountLC, DECIMAL_PLACES_PRICE, 0)) {
+                            context.outputValues.set(this.amountLC, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                         }
                     } else {
                         context.outputValues.set(this.amountLC, amount);

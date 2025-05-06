@@ -2499,7 +2499,7 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 		if (MyConfiguration.isInventoryUnitLinePrice()) {
 			return this.getPreTaxPrice();
 		}
-		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate());
+		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate(), Decimal.DECIMAL_PLACES_STORAGE);
 	}
 
 	@Override
@@ -2787,7 +2787,8 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 				if (MyConfiguration.isInventoryUnitLinePrice()) {
 					return PurchaseReturnItem.this.getPreTaxPrice();
 				}
-				return Decimal.divide(PurchaseReturnItem.this.getPreTaxPrice(), PurchaseReturnItem.this.getUOMRate());
+				return Decimal.divide(PurchaseReturnItem.this.getPreTaxPrice(), PurchaseReturnItem.this.getUOMRate(),
+						Decimal.DECIMAL_PLACES_STORAGE);
 			}
 
 			@Override

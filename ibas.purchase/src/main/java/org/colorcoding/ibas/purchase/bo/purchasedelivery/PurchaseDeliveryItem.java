@@ -2499,7 +2499,7 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 		if (MyConfiguration.isInventoryUnitLinePrice()) {
 			return this.getPreTaxPrice();
 		}
-		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate());
+		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate(), Decimal.DECIMAL_PLACES_STORAGE);
 	}
 
 	@Override
@@ -2791,7 +2791,7 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					return PurchaseDeliveryItem.this.getPreTaxPrice();
 				}
 				return Decimal.divide(PurchaseDeliveryItem.this.getPreTaxPrice(),
-						PurchaseDeliveryItem.this.getUOMRate());
+						PurchaseDeliveryItem.this.getUOMRate(), Decimal.DECIMAL_PLACES_STORAGE);
 			}
 
 			@Override

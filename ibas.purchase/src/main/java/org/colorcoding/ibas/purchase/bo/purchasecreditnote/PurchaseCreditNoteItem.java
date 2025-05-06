@@ -2495,7 +2495,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 		if (MyConfiguration.isInventoryUnitLinePrice()) {
 			return this.getPreTaxPrice();
 		}
-		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate());
+		return Decimal.divide(this.getPreTaxPrice(), this.getUOMRate(), Decimal.DECIMAL_PLACES_STORAGE);
 	}
 
 	@Override
@@ -2893,7 +2893,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 						return PurchaseCreditNoteItem.this.getPreTaxPrice();
 					}
 					return Decimal.divide(PurchaseCreditNoteItem.this.getPreTaxPrice(),
-							PurchaseCreditNoteItem.this.getUOMRate());
+							PurchaseCreditNoteItem.this.getUOMRate(), Decimal.DECIMAL_PLACES_STORAGE);
 				}
 
 				@Override
