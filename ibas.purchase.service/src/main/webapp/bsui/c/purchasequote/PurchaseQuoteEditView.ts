@@ -48,6 +48,8 @@ namespace purchase {
                 chooseSupplierAgreementsEvent: Function;
                 /** 转为采购订单事件 */
                 turnToPurchaseOrderEvent: Function;
+                /** 转为预付款申请事件 */
+                turnToDownPaymentRequestEvent: Function;
                 /** 测量物料事件 */
                 measuringMaterialsEvent: Function;
                 /** 查看物料历史价格事件 */
@@ -1136,6 +1138,17 @@ namespace purchase {
                                                 visible: shell.app.privileges.canRun({
                                                     id: purchase.app.PurchaseOrderFunc.FUNCTION_ID,
                                                     name: purchase.app.PurchaseOrderFunc.FUNCTION_NAME,
+                                                })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_downpaymentrequest_ap"),
+                                                icon: "sap-icon://doc-attachment",
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.turnToDownPaymentRequestEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: purchase.app.DownPaymentRequestFunc.FUNCTION_ID,
+                                                    name: purchase.app.DownPaymentRequestFunc.FUNCTION_NAME,
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {

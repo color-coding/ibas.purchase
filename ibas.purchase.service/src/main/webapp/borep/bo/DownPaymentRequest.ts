@@ -657,12 +657,88 @@ namespace purchase {
                     }
                 }
             }
+            /** 基于采购报价 */
+            baseDocument(document: IPurchaseQuote): void;
             /** 基于采购订单 */
             baseDocument(document: IPurchaseOrder): void;
             /** 基于采购收货 */
             baseDocument(document: IPurchaseDelivery): void;
             /** 基于采购订单 */
             baseDocument(): void {
+                if (ibas.objects.instanceOf(arguments[0], PurchaseQuote)) {
+                    let document: PurchaseQuote = arguments[0];
+                    if (!ibas.strings.equals(this.supplierCode, document.supplierCode)) {
+                        return;
+                    }
+                    // 复制头信息
+                    bo.baseDocument(this, document);
+                    // 复制行项目
+                    for (let item of document.purchaseQuoteItems) {
+                        if (item.canceled === ibas.emYesNo.YES) {
+                            continue;
+                        }
+                        if (item.deleted === ibas.emYesNo.YES) {
+                            continue;
+                        }
+                        if (item.lineStatus === ibas.emDocumentStatus.PLANNED) {
+                            continue;
+                        }
+                        if (item.lineStatus === ibas.emDocumentStatus.CLOSED) {
+                            continue;
+                        }
+                        if (this.downPaymentRequestItems.firstOrDefault(
+                            c => c.baseDocumentType === item.objectCode
+                                && c.baseDocumentEntry === item.docEntry
+                                && c.baseDocumentLineId === item.lineId) !== null) {
+                            continue;
+                        }
+                        // 计算未清金额
+                        let openAmount: number = item.lineTotal - item.closedAmount;
+                        if (openAmount <= 0) {
+                            continue;
+                        }
+                        let myItem: DownPaymentRequestItem = this.downPaymentRequestItems.create();
+                        bo.baseDocumentItem(myItem, item);
+                        if (openAmount !== item.lineTotal) {
+                            // 未清金额不等于总额，计算数量
+                            if (config.isInventoryUnitLinePrice()) {
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.inventoryQuantity) {
+                                        myItem.inventoryQuantity = item.inventoryQuantity;
+                                    } else {
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.inventoryQuantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.inventoryQuantity = result;
+                                        }
+                                    }
+                                } else {
+                                    myItem.inventoryQuantity = 0;
+                                }
+                            } else {
+                                if (myItem.price > 0) {
+                                    let result: number = ibas.numbers.round(openAmount / myItem.price);
+                                    if (ibas.numbers.isApproximated(result, item.quantity,
+                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
+                                        || result > item.quantity) {
+                                        myItem.quantity = item.quantity;
+                                    } else {
+                                        if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
+                                            myItem.quantity = ibas.numbers.round(result, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY));
+                                        } else {
+                                            myItem.quantity = result;
+                                        }
+                                    }
+                                } else {
+                                    myItem.quantity = 0;
+                                }
+                            }
+                        }
+                    }
+                }
                 if (ibas.objects.instanceOf(arguments[0], PurchaseOrder)) {
                     let document: PurchaseOrder = arguments[0];
                     if (!ibas.strings.equals(this.supplierCode, document.supplierCode)) {
