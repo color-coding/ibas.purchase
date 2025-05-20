@@ -553,6 +553,17 @@ namespace purchase {
                 this.setProperty(PurchaseCreditNote.PROPERTY_INVERSEDISCOUNT_NAME, value);
             }
 
+            /** 映射的属性名称-取消日期 */
+            static PROPERTY_CANCELLATIONDATE_NAME: string = "CancellationDate";
+            /** 获取-取消日期 */
+            get cancellationDate(): Date {
+                return this.getProperty<Date>(PurchaseCreditNote.PROPERTY_CANCELLATIONDATE_NAME);
+            }
+            /** 设置-取消日期 */
+            set cancellationDate(value: Date) {
+                this.setProperty(PurchaseCreditNote.PROPERTY_CANCELLATIONDATE_NAME, value);
+            }
+
             /** 映射的属性名称-采购贷项-行集合 */
             static PROPERTY_PURCHASECREDITNOTEITEMS_NAME: string = "PurchaseCreditNoteItems";
             /** 获取-采购贷项-行集合 */
@@ -707,6 +718,7 @@ namespace purchase {
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
                 this.purchaseCreditNoteItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.cancellationDate = undefined;
             }
             /** 转换之前 */
             beforeConvert(): void { }

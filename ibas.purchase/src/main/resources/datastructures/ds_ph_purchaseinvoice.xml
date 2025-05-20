@@ -51,6 +51,7 @@
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
     <Property Name="InverseDiscount" Description="反向折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
+    <Property Name="CancellationDate" Description="取消日期" DataType="Date" DataSubType="Default" EditSize="8" Mapped="CnclDate"/>
   </Model>
   <Model Name="PurchaseInvoiceItem" Description="采购发票-行" ModelType="DocumentLine" Mapped="${Company}_PH_INV1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>

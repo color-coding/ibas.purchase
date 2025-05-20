@@ -554,6 +554,17 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoice.PROPERTY_INVERSEDISCOUNT_NAME, value);
             }
 
+            /** 映射的属性名称-取消日期 */
+            static PROPERTY_CANCELLATIONDATE_NAME: string = "CancellationDate";
+            /** 获取-取消日期 */
+            get cancellationDate(): Date {
+                return this.getProperty<Date>(PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME);
+            }
+            /** 设置-取消日期 */
+            set cancellationDate(value: Date) {
+                this.setProperty(PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME, value);
+            }
+
 
             /** 映射的属性名称-采购预留发票-行集合 */
             static PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME: string = "PurchaseReserveInvoiceItems";
@@ -701,6 +712,10 @@ namespace purchase {
                     new BusinessRuleNegativeDiscount(
                         PurchaseReserveInvoice.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoice.PROPERTY_INVERSEDISCOUNT_NAME
                     ),
+                    // 计算单据取消日期
+                    new sales.bo.BusinessRuleCancellationDate(
+                        PurchaseReserveInvoice.PROPERTY_CANCELED_NAME, PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME
+                    ),
                 ];
             }
             /** 重置 */
@@ -709,6 +724,7 @@ namespace purchase {
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
                 this.purchaseReserveInvoiceItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.cancellationDate = undefined;
             }
             /** 转换之前 */
             beforeConvert(): void { }

@@ -270,6 +270,26 @@ namespace purchase {
                                     return true;
                                 }
                             }),
+                            new sap.m.Label("", {
+                                text: ibas.i18n.prop("bo_purchasecreditnote_cancellationdate"),
+                                visible: {
+                                    path: "canceled",
+                                    formatter(data: any): any {
+                                        return data === ibas.emYesNo.YES ? true : false;
+                                    }
+                                }
+                            }),
+                            new sap.extension.m.DatePicker("", {
+                                visible: {
+                                    path: "canceled",
+                                    formatter(data: any): any {
+                                        return data === ibas.emYesNo.YES ? true : false;
+                                    }
+                                }
+                            }).bindProperty("bindingValue", {
+                                path: "cancellationDate",
+                                type: new sap.extension.data.Date()
+                            }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnote_documentdate") }),
                             new sap.extension.m.DatePicker("", {
                             }).bindProperty("bindingValue", {

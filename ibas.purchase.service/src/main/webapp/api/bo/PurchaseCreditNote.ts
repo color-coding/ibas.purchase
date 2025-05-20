@@ -107,6 +107,8 @@ namespace purchase {
             branch: string;
             /** 反向折扣 */
             inverseDiscount: number;
+            /** 取消日期 */
+            cancellationDate: Date;
             /** 采购贷项-行集合 */
             purchaseCreditNoteItems: IPurchaseCreditNoteItems;
             /** 送货地址集合 */
