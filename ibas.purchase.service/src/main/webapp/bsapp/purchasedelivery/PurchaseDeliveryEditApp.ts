@@ -928,8 +928,8 @@ namespace purchase {
                             target.baseDocument(this.editData);
                             target.paymentCode = this.editData.paymentCode;
                             // 整单基于，则赋折扣、总计
-                            if (target.itemsLineTotal === this.editData.itemsLineTotal
-                                && target.shippingsExpenseTotal === this.editData.shippingsExpenseTotal) {
+                            if (ibas.numbers.valueOf(target.itemsLineTotal) === this.editData.itemsLineTotal
+                                && ibas.numbers.valueOf(target.shippingsExpenseTotal) === this.editData.shippingsExpenseTotal) {
                                 target.rounding = this.editData.rounding;
                                 target.diffAmount = this.editData.diffAmount;
                                 target.discount = this.editData.discount;
@@ -1642,12 +1642,15 @@ namespace purchase {
                         uom: caller.uom,
                         applyPrice: (type, price, currency) => {
                             if (type === "PRICE") {
+                                caller.price = 0;
                                 caller.price = price;
                                 caller.currency = currency;
                             } else if (type === "PRETAXPRICE") {
+                                caller.preTaxPrice = 0;
                                 caller.preTaxPrice = price;
                                 caller.currency = currency;
                             } else if (type === "UNITPRICE") {
+                                caller.unitPrice = 0;
                                 caller.unitPrice = price;
                                 caller.currency = currency;
                             }

@@ -13,12 +13,24 @@ declare namespace receiptpayment {
     /** 模块-版本 */
     const CONSOLE_VERSION: string;
     namespace config {
+        /** 配置项目-默认现金流（充值） */
+        const CONFIG_ITEM_DEFAULT_CASH_FLOW_RECHARGES: string;
+        /** 配置项目-默认现金流（付款） */
+        const CONFIG_ITEM_DEFAULT_CASH_FLOW_PAYMENTS: string;
+        /** 配置项目-默认现金流（收款） */
+        const CONFIG_ITEM_DEFAULT_CASH_FLOW_RECEIPTS: string;
         /**
          * 获取此模块配置
          * @param key 配置项
          * @param defalut 默认值
          */
         function get<T>(key: string, defalut?: T): T;
+        /**
+         * 获取默认现金流
+         * @param boName 对象类型
+         * @param method 支付方式
+         */
+        function defaultCashFlow(boName: string, method: string): number;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -348,6 +360,8 @@ declare namespace receiptpayment {
             rate: number;
             /** 交易识别码 */
             tradeId: string;
+            /** 现金流项目 */
+            cashFlow: number;
         }
     }
 }
@@ -522,6 +536,8 @@ declare namespace receiptpayment {
             rate: number;
             /** 交易识别码 */
             tradeId: string;
+            /** 现金流项目 */
+            cashFlow: number;
         }
     }
 }
@@ -678,6 +694,8 @@ declare namespace receiptpayment {
             rate: number;
             /** 交易识别码 */
             tradeId: string;
+            /** 现金流项目 */
+            cashFlow: number;
         }
     }
 }
@@ -1244,6 +1262,12 @@ declare namespace receiptpayment {
             get tradeId(): string;
             /** 设置-交易识别码 */
             set tradeId(value: string);
+            /** 映射的属性名称-现金流项目 */
+            static PROPERTY_CASHFLOW_NAME: string;
+            /** 获取-现金流项目 */
+            get cashFlow(): number;
+            /** 设置-现金流项目 */
+            set cashFlow(value: number);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -1741,6 +1765,12 @@ declare namespace receiptpayment {
             get tradeId(): string;
             /** 设置-交易识别码 */
             set tradeId(value: string);
+            /** 映射的属性名称-现金流项目 */
+            static PROPERTY_CASHFLOW_NAME: string;
+            /** 获取-现金流项目 */
+            get cashFlow(): number;
+            /** 设置-现金流项目 */
+            set cashFlow(value: number);
             /** 初始化数据 */
             protected init(): void;
         }
@@ -2182,6 +2212,12 @@ declare namespace receiptpayment {
             get tradeId(): string;
             /** 设置-交易识别码 */
             set tradeId(value: string);
+            /** 映射的属性名称-现金流项目 */
+            static PROPERTY_CASHFLOW_NAME: string;
+            /** 获取-现金流项目 */
+            get cashFlow(): number;
+            /** 设置-现金流项目 */
+            set cashFlow(value: number);
             /** 初始化数据 */
             protected init(): void;
         }
