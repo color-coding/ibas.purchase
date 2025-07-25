@@ -727,6 +727,8 @@ namespace purchase {
             baseDocument(document: IPurchaseOrder): void;
             /** 基于采购预留发票 */
             baseDocument(document: IPurchaseReserveInvoice): void;
+            /** 基于采购退货 */
+            baseDocument(document: IPurchaseReturn): void;
             /** 基于采购订单 */
             baseDocument(): void {
                 if (ibas.objects.instanceOf(arguments[0], PurchaseOrder)) {
@@ -913,6 +915,80 @@ namespace purchase {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
+                    }
+                }
+                if (ibas.objects.instanceOf(arguments[0], PurchaseReturn)) {
+                    let document: IPurchaseReturn = arguments[0];
+                    if (!ibas.strings.equals(this.supplierCode, document.supplierCode)) {
+                        return;
+                    }
+                    // 复制头信息
+                    bo.baseDocument(this, document);
+                    // 复制行项目
+                    for (let item of document.purchaseReturnItems) {
+                        if (item.canceled === ibas.emYesNo.YES) {
+                            continue;
+                        }
+                        if (item.deleted === ibas.emYesNo.YES) {
+                            continue;
+                        }
+                        if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
+                            continue;
+                        }
+                        if (this.purchaseDeliveryItems.firstOrDefault(
+                            c => c.baseDocumentType === item.objectCode
+                                && c.baseDocumentEntry === item.docEntry
+                                && c.baseDocumentLineId === item.lineId) !== null) {
+                            continue;
+                        }
+                        // 计算未交货数量
+                        let openQty: number = item.quantity - item.closedQuantity;
+                        if (openQty <= 0) {
+                            continue;
+                        }
+                        let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
+                        bo.baseDocumentItem(myItem, item);
+                        let closeQty: number = 0;
+                        if (item.closedQuantity > 0) {
+                            myItem.quantity = openQty;
+                            openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                            closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        } else {
+                            openQty = myItem.inventoryQuantity;
+                            closeQty = 0;
+                        }
+                        // 复制批次
+                        for (let batch of item.materialBatches) {
+                            closeQty -= batch.quantity;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
+                            let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
+                            myBatch.batchCode = batch.batchCode;
+                            myBatch.quantity = batch.quantity;
+                            if (myBatch.quantity > openQty) {
+                                myBatch.quantity = openQty;
+                            }
+                            openQty -= myBatch.quantity;
+                            if (openQty <= 0) {
+                                break;
+                            }
+                        }
+                        // 复制序列
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
+                        for (let serial of item.materialSerials) {
+                            closeQty -= 1;
+                            if (closeQty >= 0 || openQty <= 0) {
+                                continue;
+                            }
+                            let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
+                            mySerial.serialCode = serial.serialCode;
+                            openQty -= 1;
+                            if (openQty <= 0) {
+                                break;
+                            }
+                        }
                     }
                 }
             }

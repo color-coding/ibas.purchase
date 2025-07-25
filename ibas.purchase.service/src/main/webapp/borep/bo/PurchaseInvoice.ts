@@ -878,6 +878,10 @@ namespace purchase {
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
+                        // 基于退货的交货不能开发票
+                        if (item.baseDocumentType === ibas.config.applyVariables(PurchaseReturn.BUSINESS_OBJECT_CODE)) {
+                            continue;
+                        }
                         if (this.purchaseInvoiceItems.firstOrDefault(
                             c => c.baseDocumentType === item.objectCode
                                 && c.baseDocumentEntry === item.docEntry

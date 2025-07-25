@@ -948,9 +948,20 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 已清金额小于总计
                 condition = cCriteria.conditions.create();
-                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDAMOUNT_NAME;
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_CLOSEDAMOUNT_NAME;
                 condition.operation = ibas.emConditionOperation.LESS_THAN;
-                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_LINETOTAL_NAME;
+                condition.comparedAlias = bo.PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME;
+                // 不是基于退货的
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                condition.value = ibas.config.applyVariables(bo.PurchaseReturn.BUSINESS_OBJECT_CODE);
+                condition.bracketOpen = 1;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseDelivery>({
