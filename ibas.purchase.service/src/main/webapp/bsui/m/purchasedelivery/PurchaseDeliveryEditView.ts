@@ -36,6 +36,8 @@ namespace purchase {
                 choosePurchaseDeliveryItemMaterialBatchEvent: Function;
                 /** 选择采购交货项目-采购订单事件 */
                 choosePurchaseDeliveryPurchaseOrderEvent: Function;
+                /** 选择采购收货-采购退货事件 */
+                choosePurchaseDeliveryPurchaseReturnEvent: Function;
                 /** 选择采购交货-一揽子协议事件 */
                 choosePurchaseDeliveryBlanketAgreementEvent: Function;
                 /** 选择采购收货-行 成本中心事件 */
@@ -140,6 +142,16 @@ namespace purchase {
                                                 visible: shell.app.privileges.canRun({
                                                     id: app.PurchaseReserveInvoiceChooseApp.APPLICATION_ID,
                                                     name: app.PurchaseReserveInvoiceChooseApp.APPLICATION_NAME,
+                                                })
+                                            }),
+                                            new sap.m.MenuItem("", {
+                                                text: ibas.i18n.prop("bo_purchasereturn"),
+                                                press: function (): void {
+                                                    that.fireViewEvents(that.choosePurchaseDeliveryPurchaseReturnEvent);
+                                                },
+                                                visible: shell.app.privileges.canRun({
+                                                    id: app.PurchaseReturnChooseApp.APPLICATION_ID,
+                                                    name: app.PurchaseReturnChooseApp.APPLICATION_NAME,
                                                 })
                                             }),
                                             new sap.m.MenuItem("", {
