@@ -755,6 +755,7 @@ namespace purchase {
                                     }),
                                 ],
                                 sortProperty: "visOrder",
+                                sortIntervalStep: 1,
                             })
                         ]
                     });
