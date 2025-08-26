@@ -336,6 +336,17 @@ namespace purchase {
                 this.setProperty(PurchaseReturn.PROPERTY_REFERENCED_NAME, value);
             }
 
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string = "Printed";
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo {
+                return this.getProperty<ibas.emYesNo>(PurchaseReturn.PROPERTY_PRINTED_NAME);
+            }
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo) {
+                this.setProperty(PurchaseReturn.PROPERTY_PRINTED_NAME, value);
+            }
+
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string = "Deleted";
             /** 获取-已删除 */

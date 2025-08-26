@@ -29,6 +29,8 @@ declare namespace sales {
         const CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD: string;
         /** 配置项目-单据统计标记删除行 */
         const CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE: string;
+        /** 配置项目-首先应用单据行选择 */
+        const CONFIG_ITEM_FIRST_USE_DOCUMENT_LINE_CHOOSE: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -39,6 +41,7 @@ declare namespace sales {
         function isPriceAnchoringAfterTax(): boolean;
         function isInverseDiscount(): boolean;
         function isStatisticsTagDeleted(): boolean;
+        function isFirstUseDocumentLineChoose(): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -298,6 +301,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -574,6 +579,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -908,6 +915,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -1184,6 +1193,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户类型 */
@@ -1512,6 +1523,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -1792,6 +1805,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2241,6 +2256,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2437,6 +2454,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2697,6 +2716,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2973,6 +2994,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -3861,6 +3884,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -4697,6 +4726,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -5699,6 +5734,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -6667,6 +6708,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -7509,6 +7556,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -8356,6 +8409,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -9676,6 +9735,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -10243,6 +10308,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -11011,6 +11082,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -11850,6 +11927,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
