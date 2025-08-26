@@ -1036,6 +1036,18 @@ declare namespace accounting {
             country: string;
             /** 邮编 */
             zipCode: string;
+            /** 国税编号 */
+            taxId: string;
+            /** 开户银行 */
+            bank: string;
+            /** 银行账户 */
+            bankAccount: string;
+            /** 发票抬头 */
+            invoiceTitle: string;
+            /** 发票地址 */
+            invoiceAddress: string;
+            /** 发票电话 */
+            invoiceTelephone: string;
             /** 对象编号 */
             docEntry: number;
             /** 对象类型 */
@@ -1331,11 +1343,11 @@ declare namespace accounting {
             /** 开括号 */
             bracketOpen: number;
             /** 关系 */
-            relationship: ibas.emConditionRelationship;
+            relationship: initialfantasy.bo.emConditionRelationship;
             /** 属性 */
             propertyName: string;
             /** 方法 */
-            operation: ibas.emConditionOperation;
+            operation: initialfantasy.bo.emConditionOperation;
             /** 值 */
             value: string;
             /** 闭括号 */
@@ -4005,6 +4017,42 @@ declare namespace accounting {
             get zipCode(): string;
             /** 设置-邮编 */
             set zipCode(value: string);
+            /** 映射的属性名称-国税编号 */
+            static PROPERTY_TAXID_NAME: string;
+            /** 获取-国税编号 */
+            get taxId(): string;
+            /** 设置-国税编号 */
+            set taxId(value: string);
+            /** 映射的属性名称-开户银行 */
+            static PROPERTY_BANK_NAME: string;
+            /** 获取-开户银行 */
+            get bank(): string;
+            /** 设置-开户银行 */
+            set bank(value: string);
+            /** 映射的属性名称-银行账户 */
+            static PROPERTY_BANKACCOUNT_NAME: string;
+            /** 获取-银行账户 */
+            get bankAccount(): string;
+            /** 设置-银行账户 */
+            set bankAccount(value: string);
+            /** 映射的属性名称-发票抬头 */
+            static PROPERTY_INVOICETITLE_NAME: string;
+            /** 获取-发票抬头 */
+            get invoiceTitle(): string;
+            /** 设置-发票抬头 */
+            set invoiceTitle(value: string);
+            /** 映射的属性名称-发票地址 */
+            static PROPERTY_INVOICEADDRESS_NAME: string;
+            /** 获取-发票地址 */
+            get invoiceAddress(): string;
+            /** 设置-发票地址 */
+            set invoiceAddress(value: string);
+            /** 映射的属性名称-发票电话 */
+            static PROPERTY_INVOICETELEPHONE_NAME: string;
+            /** 获取-发票电话 */
+            get invoiceTelephone(): string;
+            /** 设置-发票电话 */
+            set invoiceTelephone(value: string);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_DOCENTRY_NAME: string;
             /** 获取-对象编号 */
@@ -4826,9 +4874,9 @@ declare namespace accounting {
             /** 映射的属性名称-关系 */
             static PROPERTY_RELATIONSHIP_NAME: string;
             /** 获取-关系 */
-            get relationship(): ibas.emConditionRelationship;
+            get relationship(): initialfantasy.bo.emConditionRelationship;
             /** 设置-关系 */
-            set relationship(value: ibas.emConditionRelationship);
+            set relationship(value: initialfantasy.bo.emConditionRelationship);
             /** 映射的属性名称-属性 */
             static PROPERTY_PROPERTYNAME_NAME: string;
             /** 获取-属性 */
@@ -4838,9 +4886,9 @@ declare namespace accounting {
             /** 映射的属性名称-方法 */
             static PROPERTY_OPERATION_NAME: string;
             /** 获取-方法 */
-            get operation(): ibas.emConditionOperation;
+            get operation(): initialfantasy.bo.emConditionOperation;
             /** 设置-方法 */
-            set operation(value: ibas.emConditionOperation);
+            set operation(value: initialfantasy.bo.emConditionOperation);
             /** 映射的属性名称-值 */
             static PROPERTY_VALUE_NAME: string;
             /** 获取-值 */
