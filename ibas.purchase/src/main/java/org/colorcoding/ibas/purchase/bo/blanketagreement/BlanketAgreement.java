@@ -37,6 +37,7 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
+import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.data.emAgreementMethod;
@@ -50,9 +51,9 @@ import org.colorcoding.ibas.purchase.data.emAgreementType;
 @XmlType(name = BlanketAgreement.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = BlanketAgreement.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = BlanketAgreement.BUSINESS_OBJECT_CODE)
-public class BlanketAgreement extends BusinessObject<BlanketAgreement>
-		implements IBlanketAgreement, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
-		IBOTagCanceled, IBOSeriesKey, IBOUserFields, IBusinessLogicsHost, IDocumentCloseQuantityOperator {
+public class BlanketAgreement extends BusinessObject<BlanketAgreement> implements IBlanketAgreement, IDataOwnership,
+		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBOSeriesKey, IBOUserFields,
+		IBusinessLogicsHost, IDocumentCloseQuantityOperator, IDocumentPrintedOperator {
 
 	/**
 	 * 序列化版本标记
@@ -976,6 +977,37 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement>
 	 */
 	public final void setReferenced(emYesNo value) {
 		this.setProperty(PROPERTY_REFERENCED, value);
+	}
+
+	/**
+	* 属性名称-已打印
+	*/
+	private static final String PROPERTY_PRINTED_NAME = "Printed";
+
+	/**
+	* 已打印 属性
+	*/
+	@DbField(name = "Printed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<emYesNo> PROPERTY_PRINTED = registerProperty(PROPERTY_PRINTED_NAME, emYesNo.class,
+			MY_CLASS);
+
+	/**
+	* 获取-已打印
+	* 
+	* @return 值
+	*/
+	@XmlElement(name = PROPERTY_PRINTED_NAME)
+	public final emYesNo getPrinted() {
+		return this.getProperty(PROPERTY_PRINTED);
+	}
+
+	/**
+	* 设置-已打印
+	* 
+	* @param value 值
+	*/
+	public final void setPrinted(emYesNo value) {
+		this.setProperty(PROPERTY_PRINTED, value);
 	}
 
 	/**

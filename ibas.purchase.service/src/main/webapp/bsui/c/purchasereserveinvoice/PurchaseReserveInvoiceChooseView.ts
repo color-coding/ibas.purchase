@@ -440,6 +440,50 @@ namespace purchase {
                                                             if (!ibas.strings.isEmpty(search)) {
                                                                 search = search.trim().toLowerCase();
                                                             }
+                                                            let criteria: ibas.ICriteria = that.usingCriteria?.clone();
+                                                            if (ibas.objects.isNull(criteria)) {
+                                                                criteria = new ibas.Criteria();
+                                                            }
+                                                            let cCriteria: ibas.IChildCriteria = criteria.childCriterias.firstOrDefault(
+                                                                c => c.propertyPath === bo.PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME
+                                                            );
+                                                            if (ibas.objects.isNull(cCriteria)) {
+                                                                cCriteria = criteria.childCriterias.create();
+                                                                cCriteria.propertyPath = bo.PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME;
+                                                                cCriteria.onlyHasChilds = true;
+                                                                cCriteria.noChilds = false;
+                                                            }
+                                                            if (!ibas.strings.isEmpty(search)) {
+                                                                let count: number = cCriteria.conditions.length;
+                                                                for (let column of that.itemTable.getColumns()) {
+                                                                    if (column instanceof sap.extension.table.DataColumn) {
+                                                                        let propertyInfo: shell.bo.IBizPropertyInfo = column.getPropertyInfo();
+                                                                        if (propertyInfo.searched !== true) {
+                                                                            continue;
+                                                                        }
+                                                                        if (!ibas.strings.isEmpty(propertyInfo?.name)) {
+                                                                            let condition: ibas.ICondition = cCriteria.conditions.create();
+                                                                            condition.alias = propertyInfo.name;
+                                                                            condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                                            condition.value = search;
+                                                                            if (cCriteria.conditions.length > count + 1) {
+                                                                                condition.relationship = ibas.emConditionRelationship.OR;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (cCriteria.conditions.length > count + 1) {
+                                                                    cCriteria.conditions[count].bracketOpen += 1;
+                                                                    cCriteria.conditions[cCriteria.conditions.length - 1].bracketClose += 1;
+                                                                }
+                                                            }
+                                                            // 成功构建子项查询
+                                                            if (cCriteria.conditions.length > 0) {
+                                                                that.table.setModel(undefined);
+                                                                that.itemTable.setModel(undefined);
+                                                                that.fireViewEvents(that.fetchDataEvent, criteria);
+                                                                return;
+                                                            }
                                                             let filters: ibas.IList<sap.ui.model.Filter> = new ibas.ArrayList<sap.ui.model.Filter>();
                                                             if (!ibas.strings.isEmpty(search)) {
                                                                 for (let i: number = 0; i < that.itemTable.getVisibleRowCount(); i++) {
@@ -471,10 +515,14 @@ namespace purchase {
                                                             }
                                                             let binding: any = that.itemTable.getBinding("rows");
                                                             if (binding instanceof sap.ui.model.ListBinding) {
-                                                                if (filters.length > 0) {
-                                                                    binding.filter(new sap.ui.model.Filter({ filters: filters, and: false }));
-                                                                } else {
+                                                                if (ibas.strings.isEmpty(search)) {
                                                                     binding.filter(undefined);
+                                                                } else {
+                                                                    if (filters.length > 0) {
+                                                                        binding.filter(new sap.ui.model.Filter({ filters: filters, and: false }));
+                                                                    } else {
+                                                                        binding.filter(new sap.ui.model.Filter("docEntry", sap.ui.model.FilterOperator.LT, 0),);
+                                                                    }
                                                                 }
                                                             }
                                                         }

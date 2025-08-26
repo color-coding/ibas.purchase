@@ -424,6 +424,20 @@ public interface IPurchaseReserveInvoice extends IBODocument, IShippingAddressPa
 	void setReferenced(emYesNo value);
 
 	/**
+	* 获取-已打印
+	* 
+	* @return 值
+	*/
+	emYesNo getPrinted();
+
+	/**
+	* 设置-已打印
+	* 
+	* @param value 值
+	*/
+	void setPrinted(emYesNo value);
+
+	/**
 	 * 获取-已删除
 	 * 
 	 * @return 值

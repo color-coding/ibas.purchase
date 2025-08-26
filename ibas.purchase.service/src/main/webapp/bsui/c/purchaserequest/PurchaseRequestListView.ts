@@ -61,6 +61,14 @@ namespace purchase {
                                 }),
                             }),
                             new sap.extension.table.DataColumn("", {
+                                label: ibas.i18n.prop("bo_purchaserequest_printed"),
+                                template: new sap.extension.m.Text("", {
+                                }).bindProperty("bindingValue", {
+                                    path: "printed",
+                                    type: new sap.extension.data.YesNo(true)
+                                }),
+                            }),
+                            new sap.extension.table.DataColumn("", {
                                 label: ibas.i18n.prop("bo_purchaserequest_documentstatus"),
                                 template: new sap.extension.m.Text("", {
                                 }).bindProperty("bindingValue", {
