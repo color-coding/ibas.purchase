@@ -8078,6 +8078,8 @@ declare namespace accounting {
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 */
             protected createData(clone: boolean): void;
+            private chooseBank;
+            private chooseBankAccount;
         }
         /** 视图-分支 */
         interface IBranchEditView extends ibas.IBOEditView {
@@ -8087,6 +8089,10 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+            /** 选择银行事件 */
+            chooseBankEvent: Function;
+            /** 选择银行账号事件 */
+            chooseBankAccountEvent: Function;
         }
     }
 }

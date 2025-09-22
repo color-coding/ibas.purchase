@@ -1020,11 +1020,16 @@ namespace purchase {
                         }
                     }
                     // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0)) {
-                        context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
-                    }
-                    if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
-                        context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                    let diffTotal: number = ibas.numbers.round(rPreTotal - preTotal, DECIMAL_PLACES_SUM);
+                    let diffTax: number = ibas.numbers.round(rTaxTotal - taxTotal, DECIMAL_PLACES_SUM);
+                    if (Math.abs(diffTotal) !== Math.abs(diffTax) || Math.abs(diffTotal) > 0.4) {
+                        // 税前总计差异 与 税差异 一致，总计不变，忽略计算（考虑与物理单据对账问题）
+                        if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0)) {
+                            context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
+                        if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
+                            context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                        }
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)
                     // 锚定税前价格时，改变税率

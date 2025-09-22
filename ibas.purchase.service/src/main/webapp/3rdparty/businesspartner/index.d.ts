@@ -5127,6 +5127,8 @@ declare namespace businesspartner {
             private createAddress;
             /** 选择总账科目事件 */
             private chooseLedgerAccount;
+            private chooseBank;
+            private chooseBankAccount;
         }
         /** 视图-客户 */
         interface ICustomerEditView extends ibas.IBOEditView {
@@ -5158,6 +5160,10 @@ declare namespace businesspartner {
             createAddressEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+            /** 选择银行事件 */
+            chooseBankEvent: Function;
+            /** 选择银行账号事件 */
+            chooseBankAccountEvent: Function;
         }
         /** 客户编辑服务映射 */
         class CustomerEditServiceMapping extends ibas.BOEditServiceMapping {
@@ -5374,6 +5380,8 @@ declare namespace businesspartner {
             private createAddress;
             /** 选择总账科目事件 */
             private chooseLedgerAccount;
+            private chooseBank;
+            private chooseBankAccount;
         }
         /** 视图-供应商 */
         interface ISupplierEditView extends ibas.IBOEditView {
@@ -5405,6 +5413,10 @@ declare namespace businesspartner {
             createAddressEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+            /** 选择银行事件 */
+            chooseBankEvent: Function;
+            /** 选择银行账号事件 */
+            chooseBankAccountEvent: Function;
         }
         /** 供应商编辑服务映射 */
         class SupplierEditServiceMapping extends ibas.BOEditServiceMapping {
