@@ -2112,8 +2112,12 @@ declare namespace importexport {
 declare namespace importexport {
     namespace app {
         enum emExportMode {
-            ALL = 0,
-            SELECTED = 1
+            /** 当前全部 */
+            CURRENT = 0,
+            /** 选择的 */
+            SELECTED = 1,
+            /** 全部 */
+            ALL = 2
         }
         /** 应用-审批流程 */
         class ViewExportApp extends ibas.ResidentApplication<IViewExportView> {

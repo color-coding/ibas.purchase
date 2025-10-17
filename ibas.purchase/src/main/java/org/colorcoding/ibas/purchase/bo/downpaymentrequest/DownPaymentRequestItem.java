@@ -2208,6 +2208,8 @@ public class DownPaymentRequestItem extends BusinessObject<DownPaymentRequestIte
 			return this.getWarehouse();
 		case Ledgers.CONDITION_PROPERTY_TAX:
 			return this.getTax();
+		case Ledgers.CONDITION_PROPERTY_TAX_RATE:
+			return this.getTaxRate();
 		default:
 			return null;
 		}
