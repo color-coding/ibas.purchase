@@ -10,19 +10,21 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
+import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -1057,32 +1059,32 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	/**
-	* 属性名称-目录编码
-	*/
+	 * 属性名称-目录编码
+	 */
 	private static final String PROPERTY_CATALOGCODE_NAME = "CatalogCode";
 
 	/**
-	* 目录编码 属性
-	*/
+	 * 目录编码 属性
+	 */
 	@DbField(name = "CatalogCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CATALOGCODE = registerProperty(PROPERTY_CATALOGCODE_NAME,
 			String.class, MY_CLASS);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_CATALOGCODE_NAME)
 	public final String getCatalogCode() {
 		return this.getProperty(PROPERTY_CATALOGCODE);
 	}
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	public final void setCatalogCode(String value) {
 		this.setProperty(PROPERTY_CATALOGCODE, value);
 	}
@@ -2199,63 +2201,63 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	/**
-	* 属性名称-价格（本币）
-	*/
+	 * 属性名称-价格（本币）
+	 */
 	private static final String PROPERTY_PRICELC_NAME = "PriceLC";
 
 	/**
-	* 价格（本币） 属性
-	*/
+	 * 价格（本币） 属性
+	 */
 	@DbField(name = "PriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICELC = registerProperty(PROPERTY_PRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
 	/**
-	* 获取-价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-价格（本币）
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_PRICELC_NAME)
 	public final BigDecimal getPriceLC() {
 		return this.getProperty(PROPERTY_PRICELC);
 	}
 
 	/**
-	* 设置-价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	public final void setPriceLC(BigDecimal value) {
 		this.setProperty(PROPERTY_PRICELC, value);
 	}
 
 	/**
-	* 属性名称-税前价格（本币）
-	*/
+	 * 属性名称-税前价格（本币）
+	 */
 	private static final String PROPERTY_PRETAXPRICELC_NAME = "PreTaxPriceLC";
 
 	/**
-	* 税前价格（本币） 属性
-	*/
+	 * 税前价格（本币） 属性
+	 */
 	@DbField(name = "PreTaxPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICELC = registerProperty(PROPERTY_PRETAXPRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
 	/**
-	* 获取-税前价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-税前价格（本币）
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_PRETAXPRICELC_NAME)
 	public final BigDecimal getPreTaxPriceLC() {
 		return this.getProperty(PROPERTY_PRETAXPRICELC);
 	}
 
 	/**
-	* 设置-税前价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-税前价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	public final void setPreTaxPriceLC(BigDecimal value) {
 		this.setProperty(PROPERTY_PRETAXPRICELC, value);
 	}
@@ -2380,6 +2382,39 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 							return emDocumentStatus.CLOSED;
 						}
 						return PurchaseRequestItem.this.getLineStatus();
+					}
+				},
+				// 物料目录检查
+				new IMaterialCatalogCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseRequestItem.this.getIdentifiers();
+					}
+
+					@Override
+					public void setCatalogCode(String value) {
+						PurchaseRequestItem.this.setCatalogCode(value);
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseRequestItem.this.getItemCode();
+					}
+
+					@Override
+					public String getCatalogCode() {
+						return PurchaseRequestItem.this.getCatalogCode();
+					}
+
+					@Override
+					public emBusinessPartnerType getBusinessPartnerType() {
+						return emBusinessPartnerType.SUPPLIER;
+					}
+
+					@Override
+					public String getBusinessPartnerCode() {
+						return PurchaseRequestItem.this.getSupplier();
 					}
 				}
 

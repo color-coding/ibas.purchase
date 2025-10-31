@@ -31,6 +31,7 @@
     <Property Name="Reference2" Description="参考2" DataType="Alphanumeric" DataSubType="Default" EditSize="200" Mapped="Ref2"/>
     <Property Name="Remarks" Description="备注" DataType="Memo" DataSubType="Default" EditSize="8" Mapped="Remarks"/>
     <Property Name="Referenced" Description="已引用" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Refed"/>
+    <Property Name="Printed" Description="已打印" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Printed"/>
     <Property Name="Deleted" Description="已删除" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Deleted"/>
     <Property Name="SupplierCode" Description="供应商代码" DataType="Alphanumeric" DataSubType="Default" EditSize="20" Mapped="CardCode"/>
     <Property Name="SupplierName" Description="供应商名称" DataType="Alphanumeric" DataSubType="Default" EditSize="100" Mapped="CardName"/>
@@ -51,6 +52,7 @@
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
     <Property Name="InverseDiscount" Description="反向折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
+    <Property Name="CancellationDate" Description="取消日期" DataType="Date" DataSubType="Default" EditSize="8" Mapped="CnclDate"/>
   </Model>
   <Model Name="PurchaseInvoiceItem" Description="采购发票-行" ModelType="DocumentLine" Mapped="${Company}_PH_INV1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>

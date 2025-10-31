@@ -94,6 +94,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseOrderItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseOrderItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseOrder.PROPERTY_DOCUMENTDATE_NAME;
@@ -250,6 +256,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.DownPaymentRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.DownPaymentRequestItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.DownPaymentRequestItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.DownPaymentRequest.PROPERTY_DOCUMENTDATE_NAME;
@@ -407,6 +419,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseCreditNoteItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseCreditNoteItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseCreditNoteItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseCreditNote.PROPERTY_DOCUMENTDATE_NAME;
@@ -563,6 +581,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseDeliveryItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseDelivery.PROPERTY_DOCUMENTDATE_NAME;
@@ -720,6 +744,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseInvoiceItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseInvoiceItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseInvoiceItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseInvoice.PROPERTY_DOCUMENTDATE_NAME;
@@ -876,6 +906,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseQuoteItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseQuoteItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseQuoteItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseQuote.PROPERTY_DOCUMENTDATE_NAME;
@@ -1032,6 +1068,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReserveInvoiceItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReserveInvoiceItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReserveInvoiceItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReserveInvoice.PROPERTY_DOCUMENTDATE_NAME;
@@ -1188,6 +1230,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReturnItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReturn.PROPERTY_DOCUMENTDATE_NAME;
@@ -1345,6 +1393,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReturnRequest.PROPERTY_DOCUMENTDATE_NAME;
@@ -1494,6 +1548,12 @@ namespace purchase {
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_DELETED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseRequestItem.PROPERTY_CANCELED_NAME;
+                condition.value = ibas.emYesNo.NO.toString();
                 // 当前供应商的
                 if (!ibas.strings.isEmpty(contract.businessPartnerCode)) {
                     condition = cCriteria.conditions.create();

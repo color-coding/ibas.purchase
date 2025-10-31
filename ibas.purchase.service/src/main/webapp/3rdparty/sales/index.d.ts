@@ -29,6 +29,8 @@ declare namespace sales {
         const CONFIG_ITEM_DISCOUNT_PRESENTATION_METHOD: string;
         /** 配置项目-单据统计标记删除行 */
         const CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE: string;
+        /** 配置项目-首先应用单据行选择 */
+        const CONFIG_ITEM_FIRST_USE_DOCUMENT_LINE_CHOOSE: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -39,6 +41,7 @@ declare namespace sales {
         function isPriceAnchoringAfterTax(): boolean;
         function isInverseDiscount(): boolean;
         function isStatisticsTagDeleted(): boolean;
+        function isFirstUseDocumentLineChoose(): boolean;
     }
     namespace bo {
         /** 业务仓库名称 */
@@ -298,6 +301,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -574,6 +579,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -908,6 +915,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -1184,6 +1193,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户类型 */
@@ -1512,6 +1523,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -1556,6 +1569,8 @@ declare namespace sales {
             grossProfit: number;
             /** 反向折扣 */
             inverseDiscount: number;
+            /** 取消日期 */
+            cancellationDate: Date;
             /** 销售贷项-行集合 */
             salesCreditNoteItems: ISalesCreditNoteItems;
             /** 送货地址集合 */
@@ -1790,6 +1805,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -1834,6 +1851,8 @@ declare namespace sales {
             grossProfit: number;
             /** 反向折扣 */
             inverseDiscount: number;
+            /** 取消日期 */
+            cancellationDate: Date;
             /** 销售发票-行集合 */
             salesInvoiceItems: ISalesInvoiceItems;
             /** 销售发票-预收款集合 */
@@ -2156,6 +2175,8 @@ declare namespace sales {
             createActionId: string;
             /** 更新动作标识 */
             updateActionId: string;
+            /** 来源编号 */
+            sourceKey: number;
             /** 基于地址 */
             baseAddress(address: businesspartner.bo.IAddress): void;
         }
@@ -2235,6 +2256,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2329,6 +2352,12 @@ declare namespace sales {
             quantity: number;
             /** 单位 */
             uom: string;
+            /** 库存单位 */
+            inventoryUOM: string;
+            /** 单位换算率 */
+            uomRate: number;
+            /** 库存数量 */
+            inventoryQuantity: number;
             /** 价格 */
             price: number;
             /** 货币 */
@@ -2425,6 +2454,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2685,6 +2716,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -2729,6 +2762,8 @@ declare namespace sales {
             grossProfit: number;
             /** 反向折扣 */
             inverseDiscount: number;
+            /** 取消日期 */
+            cancellationDate: Date;
             /** 销售预留发票-行集合 */
             salesReserveInvoiceItems: ISalesReserveInvoiceItems;
             /** 送货地址集合 */
@@ -2959,6 +2994,8 @@ declare namespace sales {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -3847,6 +3884,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -4683,6 +4726,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -5685,6 +5734,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -6653,6 +6708,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -7495,6 +7556,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -7627,6 +7694,12 @@ declare namespace sales {
             get inverseDiscount(): number;
             /** 设置-反向行折扣 */
             set inverseDiscount(value: number);
+            /** 映射的属性名称-取消日期 */
+            static PROPERTY_CANCELLATIONDATE_NAME: string;
+            /** 获取-取消日期 */
+            get cancellationDate(): Date;
+            /** 设置-取消日期 */
+            set cancellationDate(value: Date);
             /** 映射的属性名称-销售贷项-行集合 */
             static PROPERTY_SALESCREDITNOTEITEMS_NAME: string;
             /** 获取-销售贷项-行集合 */
@@ -8336,6 +8409,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -8468,6 +8547,12 @@ declare namespace sales {
             get inverseDiscount(): number;
             /** 设置-反向行折扣 */
             set inverseDiscount(value: number);
+            /** 映射的属性名称-取消日期 */
+            static PROPERTY_CANCELLATIONDATE_NAME: string;
+            /** 获取-取消日期 */
+            get cancellationDate(): Date;
+            /** 设置-取消日期 */
+            set cancellationDate(value: Date);
             /** 映射的属性名称-销售发票-行集合 */
             static PROPERTY_SALESINVOICEITEMS_NAME: string;
             /** 获取-销售发票-行集合 */
@@ -9430,6 +9515,12 @@ declare namespace sales {
             get updateActionId(): string;
             /** 设置-更新动作标识 */
             set updateActionId(value: string);
+            /** 映射的属性名称-来源编号 */
+            static PROPERTY_SOURCEKEY_NAME: string;
+            /** 获取-来源编号 */
+            get sourceKey(): number;
+            /** 设置-来源编号 */
+            set sourceKey(value: number);
             /** 基于地址 */
             baseAddress(address: businesspartner.bo.IAddress): void;
             /** 初始化数据 */
@@ -9644,6 +9735,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -9918,6 +10015,24 @@ declare namespace sales {
             get uom(): string;
             /** 设置-单位 */
             set uom(value: string);
+            /** 映射的属性名称-库存单位 */
+            static PROPERTY_INVENTORYUOM_NAME: string;
+            /** 获取-库存单位 */
+            get inventoryUOM(): string;
+            /** 设置-库存单位 */
+            set inventoryUOM(value: string);
+            /** 映射的属性名称-单位换算率 */
+            static PROPERTY_UOMRATE_NAME: string;
+            /** 获取-单位换算率 */
+            get uomRate(): number;
+            /** 设置-单位换算率 */
+            set uomRate(value: number);
+            /** 映射的属性名称-库存数量 */
+            static PROPERTY_INVENTORYQUANTITY_NAME: string;
+            /** 获取-库存数量 */
+            get inventoryQuantity(): number;
+            /** 设置-库存数量 */
+            set inventoryQuantity(value: number);
             /** 映射的属性名称-价格 */
             static PROPERTY_PRICE_NAME: string;
             /** 获取-价格 */
@@ -10193,6 +10308,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -10346,6 +10467,8 @@ declare namespace sales {
             beforeConvert(): void;
             /** 数据解析后 */
             afterParsing(): void;
+            /** 基于销售报价 */
+            baseDocument(document: ISalesQuote): void;
             /** 基于销售订单 */
             baseDocument(document: ISalesOrder): void;
             /** 基于销售交货 */
@@ -10959,6 +11082,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -11091,6 +11220,12 @@ declare namespace sales {
             get inverseDiscount(): number;
             /** 设置-反向行折扣 */
             set inverseDiscount(value: number);
+            /** 映射的属性名称-取消日期 */
+            static PROPERTY_CANCELLATIONDATE_NAME: string;
+            /** 获取-取消日期 */
+            get cancellationDate(): Date;
+            /** 设置-取消日期 */
+            set cancellationDate(value: Date);
             /** 映射的属性名称-销售预留发票-行集合 */
             static PROPERTY_SALESRESERVEINVOICEITEMS_NAME: string;
             /** 获取-销售预留发票-行集合 */
@@ -11792,6 +11927,12 @@ declare namespace sales {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-已删除 */
             static PROPERTY_DELETED_NAME: string;
             /** 获取-已删除 */
@@ -12667,6 +12808,21 @@ declare namespace sales {
             constructor(rounding: string, amount: string);
             rounding: string;
             amount: string;
+            protected compute(context: ibas.BusinessRuleContextCommon): void;
+        }
+        /**
+         * 业务规则-单据取消日期
+         */
+        class BusinessRuleCancellationDate extends ibas.BusinessRuleCommon {
+            /**
+             * 构造
+             * @param amountLC 本币
+             * @param amount 交易币
+             * @param rate 汇率
+             */
+            constructor(canceled: string, cancellationDate: string);
+            canceled: string;
+            cancellationDate: string;
             protected compute(context: ibas.BusinessRuleContextCommon): void;
         }
     }
@@ -14158,6 +14314,8 @@ declare namespace sales {
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
+            /** 转为预付款申请 */
+            protected turnToDownPaymentRequest(): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteEditView extends ibas.IBOEditView {
@@ -14199,6 +14357,8 @@ declare namespace sales {
             showSalesQuoteItemExtraEvent: Function;
             /** 转为销售订单事件 */
             turnToSalesOrderEvent: Function;
+            /** 转为预付款申请事件 */
+            turnToDownPaymentRequestEvent: Function;
             /** 预留物料库存 */
             reserveMaterialsInventoryEvent: Function;
             /** 测量物料事件 */

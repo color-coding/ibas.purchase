@@ -948,9 +948,20 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 已清金额小于总计
                 condition = cCriteria.conditions.create();
-                condition.alias = bo.PurchaseOrderItem.PROPERTY_CLOSEDAMOUNT_NAME;
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_CLOSEDAMOUNT_NAME;
                 condition.operation = ibas.emConditionOperation.LESS_THAN;
-                condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_LINETOTAL_NAME;
+                condition.comparedAlias = bo.PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME;
+                // 不是基于退货的
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                condition.value = ibas.config.applyVariables(bo.PurchaseReturn.BUSINESS_OBJECT_CODE);
+                condition.bracketOpen = 1;
+                condition = cCriteria.conditions.create();
+                condition.alias = bo.PurchaseDeliveryItem.PROPERTY_BASEDOCUMENTTYPE_NAME;
+                condition.operation = ibas.emConditionOperation.IS_NULL;
+                condition.relationship = ibas.emConditionRelationship.OR;
+                condition.bracketClose = 1;
                 // 调用选择服务
                 let that: this = this;
                 ibas.servicesManager.runChooseService<bo.PurchaseDelivery>({
@@ -1273,15 +1284,20 @@ namespace purchase {
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
-                                            beChangeds.add({
-                                                caller: item,
-                                                sourceUnit: item.uom,
-                                                targetUnit: item.inventoryUOM,
-                                                material: item.itemCode,
-                                                setUnitRate(this: bo.PurchaseInvoiceItem, value: number): void {
-                                                    this.uomRate = value;
-                                                }
-                                            });
+                                            if (!ibas.strings.isEmpty(baItem.inventoryUOM)) {
+                                                item.inventoryUOM = baItem.inventoryUOM;
+                                                item.uomRate = baItem.uomRate;
+                                            } else {
+                                                beChangeds.add({
+                                                    caller: item,
+                                                    sourceUnit: item.uom,
+                                                    targetUnit: item.inventoryUOM,
+                                                    material: item.itemCode,
+                                                    setUnitRate(this: bo.PurchaseInvoiceItem, value: number): void {
+                                                        this.uomRate = value;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                     if (beChangeds.length > 0) {
@@ -1880,12 +1896,15 @@ namespace purchase {
                         uom: caller.uom,
                         applyPrice: (type, price, currency) => {
                             if (type === "PRICE") {
+                                caller.price = 0;
                                 caller.price = price;
                                 caller.currency = currency;
                             } else if (type === "PRETAXPRICE") {
+                                caller.preTaxPrice = 0;
                                 caller.preTaxPrice = price;
                                 caller.currency = currency;
                             } else if (type === "UNITPRICE") {
+                                caller.unitPrice = 0;
                                 caller.unitPrice = price;
                                 caller.currency = currency;
                             }

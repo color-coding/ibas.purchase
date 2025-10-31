@@ -31,6 +31,7 @@
     <Property Name="Reference2" Description="参考2" DataType="Alphanumeric" DataSubType="Default" EditSize="200" Mapped="Ref2"/>
     <Property Name="Remarks" Description="备注" DataType="Memo" DataSubType="Default" EditSize="8" Mapped="Remarks"/>
     <Property Name="Referenced" Description="已引用" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Refed"/>
+    <Property Name="Printed" Description="已打印" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Printed"/>
     <Property Name="Deleted" Description="已删除" DataType="Alphanumeric" DataSubType="Default" EditSize="1" DeclaredType="emYesNo" Mapped="Deleted"/>
     <Property Name="Requester" Description="需求人" DataType="Alphanumeric" DataSubType="Default" EditSize="60" Mapped="Requester"/>
     <Property Name="Cause" Description="事由" DataType="Alphanumeric" DataSubType="Default" EditSize="200" Mapped="Cause"/>

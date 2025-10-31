@@ -310,6 +310,47 @@ namespace purchase {
                                 }),
                             }),
                         ],
+                        nextDataSet(event: sap.ui.base.Event): void {
+                            // 查询下一个数据集
+                            let data: bo.BlanketAgreementItem = event.getParameter("data");
+                            if (ibas.objects.isNull(data)) {
+                                return;
+                            }
+                            if (ibas.objects.isNull(that.lastCriteria)) {
+                                return;
+                            }
+                            let docData: bo.BlanketAgreement = new bo.BlanketAgreement();
+                            docData.docEntry = data.docEntry;
+
+                            let criteria: ibas.ICriteria = that.lastCriteria.next(docData);
+                            if (ibas.objects.isNull(criteria)) {
+                                return;
+                            }
+                            ibas.logger.log(ibas.emMessageLevel.DEBUG, "result: {0}", criteria.toString());
+                            that.fireViewEvents(that.fetchDataEvent, criteria);
+                        },
+                        rowDoubleClick(event: sap.ui.base.Event): void {
+                            let selectItems: bo.BlanketAgreementItem[] = ibas.arrays.create(event.getParameter("row")?.getBindingContext()?.getObject());
+                            if (selectItems.length === 0) {
+                                selectItems = that.itemTable.getSelecteds();
+                            }
+                            let selects: bo.BlanketAgreement[] = that.table.getModel().getData("rows");
+                            for (let select of selects) {
+                                let has: boolean = false;
+                                for (let i: number = select.blanketAgreementItems.length - 1; i >= 0; i--) {
+                                    let item: any = select.blanketAgreementItems[i];
+                                    if (selectItems.find(c => c === item)) {
+                                        has = true;
+                                        continue;
+                                    }
+                                    select.blanketAgreementItems.removeAt(i);
+                                }
+                                if (has === false) {
+                                    select.markDeleted();
+                                }
+                            }
+                            that.fireViewEvents(that.chooseDataEvent, selects.filter(c => c.isDeleted === false));
+                        }
                     });
                     return new sap.m.Dialog("", {
                         title: this.title,
@@ -363,6 +404,7 @@ namespace purchase {
                                                                             message: ibas.i18n.prop("shell_please_chooose_data", ibas.i18n.prop("shell_data_customized")),
                                                                         });
                                                                     } else {
+                                                                        that.itemTable.setModel(undefined);
                                                                         that.showDataItems(selecteds);
                                                                     }
                                                                 },
@@ -405,6 +447,50 @@ namespace purchase {
                                                             if (!ibas.strings.isEmpty(search)) {
                                                                 search = search.trim().toLowerCase();
                                                             }
+                                                            let criteria: ibas.ICriteria = that.usingCriteria?.clone();
+                                                            if (ibas.objects.isNull(criteria)) {
+                                                                criteria = new ibas.Criteria();
+                                                            }
+                                                            let cCriteria: ibas.IChildCriteria = criteria.childCriterias.firstOrDefault(
+                                                                c => c.propertyPath === bo.BlanketAgreement.PROPERTY_BLANKETAGREEMENTITEMS_NAME
+                                                            );
+                                                            if (ibas.objects.isNull(cCriteria)) {
+                                                                cCriteria = criteria.childCriterias.create();
+                                                                cCriteria.propertyPath = bo.BlanketAgreement.PROPERTY_BLANKETAGREEMENTITEMS_NAME;
+                                                                cCriteria.onlyHasChilds = true;
+                                                                cCriteria.noChilds = false;
+                                                            }
+                                                            if (!ibas.strings.isEmpty(search)) {
+                                                                let count: number = cCriteria.conditions.length;
+                                                                for (let column of that.itemTable.getColumns()) {
+                                                                    if (column instanceof sap.extension.table.DataColumn) {
+                                                                        let propertyInfo: shell.bo.IBizPropertyInfo = column.getPropertyInfo();
+                                                                        if (propertyInfo.searched !== true) {
+                                                                            continue;
+                                                                        }
+                                                                        if (!ibas.strings.isEmpty(propertyInfo?.name)) {
+                                                                            let condition: ibas.ICondition = cCriteria.conditions.create();
+                                                                            condition.alias = propertyInfo.name;
+                                                                            condition.operation = ibas.emConditionOperation.CONTAIN;
+                                                                            condition.value = search;
+                                                                            if (cCriteria.conditions.length > count + 1) {
+                                                                                condition.relationship = ibas.emConditionRelationship.OR;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (cCriteria.conditions.length > count + 1) {
+                                                                    cCriteria.conditions[count].bracketOpen += 1;
+                                                                    cCriteria.conditions[cCriteria.conditions.length - 1].bracketClose += 1;
+                                                                }
+                                                            }
+                                                            // 成功构建子项查询
+                                                            if (cCriteria.conditions.length > 0) {
+                                                                that.table.setModel(undefined);
+                                                                that.itemTable.setModel(undefined);
+                                                                that.fireViewEvents(that.fetchDataEvent, criteria);
+                                                                return;
+                                                            }
                                                             let filters: ibas.IList<sap.ui.model.Filter> = new ibas.ArrayList<sap.ui.model.Filter>();
                                                             if (!ibas.strings.isEmpty(search)) {
                                                                 for (let i: number = 0; i < that.itemTable.getVisibleRowCount(); i++) {
@@ -436,10 +522,14 @@ namespace purchase {
                                                             }
                                                             let binding: any = that.itemTable.getBinding("rows");
                                                             if (binding instanceof sap.ui.model.ListBinding) {
-                                                                if (filters.length > 0) {
-                                                                    binding.filter(new sap.ui.model.Filter({ filters: filters, and: false }));
-                                                                } else {
+                                                                if (ibas.strings.isEmpty(search)) {
                                                                     binding.filter(undefined);
+                                                                } else {
+                                                                    if (filters.length > 0) {
+                                                                        binding.filter(new sap.ui.model.Filter({ filters: filters, and: false }));
+                                                                    } else {
+                                                                        binding.filter(new sap.ui.model.Filter("docEntry", sap.ui.model.FilterOperator.LT, 0),);
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -461,25 +551,7 @@ namespace purchase {
                                                     text: ibas.i18n.prop("shell_data_choose"),
                                                     type: sap.m.ButtonType.Default,
                                                     press: function (): void {
-                                                        let selectItems: bo.BlanketAgreementItem[] = that.itemTable.getSelecteds();
-                                                        if (selectItems.length > 0) {
-                                                            let selects: bo.BlanketAgreement[] = that.table.getSelecteds();
-                                                            for (let select of selects) {
-                                                                let has: boolean = false;
-                                                                for (let i: number = select.blanketAgreementItems.length - 1; i >= 0; i--) {
-                                                                    let item: any = select.blanketAgreementItems[i];
-                                                                    if (selectItems.find(c => c === item)) {
-                                                                        has = true;
-                                                                        continue;
-                                                                    }
-                                                                    select.blanketAgreementItems.removeAt(i);
-                                                                }
-                                                                if (has === false) {
-                                                                    select.markDeleted();
-                                                                }
-                                                            }
-                                                            that.fireViewEvents(that.chooseDataEvent, selects.filter(c => c.isDeleted === false));
-                                                        }
+                                                        (<any>that.itemTable).fireRowDoubleClick({});
                                                     }
                                                 }),
                                                 new sap.m.Button("", {
@@ -528,7 +600,14 @@ namespace purchase {
                     for (let item of datas) {
                         dataItems.add(item.blanketAgreementItems);
                     }
-                    this.itemTable.setModel(new sap.extension.model.JSONModel(dataItems));
+                    let model: sap.ui.model.Model = this.itemTable.getModel();
+                    if (model instanceof sap.extension.model.JSONModel) {
+                        // 已绑定过数据
+                        model.addData(dataItems);
+                    } else {
+                        this.itemTable.setModel(new sap.extension.model.JSONModel(dataItems));
+                    }
+                    this.itemTable.setBusy(false);
                 }
 
                 /** 显示数据 */
@@ -539,9 +618,17 @@ namespace purchase {
                         model.addData(datas);
                     } else {
                         // 未绑定过数据
+                        if (config.isFirstUseDocumentLineChoose()) {
+                            if (this.container.getCurrentPage() !== this.container.getPages()[1]) {
+                                this.container.to(this.container.getPages()[1]);
+                            }
+                        }
                         this.table.setModel(new sap.extension.model.JSONModel({ rows: datas }));
                     }
                     this.table.setBusy(false);
+                    if (this.container.getCurrentPage() === this.container.getPages()[1]) {
+                        this.showDataItems(datas);
+                    }
                 }
                 /** 记录上次查询条件，表格滚动时自动触发 */
                 query(criteria: ibas.ICriteria): void {

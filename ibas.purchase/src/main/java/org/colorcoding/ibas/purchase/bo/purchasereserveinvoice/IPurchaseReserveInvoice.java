@@ -424,6 +424,20 @@ public interface IPurchaseReserveInvoice extends IBODocument, IShippingAddressPa
 	void setReferenced(emYesNo value);
 
 	/**
+	* 获取-已打印
+	* 
+	* @return 值
+	*/
+	emYesNo getPrinted();
+
+	/**
+	* 设置-已打印
+	* 
+	* @param value 值
+	*/
+	void setPrinted(emYesNo value);
+
+	/**
 	 * 获取-已删除
 	 * 
 	 * @return 值
@@ -828,6 +842,20 @@ public interface IPurchaseReserveInvoice extends IBODocument, IShippingAddressPa
 	 * @param value 值
 	 */
 	void setInverseDiscount(BigDecimal value);
+
+	/**
+	* 获取-取消日期
+	* 
+	* @return 值
+	*/
+	DateTime getCancellationDate();
+
+	/**
+	* 设置-取消日期
+	* 
+	* @param value 值
+	*/
+	void setCancellationDate(DateTime value);
 
 	/**
 	 * 获取-采购预留发票-行集合

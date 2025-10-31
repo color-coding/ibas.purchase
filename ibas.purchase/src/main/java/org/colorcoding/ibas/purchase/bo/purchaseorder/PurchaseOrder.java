@@ -47,6 +47,7 @@ import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingAmountItem;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.logic.IMaterialPriceCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
@@ -66,9 +67,10 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 @XmlType(name = PurchaseOrder.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseOrder.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseOrder.BUSINESS_OBJECT_CODE)
-public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPurchaseOrder, IDataOwnership,
-		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey,
-		IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator, IDocumentCloseAmountOperator {
+public class PurchaseOrder extends BusinessObject<PurchaseOrder>
+		implements IPurchaseOrder, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
+		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator,
+		IDocumentCloseQuantityOperator, IDocumentCloseAmountOperator, IDocumentPrintedOperator {
 
 	/**
 	 * 序列化版本标记
@@ -992,6 +994,37 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 	 */
 	public final void setReferenced(emYesNo value) {
 		this.setProperty(PROPERTY_REFERENCED, value);
+	}
+
+	/**
+	 * 属性名称-已打印
+	 */
+	private static final String PROPERTY_PRINTED_NAME = "Printed";
+
+	/**
+	 * 已打印 属性
+	 */
+	@DbField(name = "Printed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<emYesNo> PROPERTY_PRINTED = registerProperty(PROPERTY_PRINTED_NAME, emYesNo.class,
+			MY_CLASS);
+
+	/**
+	 * 获取-已打印
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_PRINTED_NAME)
+	public final emYesNo getPrinted() {
+		return this.getProperty(PROPERTY_PRINTED);
+	}
+
+	/**
+	 * 设置-已打印
+	 * 
+	 * @param value 值
+	 */
+	public final void setPrinted(emYesNo value) {
+		this.setProperty(PROPERTY_PRINTED, value);
 	}
 
 	/**
@@ -1998,6 +2031,16 @@ public class PurchaseOrder extends BusinessObject<PurchaseOrder> implements IPur
 					@Override
 					public void setFloorList(Integer value) {
 						PurchaseOrder.this.floorList = value;
+					}
+
+					@Override
+					public String getSupplierName() {
+						return PurchaseOrder.this.getSupplierName();
+					}
+
+					@Override
+					public void setSupplierName(String value) {
+						PurchaseOrder.this.setSupplierName(value);
 					}
 
 				},

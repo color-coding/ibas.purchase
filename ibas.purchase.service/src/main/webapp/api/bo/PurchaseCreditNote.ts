@@ -67,6 +67,8 @@ namespace purchase {
             remarks: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 已删除 */
             deleted: ibas.emYesNo;
             /** 客户代码 */
@@ -107,6 +109,8 @@ namespace purchase {
             branch: string;
             /** 反向折扣 */
             inverseDiscount: number;
+            /** 取消日期 */
+            cancellationDate: Date;
             /** 采购贷项-行集合 */
             purchaseCreditNoteItems: IPurchaseCreditNoteItems;
             /** 送货地址集合 */

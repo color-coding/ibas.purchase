@@ -45,6 +45,7 @@ namespace purchase {
                 this.view.chooseSupplierAgreementsEvent = this.chooseSupplierAgreements;
                 this.view.showPurchaseQuoteItemExtraEvent = this.showPurchaseQuoteItemExtra;
                 this.view.turnToPurchaseOrderEvent = this.turnToPurchaseOrder;
+                this.view.turnToDownPaymentRequestEvent = this.turnToDownPaymentRequest;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
                 this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
                 this.view.choosePaymentTermEvent = this.choosePaymentTerm;
@@ -951,15 +952,20 @@ namespace purchase {
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
-                                            beChangeds.add({
-                                                caller: item,
-                                                sourceUnit: item.uom,
-                                                targetUnit: item.inventoryUOM,
-                                                material: item.itemCode,
-                                                setUnitRate(this: bo.PurchaseQuoteItem, value: number): void {
-                                                    this.uomRate = value;
-                                                }
-                                            });
+                                            if (!ibas.strings.isEmpty(baItem.inventoryUOM)) {
+                                                item.inventoryUOM = baItem.inventoryUOM;
+                                                item.uomRate = baItem.uomRate;
+                                            } else {
+                                                beChangeds.add({
+                                                    caller: item,
+                                                    sourceUnit: item.uom,
+                                                    targetUnit: item.inventoryUOM,
+                                                    material: item.itemCode,
+                                                    setUnitRate(this: bo.PurchaseQuoteItem, value: number): void {
+                                                        this.uomRate = value;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                     if (beChangeds.length > 0) {
@@ -1287,12 +1293,15 @@ namespace purchase {
                         uom: caller.uom,
                         applyPrice: (type, price, currency) => {
                             if (type === "PRICE") {
+                                caller.price = 0;
                                 caller.price = price;
                                 caller.currency = currency;
                             } else if (type === "PRETAXPRICE") {
+                                caller.preTaxPrice = 0;
                                 caller.preTaxPrice = price;
                                 caller.currency = currency;
                             } else if (type === "UNITPRICE") {
+                                caller.unitPrice = 0;
                                 caller.unitPrice = price;
                                 caller.currency = currency;
                             }
@@ -1333,6 +1342,60 @@ namespace purchase {
                         }
                     });
                 }
+            }
+            /** 转为预付款申请事件 */
+            protected turnToDownPaymentRequest(): void {
+                if (ibas.objects.isNull(this.editData) || this.editData.isDirty === true) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_saved_first"));
+                    return;
+                }
+                let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
+                boRepository.fetchPurchaseQuote({
+                    criteria: this.editData.criteria(),
+                    onCompleted: (opRslt) => {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                throw new Error(ibas.i18n.prop("shell_data_deleted"));
+                            }
+                            this.editData = opRslt.resultObjects.firstOrDefault();
+                            this.view.showPurchaseQuote(this.editData);
+                            this.view.showPurchaseQuoteItems(this.editData.purchaseQuoteItems.filterDeleted());
+                            if ((this.editData.approvalStatus !== ibas.emApprovalStatus.APPROVED && this.editData.approvalStatus !== ibas.emApprovalStatus.UNAFFECTED)
+                                || this.editData.deleted === ibas.emYesNo.YES
+                                || this.editData.canceled === ibas.emYesNo.YES
+                                || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
+                            ) {
+                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                            }
+                            let target: bo.DownPaymentRequest = new bo.DownPaymentRequest();
+                            target.supplierCode = this.editData.supplierCode;
+                            target.supplierName = this.editData.supplierName;
+                            target.baseDocument(this.editData);
+                            target.paymentCode = this.editData.paymentCode;
+                            // 整单基于，则赋折扣、总计
+                            if (ibas.numbers.valueOf(target.itemsLineTotal) === this.editData.itemsLineTotal) {
+                                target.rounding = this.editData.rounding;
+                                target.diffAmount = this.editData.diffAmount;
+                                target.discount = this.editData.discount;
+                                target.documentTotal = this.editData.documentTotal;
+                            }
+                            // 设置单据类型
+                            bo.baseDocument_OrderType(target, this.editData);
+
+                            let app: DownPaymentRequestEditApp = new DownPaymentRequestEditApp();
+                            app.navigation = this.navigation;
+                            app.viewShower = this.viewShower;
+                            app.run(target);
+
+                        } catch (error) {
+                            this.messages(error);
+                        }
+                    }
+                });
+
             }
         }
         /** 视图-采购报价 */
@@ -1377,6 +1440,8 @@ namespace purchase {
             choosePurchaseQuotePurchaseRequestEvent: Function;
             /** 转为采购订单事件 */
             turnToPurchaseOrderEvent: Function;
+            /** 转为预付款申请事件 */
+            turnToDownPaymentRequestEvent: Function;
             /** 测量物料事件 */
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */

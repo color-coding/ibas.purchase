@@ -13,26 +13,28 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
 import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
+import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.ArrayList;
 import org.colorcoding.ibas.bobas.data.DateTime;
-import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
-import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
+import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
 import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItems;
 import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItem;
 import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItems;
 import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
 import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
+import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2604,6 +2606,39 @@ public class PurchaseReturnRequestItem extends BusinessObject<PurchaseReturnRequ
 			@Override
 			public String getWarehouse() {
 				return PurchaseReturnRequestItem.this.getWarehouse();
+			}
+		});
+		// 物料目录检查
+		contracts.add(new IMaterialCatalogCheckContract() {
+
+			@Override
+			public String getIdentifiers() {
+				return PurchaseReturnRequestItem.this.getIdentifiers();
+			}
+
+			@Override
+			public void setCatalogCode(String value) {
+				PurchaseReturnRequestItem.this.setCatalogCode(value);
+			}
+
+			@Override
+			public String getItemCode() {
+				return PurchaseReturnRequestItem.this.getItemCode();
+			}
+
+			@Override
+			public String getCatalogCode() {
+				return PurchaseReturnRequestItem.this.getCatalogCode();
+			}
+
+			@Override
+			public emBusinessPartnerType getBusinessPartnerType() {
+				return emBusinessPartnerType.SUPPLIER;
+			}
+
+			@Override
+			public String getBusinessPartnerCode() {
+				return PurchaseReturnRequestItem.this.parent.getSupplierCode();
 			}
 		});
 		return contracts.toArray(new IBusinessLogicContract[] {});

@@ -33,6 +33,8 @@ declare namespace materials {
         const CONFIG_ITEM_DEFAULT_HISTORICAL_PRICE_DOCUMENTS: string;
         /** 配置项目-历史价格的默认应用的价格 */
         const CONFIG_ITEM_DEFAULT_HISTORICAL_PRICE_WHICH_APPLY: string;
+        /** 配置项目-历史价格的查询数 */
+        const CONFIG_ITEM_DEFAULT_HISTORICAL_PRICE_COUNT: string;
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -873,6 +875,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 备注 */
             remarks: string;
             /** 单据货币 */
@@ -1055,6 +1059,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 备注 */
             remarks: string;
             /** 单据货币 */
@@ -1237,6 +1243,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 备注 */
             remarks: string;
             /** 单据货币 */
@@ -4154,6 +4162,8 @@ declare namespace materials {
             reference2: string;
             /** 已引用 */
             referenced: ibas.emYesNo;
+            /** 已打印 */
+            printed: ibas.emYesNo;
             /** 备注 */
             remarks: string;
             /** 单据货币 */
@@ -5029,6 +5039,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -5556,6 +5572,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -6083,6 +6105,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */
@@ -12969,6 +12997,12 @@ declare namespace materials {
             get referenced(): ibas.emYesNo;
             /** 设置-已引用 */
             set referenced(value: ibas.emYesNo);
+            /** 映射的属性名称-已打印 */
+            static PROPERTY_PRINTED_NAME: string;
+            /** 获取-已打印 */
+            get printed(): ibas.emYesNo;
+            /** 设置-已打印 */
+            set printed(value: ibas.emYesNo);
             /** 映射的属性名称-备注 */
             static PROPERTY_REMARKS_NAME: string;
             /** 获取-备注 */

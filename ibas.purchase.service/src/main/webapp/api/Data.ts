@@ -32,6 +32,8 @@ namespace purchase {
         export const CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE: string = "documentStatisticsTagDeletedLine";
         /** 配置项目-采购助手显示价格类型 */
         export const CONFIG_ITEM_PURCHASING_ASSISTANT_PRICE_TYPE: string = "purchasingAssistantPriceType";
+        /** 配置项目-首先应用单据行选择 */
+        export const CONFIG_ITEM_FIRST_USE_DOCUMENT_LINE_CHOOSE: string = "firstUseDocumentLineChoose";
         /**
          * 获取此模块配置
          * @param key 配置项
@@ -79,6 +81,13 @@ namespace purchase {
                 statisticsTagDeleted = get(CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE, true);
             }
             return statisticsTagDeleted;
+        }
+        let firstLineChoose: boolean = undefined;
+        export function isFirstUseDocumentLineChoose(): boolean {
+            if (ibas.objects.isNull(firstLineChoose)) {
+                firstLineChoose = get(CONFIG_ITEM_FIRST_USE_DOCUMENT_LINE_CHOOSE, false);
+            }
+            return firstLineChoose;
         }
     }
     export namespace bo {

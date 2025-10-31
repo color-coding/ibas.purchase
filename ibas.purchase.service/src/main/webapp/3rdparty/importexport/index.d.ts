@@ -27,6 +27,8 @@ declare namespace importexport {
         const BO_CODE_EXPORTTEMPLATE: string;
         /** 业务对象编码-数据表格对象 */
         const BO_CODE_DATA_TABLE: string;
+        /** 业务对象编码-导出日志 */
+        const BO_CODE_EXPORTRECORD: string;
         enum emAreaType {
             /**
              * 页眉
@@ -178,6 +180,8 @@ declare namespace importexport {
             name: string;
             /** 描述 */
             description: string;
+            /** 输出类型 */
+            contentType: string;
             /** 导出 */
             export(caller: IDataExportCaller<any>): void;
         }
@@ -263,6 +267,16 @@ declare namespace importexport {
              * @param saver 保存者
              */
             saveExportTemplate(saver: ibas.ISaveCaller<bo.IExportTemplate>): void;
+            /**
+             * 查询 导出日志
+             * @param fetcher 查询者
+             */
+            fetchExportRecord(fetcher: ibas.IFetchCaller<bo.IExportRecord>): void;
+            /**
+             * 保存 导出日志
+             * @param saver 保存者
+             */
+            saveExportRecord(saver: ibas.ISaveCaller<bo.IExportRecord>): void;
         }
         /**
          * 业务对象架构相关调用者
@@ -299,6 +313,73 @@ declare namespace importexport {
             contentType?: string;
             /** 内容 */
             content?: any;
+        }
+        /**
+         * 导出日志调用者
+         */
+        interface IExportRecordCaller<P> extends ibas.IMethodCaller<P> {
+            /** 业务对象标识 */
+            boKeys: string;
+            /** 原因 */
+            cause: string;
+            /** 内容 */
+            content?: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace importexport {
+    namespace bo {
+        /** 导出日志 */
+        interface IExportRecord extends ibas.IBOSimple {
+            /** 编号 */
+            objectKey: number;
+            /** 类型 */
+            objectCode: string;
+            /** 实例号（版本） */
+            logInst: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 服务系列 */
+            series: number;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+            /** 类型 */
+            boCode: string;
+            /** 主键值 */
+            boKeys: string;
+            /** 实例号 */
+            boInst: number;
+            /** 导出用户 */
+            exportUser: number;
+            /** 导出日期 */
+            exportDate: Date;
+            /** 导出时间 */
+            exportTime: number;
+            /** 动机 */
+            cause: string;
+            /** 内容 */
+            content: string;
         }
     }
 }
@@ -1541,6 +1622,152 @@ declare namespace importexport {
  */
 declare namespace importexport {
     namespace bo {
+        /** 导出日志 */
+        class ExportRecord extends ibas.BOSimple<ExportRecord> implements IExportRecord {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-编号 */
+            get objectKey(): number;
+            /** 设置-编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-类型 */
+            get objectCode(): string;
+            /** 设置-类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-实例号（版本） */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-实例号（版本） */
+            get logInst(): number;
+            /** 设置-实例号（版本） */
+            set logInst(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 映射的属性名称-类型 */
+            static PROPERTY_BOCODE_NAME: string;
+            /** 获取-类型 */
+            get boCode(): string;
+            /** 设置-类型 */
+            set boCode(value: string);
+            /** 映射的属性名称-主键值 */
+            static PROPERTY_BOKEYS_NAME: string;
+            /** 获取-主键值 */
+            get boKeys(): string;
+            /** 设置-主键值 */
+            set boKeys(value: string);
+            /** 映射的属性名称-实例号 */
+            static PROPERTY_BOINST_NAME: string;
+            /** 获取-实例号 */
+            get boInst(): number;
+            /** 设置-实例号 */
+            set boInst(value: number);
+            /** 映射的属性名称-导出用户 */
+            static PROPERTY_EXPORTUSER_NAME: string;
+            /** 获取-导出用户 */
+            get exportUser(): number;
+            /** 设置-导出用户 */
+            set exportUser(value: number);
+            /** 映射的属性名称-导出日期 */
+            static PROPERTY_EXPORTDATE_NAME: string;
+            /** 获取-导出日期 */
+            get exportDate(): Date;
+            /** 设置-导出日期 */
+            set exportDate(value: Date);
+            /** 映射的属性名称-导出时间 */
+            static PROPERTY_EXPORTTIME_NAME: string;
+            /** 获取-导出时间 */
+            get exportTime(): number;
+            /** 设置-导出时间 */
+            set exportTime(value: number);
+            /** 映射的属性名称-动机 */
+            static PROPERTY_CAUSE_NAME: string;
+            /** 获取-动机 */
+            get cause(): string;
+            /** 设置-动机 */
+            set cause(value: string);
+            /** 映射的属性名称-内容 */
+            static PROPERTY_CONTENT_NAME: string;
+            /** 获取-内容 */
+            get content(): string;
+            /** 设置-内容 */
+            set content(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace importexport {
+    namespace bo {
         /** 数据转换者 */
         class DataConverter extends ibas.DataConverter4j {
             /**
@@ -1561,6 +1788,8 @@ declare namespace importexport {
             Template: string;
             /** 描述 */
             Description: string;
+            /** 输出内容类型 */
+            ContentType: string;
         }
         /** 模块业务对象工厂 */
         const boFactory: ibas.BOFactory;
@@ -1581,6 +1810,8 @@ declare namespace importexport {
             name: string;
             /** 描述 */
             description: string;
+            /** 输出类型 */
+            contentType: string;
             /** 导出 */
             abstract export(caller: bo.IDataExportCaller<T>): void;
         }
@@ -1698,6 +1929,21 @@ declare namespace importexport {
              * @param saver 保存者
              */
             saveExportTemplate(saver: ibas.ISaveCaller<bo.ExportTemplate>): void;
+            /**
+             * 查询 导出日志
+             * @param fetcher 查询者
+             */
+            fetchExportRecord(fetcher: ibas.IFetchCaller<bo.ExportRecord>): void;
+            /**
+             * 保存 导出日志
+             * @param saver 保存者
+             */
+            saveExportRecord(saver: ibas.ISaveCaller<bo.ExportRecord>): void;
+            /**
+             * 记录导出日志
+             * @param caller 调用者
+             */
+            writeExportRecord(caller: IExportRecordCaller<string>): void;
         }
     }
 }
@@ -1866,8 +2112,12 @@ declare namespace importexport {
 declare namespace importexport {
     namespace app {
         enum emExportMode {
-            ALL = 0,
-            SELECTED = 1
+            /** 当前全部 */
+            CURRENT = 0,
+            /** 选择的 */
+            SELECTED = 1,
+            /** 全部 */
+            ALL = 2
         }
         /** 应用-审批流程 */
         class ViewExportApp extends ibas.ResidentApplication<IViewExportView> {
@@ -1897,6 +2147,46 @@ declare namespace importexport {
             /** 构造函数 */
             constructor();
             create(): ibas.ResidentApplication<ibas.IResidentView>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+declare namespace importexport {
+    namespace app {
+        /** 导出记录服务 */
+        class ExportRecordService extends ibas.ServiceApplication<IExportRecordServiceView, ibas.IBOServiceContract> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            /** 运行服务 */
+            runService(contract: ibas.IBOServiceContract): void;
+            /** 关联的数据 */
+            private bo;
+        }
+        /** 导出记录服务-视图 */
+        interface IExportRecordServiceView extends ibas.IView {
+            /** 显示关联对象 */
+            showBusinessObject(bo: ibas.IBusinessObject): void;
+            /** 显示已存在日志 */
+            showRecords(datas: bo.ExportRecord[]): void;
+        }
+        /** 导出记录服务映射 */
+        class ExportRecordServiceMapping extends ibas.ServiceMapping {
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
         }
     }
 }
@@ -2255,6 +2545,7 @@ declare namespace importexport {
             /** 视图显示后 */
             protected viewShowed(): void;
             protected printData: any[];
+            protected converter: ibas.IDataConverter;
             /** 预览 */
             private preview;
             /** 打印 */
@@ -2269,7 +2560,9 @@ declare namespace importexport {
             /** 显示数据导出者 */
             showExporters(exporters: bo.IDataExporter[]): void;
             /** 显示内容 */
-            showContent(content: Blob, width: string, height: string): void;
+            showContent(content: Blob, contentType: string, width: string, height: string): void;
+            /** 显示导出日志 */
+            showPrintRecords(records: bo.ExportRecord[]): void;
         }
         /** 数据打印 */
         class DataPrintService extends AbstractDataPrintService<IDataPrintServiceContract> {

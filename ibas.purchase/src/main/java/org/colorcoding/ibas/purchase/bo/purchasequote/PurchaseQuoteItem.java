@@ -25,6 +25,8 @@ import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
+import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
+import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRuleDeductionPriceQtyTotal;
@@ -2560,7 +2562,40 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 					public String getWarehouse() {
 						return Strings.VALUE_EMPTY;
 					}
-				}
+				},
+				// 物料目录检查
+				new IMaterialCatalogCheckContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseQuoteItem.this.getIdentifiers();
+					}
+
+					@Override
+					public void setCatalogCode(String value) {
+						PurchaseQuoteItem.this.setCatalogCode(value);
+					}
+
+					@Override
+					public String getItemCode() {
+						return PurchaseQuoteItem.this.getItemCode();
+					}
+
+					@Override
+					public String getCatalogCode() {
+						return PurchaseQuoteItem.this.getCatalogCode();
+					}
+
+					@Override
+					public emBusinessPartnerType getBusinessPartnerType() {
+						return emBusinessPartnerType.SUPPLIER;
+					}
+
+					@Override
+					public String getBusinessPartnerCode() {
+						return PurchaseQuoteItem.this.parent.getSupplierCode();
+					}
+				},
 
 		};
 

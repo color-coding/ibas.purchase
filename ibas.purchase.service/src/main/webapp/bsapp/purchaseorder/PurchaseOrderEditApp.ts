@@ -1455,15 +1455,20 @@ namespace purchase {
                                             item.quantity = baItem.quantity - baItem.closedQuantity;
                                             item.reference1 = baItem.reference1;
                                             item.reference2 = baItem.reference2;
-                                            beChangeds.add({
-                                                caller: item,
-                                                sourceUnit: item.uom,
-                                                targetUnit: item.inventoryUOM,
-                                                material: item.itemCode,
-                                                setUnitRate(this: bo.PurchaseOrderItem, value: number): void {
-                                                    this.uomRate = value;
-                                                }
-                                            });
+                                            if (!ibas.strings.isEmpty(baItem.inventoryUOM)) {
+                                                item.inventoryUOM = baItem.inventoryUOM;
+                                                item.uomRate = baItem.uomRate;
+                                            } else {
+                                                beChangeds.add({
+                                                    caller: item,
+                                                    sourceUnit: item.uom,
+                                                    targetUnit: item.inventoryUOM,
+                                                    material: item.itemCode,
+                                                    setUnitRate(this: bo.PurchaseOrderItem, value: number): void {
+                                                        this.uomRate = value;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                     if (beChangeds.length > 0) {
@@ -1817,12 +1822,15 @@ namespace purchase {
                         uom: caller.uom,
                         applyPrice: (type, price, currency) => {
                             if (type === "PRICE") {
+                                caller.price = 0;
                                 caller.price = price;
                                 caller.currency = currency;
                             } else if (type === "PRETAXPRICE") {
+                                caller.preTaxPrice = 0;
                                 caller.preTaxPrice = price;
                                 caller.currency = currency;
                             } else if (type === "UNITPRICE") {
+                                caller.unitPrice = 0;
                                 caller.unitPrice = price;
                                 caller.currency = currency;
                             }

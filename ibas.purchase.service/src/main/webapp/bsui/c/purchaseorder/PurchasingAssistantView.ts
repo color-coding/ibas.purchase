@@ -527,6 +527,14 @@ namespace purchase {
                                                     childCriteria.conditions.lastOrDefault().bracketClose += 1;
                                                 }
                                                 condition = childCriteria.conditions.create();
+                                                condition.alias = sales.bo.SalesOrderItem.PROPERTY_CANCELED_NAME;
+                                                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                                                condition.value = ibas.emYesNo.YES.toString();
+                                                condition = childCriteria.conditions.create();
+                                                condition.alias = sales.bo.SalesOrderItem.PROPERTY_DELETED_NAME;
+                                                condition.operation = ibas.emConditionOperation.NOT_EQUAL;
+                                                condition.value = ibas.emYesNo.YES.toString();
+                                                condition = childCriteria.conditions.create();
                                                 condition.alias = sales.bo.SalesOrderItem.PROPERTY_ORDEREDQUANTITY_NAME;
                                                 condition.operation = ibas.emConditionOperation.LESS_THAN;
                                                 condition.comparedAlias = sales.bo.SalesOrderItem.PROPERTY_QUANTITY_NAME;

@@ -237,38 +237,75 @@ namespace purchase {
                                 }
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnote_documentstatus") }),
-                            new sap.extension.m.EnumSelect("", {
-                                enumType: ibas.emDocumentStatus
-                            }).bindProperty("bindingValue", {
-                                path: "documentStatus",
-                                type: new sap.extension.data.DocumentStatus()
-                            }),
-                            new sap.extension.m.TipsCheckBox("", {
-                                text: ibas.i18n.prop("bo_purchasecreditnote_canceled"),
-                                tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
-                            }).bindProperty("bindingValue", {
-                                path: "canceled",
-                                type: new sap.extension.data.YesNo()
-                            }).bindProperty("editable", {
-                                parts: [
-                                    {
-                                        path: "approvalStatus",
-                                        type: new sap.extension.data.ApprovalStatus(),
-                                    },
-                                    {
+                            new sap.m.FlexBox("", {
+                                width: "100%",
+                                justifyContent: sap.m.FlexJustifyContent.Start,
+                                renderType: sap.m.FlexRendertype.Bare,
+                                alignContent: sap.m.FlexAlignContent.Center,
+                                alignItems: sap.m.FlexAlignItems.Center,
+                                items: [
+                                    new sap.extension.m.EnumSelect("", {
+                                        enumType: ibas.emDocumentStatus,
+                                        width: "100%",
+                                    }).bindProperty("bindingValue", {
                                         path: "documentStatus",
-                                        type: new sap.extension.data.DocumentStatus(),
+                                        type: new sap.extension.data.DocumentStatus()
+                                    }).addStyleClass("sapUiSmallMarginEnd"),
+                                    new sap.extension.m.TipsCheckBox("", {
+                                        text: ibas.i18n.prop("bo_purchasecreditnote_canceled"),
+                                        tipsOnSelection: ibas.i18n.prop(["shell_data_cancel", "shell_data_status"]),
+                                    }).bindProperty("bindingValue", {
+                                        path: "canceled",
+                                        type: new sap.extension.data.YesNo()
+                                    }).bindProperty("editable", {
+                                        parts: [
+                                            {
+                                                path: "approvalStatus",
+                                                type: new sap.extension.data.ApprovalStatus(),
+                                            },
+                                            {
+                                                path: "documentStatus",
+                                                type: new sap.extension.data.DocumentStatus(),
+                                            }
+                                        ],
+                                        formatter(apStatus: ibas.emApprovalStatus, docStatus: ibas.emDocumentStatus): boolean {
+                                            if (apStatus === ibas.emApprovalStatus.PROCESSING) {
+                                                return false;
+                                            }
+                                            if (docStatus === ibas.emDocumentStatus.PLANNED) {
+                                                return false;
+                                            }
+                                            return true;
+                                        }
+                                    }).addStyleClass("sapUiSmallMarginEnd"),
+                                    new sap.extension.m.CheckBox("", {
+                                        text: ibas.i18n.prop("bo_purchasecreditnote_printed"),
+                                        editable: false,
+                                    }).bindProperty("bindingValue", {
+                                        path: "printed",
+                                        type: new sap.extension.data.YesNo()
+                                    }),
+                                ]
+                            }),
+                            new sap.m.Label("", {
+                                text: ibas.i18n.prop("bo_purchasecreditnote_cancellationdate"),
+                                visible: {
+                                    path: "canceled",
+                                    formatter(data: any): any {
+                                        return data === ibas.emYesNo.YES ? true : false;
                                     }
-                                ],
-                                formatter(apStatus: ibas.emApprovalStatus, docStatus: ibas.emDocumentStatus): boolean {
-                                    if (apStatus === ibas.emApprovalStatus.PROCESSING) {
-                                        return false;
-                                    }
-                                    if (docStatus === ibas.emDocumentStatus.PLANNED) {
-                                        return false;
-                                    }
-                                    return true;
                                 }
+                            }),
+                            new sap.extension.m.DatePicker("", {
+                                visible: {
+                                    path: "canceled",
+                                    formatter(data: any): any {
+                                        return data === ibas.emYesNo.YES ? true : false;
+                                    }
+                                }
+                            }).bindProperty("bindingValue", {
+                                path: "cancellationDate",
+                                type: new sap.extension.data.Date()
                             }),
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_purchasecreditnote_documentdate") }),
                             new sap.extension.m.DatePicker("", {
@@ -982,6 +1019,7 @@ namespace purchase {
                                     }),
                                 ],
                                 sortProperty: "visOrder",
+                                sortIntervalStep: 1,
                             })
                         ]
                     });

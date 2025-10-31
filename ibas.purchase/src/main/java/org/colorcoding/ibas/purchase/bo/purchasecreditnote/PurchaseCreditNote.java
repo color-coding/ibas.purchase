@@ -52,6 +52,7 @@ import org.colorcoding.ibas.businesspartner.logic.ISupplierCheckContract;
 import org.colorcoding.ibas.document.IDocumentCloseQuantityOperator;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
 import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
+import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
@@ -63,6 +64,7 @@ import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
+import org.colorcoding.ibas.sales.rules.BusinessRuleCancellationDate;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
@@ -78,7 +80,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 		implements IPurchaseCreditNote, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
 		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator,
-		IDocumentCloseQuantityOperator, IJECPropertyValueGetter {
+		IDocumentCloseQuantityOperator, IJECPropertyValueGetter, IDocumentPrintedOperator {
 
 	/**
 	 * 序列化版本标记
@@ -1005,6 +1007,37 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 	}
 
 	/**
+	 * 属性名称-已打印
+	 */
+	private static final String PROPERTY_PRINTED_NAME = "Printed";
+
+	/**
+	 * 已打印 属性
+	 */
+	@DbField(name = "Printed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<emYesNo> PROPERTY_PRINTED = registerProperty(PROPERTY_PRINTED_NAME, emYesNo.class,
+			MY_CLASS);
+
+	/**
+	 * 获取-已打印
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_PRINTED_NAME)
+	public final emYesNo getPrinted() {
+		return this.getProperty(PROPERTY_PRINTED);
+	}
+
+	/**
+	 * 设置-已打印
+	 * 
+	 * @param value 值
+	 */
+	public final void setPrinted(emYesNo value) {
+		this.setProperty(PROPERTY_PRINTED, value);
+	}
+
+	/**
 	 * 属性名称-已删除
 	 */
 	private static final String PROPERTY_DELETED_NAME = "Deleted";
@@ -1787,6 +1820,37 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 	}
 
 	/**
+	 * 属性名称-取消日期
+	 */
+	private static final String PROPERTY_CANCELLATIONDATE_NAME = "CancellationDate";
+
+	/**
+	 * 取消日期 属性
+	 */
+	@DbField(name = "CnclDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	public static final IPropertyInfo<DateTime> PROPERTY_CANCELLATIONDATE = registerProperty(
+			PROPERTY_CANCELLATIONDATE_NAME, DateTime.class, MY_CLASS);
+
+	/**
+	 * 获取-取消日期
+	 * 
+	 * @return 值
+	 */
+	@XmlElement(name = PROPERTY_CANCELLATIONDATE_NAME)
+	public final DateTime getCancellationDate() {
+		return this.getProperty(PROPERTY_CANCELLATIONDATE);
+	}
+
+	/**
+	 * 设置-取消日期
+	 * 
+	 * @param value 值
+	 */
+	public final void setCancellationDate(DateTime value) {
+		this.setProperty(PROPERTY_CANCELLATIONDATE, value);
+	}
+
+	/**
 	 * 属性名称-采购贷项-行
 	 */
 	private static final String PROPERTY_PURCHASECREDITNOTEITEMS_NAME = "PurchaseCreditNoteItems";
@@ -1967,6 +2031,7 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 				new BusinessRuleDeductionInverseDiscount(PROPERTY_DISCOUNT, PROPERTY_INVERSEDISCOUNT),
 				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DISCOUNTTOTAL), // 不能低于0
 				new BusinessRuleMinValue<BigDecimal>(Decimals.VALUE_ZERO, PROPERTY_DOCUMENTTOTAL), // 不能低于0
+				new BusinessRuleCancellationDate(PROPERTY_CANCELED, PROPERTY_CANCELLATIONDATE),// 单据取消日期
 
 		};
 	}
@@ -1997,6 +2062,16 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 					@Override
 					public String getSupplierCode() {
 						return PurchaseCreditNote.this.getSupplierCode();
+					}
+
+					@Override
+					public String getSupplierName() {
+						return PurchaseCreditNote.this.getSupplierName();
+					}
+
+					@Override
+					public void setSupplierName(String value) {
+						PurchaseCreditNote.this.setSupplierName(value);
 					}
 				},
 				// 分支检查
@@ -2056,6 +2131,9 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 
 					@Override
 					public DateTime getDocumentDate() {
+						if (PurchaseCreditNote.this.getCanceled() == emYesNo.YES) {
+							return PurchaseCreditNote.this.getCancellationDate();
+						}
 						return PurchaseCreditNote.this.getDocumentDate();
 					}
 
