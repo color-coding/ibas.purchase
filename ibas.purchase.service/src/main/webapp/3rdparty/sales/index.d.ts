@@ -16533,6 +16533,27 @@ declare namespace sales {
             /** 创建服务实例 */
             create(): ibas.IService<ibas.IServiceContract>;
         }
+        /** 单据收款-销售贷项 */
+        class SalesCreditNoteReceiptService extends ibas.ServiceWithResultApplication<ibas.IView, receiptpayment.app.IDocumentReceiptContract, receiptpayment.bo.IPaymentItem[]> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected runService(contract: receiptpayment.app.IDocumentReceiptContract): void;
+        }
+        /** 单据收款-销售贷项 */
+        class SalesCreditNoteReceiptServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
     }
 }
 /**
