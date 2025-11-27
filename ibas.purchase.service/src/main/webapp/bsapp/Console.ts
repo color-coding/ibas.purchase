@@ -97,6 +97,7 @@ namespace purchase {
                 this.register(new PurchaseInvoicePaymentServiceMapping());
                 this.register(new PurchaseReserveInvoicePaymentServiceMapping());
                 this.register(new DownPaymentRequestPaymentServiceMapping());
+                this.register(new PurchaseCreditNotePaymentServiceMapping());
                 // 订购服务
                 this.register(new MaterialOrderedReservationSourcePurchaseOrderServiceMapping());
                 this.register(new MaterialOrderedReservationSourcePurchaseRequestServiceMapping());

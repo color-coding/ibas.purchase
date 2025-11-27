@@ -2480,7 +2480,7 @@ declare namespace importexport {
             protected viewShowed(): void;
             private files;
             /** 导入 */
-            protected import(method?: bo.emDataUpdateMethod): void;
+            protected import(method: bo.emDataUpdateMethod, transcation: ibas.emYesNo, approval: ibas.emYesNo): void;
             /** 选择文件 */
             protected addFiles(): void;
             /** 移除文件 */
