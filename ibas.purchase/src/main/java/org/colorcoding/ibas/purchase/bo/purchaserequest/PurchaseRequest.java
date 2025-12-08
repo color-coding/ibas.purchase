@@ -1629,7 +1629,7 @@ public class PurchaseRequest extends BusinessObject<PurchaseRequest>
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getPurchaseRequestItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));

@@ -1998,7 +1998,7 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setPaidTotal(Decimals.VALUE_ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);

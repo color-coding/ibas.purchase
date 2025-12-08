@@ -91,6 +91,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseOrder.PROPERTY_PURCHASEORDERITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseOrderItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -253,6 +254,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.DownPaymentRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -416,6 +418,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseCreditNote.PROPERTY_PURCHASECREDITNOTEITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseCreditNoteItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -578,6 +581,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseDeliveryItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -741,6 +745,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseInvoice.PROPERTY_PURCHASEINVOICEITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseInvoiceItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -903,6 +908,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseQuote.PROPERTY_PURCHASEQUOTEITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseQuoteItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -1065,6 +1071,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReserveInvoiceItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -1227,6 +1234,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseReturn.PROPERTY_PURCHASERETURNITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReturnItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -1390,6 +1398,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReturnRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;
@@ -1545,6 +1554,7 @@ namespace purchase {
                 let cCriteria: ibas.IChildCriteria = criteria.childCriterias.create();
                 cCriteria.propertyPath = bo.PurchaseRequest.PROPERTY_PURCHASEREQUESTITEMS_NAME;
                 cCriteria.onlyHasChilds = true;
+                cCriteria.entry = true;
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseRequestItem.PROPERTY_ITEMCODE_NAME;
                 condition.value = contract.itemCode;

@@ -121,6 +121,8 @@ declare namespace materials {
         const BO_CODE_BUSINESSPARTNERMATERIALCATALOG: string;
         /** 业务对象编码-计划组 */
         const BO_CODE_SCHEDULINGGROUP: string;
+        /** 业务对象编码-物料扩展设置 */
+        const BO_CODE_MATERIALSEXTENDEDSETTING: string;
         /** 物料类型 */
         enum emItemType {
             /** 物料 */
@@ -681,6 +683,28 @@ declare namespace materials {
         }
         /** 单据物料价格服务代理 */
         class DocumentMaterialPriceServiceProxy extends ibas.ServiceProxy<IDocumentMaterialPriceContract> {
+        }
+        /** 物料查看扩展服务契约 */
+        interface IMaterialViewExtendedContract extends ibas.IServiceContract {
+            /** 数据改变 */
+            dataChangeEvent: (event: {
+                reson: "CREATE" | "CLONE" | "FETCH" | "DELETE";
+                data: bo.IMaterial;
+            }) => void;
+        }
+        /** 物料编辑扩展服务契约 */
+        interface IMaterialEditExtendedContract extends IMaterialViewExtendedContract {
+            /** 数据保存 */
+            dataSavingEvent: (event: {
+                reson: "SAVE" | "DELETE";
+                data: bo.IMaterial;
+            }) => void;
+        }
+        /** 物料查看扩展服务代理 */
+        class MaterialViewExtendedServiceProxy extends ibas.ServiceProxy<IMaterialViewExtendedContract> {
+        }
+        /** 物料编辑扩展服务代理 */
+        class MaterialEditExtendedServiceProxy extends ibas.ServiceProxy<IMaterialEditExtendedContract> {
         }
         /** 查询条件 */
         namespace conditions {
@@ -4524,6 +4548,55 @@ declare namespace materials {
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
+ */
+declare namespace materials {
+    namespace bo {
+        /** 物料扩展设置 */
+        interface IMaterialsExtendedSetting extends ibas.IBOSimple {
+            /** 扩展项目 */
+            element: string;
+            /** 描述 */
+            description: string;
+            /** 目标类型 */
+            targetCode: string;
+            /** 目标键值 */
+            targetKeys: string;
+            /** 启用的 */
+            enabled: ibas.emYesNo;
+            /** 设置 */
+            settings: string;
+            /** 对象编号 */
+            objectKey: number;
+            /** 对象类型 */
+            objectCode: string;
+            /** 创建日期 */
+            createDate: Date;
+            /** 创建时间 */
+            createTime: number;
+            /** 修改日期 */
+            updateDate: Date;
+            /** 修改时间 */
+            updateTime: number;
+            /** 版本 */
+            logInst: number;
+            /** 服务系列 */
+            series: number;
+            /** 数据源 */
+            dataSource: string;
+            /** 创建用户 */
+            createUserSign: number;
+            /** 修改用户 */
+            updateUserSign: number;
+            /** 创建动作标识 */
+            createActionId: string;
+            /** 更新动作标识 */
+            updateActionId: string;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
@@ -4536,7 +4609,7 @@ declare namespace materials {
              * 上传文件
              * @param caller 调用者
              */
-            upload(caller: ibas.IUploadFileCaller<ibas.FileData>): void;
+            upload(caller: ibas.IUploadFileCaller<ibas.FileItem>): void;
             /**
              * 下载文件
              * @param caller 调用者
@@ -4842,6 +4915,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveSchedulingGroup(saver: ibas.ISaveCaller<bo.ISchedulingGroup>): void;
+            /**
+             * 查询 物料扩展设置
+             * @param fetcher 查询者
+             */
+            fetchMaterialsExtendedSetting(fetcher: ibas.IFetchCaller<bo.IMaterialsExtendedSetting>): void;
+            /**
+             * 保存 物料扩展设置
+             * @param saver 保存者
+             */
+            saveMaterialsExtendedSetting(saver: ibas.ISaveCaller<bo.IMaterialsExtendedSetting>): void;
         }
         interface ICloseCaller<T> extends ibas.IMethodCaller<string> {
             /** 查询条件 */
@@ -13988,6 +14071,137 @@ declare namespace materials {
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
+ */
+declare namespace materials {
+    namespace bo {
+        /** 物料扩展设置 */
+        class MaterialsExtendedSetting extends ibas.BOSimple<MaterialsExtendedSetting> implements IMaterialsExtendedSetting {
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string;
+            /** 构造函数 */
+            constructor();
+            /** 映射的属性名称-扩展项目 */
+            static PROPERTY_ELEMENT_NAME: string;
+            /** 获取-扩展项目 */
+            get element(): string;
+            /** 设置-扩展项目 */
+            set element(value: string);
+            /** 映射的属性名称-描述 */
+            static PROPERTY_DESCRIPTION_NAME: string;
+            /** 获取-描述 */
+            get description(): string;
+            /** 设置-描述 */
+            set description(value: string);
+            /** 映射的属性名称-目标类型 */
+            static PROPERTY_TARGETCODE_NAME: string;
+            /** 获取-目标类型 */
+            get targetCode(): string;
+            /** 设置-目标类型 */
+            set targetCode(value: string);
+            /** 映射的属性名称-目标键值 */
+            static PROPERTY_TARGETKEYS_NAME: string;
+            /** 获取-目标键值 */
+            get targetKeys(): string;
+            /** 设置-目标键值 */
+            set targetKeys(value: string);
+            /** 映射的属性名称-启用的 */
+            static PROPERTY_ENABLED_NAME: string;
+            /** 获取-启用的 */
+            get enabled(): ibas.emYesNo;
+            /** 设置-启用的 */
+            set enabled(value: ibas.emYesNo);
+            /** 映射的属性名称-设置 */
+            static PROPERTY_SETTINGS_NAME: string;
+            /** 获取-设置 */
+            get settings(): string;
+            /** 设置-设置 */
+            set settings(value: string);
+            /** 映射的属性名称-对象编号 */
+            static PROPERTY_OBJECTKEY_NAME: string;
+            /** 获取-对象编号 */
+            get objectKey(): number;
+            /** 设置-对象编号 */
+            set objectKey(value: number);
+            /** 映射的属性名称-对象类型 */
+            static PROPERTY_OBJECTCODE_NAME: string;
+            /** 获取-对象类型 */
+            get objectCode(): string;
+            /** 设置-对象类型 */
+            set objectCode(value: string);
+            /** 映射的属性名称-创建日期 */
+            static PROPERTY_CREATEDATE_NAME: string;
+            /** 获取-创建日期 */
+            get createDate(): Date;
+            /** 设置-创建日期 */
+            set createDate(value: Date);
+            /** 映射的属性名称-创建时间 */
+            static PROPERTY_CREATETIME_NAME: string;
+            /** 获取-创建时间 */
+            get createTime(): number;
+            /** 设置-创建时间 */
+            set createTime(value: number);
+            /** 映射的属性名称-修改日期 */
+            static PROPERTY_UPDATEDATE_NAME: string;
+            /** 获取-修改日期 */
+            get updateDate(): Date;
+            /** 设置-修改日期 */
+            set updateDate(value: Date);
+            /** 映射的属性名称-修改时间 */
+            static PROPERTY_UPDATETIME_NAME: string;
+            /** 获取-修改时间 */
+            get updateTime(): number;
+            /** 设置-修改时间 */
+            set updateTime(value: number);
+            /** 映射的属性名称-版本 */
+            static PROPERTY_LOGINST_NAME: string;
+            /** 获取-版本 */
+            get logInst(): number;
+            /** 设置-版本 */
+            set logInst(value: number);
+            /** 映射的属性名称-服务系列 */
+            static PROPERTY_SERIES_NAME: string;
+            /** 获取-服务系列 */
+            get series(): number;
+            /** 设置-服务系列 */
+            set series(value: number);
+            /** 映射的属性名称-数据源 */
+            static PROPERTY_DATASOURCE_NAME: string;
+            /** 获取-数据源 */
+            get dataSource(): string;
+            /** 设置-数据源 */
+            set dataSource(value: string);
+            /** 映射的属性名称-创建用户 */
+            static PROPERTY_CREATEUSERSIGN_NAME: string;
+            /** 获取-创建用户 */
+            get createUserSign(): number;
+            /** 设置-创建用户 */
+            set createUserSign(value: number);
+            /** 映射的属性名称-修改用户 */
+            static PROPERTY_UPDATEUSERSIGN_NAME: string;
+            /** 获取-修改用户 */
+            get updateUserSign(): number;
+            /** 设置-修改用户 */
+            set updateUserSign(value: number);
+            /** 映射的属性名称-创建动作标识 */
+            static PROPERTY_CREATEACTIONID_NAME: string;
+            /** 获取-创建动作标识 */
+            get createActionId(): string;
+            /** 设置-创建动作标识 */
+            set createActionId(value: string);
+            /** 映射的属性名称-更新动作标识 */
+            static PROPERTY_UPDATEACTIONID_NAME: string;
+            /** 获取-更新动作标识 */
+            get updateActionId(): string;
+            /** 设置-更新动作标识 */
+            set updateActionId(value: string);
+            /** 初始化数据 */
+            protected init(): void;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
  *
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
@@ -14114,7 +14328,7 @@ declare namespace materials {
              * 上传文件
              * @param caller 调用者
              */
-            upload(caller: ibas.IUploadFileCaller<ibas.FileData>): void;
+            upload(caller: ibas.IUploadFileCaller<ibas.FileItem>): void;
             /**
              * 下载文件
              * @param caller 调用者
@@ -14435,6 +14649,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveSchedulingGroup(saver: ibas.ISaveCaller<bo.SchedulingGroup>): void;
+            /**
+             * 查询 物料扩展设置
+             * @param fetcher 查询者
+             */
+            fetchMaterialsExtendedSetting(fetcher: ibas.IFetchCaller<bo.MaterialsExtendedSetting>): void;
+            /**
+             * 保存 物料扩展设置
+             * @param saver 保存者
+             */
+            saveMaterialsExtendedSetting(saver: ibas.ISaveCaller<bo.MaterialsExtendedSetting>): void;
         }
         interface IChangeCaller extends ibas.IMethodCaller<string> {
             /** 改变内容 */
@@ -15301,6 +15525,8 @@ declare namespace materials {
             constructor();
             /** 注册视图 */
             protected registerView(): void;
+            show(): void;
+            private extendedContracts;
             /** 视图显示后 */
             protected viewShowed(): void;
             /** 运行,覆盖原方法 */
@@ -15330,6 +15556,7 @@ declare namespace materials {
             private editMaterialSubstitute;
             /** 选择总账科目事件 */
             private chooseLedgerAccount;
+            /** 物料总揽事件 */
             protected overview(): void;
         }
         /** 视图-物料 */
@@ -15360,6 +15587,8 @@ declare namespace materials {
             chooseLedgerAccountEvent: Function;
             /** 更多信息 */
             overviewEvent: Function;
+            /** 显示扩展视图 */
+            showExtendedView(view: ibas.IView): void;
         }
     }
 }
@@ -20542,8 +20771,6 @@ declare namespace materials {
         class Console extends ibas.ModuleConsole {
             /** 构造函数 */
             constructor();
-            /** 创建视图导航 */
-            navigation(): ibas.IViewNavigation;
             /** 初始化 */
             protected registers(): void;
             /** 运行 */
@@ -20553,8 +20780,6 @@ declare namespace materials {
         class ConsoleInventory extends Console {
             /** 构造函数 */
             constructor();
-            /** 创建视图导航 */
-            navigation(): ibas.IViewNavigation;
             /** 初始化 */
             protected registers(): void;
         }

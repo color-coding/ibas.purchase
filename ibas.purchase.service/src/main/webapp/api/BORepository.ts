@@ -14,7 +14,7 @@ namespace purchase {
              * 上传文件
              * @param caller 调用者
              */
-            upload(caller: ibas.IUploadFileCaller<ibas.FileData>): void;
+            upload(caller: ibas.IUploadFileCaller<ibas.FileItem>): void;
             /**
              * 下载文件
              * @param caller 调用者

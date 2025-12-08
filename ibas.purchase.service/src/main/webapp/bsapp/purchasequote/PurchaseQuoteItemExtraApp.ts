@@ -104,18 +104,18 @@ namespace purchase {
                     let boRepository: bo.BORepositoryPurchase = new bo.BORepositoryPurchase();
                     boRepository.upload({
                         fileData: type,
-                        onCompleted(opRslt: ibas.IOperationResult<ibas.FileData>): void {
+                        onCompleted(opRslt: ibas.IOperationResult<ibas.FileItem>): void {
                             try {
                                 if (opRslt.resultCode !== 0) {
                                     throw new Error(opRslt.message);
                                 }
                                 that.proceeding(ibas.emMessageType.INFORMATION,
                                     ibas.i18n.prop("shell_upload") + ibas.i18n.prop("shell_sucessful"));
-                                let fileData: ibas.FileData = opRslt.resultObjects.firstOrDefault();
+                                let fileData: ibas.FileItem = opRslt.resultObjects.firstOrDefault();
                                 let item: bo.PurchaseQuoteItemExtra = that.editData.purchaseQuoteItemExtras.create();
                                 item.extraType = EXTRA_ATTACHMENT;
                                 item.extraKey = -1;
-                                item.note = fileData.fileName;
+                                item.note = fileData.name;
                                 item.quantity = 1;
                                 that.view.showExtraDatas(that.editData.purchaseQuoteItemExtras.filterDeleted());
                             } catch (error) {

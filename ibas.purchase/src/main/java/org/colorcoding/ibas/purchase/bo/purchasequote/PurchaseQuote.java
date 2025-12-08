@@ -1914,7 +1914,7 @@ public class PurchaseQuote extends BusinessObject<PurchaseQuote>
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setPaidTotal(Decimals.VALUE_ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);

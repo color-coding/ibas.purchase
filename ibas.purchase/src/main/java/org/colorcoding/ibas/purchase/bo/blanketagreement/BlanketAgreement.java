@@ -1589,7 +1589,7 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement> implement
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
 		this.getBlanketAgreementItems().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));

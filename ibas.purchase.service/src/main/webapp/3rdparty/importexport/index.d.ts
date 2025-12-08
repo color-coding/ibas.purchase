@@ -1968,7 +1968,7 @@ declare namespace importexport {
 declare namespace importexport {
     namespace app {
         /** 数据导出 */
-        class DataExportApp extends ibas.Application<IDataExportView> {
+        class DataExportApp extends ibas.BOQueryApplication<IDataExportView> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -1986,30 +1986,36 @@ declare namespace importexport {
             /** 导出 */
             export(exporter: bo.IDataExporter): void;
             /** 选择业务对象事件 */
-            private chooseBusinessObject;
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void;
+            private selectedBusinessObject;
             private addQueryCondition;
             private removeQueryCondition;
         }
         /** 数据导出-视图 */
-        interface IDataExportView extends ibas.IView {
+        interface IDataExportView extends ibas.IBOQueryView {
             /** 获取Schema，参数1，类型（xml,json） */
             schemaEvent: Function;
-            /** 显示查询 */
-            showCriteria(criteria: ibas.ICriteria): void;
+            /** 显示schema内容 */
+            showSchemaContent(content: string, type: string): void;
             /** 显示数据导出者 */
             showExporters(exporters: bo.IDataExporter[]): void;
-            /** 显示结果 */
-            showResluts(results: bo.IDataExportResult[]): void;
             /** 选择业务对象 */
-            chooseBusinessObjectEvent: Function;
-            /** 导出 */
-            exportEvent: Function;
+            selectedBusinessObjectEvent: Function;
+            /** 显示业务对象信息 */
+            showBusinessObjects(datas: initialfantasy.bo.BOInformation[]): void;
+            /** 显示业务对象属性信息 */
+            showBusinessObjectProperties(datas: initialfantasy.bo.BOPropertyInformation[]): void;
             /** 添加条件 */
             addConditionEvent: Function;
             /** 移出条件 */
             removeConditionEvent: Function;
             /** 显示结果 */
             showConditions(conditions: ibas.ICondition[]): void;
+            /** 导出 */
+            exportEvent: Function;
+            /** 显示结果 */
+            showResluts(results: bo.IDataExportResult[]): void;
         }
     }
 }
@@ -2666,8 +2672,6 @@ declare namespace importexport {
         class Console extends ibas.ModuleConsole {
             /** 构造函数 */
             constructor();
-            /** 创建视图导航 */
-            navigation(): ibas.IViewNavigation;
             /** 初始化 */
             protected registers(): void;
             /** 运行 */
