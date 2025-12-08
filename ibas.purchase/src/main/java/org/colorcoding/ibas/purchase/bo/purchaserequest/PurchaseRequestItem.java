@@ -2337,7 +2337,7 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setClosedQuantity(Decimals.VALUE_ZERO);
 	}

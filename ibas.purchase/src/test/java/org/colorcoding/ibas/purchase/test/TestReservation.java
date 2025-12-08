@@ -71,10 +71,10 @@ public class TestReservation extends TestCase {
 		try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 			if (boRepository.fetchWarehouse(warehouse.getCriteria()).getResultObjects().isEmpty()) {
-				warehouse = BOUtilities.valueOf(boRepository.saveWarehouse(warehouse));
+				warehouse = BOUtilities.valueOf(boRepository.saveWarehouse(warehouse)).firstOrDefault();
 			}
 			if (boRepository.fetchMaterial(material.getCriteria()).getResultObjects().isEmpty()) {
-				material = BOUtilities.valueOf(boRepository.saveMaterial(material));
+				material = BOUtilities.valueOf(boRepository.saveMaterial(material)).firstOrDefault();
 			}
 		}
 
@@ -90,10 +90,10 @@ public class TestReservation extends TestCase {
 		try (BORepositoryBusinessPartner boRepository = new BORepositoryBusinessPartner()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 			if (boRepository.fetchCustomer(customer.getCriteria()).getResultObjects().isEmpty()) {
-				customer = BOUtilities.valueOf(boRepository.saveCustomer(customer));
+				customer = BOUtilities.valueOf(boRepository.saveCustomer(customer)).firstOrDefault();
 			}
 			if (boRepository.fetchSupplier(supplier.getCriteria()).getResultObjects().isEmpty()) {
-				supplier = BOUtilities.valueOf(boRepository.saveSupplier(supplier));
+				supplier = BOUtilities.valueOf(boRepository.saveSupplier(supplier)).firstOrDefault();
 			}
 		}
 		ICriteria criteria;
@@ -117,13 +117,13 @@ public class TestReservation extends TestCase {
 		try (BORepositorySales boRepository = new BORepositorySales()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			salesOrder = BOUtilities.valueOf(boRepository.saveSalesOrder(salesOrder));
+			salesOrder = BOUtilities.valueOf(boRepository.saveSalesOrder(salesOrder)).firstOrDefault();
 		}
 		// 检查承诺量
 		try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			material = BOUtilities.valueOf(boRepository.fetchMaterial(material.getCriteria()));
+			material = BOUtilities.valueOf(boRepository.fetchMaterial(material.getCriteria())).firstOrDefault();
 
 			assertEquals("material OnCommited not equest.",
 					salesOrder.getSalesOrderItems().sum(c -> c.getInventoryQuantity()), material.getOnCommited());
@@ -134,7 +134,8 @@ public class TestReservation extends TestCase {
 			condition = criteria.getConditions().create();
 			condition.setAlias(MaterialInventory.PROPERTY_WAREHOUSE);
 			condition.setValue(warehouse.getCode());
-			IMaterialInventory materialInventory = BOUtilities.valueOf(boRepository.fetchMaterialInventory(criteria));
+			IMaterialInventory materialInventory = BOUtilities.valueOf(boRepository.fetchMaterialInventory(criteria))
+					.firstOrDefault();
 			assertEquals("warehouse OnCommited not equest.",
 					salesOrder.getSalesOrderItems().sum(c -> c.getInventoryQuantity()),
 					materialInventory.getOnCommited());
@@ -147,7 +148,7 @@ public class TestReservation extends TestCase {
 		try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			purchaseRequest = BOUtilities.valueOf(boRepository.savePurchaseRequest(purchaseRequest));
+			purchaseRequest = BOUtilities.valueOf(boRepository.savePurchaseRequest(purchaseRequest)).firstOrDefault();
 		}
 		// 采购申请占用
 		try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {
@@ -166,7 +167,7 @@ public class TestReservation extends TestCase {
 				orderedReservation.setQuantity(item.getQuantity());
 
 				orderedReservation = BOUtilities
-						.valueOf(boRepository.saveMaterialOrderedReservation(orderedReservation));
+						.valueOf(boRepository.saveMaterialOrderedReservation(orderedReservation)).firstOrDefault();
 			}
 		}
 		// 创建采购订单
@@ -187,9 +188,10 @@ public class TestReservation extends TestCase {
 		try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			purchaseOrder = BOUtilities.valueOf(boRepository.savePurchaseOrder(purchaseOrder));
+			purchaseOrder = BOUtilities.valueOf(boRepository.savePurchaseOrder(purchaseOrder)).firstOrDefault();
 
-			purchaseRequest = BOUtilities.valueOf(boRepository.fetchPurchaseRequest(purchaseRequest.getCriteria()));
+			purchaseRequest = BOUtilities.valueOf(boRepository.fetchPurchaseRequest(purchaseRequest.getCriteria()))
+					.firstOrDefault();
 
 			assertEquals("purchaseRequest ClosedQuantity not equest.",
 					purchaseOrder.getPurchaseOrderItems().sum(c -> c.getQuantity()),
@@ -244,10 +246,13 @@ public class TestReservation extends TestCase {
 		try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			purchaseDelivery = BOUtilities.valueOf(boRepository.savePurchaseDelivery(purchaseDelivery));
+			purchaseDelivery = BOUtilities.valueOf(boRepository.savePurchaseDelivery(purchaseDelivery))
+					.firstOrDefault();
 
-			purchaseOrder = BOUtilities.valueOf(boRepository.fetchPurchaseOrder(purchaseOrder.getCriteria()));
-			purchaseRequest = BOUtilities.valueOf(boRepository.fetchPurchaseRequest(purchaseRequest.getCriteria()));
+			purchaseOrder = BOUtilities.valueOf(boRepository.fetchPurchaseOrder(purchaseOrder.getCriteria()))
+					.firstOrDefault();
+			purchaseRequest = BOUtilities.valueOf(boRepository.fetchPurchaseRequest(purchaseRequest.getCriteria()))
+					.firstOrDefault();
 
 			assertEquals("purchaseDelivery ClosedQuantity not equest.",
 					purchaseDelivery.getPurchaseDeliveryItems().sum(c -> c.getQuantity()),
@@ -324,7 +329,7 @@ public class TestReservation extends TestCase {
 		try (BORepositorySales boRepository = new BORepositorySales()) {
 			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER);
 
-			salesDelivery = BOUtilities.valueOf(boRepository.saveSalesDelivery(salesDelivery));
+			salesDelivery = BOUtilities.valueOf(boRepository.saveSalesDelivery(salesDelivery)).firstOrDefault();
 		}
 		// 检查订单预留是否转为库存预留
 		try (BORepositoryMaterials boRepository = new BORepositoryMaterials()) {

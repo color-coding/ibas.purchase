@@ -1,7 +1,5 @@
 package org.colorcoding.ibas.purchase.service.rest;
 
-import java.io.File;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.Files;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.common.OperationResult;
@@ -28,8 +27,10 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 @Path("file")
 public class FileService extends FileRepositoryService {
 
-	public final static String WORK_FOLDER = MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_DOCUMENT_FOLDER,
-			MyConfiguration.getDataFolder() + File.separator + "purchase_files");
+	public final static String WORK_FOLDER = Files
+			.valueOf(MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_DOCUMENT_FOLDER,
+					MyConfiguration.getDataFolder()), "purchase_files")
+			.getPath();
 
 	public FileService() {
 		// 设置工作目录

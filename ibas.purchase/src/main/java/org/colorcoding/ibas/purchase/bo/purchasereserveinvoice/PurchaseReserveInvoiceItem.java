@@ -2545,7 +2545,7 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setClosedAmount(Decimals.VALUE_ZERO);
 		this.setClosedQuantity(Decimals.VALUE_ZERO);

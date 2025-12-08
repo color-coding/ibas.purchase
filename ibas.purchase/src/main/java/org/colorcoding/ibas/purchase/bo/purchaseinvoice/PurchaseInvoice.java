@@ -2108,7 +2108,7 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 	}
 
 	@Override
-	public void reset() {
+	protected void reset() {
 		super.reset();
 		this.setPaidTotal(Decimals.VALUE_ZERO);
 		this.setDocumentStatus(emDocumentStatus.RELEASED);
