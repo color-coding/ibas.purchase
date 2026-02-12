@@ -43,6 +43,7 @@ namespace purchase {
                 this.view.purchaseRequestToEvent = this.purchaseRequestTo;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
                 this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
+                this.view.calculateQuantityEvent = this.calculateQuantity;
             }
             /** 视图显示后 */
             protected viewShowed(): void {
@@ -884,6 +885,39 @@ namespace purchase {
                     })
                 });
             }
+            protected calculateQuantity(caller: bo.PurchaseRequestItem): void {
+                if (ibas.objects.isNull(caller)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_view")
+                    )); return;
+                }
+                if (ibas.strings.isEmpty(caller.itemCode)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("sales_please_choose_material_first")
+                    ); return;
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialQuantitiesContract>({
+                    proxy: new materials.app.MaterialQuantitiesServiceProxy({
+                        direction: ibas.emDirection.IN,
+                        businessPartnerType: businesspartner.bo.emBusinessPartnerType.SUPPLIER,
+                        businessPartnerCode: caller.supplier,
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        documentLineId: caller.lineId,
+                        documentDate: this.editData.documentDate,
+                        itemCode: caller.itemCode,
+                        itemDescription: caller.itemDescription,
+                        itemVersion: caller.itemVersion,
+                        serialManagement: caller.serialManagement,
+                        batchManagement: caller.batchManagement,
+                        applyQuantity: (quantity, uom, warehouse) => {
+                            caller.quantity = quantity;
+                            caller.uom = uom;
+                            caller.warehouse = warehouse;
+                        }
+                    })
+                });
+            }
         }
         /** 视图-采购申请 */
         export interface IPurchaseRequestEditView extends ibas.IBOEditView {
@@ -925,6 +959,8 @@ namespace purchase {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
         }
         /** 采购申请编辑服务映射 */
         export class PurchaseRequestEditServiceMapping extends ibas.BOEditServiceMapping {

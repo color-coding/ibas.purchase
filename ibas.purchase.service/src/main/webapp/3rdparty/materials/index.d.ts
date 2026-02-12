@@ -686,11 +686,17 @@ declare namespace materials {
         }
         /** 物料查看扩展服务契约 */
         interface IMaterialViewExtendedContract extends ibas.IServiceContract {
+            /** 标识 */
+            id: string;
             /** 数据改变 */
             dataChangeEvent: (event: {
                 reson: "CREATE" | "CLONE" | "FETCH" | "DELETE";
                 data: bo.IMaterial;
             }) => void;
+            /** 显示页面 */
+            showViewEvent?: () => void;
+            /** 关闭页面 */
+            closeViewEvent?: () => void;
         }
         /** 物料编辑扩展服务契约 */
         interface IMaterialEditExtendedContract extends IMaterialViewExtendedContract {
@@ -705,6 +711,51 @@ declare namespace materials {
         }
         /** 物料编辑扩展服务代理 */
         class MaterialEditExtendedServiceProxy extends ibas.ServiceProxy<IMaterialEditExtendedContract> {
+        }
+        /** 物料数量服务契约 */
+        interface IMaterialQuantitiesContract extends ibas.IServiceContract {
+            /** 业务伙伴类型 */
+            businessPartnerType?: businesspartner.bo.emBusinessPartnerType;
+            /** 业务伙伴编码 */
+            businessPartnerCode?: string;
+            /** 业务伙伴名称 */
+            businessPartnerName?: string;
+            /** 方向 */
+            direction: ibas.emDirection;
+            /** 单据类型 */
+            documentType: string;
+            /** 单据编号 */
+            documentEntry: number;
+            /** 单据行号 */
+            documentLineId?: number;
+            /** 单据日期 */
+            documentDate?: Date;
+            /** 物料编码 */
+            itemCode: string;
+            /** 物料描述 */
+            itemDescription: string;
+            /** 物料版本 */
+            itemVersion?: string;
+            /** 序号管理 */
+            serialManagement?: ibas.emYesNo;
+            /** 物料序列 */
+            materialSerials?: bo.IMaterialSerialItems;
+            /** 批号管理 */
+            batchManagement?: ibas.emYesNo;
+            /** 物料批次 */
+            materialBatches?: bo.IMaterialBatchItems;
+            /**
+             * 应用数量
+             * @param quantity 数量
+             * @param uom 单位
+             * @param warehouse 仓库
+             * @param batches 批次信息
+             * @param serials 序列号信息
+             */
+            applyQuantity?: (quantity: number, uom: string, warehouse: string, batches?: bo.IMaterialBatch[], serials?: bo.IMaterialSerial[]) => void;
+        }
+        /** 物料数量服务代理 */
+        class MaterialQuantitiesServiceProxy extends ibas.ServiceProxy<IMaterialQuantitiesContract> {
         }
         /** 查询条件 */
         namespace conditions {
@@ -14781,6 +14832,7 @@ declare namespace materials {
             private chooseGoodsIssueLineDistributionRule;
             private chooseGoodsIssueLineMaterialVersion;
             protected measuringMaterials(): void;
+            protected calculateQuantity(caller: bo.GoodsIssueLine): void;
         }
         /** 视图-库存发货 */
         interface IGoodsIssueEditView extends ibas.IBOEditView {
@@ -14812,6 +14864,8 @@ declare namespace materials {
             chooseGoodsIssueLineMaterialVersionEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -15038,6 +15092,7 @@ declare namespace materials {
             private chooseGoodsReceiptLineDistributionRule;
             private chooseGoodsReceiptLineMaterialVersion;
             protected measuringMaterials(): void;
+            protected calculateQuantity(caller: bo.GoodsReceiptLine): void;
         }
         /** 视图-库存收货 */
         interface IGoodsReceiptEditView extends ibas.IBOEditView {
@@ -15069,6 +15124,8 @@ declare namespace materials {
             chooseGoodsReceiptLineMaterialVersionEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 默认仓库 */
             defaultWarehouse: string;
         }
@@ -15292,6 +15349,7 @@ declare namespace materials {
             private chooseInventoryTransferLineTransferRequest;
             private chooseInventoryTransferLineMaterialVersion;
             protected measuringMaterials(): void;
+            protected calculateQuantity(caller: bo.InventoryTransferLine): void;
         }
         /** 视图-库存转储 */
         interface IInventoryTransferEditView extends ibas.IBOEditView {
@@ -15329,6 +15387,8 @@ declare namespace materials {
             chooseInventoryTransferLineMaterialVersionEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 从仓库 */
             fromWarehouse: string;
             /** 目标仓库 */
@@ -15525,8 +15585,6 @@ declare namespace materials {
             constructor();
             /** 注册视图 */
             protected registerView(): void;
-            show(): void;
-            private extendedContracts;
             /** 视图显示后 */
             protected viewShowed(): void;
             /** 运行,覆盖原方法 */
@@ -15558,6 +15616,12 @@ declare namespace materials {
             private chooseLedgerAccount;
             /** 物料总揽事件 */
             protected overview(): void;
+            private extendedContracts;
+            private extendedSettings;
+            /** 加载物料扩展设置 */
+            protected showMaterialsExtendedViews(): void;
+            /** 关闭扩展视图 */
+            private closeExtendedView;
         }
         /** 视图-物料 */
         interface IMaterialEditView extends ibas.IBOEditView {
@@ -15589,6 +15653,10 @@ declare namespace materials {
             overviewEvent: Function;
             /** 显示扩展视图 */
             showExtendedView(view: ibas.IView): void;
+            /** 关闭扩展视图 */
+            closeExtendedViewEvent: Function;
+            /** 显示扩展设置 */
+            showExtendedSettings(datas: bo.MaterialsExtendedSetting[]): void;
         }
     }
 }
@@ -16760,6 +16828,53 @@ declare namespace materials {
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+declare namespace materials {
+    namespace app {
+        /** 物料数量服务 */
+        class MaterialQuantitiesService extends ibas.ServiceApplication<IMaterialQuantitiesView, IMaterialQuantitiesContract> {
+            /** 应用标识 */
+            static APPLICATION_ID: string;
+            /** 应用名称 */
+            static APPLICATION_NAME: string;
+            /** 构造函数 */
+            constructor();
+            /** 注册视图 */
+            protected registerView(): void;
+            /** 视图显示后 */
+            protected viewShowed(): void;
+            protected contract: IMaterialQuantitiesContract;
+            protected material: bo.IMaterial;
+            protected runService(contract: IMaterialQuantitiesContract): void;
+            protected fetchInventoryEvent(criteria?: ibas.ICriteria): void;
+            protected apply(datas: bo.MaterialInventory[] | bo.MaterialBatch[] | bo.MaterialSerial[]): void;
+        }
+        /** 视图-物料数量 */
+        interface IMaterialQuantitiesView extends ibas.IView {
+            /** 应用价格事件 */
+            applyEvent: Function;
+            /** 显示物料 */
+            showMaterial(data: bo.IMaterial): void;
+            /** 查询库存事件 */
+            fetchInventoryEvent: Function;
+            /** 显示物料库存 */
+            showInventories(datas: bo.IMaterialInventory[] | bo.IMaterialBatch[] | bo.IMaterialSerial[]): void;
+        }
+        /**  物料数量服务映射 */
+        class MaterialQuantitiesServiceMapping extends ibas.ServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IServiceContract>;
+        }
+    }
+}
+/**
+ * @license
+ * Copyright Color-Coding Studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
 /**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
@@ -17254,7 +17369,10 @@ declare namespace materials {
             /** 选择父项 */
             protected chooseParents(): void;
             /** 选择总账科目事件 */
-            private chooseLedgerAccount;
+            protected chooseLedgerAccount(): void;
+            protected extendedSettings: ibas.IList<bo.MaterialsExtendedSetting>;
+            /** 加载物料扩展设置 */
+            protected showMaterialsExtendedSettings(): void;
         }
         /** 视图-物料组 */
         interface IMaterialGroupEditView extends ibas.IBOEditView {
@@ -17268,6 +17386,8 @@ declare namespace materials {
             chooseParentsEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+            /** 显示扩展设置 */
+            showExtendedSettings(datas: bo.MaterialsExtendedSetting[]): void;
         }
     }
 }
@@ -20402,6 +20522,7 @@ declare namespace materials {
             /** 预留物料库存 */
             private reserveMaterialsInventory;
             protected measuringMaterials(): void;
+            protected calculateQuantity(caller: bo.InventoryTransferRequestLine): void;
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestEditView extends ibas.IBOEditView {
@@ -20437,6 +20558,8 @@ declare namespace materials {
             reserveMaterialsInventoryEvent: Function;
             /** 测量物料 */
             measuringMaterialsEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 从仓库 */
             fromWarehouse: string;
             /** 目标仓库 */

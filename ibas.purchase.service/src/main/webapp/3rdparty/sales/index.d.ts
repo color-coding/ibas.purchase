@@ -13312,6 +13312,7 @@ declare namespace sales {
             protected chooseSalesDeliveryItemMaterialCatalog(caller: bo.SalesDeliveryItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesDeliveryItem): void;
+            protected calculateQuantity(caller: bo.SalesDeliveryItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售交货 */
@@ -13370,6 +13371,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -13630,6 +13633,7 @@ declare namespace sales {
             protected chooseSalesOrderItemMaterialCatalog(caller: bo.SalesOrderItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesOrderItem): void;
+            protected calculateQuantity(caller: bo.SalesOrderItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售订单 */
@@ -13698,6 +13702,8 @@ declare namespace sales {
             viewHistoricalPricesEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 选择付款条款事件 */
             choosePaymentTermEvent: Function;
             /** 默认仓库 */
@@ -14020,6 +14026,7 @@ declare namespace sales {
             protected chooseSalesReturnItemMaterialCatalog(caller: bo.SalesReturnItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnItem): void;
+            protected calculateQuantity(caller: bo.SalesReturnItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售退货 */
@@ -14072,6 +14079,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -14313,6 +14322,7 @@ declare namespace sales {
             protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
+            protected calculateQuantity(caller: bo.SalesQuoteItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
             /** 转为预付款申请 */
             protected turnToDownPaymentRequest(): void;
@@ -14365,6 +14375,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -14675,6 +14687,7 @@ declare namespace sales {
             protected chooseSalesInvoiceItemMaterialCatalog(caller: bo.SalesInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesInvoiceItem): void;
+            protected calculateQuantity(caller: bo.SalesInvoiceItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售发票 */
@@ -14737,6 +14750,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -14982,6 +14997,7 @@ declare namespace sales {
             protected chooseSalesCreditNoteItemMaterialCatalog(caller: bo.SalesCreditNoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesCreditNoteItem): void;
+            protected calculateQuantity(caller: bo.SalesCreditNoteItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售贷项 */
@@ -15032,6 +15048,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -15694,6 +15712,7 @@ declare namespace sales {
             protected measuringMaterials(): void;
             protected chooseDownPaymentRequestItemMaterialCatalog(caller: bo.DownPaymentRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected viewHistoricalPrices(caller: bo.DownPaymentRequestItem): void;
+            protected calculateQuantity(caller: bo.DownPaymentRequestItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-预收款申请 */
@@ -15740,6 +15759,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 选择付款条款事件 */
             choosePaymentTermEvent: Function;
             /** 默认仓库 */
@@ -15875,6 +15896,7 @@ declare namespace sales {
             protected chooseSalesReserveInvoiceItemMaterialCatalog(caller: bo.SalesReserveInvoiceItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReserveInvoiceItem): void;
+            protected calculateQuantity(caller: bo.SalesReserveInvoiceItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售预留发票 */
@@ -15931,6 +15953,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */
@@ -16179,6 +16203,7 @@ declare namespace sales {
             protected chooseSalesReturnRequestItemMaterialCatalog(caller: bo.SalesReturnRequestItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesReturnRequestItem): void;
+            protected calculateQuantity(caller: bo.SalesReturnRequestItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
         }
         /** 视图-销售退货请求 */
@@ -16231,6 +16256,8 @@ declare namespace sales {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 计算毛利润 */
             calculateGrossProfitEvent: Function;
             /** 选择付款条款事件 */

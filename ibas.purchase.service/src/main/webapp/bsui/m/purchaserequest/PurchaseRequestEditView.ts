@@ -42,6 +42,8 @@ namespace purchase {
                 measuringMaterialsEvent: Function;
                 /** 查看物料历史价格事件 */
                 viewHistoricalPricesEvent: Function;
+                /** 计算数量 */
+                calculateQuantityEvent: Function;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

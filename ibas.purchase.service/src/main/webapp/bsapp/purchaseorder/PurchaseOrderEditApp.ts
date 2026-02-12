@@ -56,6 +56,7 @@ namespace purchase {
                 this.view.reserveMaterialsOrderedEvent = this.reserveMaterialsOrdered;
                 this.view.measuringMaterialsEvent = this.measuringMaterials;
                 this.view.viewHistoricalPricesEvent = this.viewHistoricalPrices;
+                this.view.calculateQuantityEvent = this.calculateQuantity;
                 this.view.choosePaymentTermEvent = this.choosePaymentTerm;
             }
             /** 视图显示后 */
@@ -1838,6 +1839,47 @@ namespace purchase {
                     })
                 });
             }
+            protected calculateQuantity(caller: bo.PurchaseOrderItem): void {
+                if (ibas.objects.isNull(caller)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_view")
+                    )); return;
+                }
+                if (ibas.strings.isEmpty(caller.itemCode)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("sales_please_choose_material_first")
+                    ); return;
+                }
+                if (ibas.strings.isEmpty(this.editData.supplierCode)) {
+                    this.messages(
+                        ibas.emMessageType.WARNING, ibas.i18n.prop("sales_please_choose_customer_first")
+                    ); return;
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialQuantitiesContract>({
+                    proxy: new materials.app.MaterialQuantitiesServiceProxy({
+                        direction: ibas.emDirection.IN,
+                        businessPartnerType: businesspartner.bo.emBusinessPartnerType.SUPPLIER,
+                        businessPartnerCode: this.editData.supplierCode,
+                        businessPartnerName: this.editData.supplierName,
+                        documentType: this.editData.objectCode,
+                        documentEntry: this.editData.docEntry,
+                        documentLineId: caller.lineId,
+                        documentDate: this.editData.documentDate,
+                        itemCode: caller.itemCode,
+                        itemDescription: caller.itemDescription,
+                        itemVersion: caller.itemVersion,
+                        serialManagement: caller.serialManagement,
+                        materialSerials: caller.materialSerials,
+                        batchManagement: caller.batchManagement,
+                        materialBatches: caller.materialBatches,
+                        applyQuantity: (quantity, uom, warehouse) => {
+                            caller.quantity = quantity;
+                            caller.uom = uom;
+                            caller.warehouse = warehouse;
+                        }
+                    })
+                });
+            }
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void {
                 if (ibas.objects.isNull(criteria) || criteria.conditions.length === 0) {
                     criteria = new ibas.Criteria();
@@ -1937,6 +1979,8 @@ namespace purchase {
             measuringMaterialsEvent: Function;
             /** 查看物料历史价格事件 */
             viewHistoricalPricesEvent: Function;
+            /** 计算数量 */
+            calculateQuantityEvent: Function;
             /** 选择付款条款事件 */
             choosePaymentTermEvent: Function;
             /** 默认仓库 */

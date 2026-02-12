@@ -64,6 +64,8 @@ namespace purchase {
                 measuringMaterialsEvent: Function;
                 /** 查看物料历史价格事件 */
                 viewHistoricalPricesEvent: Function;
+                /** 计算数量 */
+                calculateQuantityEvent: Function;
                 /** 选择付款条款事件 */
                 choosePaymentTermEvent: Function;
                 /** 绘制视图 */
@@ -824,6 +826,12 @@ namespace purchase {
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_purchaseinvoiceitem_quantity"),
                                         template: new sap.extension.m.Input("", {
+                                            showValueHelp: true,
+                                            valueHelpOnly: false,
+                                            valueHelpIconSrc: "sap-icon://simulate",
+                                            valueHelpRequest: function (): void {
+                                                that.fireViewEvents(that.calculateQuantityEvent, this.getBindingContext().getObject());
+                                            },
                                         }).bindProperty("bindingValue", {
                                             path: "quantity",
                                             type: new sap.extension.data.Quantity()
