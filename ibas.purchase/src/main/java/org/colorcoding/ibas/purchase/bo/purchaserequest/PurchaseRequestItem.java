@@ -24,6 +24,7 @@ import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
@@ -2416,6 +2417,35 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 					public String getBusinessPartnerCode() {
 						return PurchaseRequestItem.this.getSupplier();
 					}
+				},
+				// 基于单据数量完成
+				new IDocumentQuantityClosingContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseRequestItem.this.getIdentifiers();
+					}
+
+					@Override
+					public BigDecimal getQuantity() {
+						return PurchaseRequestItem.this.getQuantity();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseRequestItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseRequestItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseRequestItem.this.getBaseDocumentLineId();
+					}
+
 				}
 
 		};

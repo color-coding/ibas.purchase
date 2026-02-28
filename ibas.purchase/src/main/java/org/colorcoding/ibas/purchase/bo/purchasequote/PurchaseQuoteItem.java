@@ -26,6 +26,7 @@ import org.colorcoding.ibas.bobas.rule.IBusinessRule;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
+import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
 import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
@@ -2596,6 +2597,35 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 						return PurchaseQuoteItem.this.parent.getSupplierCode();
 					}
 				},
+				// 基于单据数量完成
+				new IDocumentQuantityClosingContract() {
+
+					@Override
+					public String getIdentifiers() {
+						return PurchaseQuoteItem.this.getIdentifiers();
+					}
+
+					@Override
+					public BigDecimal getQuantity() {
+						return PurchaseQuoteItem.this.getQuantity();
+					}
+
+					@Override
+					public String getBaseDocumentType() {
+						return PurchaseQuoteItem.this.getBaseDocumentType();
+					}
+
+					@Override
+					public Integer getBaseDocumentEntry() {
+						return PurchaseQuoteItem.this.getBaseDocumentEntry();
+					}
+
+					@Override
+					public Integer getBaseDocumentLineId() {
+						return PurchaseQuoteItem.this.getBaseDocumentLineId();
+					}
+
+				}
 
 		};
 
