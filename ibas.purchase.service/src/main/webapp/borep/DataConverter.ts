@@ -1043,8 +1043,10 @@ namespace purchase {
                     let rTaxTotal: number = preTotal * taxRate;
                     let rTotal: number = preTotal + rTaxTotal;
                     // 税前 + 税 与 价格 * 数量，差异小时，使用明显值
-                    if (ibas.numbers.round(Math.abs(rTotal - (price * quantity)), DECIMAL_PLACES_SUM) <= (Math.pow(0.1, DECIMAL_PLACES_SUM))) {
-                        rTotal = price * quantity;
+                    if (rTaxTotal !== 0) {
+                        if (ibas.numbers.round(Math.abs(rTotal - (price * quantity)), DECIMAL_PLACES_SUM) <= (Math.pow(0.1, DECIMAL_PLACES_SUM))) {
+                            rTotal = price * quantity;
+                        }
                     }
                     if (Math.abs(rTotal - total) <= 0.04 && total === ibas.numbers.round(preTotal + taxTotal)) {
                         // 总计 = 税前总计 + 税，此情况不重新计算，用来处理对票问题
@@ -1144,7 +1146,7 @@ namespace purchase {
                     if (rate !== 1) {
                         let result: number = amountLC * rate;
                         if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)
-                            && (Math.abs(result - amount) > (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE)))) {
+                            && (Math.abs(result - amount) > Math.pow(0.1, DECIMAL_PLACES_PRICE - 1))) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                         }
                     } else {

@@ -286,6 +286,8 @@ declare namespace receiptpayment {
             downPayment: ibas.emYesNo;
             /** 已清金额 */
             closedAmount: number;
+            /** 分录合并方式 */
+            mergingMethod: string;
             /** 付款-项目集合 */
             paymentItems: IPaymentItems;
         }
@@ -464,6 +466,8 @@ declare namespace receiptpayment {
             downPayment: ibas.emYesNo;
             /** 已清金额 */
             closedAmount: number;
+            /** 分录合并方式 */
+            mergingMethod: string;
             /** 收款-项目集合 */
             receiptItems: IReceiptItems;
         }
@@ -638,6 +642,8 @@ declare namespace receiptpayment {
             orderType: string;
             /** 分支 */
             branch: string;
+            /** 分录合并方式 */
+            mergingMethod: string;
             /** 资产充值-项目集合 */
             assetRechargeItems: IAssetRechargeItems;
         }
@@ -1049,6 +1055,12 @@ declare namespace receiptpayment {
             get closedAmount(): number;
             /** 设置-已清金额 */
             set closedAmount(value: number);
+            /** 映射的属性名称-分录合并方式 */
+            static PROPERTY_MERGINGMETHOD_NAME: string;
+            /** 获取-分录合并方式 */
+            get mergingMethod(): string;
+            /** 设置-分录合并方式 */
+            set mergingMethod(value: string);
             /** 映射的属性名称-付款-项目集合 */
             static PROPERTY_PAYMENTITEMS_NAME: string;
             /** 获取-付款-项目集合 */
@@ -1558,6 +1570,12 @@ declare namespace receiptpayment {
             get closedAmount(): number;
             /** 设置-已清金额 */
             set closedAmount(value: number);
+            /** 映射的属性名称-分录合并方式 */
+            static PROPERTY_MERGINGMETHOD_NAME: string;
+            /** 获取-分录合并方式 */
+            get mergingMethod(): string;
+            /** 设置-分录合并方式 */
+            set mergingMethod(value: string);
             /** 映射的属性名称-收款-项目集合 */
             static PROPERTY_RECEIPTITEMS_NAME: string;
             /** 获取-收款-项目集合 */
@@ -2055,6 +2073,12 @@ declare namespace receiptpayment {
             get branch(): string;
             /** 设置-分支 */
             set branch(value: string);
+            /** 映射的属性名称-分录合并方式 */
+            static PROPERTY_MERGINGMETHOD_NAME: string;
+            /** 获取-分录合并方式 */
+            get mergingMethod(): string;
+            /** 设置-分录合并方式 */
+            set mergingMethod(value: string);
             /** 映射的属性名称-资产充值-项目集合 */
             static PROPERTY_ASSETRECHARGEITEMS_NAME: string;
             /** 获取-资产充值-项目集合 */
