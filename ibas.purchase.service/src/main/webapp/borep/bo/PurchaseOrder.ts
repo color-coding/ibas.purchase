@@ -1700,6 +1700,7 @@ namespace purchase {
             set purchaseOrderItemExtras(value: PurchaseOrderItemExtras) {
                 this.setProperty(PurchaseOrderItem.PROPERTY_PURCHASEORDERITEMEXTRAS_NAME, value);
             }
+
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
             /** 获取-物料批次集合 */

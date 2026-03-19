@@ -14710,6 +14710,16 @@ declare namespace materials {
              * @param saver 保存者
              */
             saveMaterialsExtendedSetting(saver: ibas.ISaveCaller<bo.MaterialsExtendedSetting>): void;
+            /**
+             * 查询 物料序列项目
+             * @param fetcher 查询者
+             */
+            fetchMaterialSerialItem(fetcher: ibas.IFetchCaller<bo.MaterialSerialItem>): void;
+            /**
+             * 查询 物料批次项目
+             * @param fetcher 查询者
+             */
+            fetchMaterialBatchItem(fetcher: ibas.IFetchCaller<bo.MaterialBatchItem>): void;
         }
         interface IChangeCaller extends ibas.IMethodCaller<string> {
             /** 改变内容 */

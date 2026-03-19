@@ -112,7 +112,7 @@ namespace purchase {
         }
 
         /** 采购申请-行 */
-        export interface IPurchaseRequestItem extends ibas.IBODocumentLine, ibas.IBOUserFields {
+        export interface IPurchaseRequestItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
             /** 编码 */
             docEntry: number;
             /** 行号 */

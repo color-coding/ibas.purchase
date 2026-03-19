@@ -32,6 +32,10 @@ namespace purchase {
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
                 /** 选择采购申请-行 仓库 */
                 choosePurchaseRequestItemWarehouseEvent: Function;
+                /** 选择采购申请-行 物料序列事件 */
+                choosePurchaseRequestItemMaterialSerialEvent: Function;
+                /** 选择采购申请-行 物料批次事件 */
+                choosePurchaseRequestItemMaterialBatchEvent: Function;
                 /** 选择供应商合同 */
                 chooseSupplierAgreementsEvent: Function;
                 /** 显示采购申请额外信息事件 */
@@ -302,6 +306,37 @@ namespace purchase {
                                             press: function (): void {
                                                 that.fireViewEvents(that.removePurchaseRequestItemEvent, that.tablePurchaseRequestItem.getSelecteds());
                                             }
+                                        }),
+                                        new sap.m.ToolbarSeparator(""),
+                                        new sap.extension.m.MenuButton("", {
+                                            autoHide: true,
+                                            icon: "sap-icon://tags",
+                                            text: ibas.strings.format("{0}/{1}",
+                                                ibas.i18n.prop("purchase_material_batch"), ibas.i18n.prop("purchase_material_serial")),
+                                            menu: new sap.m.Menu("", {
+                                                items: [
+                                                    new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("purchase_material_batch"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.choosePurchaseRequestItemMaterialBatchEvent);
+                                                        },
+                                                        visible: shell.app.privileges.canRun({
+                                                            id: materials.app.MaterialBatchReceiptService.APPLICATION_ID,
+                                                            name: materials.app.MaterialBatchReceiptService.APPLICATION_NAME,
+                                                        })
+                                                    }),
+                                                    new sap.m.MenuItem("", {
+                                                        text: ibas.i18n.prop("purchase_material_serial"),
+                                                        press: function (): void {
+                                                            that.fireViewEvents(that.choosePurchaseRequestItemMaterialSerialEvent);
+                                                        },
+                                                        visible: shell.app.privileges.canRun({
+                                                            id: materials.app.MaterialSerialReceiptService.APPLICATION_ID,
+                                                            name: materials.app.MaterialSerialReceiptService.APPLICATION_NAME,
+                                                        })
+                                                    }),
+                                                ]
+                                            })
                                         }),
                                         new sap.m.ToolbarSeparator(""),
                                         new sap.m.Button("", {

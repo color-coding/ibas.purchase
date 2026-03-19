@@ -34,6 +34,10 @@ namespace purchase {
                 choosePurchaseRequestItemDistributionRuleEvent: Function;
                 /** 选择采购申请-行 物料版本 */
                 choosePurchaseRequestItemMaterialVersionEvent: Function;
+                /** 选择采购申请-行 物料序列事件 */
+                choosePurchaseRequestItemMaterialSerialEvent: Function;
+                /** 选择采购申请-行 物料批次事件 */
+                choosePurchaseRequestItemMaterialBatchEvent: Function;
                 /** 预留物料订购 */
                 reserveMaterialsOrderedEvent: Function;
                 /** 采购申请转换事件 */

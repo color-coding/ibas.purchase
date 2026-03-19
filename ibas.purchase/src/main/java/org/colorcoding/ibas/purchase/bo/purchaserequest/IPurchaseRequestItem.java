@@ -8,12 +8,15 @@ import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
+import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItemParent;
+import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItemParent;
 
 /**
  * 采购申请-行 接口
  * 
  */
-public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentClosingQuantityItem {
+public interface IPurchaseRequestItem
+		extends IBODocumentLine, IMaterialBatchItemParent, IMaterialSerialItemParent, IDocumentClosingQuantityItem {
 
 	/**
 	 * 获取-编码
@@ -464,17 +467,17 @@ public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentClosingQ
 	void setItemSign(String value);
 
 	/**
-	* 获取-目录编码
-	* 
-	* @return 值
-	*/
+	 * 获取-目录编码
+	 * 
+	 * @return 值
+	 */
 	String getCatalogCode();
 
 	/**
-	* 设置-目录编码
-	* 
-	* @param value 值
-	*/
+	 * 设置-目录编码
+	 * 
+	 * @param value 值
+	 */
 	void setCatalogCode(String value);
 
 	/**
@@ -1059,31 +1062,31 @@ public interface IPurchaseRequestItem extends IBODocumentLine, IDocumentClosingQ
 	void setAgreements(String value);
 
 	/**
-	* 获取-价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-价格（本币）
+	 * 
+	 * @return 值
+	 */
 	BigDecimal getPriceLC();
 
 	/**
-	* 设置-价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	void setPriceLC(BigDecimal value);
 
 	/**
-	* 获取-税前价格（本币）
-	* 
-	* @return 值
-	*/
+	 * 获取-税前价格（本币）
+	 * 
+	 * @return 值
+	 */
 	BigDecimal getPreTaxPriceLC();
 
 	/**
-	* 设置-税前价格（本币）
-	* 
-	* @param value 值
-	*/
+	 * 设置-税前价格（本币）
+	 * 
+	 * @param value 值
+	 */
 	void setPreTaxPriceLC(BigDecimal value);
 
 	/**

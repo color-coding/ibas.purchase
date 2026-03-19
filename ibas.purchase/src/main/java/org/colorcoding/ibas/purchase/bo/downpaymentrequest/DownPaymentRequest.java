@@ -1331,7 +1331,7 @@ public class DownPaymentRequest extends BusinessObject<DownPaymentRequest>
 	/**
 	 * 付款条款代码 属性
 	 */
-	@DbField(name = "PaymentCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "PaymentCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_PAYMENTCODE = registerProperty(PROPERTY_PAYMENTCODE_NAME,
 			String.class, MY_CLASS);
 

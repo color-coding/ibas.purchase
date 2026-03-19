@@ -1246,6 +1246,8 @@ declare namespace accounting {
             reference3: string;
             /** 现金流项目 */
             cashFlow: number;
+            /** 基于行号 */
+            baseLineIds: string;
         }
     }
 }
@@ -4616,6 +4618,12 @@ declare namespace accounting {
             get cashFlow(): number;
             /** 设置-现金流项目 */
             set cashFlow(value: number);
+            /** 映射的属性名称-基于行号 */
+            static PROPERTY_BASELINEIDS_NAME: string;
+            /** 获取-基于行号 */
+            get baseLineIds(): string;
+            /** 设置-基于行号 */
+            set baseLineIds(value: string);
             /** 初始化数据 */
             protected init(): void;
         }

@@ -1061,7 +1061,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	/**
 	 * 税定义 属性
 	 */
-	@DbField(name = "Tax", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "Tax", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_TAX = registerProperty(PROPERTY_TAX_NAME, String.class,
 			MY_CLASS);
 
@@ -1092,7 +1092,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	/**
 	 * 税率 属性
 	 */
-	@DbField(name = "TaxRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "TaxRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXRATE = registerProperty(PROPERTY_TAXRATE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1150,7 +1150,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	/**
 	 * 税总额 属性
 	 */
-	@DbField(name = "TaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "TaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXTOTAL = registerProperty(PROPERTY_TAXTOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1208,7 +1208,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	/**
 	 * 税前价格 属性
 	 */
-	@DbField(name = "PreTaxPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "PreTaxPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICE = registerProperty(PROPERTY_PRETAXPRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1266,7 +1266,7 @@ public class BlanketAgreementItem extends BusinessObject<BlanketAgreementItem>
 	/**
 	 * 税前行总计 属性
 	 */
-	@DbField(name = "PreTaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME, primaryKey = false)
+	@DbField(name = "PreTaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXLINETOTAL = registerProperty(
 			PROPERTY_PRETAXLINETOTAL_NAME, BigDecimal.class, MY_CLASS);
 

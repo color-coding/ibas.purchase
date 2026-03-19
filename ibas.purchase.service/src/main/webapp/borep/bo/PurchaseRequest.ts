@@ -1406,9 +1406,33 @@ namespace purchase {
                 this.setProperty(PurchaseRequestItem.PROPERTY_PURCHASEREQUESTITEMEXTRAS_NAME, value);
             }
 
+            /** 映射的属性名称-物料批次集合 */
+            static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
+            /** 获取-物料批次集合 */
+            get materialBatches(): materials.bo.MaterialBatchItems {
+                return this.getProperty<materials.bo.MaterialBatchItems>(PurchaseOrderItem.PROPERTY_MATERIALBATCHES_NAME);
+            }
+            /** 设置-物料批次集合 */
+            set materialBatches(value: materials.bo.MaterialBatchItems) {
+                this.setProperty(PurchaseOrderItem.PROPERTY_MATERIALBATCHES_NAME, value);
+            }
+
+            /** 映射的属性名称-物料序列集合 */
+            static PROPERTY_MATERIALSERIALS_NAME: string = "MaterialSerials";
+            /** 获取-物料序列集合 */
+            get materialSerials(): materials.bo.MaterialSerialItems {
+                return this.getProperty<materials.bo.MaterialSerialItems>(PurchaseOrderItem.PROPERTY_MATERIALSERIALS_NAME);
+            }
+            /** 设置-物料序列集合 */
+            set materialSerials(value: materials.bo.MaterialSerialItems) {
+                this.setProperty(PurchaseOrderItem.PROPERTY_MATERIALSERIALS_NAME, value);
+            }
+
             /** 初始化数据 */
             protected init(): void {
                 this.purchaseRequestItemExtras = new PurchaseRequestItemExtras(this);
+                this.materialBatches = new materials.bo.MaterialBatchItems(this);
+                this.materialSerials = new materials.bo.MaterialSerialItems(this);
                 this.currency = accounting.config.currency("LOCAL");
                 this.taxRate = 0;
             }
