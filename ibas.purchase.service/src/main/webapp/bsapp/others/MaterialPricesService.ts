@@ -102,9 +102,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseOrder.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseOrder.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -264,9 +261,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.DownPaymentRequest.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.DownPaymentRequest.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -427,9 +421,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseCreditNote.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseCreditNote.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -589,9 +580,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseDelivery.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseDelivery.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -752,9 +740,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseInvoice.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseInvoice.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -914,9 +899,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseQuote.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseQuote.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -1076,9 +1058,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseReserveInvoice.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReserveInvoice.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -1238,9 +1217,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseReturn.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReturn.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -1401,9 +1377,6 @@ namespace purchase {
                 condition.value = ibas.emYesNo.NO.toString();
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseReturnRequest.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseReturnRequest.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
@@ -1563,9 +1536,6 @@ namespace purchase {
                 }
                 // 日期排序
                 let sort: ibas.ISort = criteria.sorts.create();
-                sort.alias = bo.PurchaseRequest.PROPERTY_DOCUMENTDATE_NAME;
-                sort.sortType = ibas.emSortType.DESCENDING;
-                sort = criteria.sorts.create();
                 sort.alias = bo.PurchaseRequest.PROPERTY_DOCENTRY_NAME;
                 sort.sortType = ibas.emSortType.DESCENDING;
                 // 查询数据
