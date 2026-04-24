@@ -411,6 +411,15 @@ namespace purchase {
                 | PurchaseReserveInvoiceItem | PurchaseReturnRequestItem,
             source: materials.bo.IProduct
         ): void {
+            // 改变物料，清除无效数据
+            if (!ibas.strings.equals(target.itemCode, source.code)) {
+                if (!(target instanceof PurchaseRequestItem)
+                    && !(target instanceof DownPaymentRequestItem)
+                    && !(target instanceof PurchaseQuoteItem)) {
+                    target.materialSerials.clear();
+                    target.materialBatches.clear();
+                }
+            }
             target.itemCode = source.code;
             target.itemDescription = source.name;
             target.itemSign = source.sign;

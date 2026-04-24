@@ -1255,8 +1255,12 @@ namespace purchase {
                         materialBatches: caller.materialBatches,
                         applyQuantity: (quantity, uom, warehouse) => {
                             caller.quantity = quantity;
-                            caller.uom = uom;
-                            caller.warehouse = warehouse;
+                            if (!ibas.objects.isNull(uom)) {
+                                caller.uom = uom;
+                            }
+                            if (!ibas.objects.isNull(uom)) {
+                                caller.warehouse = warehouse;
+                            }
                         }
                     })
                 });
