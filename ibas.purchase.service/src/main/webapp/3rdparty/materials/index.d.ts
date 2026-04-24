@@ -688,6 +688,8 @@ declare namespace materials {
         interface IMaterialViewExtendedContract extends ibas.IServiceContract {
             /** 标识 */
             id: string;
+            /** 设置 */
+            setting?: bo.MaterialsExtendedSetting;
             /** 数据改变 */
             dataChangeEvent: (event: {
                 reson: "CREATE" | "CLONE" | "FETCH" | "DELETE";
@@ -14280,7 +14282,7 @@ declare namespace materials {
         }
         /** 模块业务对象工厂 */
         const boFactory: ibas.BOFactory;
-        function baseMaterial(target: IGoodsIssueLine | IGoodsReceiptLine | IInventoryTransferLine | IInventoryTransferRequestLine, source: materials.bo.IMaterial | materials.bo.IProduct): void;
+        function baseMaterial(target: GoodsIssueLine | GoodsReceiptLine | InventoryTransferLine | InventoryTransferRequestLine, source: materials.bo.IMaterial | materials.bo.IProduct): void;
         /** 业务规则-计算库存数量 */
         class BusinessRuleCalculateInventoryQuantity extends ibas.BusinessRuleCommon {
             /**

@@ -12615,7 +12615,7 @@ declare namespace sales {
          * @param source 源
          */
         function baseDocumentItem(target: SalesOrderItem | SalesDeliveryItem | SalesReturnItem | SalesCreditNoteItem | SalesInvoiceItem | DownPaymentRequestItem | SalesReserveInvoiceItem | SalesReturnRequestItem | SalesCreditNoteItem, source: ISalesQuoteItem | ISalesOrderItem | ISalesDeliveryItem | ISalesReserveInvoiceItem | SalesReturnRequestItem): void;
-        function baseProduct(target: ISalesQuoteItem | ISalesOrderItem | ISalesDeliveryItem | ISalesReturnItem | ISalesInvoiceItem | ISalesCreditNoteItem | IDownPaymentRequestItem | ISalesReserveInvoiceItem | SalesReturnRequestItem, source: materials.bo.IProduct): void;
+        function baseProduct(target: SalesQuoteItem | SalesOrderItem | SalesDeliveryItem | SalesReturnItem | SalesInvoiceItem | SalesCreditNoteItem | DownPaymentRequestItem | SalesReserveInvoiceItem | SalesReturnRequestItem, source: materials.bo.IProduct): void;
         function baseProductSuit(target: ISalesQuoteItems | ISalesOrderItems | ISalesDeliveryItems, source: bo.IProductSuitEx): ISalesQuoteItem[] | ISalesOrderItem[] | ISalesDeliveryItem[];
         /**
          * 设置单据类型
