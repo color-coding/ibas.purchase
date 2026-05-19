@@ -1040,10 +1040,7 @@ namespace purchase {
                             context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                         }
                     }
-                } else if (ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)
-                    // 锚定税前价格时，改变税率
-                    || (!config.isPriceAnchoringAfterTax() && ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger))
-                ) {
+                } else if (ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)) {
                     let rPrice: number = quantity === 0 ? 0 : ((preTotal * (1 + taxRate)) / quantity);
                     if (!ibas.numbers.isApproximated(rPrice, price)) {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
@@ -1072,6 +1069,13 @@ namespace purchase {
                             if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
                                 && Math.abs(rTotal - total) > 0.04) {
                                 context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
+                            }
+                        }
+                        // 更新价格保持一致
+                        if (quantity > 0) {
+                            let rPrice: number = rTotal / quantity;
+                            if (!ibas.numbers.isApproximated(rPrice, price, DECIMAL_PLACES_PRICE)) {
+                                context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                             }
                         }
                     }

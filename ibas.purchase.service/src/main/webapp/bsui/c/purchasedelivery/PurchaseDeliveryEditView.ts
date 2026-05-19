@@ -104,6 +104,7 @@ namespace purchase {
                                         that.fireViewEvents(that.choosePurchaseDeliverySupplierEvent, this.itemConditions(selectedItem));
                                     }
                                 },
+                                criteria: businesspartner.app.conditions.supplier.create(),
                                 editable: {
                                     parts: [
                                         {

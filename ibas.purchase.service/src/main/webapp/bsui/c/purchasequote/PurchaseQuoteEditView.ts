@@ -92,6 +92,7 @@ namespace purchase {
                                         that.fireViewEvents(that.choosePurchaseQuoteSupplierEvent, this.itemConditions(selectedItem));
                                     }
                                 },
+                                criteria: businesspartner.app.conditions.supplier.create(),
                                 editable: {
                                     parts: [
                                         {

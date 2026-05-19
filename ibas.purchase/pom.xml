@@ -21,22 +21,22 @@
         <dependency>
             <groupId>org.colorcoding.apps</groupId>
             <artifactId>ibas.materials</artifactId>
-            <version>0.2.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.colorcoding.apps</groupId>
             <artifactId>ibas.businesspartner</artifactId>
-            <version>0.2.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.colorcoding.apps</groupId>
             <artifactId>ibas.accounting</artifactId>
-            <version>0.2.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.colorcoding.apps</groupId>
             <artifactId>ibas.sales</artifactId>
-            <version>0.2.0</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
