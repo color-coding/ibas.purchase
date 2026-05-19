@@ -91,6 +91,7 @@ namespace purchase {
                                         that.fireViewEvents(that.choosePurchaseCreditNoteSupplierEvent, this.itemConditions(selectedItem));
                                     }
                                 },
+                                criteria: businesspartner.app.conditions.supplier.create(),
                                 editable: {
                                     parts: [
                                         {

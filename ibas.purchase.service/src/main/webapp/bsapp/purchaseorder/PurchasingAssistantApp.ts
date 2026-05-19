@@ -370,6 +370,47 @@ namespace purchase {
                     boRepository.fetchMaterialPrice({
                         criteria: priceList,
                         onCompleted: (opRslt) => {
+                            for (let item of orderItems) {
+                                let matchedPrice: materials.bo.MaterialPrice = null;
+                                let fallbackPrice: materials.bo.MaterialPrice = null;
+                                let effectiveUom: string = config.isInventoryUnitLinePrice() ? item.inventoryUOM : item.uom;
+                                for (let price of opRslt.resultObjects) {
+                                    if (price.itemCode === item.itemCode) {
+                                        if (ibas.strings.isEmpty(effectiveUom) || price.uom === effectiveUom) {
+                                            matchedPrice = price;
+                                            break;
+                                        }
+                                        if (ibas.strings.isEmpty(price.uom)) {
+                                            fallbackPrice = price;
+                                        }
+                                    }
+                                }
+                                let priceItem: materials.bo.MaterialPrice = matchedPrice || fallbackPrice;
+                                if (priceItem) {
+                                    if (priceItem.taxed === ibas.emYesNo.YES) {
+                                        item.unitPrice = 0;
+                                        item.price = priceItem.price;
+                                        item.currency = priceItem.currency;
+                                    } else {
+                                        item.unitPrice = 0;
+                                        item.preTaxPrice = priceItem.price;
+                                        item.currency = priceItem.currency;
+                                    }
+                                    if (!ibas.strings.isEmpty(item.tax)) {
+                                        accounting.taxrate.assign(item.tax, (rate) => {
+                                            if (rate >= 0) {
+                                                item.taxRate = rate;
+                                                item.unitPrice = 0;
+                                                if (priceItem.taxed === ibas.emYesNo.NO) {
+                                                    item.preTaxPrice = item.price;
+                                                } else {
+                                                    item.price = item.price;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
                             for (let item of opRslt.resultObjects) {
                                 orderItems.forEach((value) => {
                                     if (value.itemCode === item.itemCode

@@ -408,22 +408,33 @@ namespace purchase {
                     boRepository.fetchMaterialPrice({
                         criteria: priceList,
                         onCompleted: (opRslt) => {
-                            for (let item of opRslt.resultObjects) {
-                                items.forEach((value) => {
-                                    if (item.itemCode === value.itemCode
-                                        && (ibas.strings.isEmpty(value.uom)
-                                            || (config.isInventoryUnitLinePrice() ? item.uom === value.inventoryUOM : item.uom === value.uom))) {
-                                        if (item.taxed === ibas.emYesNo.YES) {
-                                            value.unitPrice = 0;
-                                            value.price = item.price;
-                                            value.currency = item.currency;
-                                        } else {
-                                            value.unitPrice = 0;
-                                            value.preTaxPrice = item.price;
-                                            value.currency = item.currency;
+                            for (let item of items) {
+                                let matchedPrice: materials.bo.MaterialPrice = null;
+                                let fallbackPrice: materials.bo.MaterialPrice = null;
+                                let effectiveUom: string = config.isInventoryUnitLinePrice() ? item.inventoryUOM : item.uom;
+                                for (let price of opRslt.resultObjects) {
+                                    if (price.itemCode === item.itemCode) {
+                                        if (ibas.strings.isEmpty(effectiveUom) || price.uom === effectiveUom) {
+                                            matchedPrice = price;
+                                            break;
+                                        }
+                                        if (ibas.strings.isEmpty(price.uom)) {
+                                            fallbackPrice = price;
                                         }
                                     }
-                                });
+                                }
+                                let priceItem: materials.bo.MaterialPrice = matchedPrice || fallbackPrice;
+                                if (priceItem) {
+                                    if (priceItem.taxed === ibas.emYesNo.YES) {
+                                        item.unitPrice = 0;
+                                        item.price = priceItem.price;
+                                        item.currency = priceItem.currency;
+                                    } else {
+                                        item.unitPrice = 0;
+                                        item.preTaxPrice = priceItem.price;
+                                        item.currency = priceItem.currency;
+                                    }
+                                }
                             }
                             this.busy(false);
                         }
