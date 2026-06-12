@@ -16,7 +16,8 @@ import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.db.DbField;
-import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.businesspartner.logic.IDocumentPaidTotalContract;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
@@ -62,7 +63,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 凭证编号 属性
 	 */
-	@DbField(name = "DocEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "DocEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_DOCENTRY = registerProperty(PROPERTY_DOCENTRY_NAME,
 			Integer.class, MY_CLASS);
 
@@ -93,7 +94,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 行号 属性
 	 */
-	@DbField(name = "LineId", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "LineId", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_LINEID = registerProperty(PROPERTY_LINEID_NAME, Integer.class,
 			MY_CLASS);
 
@@ -124,7 +125,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 显示顺序 属性
 	 */
-	@DbField(name = "VisOrder", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "VisOrder", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_VISORDER = registerProperty(PROPERTY_VISORDER_NAME,
 			Integer.class, MY_CLASS);
 
@@ -155,7 +156,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 类型 属性
 	 */
-	@DbField(name = "Object", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Object", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_OBJECTCODE = registerProperty(PROPERTY_OBJECTCODE_NAME,
 			String.class, MY_CLASS);
 
@@ -186,7 +187,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 实例号（版本） 属性
 	 */
-	@DbField(name = "LogInst", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LogInst", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_LOGINST = registerProperty(PROPERTY_LOGINST_NAME, Integer.class,
 			MY_CLASS);
 
@@ -217,7 +218,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 数据源 属性
 	 */
-	@DbField(name = "DataSource", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "DataSource", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DATASOURCE = registerProperty(PROPERTY_DATASOURCE_NAME,
 			String.class, MY_CLASS);
 
@@ -248,7 +249,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 状态 属性
 	 */
-	@DbField(name = "Status", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Status", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emBOStatus> PROPERTY_STATUS = registerProperty(PROPERTY_STATUS_NAME,
 			emBOStatus.class, MY_CLASS);
 
@@ -279,7 +280,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 单据状态 属性
 	 */
-	@DbField(name = "LineStatus", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LineStatus", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emDocumentStatus> PROPERTY_LINESTATUS = registerProperty(PROPERTY_LINESTATUS_NAME,
 			emDocumentStatus.class, MY_CLASS);
 
@@ -310,7 +311,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 创建日期 属性
 	 */
-	@DbField(name = "CreateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "CreateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_CREATEDATE = registerProperty(PROPERTY_CREATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -341,7 +342,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 创建时间 属性
 	 */
-	@DbField(name = "CreateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_CREATETIME = registerProperty(PROPERTY_CREATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -372,7 +373,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 修改日期 属性
 	 */
-	@DbField(name = "UpdateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_UPDATEDATE = registerProperty(PROPERTY_UPDATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -403,7 +404,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 修改时间 属性
 	 */
-	@DbField(name = "UpdateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_UPDATETIME = registerProperty(PROPERTY_UPDATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -434,7 +435,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 创建用户 属性
 	 */
-	@DbField(name = "Creator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Creator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_CREATEUSERSIGN = registerProperty(PROPERTY_CREATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -465,7 +466,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 修改用户 属性
 	 */
-	@DbField(name = "Updator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Updator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_UPDATEUSERSIGN = registerProperty(PROPERTY_UPDATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -496,7 +497,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 创建动作标识 属性
 	 */
-	@DbField(name = "CreateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CREATEACTIONID = registerProperty(PROPERTY_CREATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -527,7 +528,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 更新动作标识 属性
 	 */
-	@DbField(name = "UpdateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UPDATEACTIONID = registerProperty(PROPERTY_UPDATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -558,7 +559,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 参考1 属性
 	 */
-	@DbField(name = "Ref1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref1", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE1 = registerProperty(PROPERTY_REFERENCE1_NAME,
 			String.class, MY_CLASS);
 
@@ -589,7 +590,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 参考2 属性
 	 */
-	@DbField(name = "Ref2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref2", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE2 = registerProperty(PROPERTY_REFERENCE2_NAME,
 			String.class, MY_CLASS);
 
@@ -620,7 +621,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款类型 属性
 	 */
-	@DbField(name = "PayType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "PayType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_PAYMENTTYPE = registerProperty(PROPERTY_PAYMENTTYPE_NAME,
 			String.class, MY_CLASS);
 
@@ -651,7 +652,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款编号 属性
 	 */
-	@DbField(name = "PayEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "PayEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_PAYMENTENTRY = registerProperty(PROPERTY_PAYMENTENTRY_NAME,
 			Integer.class, MY_CLASS);
 
@@ -682,7 +683,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款行号 属性
 	 */
-	@DbField(name = "PayLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "PayLine", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_PAYMENTLINEID = registerProperty(PROPERTY_PAYMENTLINEID_NAME,
 			Integer.class, MY_CLASS);
 
@@ -713,7 +714,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款总计 属性
 	 */
-	@DbField(name = "PayTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PayTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PAYMENTTOTAL = registerProperty(PROPERTY_PAYMENTTOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -744,7 +745,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款货币 属性
 	 */
-	@DbField(name = "PayCur", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "PayCur", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_PAYMENTCURRENCY = registerProperty(PROPERTY_PAYMENTCURRENCY_NAME,
 			String.class, MY_CLASS);
 
@@ -775,7 +776,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 预付款汇率 属性
 	 */
-	@DbField(name = "PayRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PayRate", type = DataType.DECIMAL, editType = EditType.RATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PAYMENTRATE = registerProperty(PROPERTY_PAYMENTRATE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -806,7 +807,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 提取金额 属性
 	 */
-	@DbField(name = "DrawnTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "DrawnTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_DRAWNTOTAL = registerProperty(PROPERTY_DRAWNTOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -837,7 +838,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 基于类型 属性
 	 */
-	@DbField(name = "BaseType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_BASEDOCUMENTTYPE = registerProperty(
 			PROPERTY_BASEDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -868,7 +869,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 基于标识 属性
 	 */
-	@DbField(name = "BaseEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTENTRY = registerProperty(
 			PROPERTY_BASEDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -899,7 +900,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 基于行号 属性
 	 */
-	@DbField(name = "BaseLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseLine", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTLINEID = registerProperty(
 			PROPERTY_BASEDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 
@@ -930,7 +931,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 原始类型 属性
 	 */
-	@DbField(name = "OrgnlType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ORIGINALDOCUMENTTYPE = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -961,7 +962,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 原始标识 属性
 	 */
-	@DbField(name = "OrgnlEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTENTRY = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -992,7 +993,7 @@ public class PurchaseInvoiceDownPayment extends BusinessObject<PurchaseInvoiceDo
 	/**
 	 * 原始行号 属性
 	 */
-	@DbField(name = "OrgnlLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlLine", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTLINEID = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 

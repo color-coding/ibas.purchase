@@ -91,7 +91,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseOrder.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseOrder.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -249,7 +249,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseDelivery.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseDelivery.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -408,7 +408,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseInvoice.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseInvoice.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -570,7 +570,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.DownPaymentRequest.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.DownPaymentRequest.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -731,7 +731,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseReserveInvoice.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseReserveInvoice.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -891,7 +891,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseCreditNote.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseCreditNote.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;

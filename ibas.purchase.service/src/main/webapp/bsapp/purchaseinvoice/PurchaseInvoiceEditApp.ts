@@ -162,13 +162,13 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 // 删除成功，释放当前对象
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                 that.editData = undefined;
                             } else {
                                 // 替换编辑对象
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                             }
                             // 刷新当前视图
                             that.viewShowed();
@@ -793,7 +793,7 @@ namespace purchase {
                 // 数量大于已清数量
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseOrderItem.PROPERTY_QUANTITY_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -1124,7 +1124,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             let target: bo.PurchaseCreditNote = new bo.PurchaseCreditNote();
                             target.supplierCode = this.editData.supplierCode;
@@ -1236,7 +1236,7 @@ namespace purchase {
                 condition = criteria.conditions.create();
                 condition.bracketOpen = 1;
                 condition.alias = bo.BlanketAgreement.PROPERTY_ENDDATE_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                 condition.value = ibas.dates.toString(ibas.dates.today());
                 condition = criteria.conditions.create();
                 condition.bracketClose = 1;
@@ -1453,7 +1453,7 @@ namespace purchase {
             }
             private choosePurchaseInvoiceItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseInvoiceItem): void {
                 if (ibas.objects.isNull(type)) {
-                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invalid", ""));
                     return;
                 }
                 ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
@@ -1622,7 +1622,7 @@ namespace purchase {
                 // 存在已清金额
                 condition = criteria.conditions.create();
                 condition.alias = receiptpayment.bo.Payment.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = receiptpayment.bo.Payment.PROPERTY_CLOSEDAMOUNT_NAME;
                 if (ibas.objects.isNull(boRepository)) {
                     let that: this = this;
@@ -1781,7 +1781,7 @@ namespace purchase {
                 // 存在已清金额
                 condition = criteria.conditions.create();
                 condition.alias = receiptpayment.bo.Payment.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.value = "0";
 
                 ibas.servicesManager.runChooseService<receiptpayment.bo.Payment>({

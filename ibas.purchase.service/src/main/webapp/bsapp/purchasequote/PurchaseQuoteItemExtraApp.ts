@@ -83,7 +83,7 @@ namespace purchase {
                                 ibas.servicesManager.runChooseService<materials.bo.IMaterialSpecification>({
                                     boCode: materials.bo.BO_CODE_MATERIALSPECIFICATION,
                                     criteria: [
-                                        new ibas.Condition(materials.bo.MaterialSpecification.PROPERTY_OBJECTKEY_NAME, ibas.emConditionOperation.GRATER_THAN, "0"),
+                                        new ibas.Condition(materials.bo.MaterialSpecification.PROPERTY_OBJECTKEY_NAME, ibas.emConditionOperation.GREATER_THAN, "0"),
                                     ],
                                     onCompleted(selecteds: ibas.IList<materials.bo.IMaterialSpecification>): void {
                                         for (let selected of selecteds) {
@@ -110,7 +110,7 @@ namespace purchase {
                                     throw new Error(opRslt.message);
                                 }
                                 that.proceeding(ibas.emMessageType.INFORMATION,
-                                    ibas.i18n.prop("shell_upload") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_upload") + ibas.i18n.prop("shell_successful"));
                                 let fileData: ibas.FileItem = opRslt.resultObjects.firstOrDefault();
                                 let item: bo.PurchaseQuoteItemExtra = that.editData.purchaseQuoteItemExtras.create();
                                 item.extraType = EXTRA_ATTACHMENT;

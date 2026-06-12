@@ -91,7 +91,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseReturn.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseReturn.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -250,7 +250,7 @@ namespace purchase {
                 // 未收全款的
                 condition = criteria.conditions.create();
                 condition.alias = purchase.bo.PurchaseCreditNote.PROPERTY_DOCUMENTTOTAL_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = purchase.bo.PurchaseCreditNote.PROPERTY_PAIDTOTAL_NAME;
                 // 调用选择服务
                 let that: this = this;

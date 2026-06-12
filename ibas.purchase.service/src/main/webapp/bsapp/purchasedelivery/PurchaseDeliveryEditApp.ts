@@ -151,13 +151,13 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 // 删除成功，释放当前对象
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                 that.editData = undefined;
                             } else {
                                 // 替换编辑对象
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                                 if (that.editData.isDeleted !== true
                                     && that.editData.canceled !== ibas.emYesNo.YES
                                     && that.editData.deleted !== ibas.emYesNo.YES) {
@@ -802,7 +802,7 @@ namespace purchase {
                 // 数量大于已清数量
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseOrderItem.PROPERTY_QUANTITY_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = bo.PurchaseOrderItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 调用选择服务
                 let that: this = this;
@@ -913,7 +913,7 @@ namespace purchase {
                 // 数量大于已清数量
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReturnItem.PROPERTY_QUANTITY_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = bo.PurchaseReturnItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 不基于单据的
                 condition = cCriteria.conditions.create();
@@ -1004,7 +1004,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             let target: bo.PurchaseReturn = new bo.PurchaseReturn();
                             target.supplierCode = this.editData.supplierCode;
@@ -1055,7 +1055,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             let target: bo.PurchaseInvoice = new bo.PurchaseInvoice();
                             target.supplierCode = this.editData.supplierCode;
@@ -1110,7 +1110,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             if (salesOrders instanceof Array) {
                                 let target: sales.bo.SalesDelivery = new sales.bo.SalesDelivery();
@@ -1297,7 +1297,7 @@ namespace purchase {
                 condition = criteria.conditions.create();
                 condition.bracketOpen = 1;
                 condition.alias = bo.BlanketAgreement.PROPERTY_ENDDATE_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                 condition.value = ibas.dates.toString(ibas.dates.today());
                 condition = criteria.conditions.create();
                 condition.bracketClose = 1;
@@ -1514,7 +1514,7 @@ namespace purchase {
             }
             private choosePurchaseDeliveryItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseDeliveryItem): void {
                 if (ibas.objects.isNull(type)) {
-                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invalid", ""));
                     return;
                 }
                 ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
@@ -1628,7 +1628,7 @@ namespace purchase {
                 // 数量大于已清数量
                 condition = cCriteria.conditions.create();
                 condition.alias = bo.PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME;
-                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                 condition.comparedAlias = bo.PurchaseReserveInvoiceItem.PROPERTY_CLOSEDQUANTITY_NAME;
                 // 调用选择服务
                 let that: this = this;

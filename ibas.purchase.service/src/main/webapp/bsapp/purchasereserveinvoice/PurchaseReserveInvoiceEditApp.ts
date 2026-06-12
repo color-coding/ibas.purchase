@@ -159,13 +159,13 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 // 删除成功，释放当前对象
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                 that.editData = undefined;
                             } else {
                                 // 替换编辑对象
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                             }
                             // 刷新当前视图
                             that.viewShowed();
@@ -922,7 +922,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             let target: bo.PurchaseCreditNote = new bo.PurchaseCreditNote();
                             target.supplierCode = this.editData.supplierCode;
@@ -975,7 +975,7 @@ namespace purchase {
                                 || this.editData.canceled === ibas.emYesNo.YES
                                 || this.editData.documentStatus === ibas.emDocumentStatus.PLANNED
                             ) {
-                                throw new Error(ibas.i18n.prop("purchase_invaild_status_not_support_turn_to_operation"));
+                                throw new Error(ibas.i18n.prop("purchase_invalid_status_not_support_turn_to_operation"));
                             }
                             let target: bo.PurchaseDelivery = new bo.PurchaseDelivery();
                             target.supplierCode = this.editData.supplierCode;
@@ -1114,7 +1114,7 @@ namespace purchase {
             }
             private choosePurchaseReserveInvoiceItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseReserveInvoiceItem): void {
                 if (ibas.objects.isNull(type)) {
-                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invalid", ""));
                     return;
                 }
                 ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({

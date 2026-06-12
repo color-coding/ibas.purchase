@@ -74,7 +74,7 @@ public class BlanketAgreementQuantityService
 			}
 		}
 		if (order == null) {
-			throw new BusinessLogicException(I18N.prop("msg_sl_not_found_order", contract.getBaseDocumentType(),
+			throw new BusinessLogicException(I18N.prop("msg_ph_not_found_order", contract.getBaseDocumentType(),
 					contract.getBaseDocumentEntry()));
 		}
 		return order;
@@ -88,7 +88,7 @@ public class BlanketAgreementQuantityService
 		IBlanketAgreementItem orderItem = this.getBeAffected().getBlanketAgreementItems()
 				.firstOrDefault(c -> c.getLineId().compareTo(contract.getBaseDocumentLineId()) == 0);
 		if (orderItem == null) {
-			throw new BusinessLogicException(I18N.prop("msg_sl_not_found_order_item", contract.getBaseDocumentType(),
+			throw new BusinessLogicException(I18N.prop("msg_ph_not_found_order_item", contract.getBaseDocumentType(),
 					contract.getBaseDocumentEntry(), contract.getBaseDocumentLineId()));
 		}
 		if (this.getBeAffected().getAgreementMethod() == emAgreementMethod.ITEM) {
@@ -121,7 +121,7 @@ public class BlanketAgreementQuantityService
 		IBlanketAgreementItem orderItem = this.getBeAffected().getBlanketAgreementItems()
 				.firstOrDefault(c -> c.getLineId().compareTo(contract.getBaseDocumentLineId()) == 0);
 		if (orderItem == null) {
-			throw new BusinessLogicException(I18N.prop("msg_sl_not_found_order_item", contract.getBaseDocumentType(),
+			throw new BusinessLogicException(I18N.prop("msg_ph_not_found_order_item", contract.getBaseDocumentType(),
 					contract.getBaseDocumentEntry(), contract.getBaseDocumentLineId()));
 		}
 		if (this.getBeAffected().getAgreementMethod() == emAgreementMethod.ITEM) {

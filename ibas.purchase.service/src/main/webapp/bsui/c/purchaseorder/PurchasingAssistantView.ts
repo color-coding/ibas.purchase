@@ -450,7 +450,7 @@ namespace purchase {
                                             if (!ibas.strings.isEmpty(value)) {
                                                 condition = criteria.conditions.create();
                                                 condition.alias = sales.bo.SalesOrder.PROPERTY_DOCENTRY_NAME;
-                                                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                                                condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                                                 condition.value = value;
                                             }
                                             value = that.inputOrderTo.getValue();
@@ -465,7 +465,7 @@ namespace purchase {
                                             if (!ibas.strings.isEmpty(value)) {
                                                 condition = criteria.conditions.create();
                                                 condition.alias = sales.bo.SalesOrder.PROPERTY_DELIVERYDATE_NAME;
-                                                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                                                condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                                                 condition.value = value;
                                             }
                                             value = that.inputDateTo.getValue();
@@ -488,12 +488,12 @@ namespace purchase {
                                             if (ibas.strings.equalsIgnoreCase(value, "01")) {
                                                 condition = criteria.conditions.create();
                                                 condition.alias = sales.bo.SalesOrder.PROPERTY_PAIDTOTAL_NAME;
-                                                condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                                                condition.operation = ibas.emConditionOperation.GREATER_THAN;
                                                 condition.value = "0";
                                             } else if (ibas.strings.equalsIgnoreCase(value, "02")) {
                                                 condition = criteria.conditions.create();
                                                 condition.alias = sales.bo.SalesOrder.PROPERTY_PAIDTOTAL_NAME;
-                                                condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                                                condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                                                 condition.comparedAlias = sales.bo.SalesOrder.PROPERTY_DOCUMENTTOTAL_NAME;
                                             }
                                             // 物料筛选

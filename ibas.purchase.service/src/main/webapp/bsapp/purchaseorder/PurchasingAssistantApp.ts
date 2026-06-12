@@ -140,7 +140,7 @@ namespace purchase {
                     condition = new ibas.Condition();
                     condition.bracketClose = 3;
                     condition.alias = materials.bo.Material.PROPERTY_INVALIDDATE_NAME;
-                    condition.operation = ibas.emConditionOperation.GRATER_EQUAL;
+                    condition.operation = ibas.emConditionOperation.GREATER_EQUAL;
                     condition.value = today;
                     conditions.add(condition);
                     // 首选供应商
@@ -577,7 +577,7 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 // 删除成功，释放当前对象
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                 that.purchaseOrder = undefined;
                             } else {
                                 // 替换编辑对象

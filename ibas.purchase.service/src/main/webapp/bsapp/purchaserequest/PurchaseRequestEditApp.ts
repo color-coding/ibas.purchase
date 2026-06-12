@@ -127,13 +127,13 @@ namespace purchase {
                             if (opRslt.resultObjects.length === 0) {
                                 // 删除成功，释放当前对象
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                 that.editData = undefined;
                             } else {
                                 // 替换编辑对象
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
-                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                    ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                                 if (that.editData.isDeleted !== true
                                     && that.editData.canceled !== ibas.emYesNo.YES
                                     && that.editData.deleted !== ibas.emYesNo.YES) {
@@ -688,7 +688,7 @@ namespace purchase {
             }
             private choosePurchaseRequestItemDistributionRule(type: accounting.app.emDimensionType, caller: bo.PurchaseRequestItem): void {
                 if (ibas.objects.isNull(type)) {
-                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invaild", ""));
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("accounting_dimension_invalid", ""));
                     return;
                 }
                 ibas.servicesManager.runApplicationService<accounting.app.IDimensionDataServiceContract, String>({
@@ -745,13 +745,13 @@ namespace purchase {
                                                 if (opRslt.resultObjects.length === 0) {
                                                     // 删除成功，释放当前对象
                                                     that.proceeding(ibas.emMessageType.SUCCESS,
-                                                        ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                                        ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_successful"));
                                                     that.editData = undefined;
                                                 } else {
                                                     // 替换编辑对象
                                                     that.editData = opRslt.resultObjects.firstOrDefault();
                                                     that.proceeding(ibas.emMessageType.SUCCESS,
-                                                        ibas.i18n.prop("bo_purchaserequest") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                                        ibas.i18n.prop("bo_purchaserequest") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                                                     // 处理预留
                                                     let criteria: ibas.ICriteria = new ibas.Criteria();
                                                     let condition: ibas.ICondition = criteria.conditions.create();
@@ -768,7 +768,7 @@ namespace purchase {
                                                     condition.value = ibas.emYesNo.NO.toString();
                                                     condition = criteria.conditions.create();
                                                     condition.alias = materials.bo.MaterialOrderedReservation.PROPERTY_QUANTITY_NAME;
-                                                    condition.operation = ibas.emConditionOperation.GRATER_THAN;
+                                                    condition.operation = ibas.emConditionOperation.GREATER_THAN;
                                                     condition.comparedAlias = materials.bo.MaterialOrderedReservation.PROPERTY_CLOSEDQUANTITY_NAME;
                                                     let boRepository: materials.bo.BORepositoryMaterials = new materials.bo.BORepositoryMaterials();
                                                     boRepository.fetchMaterialOrderedReservation({
@@ -819,7 +819,7 @@ namespace purchase {
                                                                     that.messages(error);
                                                                 } else {
                                                                     that.proceeding(ibas.emMessageType.SUCCESS,
-                                                                        ibas.i18n.prop("bo_materialorderedreservation") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_sucessful"));
+                                                                        ibas.i18n.prop("bo_materialorderedreservation") + ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
                                                                 }
                                                             });
                                                         }

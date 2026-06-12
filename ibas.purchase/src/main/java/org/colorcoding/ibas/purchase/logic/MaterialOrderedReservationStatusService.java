@@ -22,7 +22,7 @@ import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.db.DbField;
-import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DataType;
 import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
 import org.colorcoding.ibas.bobas.logic.IBusinessObjectGroup;
 import org.colorcoding.ibas.bobas.logic.LogicContract;
@@ -234,7 +234,7 @@ class MaterialOrderedReservationGroup extends BusinessObject<IMaterialOrderedRes
 	/**
 	 * 源单据类型 属性
 	 */
-	@DbField(name = "SourceType", type = DbFieldType.ALPHANUMERIC)
+	@DbField(name = "SourceType", type = DataType.ALPHANUMERIC)
 	public static final IPropertyInfo<String> PROPERTY_SOURCEDOCUMENTTYPE = registerProperty(
 			PROPERTY_SOURCEDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -265,7 +265,7 @@ class MaterialOrderedReservationGroup extends BusinessObject<IMaterialOrderedRes
 	/**
 	 * 源单据编号 属性
 	 */
-	@DbField(name = "SourceEntry", type = DbFieldType.NUMERIC)
+	@DbField(name = "SourceEntry", type = DataType.NUMERIC)
 	public static final IPropertyInfo<Integer> PROPERTY_SOURCEDOCUMENTENTRY = registerProperty(
 			PROPERTY_SOURCEDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -296,7 +296,7 @@ class MaterialOrderedReservationGroup extends BusinessObject<IMaterialOrderedRes
 	/**
 	 * 源单据行号 属性
 	 */
-	@DbField(name = "SourceLine", type = DbFieldType.NUMERIC)
+	@DbField(name = "SourceLine", type = DataType.NUMERIC)
 	public static final IPropertyInfo<Integer> PROPERTY_SOURCEDOCUMENTLINEID = registerProperty(
 			PROPERTY_SOURCEDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 

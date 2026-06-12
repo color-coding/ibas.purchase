@@ -24,7 +24,8 @@ import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.db.DbField;
-import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
 import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
@@ -99,7 +100,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 编码 属性
 	 */
-	@DbField(name = "DocEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "DocEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_DOCENTRY = registerProperty(PROPERTY_DOCENTRY_NAME,
 			Integer.class, MY_CLASS);
 
@@ -130,7 +131,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 行号 属性
 	 */
-	@DbField(name = "LineId", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "LineId", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_LINEID = registerProperty(PROPERTY_LINEID_NAME, Integer.class,
 			MY_CLASS);
 
@@ -161,7 +162,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 显示顺序 属性
 	 */
-	@DbField(name = "VisOrder", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "VisOrder", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_VISORDER = registerProperty(PROPERTY_VISORDER_NAME,
 			Integer.class, MY_CLASS);
 
@@ -192,7 +193,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 类型 属性
 	 */
-	@DbField(name = "Object", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Object", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_OBJECTCODE = registerProperty(PROPERTY_OBJECTCODE_NAME,
 			String.class, MY_CLASS);
 
@@ -223,7 +224,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 实例号（版本） 属性
 	 */
-	@DbField(name = "LogInst", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LogInst", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_LOGINST = registerProperty(PROPERTY_LOGINST_NAME, Integer.class,
 			MY_CLASS);
 
@@ -254,7 +255,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 数据源 属性
 	 */
-	@DbField(name = "DataSource", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "DataSource", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DATASOURCE = registerProperty(PROPERTY_DATASOURCE_NAME,
 			String.class, MY_CLASS);
 
@@ -285,7 +286,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 取消 属性
 	 */
-	@DbField(name = "Canceled", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Canceled", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_CANCELED = registerProperty(PROPERTY_CANCELED_NAME,
 			emYesNo.class, MY_CLASS);
 
@@ -316,7 +317,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 状态 属性
 	 */
-	@DbField(name = "Status", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Status", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emBOStatus> PROPERTY_STATUS = registerProperty(PROPERTY_STATUS_NAME,
 			emBOStatus.class, MY_CLASS);
 
@@ -347,7 +348,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 单据状态 属性
 	 */
-	@DbField(name = "LineStatus", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LineStatus", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emDocumentStatus> PROPERTY_LINESTATUS = registerProperty(PROPERTY_LINESTATUS_NAME,
 			emDocumentStatus.class, MY_CLASS);
 
@@ -378,7 +379,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 创建日期 属性
 	 */
-	@DbField(name = "CreateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "CreateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_CREATEDATE = registerProperty(PROPERTY_CREATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -409,7 +410,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 创建时间 属性
 	 */
-	@DbField(name = "CreateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_CREATETIME = registerProperty(PROPERTY_CREATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -440,7 +441,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 修改日期 属性
 	 */
-	@DbField(name = "UpdateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_UPDATEDATE = registerProperty(PROPERTY_UPDATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -471,7 +472,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 修改时间 属性
 	 */
-	@DbField(name = "UpdateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_UPDATETIME = registerProperty(PROPERTY_UPDATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -502,7 +503,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 创建用户 属性
 	 */
-	@DbField(name = "Creator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Creator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_CREATEUSERSIGN = registerProperty(PROPERTY_CREATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -533,7 +534,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 修改用户 属性
 	 */
-	@DbField(name = "Updator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Updator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_UPDATEUSERSIGN = registerProperty(PROPERTY_UPDATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -564,7 +565,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 创建动作标识 属性
 	 */
-	@DbField(name = "CreateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CREATEACTIONID = registerProperty(PROPERTY_CREATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -595,7 +596,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 更新动作标识 属性
 	 */
-	@DbField(name = "UpdateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UPDATEACTIONID = registerProperty(PROPERTY_UPDATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -626,7 +627,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 参考1 属性
 	 */
-	@DbField(name = "Ref1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref1", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE1 = registerProperty(PROPERTY_REFERENCE1_NAME,
 			String.class, MY_CLASS);
 
@@ -657,7 +658,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 参考2 属性
 	 */
-	@DbField(name = "Ref2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref2", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE2 = registerProperty(PROPERTY_REFERENCE2_NAME,
 			String.class, MY_CLASS);
 
@@ -688,7 +689,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 已引用 属性
 	 */
-	@DbField(name = "Refed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Refed", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_REFERENCED = registerProperty(PROPERTY_REFERENCED_NAME,
 			emYesNo.class, MY_CLASS);
 
@@ -719,7 +720,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 已删除 属性
 	 */
-	@DbField(name = "Deleted", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Deleted", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_DELETED = registerProperty(PROPERTY_DELETED_NAME, emYesNo.class,
 			MY_CLASS);
 
@@ -750,7 +751,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 基于类型 属性
 	 */
-	@DbField(name = "BaseType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_BASEDOCUMENTTYPE = registerProperty(
 			PROPERTY_BASEDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -781,7 +782,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 基于标识 属性
 	 */
-	@DbField(name = "BaseEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTENTRY = registerProperty(
 			PROPERTY_BASEDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -812,7 +813,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 基于行号 属性
 	 */
-	@DbField(name = "BaseLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BaseLine", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_BASEDOCUMENTLINEID = registerProperty(
 			PROPERTY_BASEDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 
@@ -843,7 +844,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 原始类型 属性
 	 */
-	@DbField(name = "OrgnlType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ORIGINALDOCUMENTTYPE = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTTYPE_NAME, String.class, MY_CLASS);
 
@@ -874,7 +875,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 原始标识 属性
 	 */
-	@DbField(name = "OrgnlEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTENTRY = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTENTRY_NAME, Integer.class, MY_CLASS);
 
@@ -905,7 +906,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 原始行号 属性
 	 */
-	@DbField(name = "OrgnlLine", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OrgnlLine", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ORIGINALDOCUMENTLINEID = registerProperty(
 			PROPERTY_ORIGINALDOCUMENTLINEID_NAME, Integer.class, MY_CLASS);
 
@@ -936,7 +937,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 产品编号 属性
 	 */
-	@DbField(name = "ItemCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ItemCode", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMCODE = registerProperty(PROPERTY_ITEMCODE_NAME, String.class,
 			MY_CLASS);
 
@@ -967,7 +968,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 产品/服务描述 属性
 	 */
-	@DbField(name = "Dscription", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Dscription", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMDESCRIPTION = registerProperty(PROPERTY_ITEMDESCRIPTION_NAME,
 			String.class, MY_CLASS);
 
@@ -998,7 +999,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 产品标识 属性
 	 */
-	@DbField(name = "ItemSign", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ItemSign", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMSIGN = registerProperty(PROPERTY_ITEMSIGN_NAME, String.class,
 			MY_CLASS);
 
@@ -1029,7 +1030,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 目录编码 属性
 	 */
-	@DbField(name = "CatalogCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CatalogCode", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CATALOGCODE = registerProperty(PROPERTY_CATALOGCODE_NAME,
 			String.class, MY_CLASS);
 
@@ -1060,7 +1061,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 物料版本 属性
 	 */
-	@DbField(name = "ItemVer", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ItemVer", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_ITEMVERSION = registerProperty(PROPERTY_ITEMVERSION_NAME,
 			String.class, MY_CLASS);
 
@@ -1091,7 +1092,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 序号管理 属性
 	 */
-	@DbField(name = "SerialMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "SerialMgment", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_SERIALMANAGEMENT = registerProperty(
 			PROPERTY_SERIALMANAGEMENT_NAME, emYesNo.class, MY_CLASS);
 
@@ -1122,7 +1123,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 批号管理 属性
 	 */
-	@DbField(name = "BatchMgment", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "BatchMgment", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_BATCHMANAGEMENT = registerProperty(
 			PROPERTY_BATCHMANAGEMENT_NAME, emYesNo.class, MY_CLASS);
 
@@ -1153,7 +1154,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 数量 属性
 	 */
-	@DbField(name = "Quantity", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "Quantity", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_QUANTITY = registerProperty(PROPERTY_QUANTITY_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1211,7 +1212,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 单位 属性
 	 */
-	@DbField(name = "UOM", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UOM", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UOM = registerProperty(PROPERTY_UOM_NAME, String.class,
 			MY_CLASS);
 
@@ -1242,7 +1243,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 库存单位 属性
 	 */
-	@DbField(name = "InvUOM", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "InvUOM", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_INVENTORYUOM = registerProperty(PROPERTY_INVENTORYUOM_NAME,
 			String.class, MY_CLASS);
 
@@ -1273,7 +1274,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 单位换算率 属性
 	 */
-	@DbField(name = "UOMRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "UOMRate", type = DataType.DECIMAL, editType = EditType.RATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UOMRATE = registerProperty(PROPERTY_UOMRATE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1304,7 +1305,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 库存数量 属性
 	 */
-	@DbField(name = "InvQty", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "InvQty", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_INVENTORYQUANTITY = registerProperty(
 			PROPERTY_INVENTORYQUANTITY_NAME, BigDecimal.class, MY_CLASS);
 
@@ -1335,7 +1336,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 仓库 属性
 	 */
-	@DbField(name = "WhsCode", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "WhsCode", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_WAREHOUSE = registerProperty(PROPERTY_WAREHOUSE_NAME,
 			String.class, MY_CLASS);
 
@@ -1366,7 +1367,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 价格 属性
 	 */
-	@DbField(name = "Price", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "Price", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICE = registerProperty(PROPERTY_PRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1424,7 +1425,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 货币 属性
 	 */
-	@DbField(name = "Currency", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Currency", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CURRENCY = registerProperty(PROPERTY_CURRENCY_NAME, String.class,
 			MY_CLASS);
 
@@ -1455,7 +1456,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 汇率 属性
 	 */
-	@DbField(name = "Rate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "Rate", type = DataType.DECIMAL, editType = EditType.RATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_RATE = registerProperty(PROPERTY_RATE_NAME, BigDecimal.class,
 			MY_CLASS);
 
@@ -1513,7 +1514,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 行总计 属性
 	 */
-	@DbField(name = "LineTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "LineTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_LINETOTAL = registerProperty(PROPERTY_LINETOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1571,7 +1572,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 行交货日期 属性
 	 */
-	@DbField(name = "ShipDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "ShipDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_DELIVERYDATE = registerProperty(PROPERTY_DELIVERYDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -1602,7 +1603,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 已清数量 属性
 	 */
-	@DbField(name = "ClosedQty", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "ClosedQty", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_CLOSEDQUANTITY = registerProperty(
 			PROPERTY_CLOSEDQUANTITY_NAME, BigDecimal.class, MY_CLASS);
 
@@ -1660,7 +1661,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 行折扣 属性
 	 */
-	@DbField(name = "DiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "DiscPrcnt", type = DataType.DECIMAL, editType = EditType.PERCENTAGE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_DISCOUNT = registerProperty(PROPERTY_DISCOUNT_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1718,7 +1719,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 已清金额 属性
 	 */
-	@DbField(name = "ClosedAmt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "ClosedAmt", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_CLOSEDAMOUNT = registerProperty(PROPERTY_CLOSEDAMOUNT_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1776,7 +1777,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 折扣前价格 属性
 	 */
-	@DbField(name = "UnitPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "UnitPrice", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITPRICE = registerProperty(PROPERTY_UNITPRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1834,7 +1835,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 折扣前行总计 属性
 	 */
-	@DbField(name = "UnitTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "UnitTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITLINETOTAL = registerProperty(PROPERTY_UNITLINETOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1865,7 +1866,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税定义 属性
 	 */
-	@DbField(name = "Tax", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Tax", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_TAX = registerProperty(PROPERTY_TAX_NAME, String.class,
 			MY_CLASS);
 
@@ -1896,7 +1897,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税率 属性
 	 */
-	@DbField(name = "TaxRate", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "TaxRate", type = DataType.DECIMAL, editType = EditType.RATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXRATE = registerProperty(PROPERTY_TAXRATE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -1954,7 +1955,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税总额 属性
 	 */
-	@DbField(name = "TaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "TaxTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_TAXTOTAL = registerProperty(PROPERTY_TAXTOTAL_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -2012,7 +2013,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税前价格 属性
 	 */
-	@DbField(name = "PreTaxPrice", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PreTaxPrice", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICE = registerProperty(PROPERTY_PRETAXPRICE_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -2070,7 +2071,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税前行总计 属性
 	 */
-	@DbField(name = "PreTaxTotal", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PreTaxTotal", type = DataType.DECIMAL, editType = EditType.SUM, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXLINETOTAL = registerProperty(
 			PROPERTY_PRETAXLINETOTAL_NAME, BigDecimal.class, MY_CLASS);
 
@@ -2128,7 +2129,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 成本中心1 属性
 	 */
-	@DbField(name = "OcrCode1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OcrCode1", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE1 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE1_NAME, String.class, MY_CLASS);
 
@@ -2159,7 +2160,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 成本中心2 属性
 	 */
-	@DbField(name = "OcrCode2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OcrCode2", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE2 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE2_NAME, String.class, MY_CLASS);
 
@@ -2190,7 +2191,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 成本中心3 属性
 	 */
-	@DbField(name = "OcrCode3", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OcrCode3", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE3 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE3_NAME, String.class, MY_CLASS);
 
@@ -2221,7 +2222,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 成本中心4 属性
 	 */
-	@DbField(name = "OcrCode4", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OcrCode4", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE4 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE4_NAME, String.class, MY_CLASS);
 
@@ -2252,7 +2253,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 成本中心5 属性
 	 */
-	@DbField(name = "OcrCode5", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "OcrCode5", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DISTRIBUTIONRULE5 = registerProperty(
 			PROPERTY_DISTRIBUTIONRULE5_NAME, String.class, MY_CLASS);
 
@@ -2283,7 +2284,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 合同 属性
 	 */
-	@DbField(name = "Agreements", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Agreements", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_AGREEMENTS = registerProperty(PROPERTY_AGREEMENTS_NAME,
 			String.class, MY_CLASS);
 
@@ -2314,7 +2315,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 反向行折扣 属性
 	 */
-	@DbField(name = "InDiscPrcnt", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "InDiscPrcnt", type = DataType.DECIMAL, editType = EditType.PERCENTAGE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_INVERSEDISCOUNT = registerProperty(
 			PROPERTY_INVERSEDISCOUNT_NAME, BigDecimal.class, MY_CLASS);
 
@@ -2345,7 +2346,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 价格（本币） 属性
 	 */
-	@DbField(name = "PriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PriceLC", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRICELC = registerProperty(PROPERTY_PRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -2376,7 +2377,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 折扣前价格（本币） 属性
 	 */
-	@DbField(name = "UnitPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "UnitPriceLC", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_UNITPRICELC = registerProperty(PROPERTY_UNITPRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -2407,7 +2408,7 @@ public class PurchaseCreditNoteItem extends BusinessObject<PurchaseCreditNoteIte
 	/**
 	 * 税前价格（本币） 属性
 	 */
-	@DbField(name = "PreTaxPriceLC", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "PreTaxPriceLC", type = DataType.DECIMAL, editType = EditType.PRICE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_PRETAXPRICELC = registerProperty(PROPERTY_PRETAXPRICELC_NAME,
 			BigDecimal.class, MY_CLASS);
 

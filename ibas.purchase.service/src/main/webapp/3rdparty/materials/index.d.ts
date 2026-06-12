@@ -3409,7 +3409,7 @@ declare namespace materials {
             /** 必填的 */
             required: boolean;
             /** 可选值 */
-            vaildValues: ibas.IList<ISpecificationTreeItemValue>;
+            validValues: ibas.IList<ISpecificationTreeItemValue>;
             /** 规格模板-项目集合 */
             items: ibas.IList<ISpecificationTreeItem>;
         }
@@ -10897,7 +10897,7 @@ declare namespace materials {
             /** 必填的 */
             required: boolean;
             /** 可选值 */
-            vaildValues: ibas.IList<ISpecificationTreeItemValue>;
+            validValues: ibas.IList<ISpecificationTreeItemValue>;
             /** 规格模板-项目集合 */
             items: ibas.IList<ISpecificationTreeItem>;
         }
@@ -14333,7 +14333,7 @@ declare namespace materials {
                 /** 必填的 */
                 Required: boolean;
                 /** 可选值 */
-                VaildValues: ISpecificationTreeItemValue[];
+                ValidValues: ISpecificationTreeItemValue[];
                 /** 规格模板-项目集合 */
                 Items: ISpecificationTreeItem[];
             }
@@ -19094,7 +19094,7 @@ declare namespace materials {
             get note(): string;
             set note(value: string);
             /** 可选值 */
-            vaildValues: ibas.IList<bo.ISpecificationTreeItemValue>;
+            validValues: ibas.IList<bo.ISpecificationTreeItemValue>;
             /** 项目集合 */
             items: ibas.IList<bo.ISpecificationTreeItem>;
         }

@@ -15,7 +15,8 @@ import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.bobas.db.DbField;
-import org.colorcoding.ibas.bobas.db.DbFieldType;
+import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 
 /**
@@ -59,7 +60,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 编码 属性
 	 */
-	@DbField(name = "DocEntry", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "DocEntry", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_DOCENTRY = registerProperty(PROPERTY_DOCENTRY_NAME,
 			Integer.class, MY_CLASS);
 
@@ -90,7 +91,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 行号 属性
 	 */
-	@DbField(name = "LineId", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
+	@DbField(name = "LineId", type = DataType.NUMERIC, table = DB_TABLE_NAME, primaryKey = true)
 	public static final IPropertyInfo<Integer> PROPERTY_LINEID = registerProperty(PROPERTY_LINEID_NAME, Integer.class,
 			MY_CLASS);
 
@@ -121,7 +122,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 显示顺序 属性
 	 */
-	@DbField(name = "VisOrder", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "VisOrder", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_VISORDER = registerProperty(PROPERTY_VISORDER_NAME,
 			Integer.class, MY_CLASS);
 
@@ -152,7 +153,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 类型 属性
 	 */
-	@DbField(name = "Object", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Object", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_OBJECTCODE = registerProperty(PROPERTY_OBJECTCODE_NAME,
 			String.class, MY_CLASS);
 
@@ -183,7 +184,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 实例号（版本） 属性
 	 */
-	@DbField(name = "LogInst", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LogInst", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_LOGINST = registerProperty(PROPERTY_LOGINST_NAME, Integer.class,
 			MY_CLASS);
 
@@ -214,7 +215,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 数据源 属性
 	 */
-	@DbField(name = "DataSource", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "DataSource", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DATASOURCE = registerProperty(PROPERTY_DATASOURCE_NAME,
 			String.class, MY_CLASS);
 
@@ -245,7 +246,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 取消 属性
 	 */
-	@DbField(name = "Canceled", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Canceled", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_CANCELED = registerProperty(PROPERTY_CANCELED_NAME,
 			emYesNo.class, MY_CLASS);
 
@@ -276,7 +277,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 状态 属性
 	 */
-	@DbField(name = "Status", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Status", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emBOStatus> PROPERTY_STATUS = registerProperty(PROPERTY_STATUS_NAME,
 			emBOStatus.class, MY_CLASS);
 
@@ -307,7 +308,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 单据状态 属性
 	 */
-	@DbField(name = "LineStatus", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "LineStatus", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emDocumentStatus> PROPERTY_LINESTATUS = registerProperty(PROPERTY_LINESTATUS_NAME,
 			emDocumentStatus.class, MY_CLASS);
 
@@ -338,7 +339,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 创建日期 属性
 	 */
-	@DbField(name = "CreateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "CreateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_CREATEDATE = registerProperty(PROPERTY_CREATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -369,7 +370,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 创建时间 属性
 	 */
-	@DbField(name = "CreateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_CREATETIME = registerProperty(PROPERTY_CREATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -400,7 +401,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 修改日期 属性
 	 */
-	@DbField(name = "UpdateDate", type = DbFieldType.DATE, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateDate", type = DataType.DATE, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<DateTime> PROPERTY_UPDATEDATE = registerProperty(PROPERTY_UPDATEDATE_NAME,
 			DateTime.class, MY_CLASS);
 
@@ -431,7 +432,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 修改时间 属性
 	 */
-	@DbField(name = "UpdateTime", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateTime", type = DataType.NUMERIC, editType = EditType.TIME, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Short> PROPERTY_UPDATETIME = registerProperty(PROPERTY_UPDATETIME_NAME,
 			Short.class, MY_CLASS);
 
@@ -462,7 +463,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 创建用户 属性
 	 */
-	@DbField(name = "Creator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Creator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_CREATEUSERSIGN = registerProperty(PROPERTY_CREATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -493,7 +494,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 修改用户 属性
 	 */
-	@DbField(name = "Updator", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Updator", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_UPDATEUSERSIGN = registerProperty(PROPERTY_UPDATEUSERSIGN_NAME,
 			Integer.class, MY_CLASS);
 
@@ -524,7 +525,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 创建动作标识 属性
 	 */
-	@DbField(name = "CreateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "CreateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_CREATEACTIONID = registerProperty(PROPERTY_CREATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -555,7 +556,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 更新动作标识 属性
 	 */
-	@DbField(name = "UpdateActId", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "UpdateActId", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_UPDATEACTIONID = registerProperty(PROPERTY_UPDATEACTIONID_NAME,
 			String.class, MY_CLASS);
 
@@ -586,7 +587,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 参考1 属性
 	 */
-	@DbField(name = "Ref1", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref1", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE1 = registerProperty(PROPERTY_REFERENCE1_NAME,
 			String.class, MY_CLASS);
 
@@ -617,7 +618,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 参考2 属性
 	 */
-	@DbField(name = "Ref2", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Ref2", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_REFERENCE2 = registerProperty(PROPERTY_REFERENCE2_NAME,
 			String.class, MY_CLASS);
 
@@ -648,7 +649,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 项目行号 属性
 	 */
-	@DbField(name = "ItemId", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ItemId", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_ITEMID = registerProperty(PROPERTY_ITEMID_NAME, Integer.class,
 			MY_CLASS);
 
@@ -679,7 +680,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 额外类型 属性
 	 */
-	@DbField(name = "ExtraType", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ExtraType", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_EXTRATYPE = registerProperty(PROPERTY_EXTRATYPE_NAME,
 			String.class, MY_CLASS);
 
@@ -710,7 +711,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 额外标识 属性
 	 */
-	@DbField(name = "ExtraKey", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "ExtraKey", type = DataType.NUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<Integer> PROPERTY_EXTRAKEY = registerProperty(PROPERTY_EXTRAKEY_NAME,
 			Integer.class, MY_CLASS);
 
@@ -741,7 +742,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 数量 属性
 	 */
-	@DbField(name = "Quantity", type = DbFieldType.DECIMAL, table = DB_TABLE_NAME)
+	@DbField(name = "Quantity", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_QUANTITY = registerProperty(PROPERTY_QUANTITY_NAME,
 			BigDecimal.class, MY_CLASS);
 
@@ -799,7 +800,7 @@ public class PurchaseQuoteItemExtra extends BusinessObject<PurchaseQuoteItemExtr
 	/**
 	 * 备注 属性
 	 */
-	@DbField(name = "Note", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "Note", type = DataType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_NOTE = registerProperty(PROPERTY_NOTE_NAME, String.class,
 			MY_CLASS);
 
