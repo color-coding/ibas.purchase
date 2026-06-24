@@ -52,6 +52,17 @@
     <Property Name="Agreements" Description="合同/协议" DataType="Alphanumeric" DataSubType="Default" EditSize="110" Mapped="Agreements"/>
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
     <Property Name="InverseDiscount" Description="反向折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
+    <Index ShortName="DOCUMENT_NUM" Description="单据编码索引">
+      <IndexProperty Name="DocNum" />
+    </Index>
+    <Index ShortName="DOCUMENT_DATE" Description="凭证日期索引">
+      <IndexProperty Name="DocumentDate" />
+      <IndexProperty Name="DocumentStatus" />
+    </Index>
+    <Index ShortName="DOCUMENT_BP" Description="业务伙伴索引">
+      <IndexProperty Name="SupplierCode" />
+      <IndexProperty Name="DocumentDate" />
+    </Index>
   </Model>
   <Model Name="PurchaseOrderItem" Description="采购订单-行" ModelType="DocumentLine" Mapped="${Company}_PH_POR1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -119,6 +130,20 @@
     <Property Name="PriceLC" Description="价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PriceLC"/>
     <Property Name="UnitPriceLC" Description="折扣前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="UnitPriceLC"/>
     <Property Name="PreTaxPriceLC" Description="税前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PreTaxPriceLC"/>
+    <Index ShortName="DOCUMENT_BASED" Description="基于单据索引">
+      <IndexProperty Name="BaseDocumentType" />
+      <IndexProperty Name="BaseDocumentEntry" />
+      <IndexProperty Name="BaseDocumentLineId" />
+    </Index>
+    <Index ShortName="DOCUMENT_ORIGINAL" Description="原始单据索引">
+      <IndexProperty Name="OriginalDocumentType" />
+      <IndexProperty Name="OriginalDocumentEntry" />
+      <IndexProperty Name="OriginalDocumentLineId" />
+    </Index>
+    <Index ShortName="LINE_ITEM" Description="物料行索引">
+      <IndexProperty Name="ItemCode" />
+      <IndexProperty Name="Warehouse" />
+    </Index>
   </Model>
   <Model Name="PurchaseOrderItemExtra" Description="采购订单-行-额外信息" ModelType="DocumentLine" Mapped="${Company}_PH_POR11">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -145,6 +170,10 @@
     <Property Name="ExtraKey" Description="额外标识" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="ExtraKey"/>
     <Property Name="Quantity" Description="数量" DataType="Decimal" DataSubType="Quantity" EditSize="8" Mapped="Quantity"/>
     <Property Name="Note" Description="备注" DataType="Alphanumeric" DataSubType="Default" EditSize="200" Mapped="Note"/>
+    <Index ShortName="EXTRA_REF" Description="额外引用索引">
+      <IndexProperty Name="ExtraType" />
+      <IndexProperty Name="ExtraKey" />
+    </Index>
   </Model>
   <BusinessObject MappedModel="PurchaseOrder" ShortName="${Company}_PH_PURCHORDER">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseOrderItem">

@@ -53,6 +53,17 @@
     <Property Name="Branch" Description="分支" DataType="Alphanumeric" DataSubType="Default" EditSize="8" Mapped="Branch"/>
     <Property Name="InverseDiscount" Description="反向折扣" DataType="Decimal" DataSubType="Percentage" EditSize="8" Mapped="InDiscPrcnt"/>
     <Property Name="CancellationDate" Description="取消日期" DataType="Date" DataSubType="Default" EditSize="8" Mapped="CnclDate"/>
+    <Index ShortName="DOCUMENT_NUM" Description="单据编码索引">
+      <IndexProperty Name="DocNum" />
+    </Index>
+    <Index ShortName="DOCUMENT_DATE" Description="凭证日期索引">
+      <IndexProperty Name="DocumentDate" />
+      <IndexProperty Name="DocumentStatus" />
+    </Index>
+    <Index ShortName="DOCUMENT_BP" Description="业务伙伴索引">
+      <IndexProperty Name="SupplierCode" />
+      <IndexProperty Name="DocumentDate" />
+    </Index>
   </Model>
   <Model Name="PurchaseInvoiceItem" Description="采购发票-行" ModelType="DocumentLine" Mapped="${Company}_PH_INV1">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -120,6 +131,20 @@
     <Property Name="PriceLC" Description="价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PriceLC"/>
     <Property Name="UnitPriceLC" Description="折扣前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="UnitPriceLC"/>
     <Property Name="PreTaxPriceLC" Description="税前价格（本币）" DataType="Decimal" DataSubType="Price" EditSize="8" Mapped="PreTaxPriceLC"/>
+    <Index ShortName="DOCUMENT_BASED" Description="基于单据索引">
+      <IndexProperty Name="BaseDocumentType" />
+      <IndexProperty Name="BaseDocumentEntry" />
+      <IndexProperty Name="BaseDocumentLineId" />
+    </Index>
+    <Index ShortName="DOCUMENT_ORIGINAL" Description="原始单据索引">
+      <IndexProperty Name="OriginalDocumentType" />
+      <IndexProperty Name="OriginalDocumentEntry" />
+      <IndexProperty Name="OriginalDocumentLineId" />
+    </Index>
+    <Index ShortName="LINE_ITEM" Description="物料行索引">
+      <IndexProperty Name="ItemCode" />
+      <IndexProperty Name="Warehouse" />
+    </Index>
   </Model>
   <Model Name="PurchaseInvoiceDownPayment" Description="采购发票-预付款" ModelType="DocumentLine" Mapped="${Company}_PH_INV9">
     <Property Name="DocEntry" Description="凭证编号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="DocEntry" PrimaryKey="Yes"/>
@@ -153,6 +178,16 @@
     <Property Name="OriginalDocumentType" Description="原始类型" DataType="Alphanumeric" DataSubType="Default" EditSize="30" Mapped="OrgnlType"/>
     <Property Name="OriginalDocumentEntry" Description="原始标识" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="OrgnlEntry"/>
     <Property Name="OriginalDocumentLineId" Description="原始行号" DataType="Numeric" DataSubType="Default" EditSize="8" Mapped="OrgnlLine"/>
+    <Index ShortName="DOCUMENT_BASED" Description="基于单据索引">
+      <IndexProperty Name="BaseDocumentType" />
+      <IndexProperty Name="BaseDocumentEntry" />
+      <IndexProperty Name="BaseDocumentLineId" />
+    </Index>
+    <Index ShortName="DOCUMENT_ORIGINAL" Description="原始单据索引">
+      <IndexProperty Name="OriginalDocumentType" />
+      <IndexProperty Name="OriginalDocumentEntry" />
+      <IndexProperty Name="OriginalDocumentLineId" />
+    </Index>
   </Model>
   <BusinessObject MappedModel="PurchaseInvoice" ShortName="${Company}_PH_PURCHINVOICE">
     <RelatedBO Relation="OneToMany" MappedModel="PurchaseInvoiceItem"/>
