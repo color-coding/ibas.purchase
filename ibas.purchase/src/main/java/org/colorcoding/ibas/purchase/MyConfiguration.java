@@ -84,4 +84,10 @@ public class MyConfiguration extends org.colorcoding.ibas.initialfantasy.MyConfi
 
 	/** 配置项目-单据统计标记删除行 */
 	public final static String CONFIG_ITEM_DOCUMENT_STATISTICS_TAG_DELETED_LINE = "documentStatisticsTagDeletedLine";
+
+	/** 配置项目-采购订单行数量与批次数量检查 */
+	public final static String CONFIG_ITEM_PURCHASE_ORDER_LINE_BATCH_SERIAL_QUANTITY_CHECK = "orderLineBatchSerialQuantityCheck";
+
+	/** 配置项目-采购订单行数量与批次数量检查 */
+	public final static String CONFIG_ITEM_PURCHASE_REQUEST_LINE_BATCH_SERIAL_QUANTITY_CHECK = "requestLineBatchSerialQuantityCheck";
 }

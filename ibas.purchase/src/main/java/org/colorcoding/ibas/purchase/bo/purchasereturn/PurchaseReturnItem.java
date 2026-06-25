@@ -27,8 +27,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
@@ -2932,6 +2932,16 @@ public class PurchaseReturnItem extends BusinessObject<PurchaseReturnItem> imple
 				@Override
 				public Integer getBaseDocumentLineId() {
 					return PurchaseReturnItem.this.getBaseDocumentLineId();
+				}
+
+				@Override
+				public IMaterialBatchItems getMaterialBatches() {
+					return PurchaseReturnItem.this.getMaterialBatches();
+				}
+
+				@Override
+				public IMaterialSerialItems getMaterialSerials() {
+					return PurchaseReturnItem.this.getMaterialSerials();
 				}
 
 			});

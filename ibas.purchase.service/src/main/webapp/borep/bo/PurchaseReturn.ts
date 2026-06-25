@@ -848,13 +848,13 @@ namespace purchase {
                         }
                         // 复制批次
                         for (let batch of item.materialBatches) {
-                            closeQty -= batch.quantity;
+                            closeQty -= ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
                             if (closeQty >= 0 || openQty <= 0) {
                                 continue;
                             }
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
                             myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = batch.quantity;
+                            myBatch.quantity = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
                             if (myBatch.quantity > openQty) {
                                 myBatch.quantity = openQty;
                             }
@@ -867,13 +867,13 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
                         closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let serial of item.materialSerials) {
-                            closeQty -= 1;
+                            closeQty -= 1 - (serial.closed === ibas.emYesNo.YES ? 1 : 0);
                             if (closeQty >= 0 || openQty <= 0) {
                                 continue;
                             }
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
                             mySerial.serialCode = serial.serialCode;
-                            openQty -= 1;
+                            openQty -= 1 - (serial.closed === ibas.emYesNo.YES ? 1 : 0);
                             if (openQty <= 0) {
                                 break;
                             }
@@ -942,13 +942,13 @@ namespace purchase {
                         }
                         // 复制批次
                         for (let batch of item.materialBatches) {
-                            closeQty -= batch.quantity;
+                            closeQty -= ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
                             if (closeQty >= 0 || openQty <= 0) {
                                 continue;
                             }
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
                             myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = batch.quantity;
+                            myBatch.quantity = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
                             if (myBatch.quantity > openQty) {
                                 myBatch.quantity = openQty;
                             }
@@ -961,13 +961,13 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
                         closeQty = item.closedQuantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let serial of item.materialSerials) {
-                            closeQty -= 1;
+                            closeQty -= 1 - (serial.closed === ibas.emYesNo.YES ? 1 : 0);
                             if (closeQty >= 0 || openQty <= 0) {
                                 continue;
                             }
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
                             mySerial.serialCode = serial.serialCode;
-                            openQty -= 1;
+                            openQty -= 1 - (serial.closed === ibas.emYesNo.YES ? 1 : 0);
                             if (openQty <= 0) {
                                 break;
                             }

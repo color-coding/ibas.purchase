@@ -1806,6 +1806,8 @@ declare namespace materials {
             documentEntry: number;
             /** 基于行号 */
             documentLineId: number;
+            /** 已清数量 */
+            closedQuantity: number;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -1896,6 +1898,12 @@ declare namespace materials {
             get documentLineId(): number;
             /** 设置-基于行号 */
             set documentLineId(value: number);
+            /** 映射的属性名称-已清数量 */
+            static PROPERTY_CLOSEDQUANTITY_NAME: string;
+            /** 获取-已清数量 */
+            get closedQuantity(): number;
+            /** 设置-已清数量 */
+            set closedQuantity(value: number);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -2469,6 +2477,8 @@ declare namespace materials {
             documentEntry: number;
             /** 基于行号 */
             documentLineId: number;
+            /** 已清 */
+            closed: ibas.emYesNo;
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -2553,6 +2563,12 @@ declare namespace materials {
             get documentLineId(): number;
             /** 设置-基于行号 */
             set documentLineId(value: number);
+            /** 映射的属性名称-已清 */
+            static PROPERTY_CLOSED_NAME: string;
+            /** 获取-已清 */
+            get closed(): ibas.emYesNo;
+            /** 设置-已清 */
+            set closed(value: ibas.emYesNo);
             /** 映射的属性名称-对象编号 */
             static PROPERTY_OBJECTKEY_NAME: string;
             /** 获取-对象编号 */
@@ -12937,6 +12953,16 @@ declare namespace materials {
             get pickQuantity(): number;
             /** 设置-拣配数量 */
             set pickQuantity(value: number);
+            /** 映射的属性名称-已清数量 */
+            static PROPERTY_CLOSEDQUANTITY_NAME: string;
+            /** 获取-已清数量 */
+            get closedQuantity(): number;
+            /** 设置-已清数量 */
+            set closedQuantity(value: number);
+            /** 获取-已清 */
+            get closed(): ibas.emYesNo;
+            /** 设置-已清 */
+            set closed(value: ibas.emYesNo);
             get documentType(): string;
             set documentType(value: string);
             get documentEntry(): number;

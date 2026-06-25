@@ -27,8 +27,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
@@ -2904,6 +2904,16 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 					}
 				}
 				return IDocumentQuantityClosingContract.super.checkDataStatus(transaction);
+			}
+
+			@Override
+			public IMaterialBatchItems getMaterialBatches() {
+				return PurchaseDeliveryItem.this.getMaterialBatches();
+			}
+
+			@Override
+			public IMaterialSerialItems getMaterialSerials() {
+				return PurchaseDeliveryItem.this.getMaterialSerials();
 			}
 
 		});

@@ -16,12 +16,14 @@ import org.colorcoding.ibas.bobas.data.DateTime;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
+import org.colorcoding.ibas.bobas.rule.BusinessRuleException;
 import org.colorcoding.ibas.bobas.rule.IBusinessRule;
+import org.colorcoding.ibas.bobas.rule.ICheckRules;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
@@ -47,7 +49,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
-		implements IPurchaseRequestItem, IBOUserFields, IBusinessLogicsHost {
+		implements IPurchaseRequestItem, IBOUserFields, IBusinessLogicsHost, ICheckRules {
 
 	/**
 	 * 序列化版本标记
@@ -2416,6 +2418,17 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 		this.setClosedQuantity(Decimals.VALUE_ZERO);
 	}
 
+	@Override
+	public void check() throws BusinessRuleException {
+		if (MyConfiguration
+				.getConfigValue(MyConfiguration.CONFIG_ITEM_PURCHASE_REQUEST_LINE_BATCH_SERIAL_QUANTITY_CHECK, false)) {
+			// 批次检查
+			this.getMaterialBatches().check();
+			// 序列检查
+			this.getMaterialSerials().check();
+		}
+	}
+
 	/**
 	 * 父项
 	 */
@@ -2519,6 +2532,15 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 						return PurchaseRequestItem.this.getBaseDocumentLineId();
 					}
 
+					@Override
+					public IMaterialBatchItems getMaterialBatches() {
+						return PurchaseRequestItem.this.getMaterialBatches();
+					}
+
+					@Override
+					public IMaterialSerialItems getMaterialSerials() {
+						return PurchaseRequestItem.this.getMaterialSerials();
+					}
 				}
 
 		};
