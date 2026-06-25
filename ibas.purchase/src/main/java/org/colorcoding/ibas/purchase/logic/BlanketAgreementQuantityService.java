@@ -108,7 +108,16 @@ public class BlanketAgreementQuantityService
 			amount = amount.add(contract.getAmount());
 			orderItem.setClosedAmount(amount);
 		}
-		if (orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) > 0) {
+		// 按协议模式分别判断是否已被引用
+		boolean closed;
+		if (this.getBeAffected().getAgreementMethod() == emAgreementMethod.MONETARY) {
+			closed = orderItem.getClosedAmount() != null
+					&& orderItem.getClosedAmount().compareTo(Decimals.VALUE_ZERO) > 0;
+		} else {
+			closed = orderItem.getClosedQuantity() != null
+					&& orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) > 0;
+		}
+		if (closed) {
 			orderItem.setReferenced(emYesNo.YES);
 		}
 	}
@@ -141,7 +150,16 @@ public class BlanketAgreementQuantityService
 			amount = amount.subtract(contract.getAmount());
 			orderItem.setClosedAmount(amount);
 		}
-		if (orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
+		// 按协议模式分别判断是否已不被引用
+		boolean noLongerClosed;
+		if (this.getBeAffected().getAgreementMethod() == emAgreementMethod.MONETARY) {
+			noLongerClosed = orderItem.getClosedAmount() == null
+					|| orderItem.getClosedAmount().compareTo(Decimals.VALUE_ZERO) <= 0;
+		} else {
+			noLongerClosed = orderItem.getClosedQuantity() == null
+					|| orderItem.getClosedQuantity().compareTo(Decimals.VALUE_ZERO) <= 0;
+		}
+		if (noLongerClosed) {
 			orderItem.setReferenced(emYesNo.NO);
 		}
 	}

@@ -2932,7 +2932,8 @@ public class PurchaseDeliveryItem extends BusinessObject<PurchaseDeliveryItem> i
 
 			@Override
 			public BigDecimal getAmount() {
-				return PurchaseDeliveryItem.this.getLineTotal();
+				// 一揽子协议金额按不含税口径
+				return PurchaseDeliveryItem.this.getPreTaxLineTotal();
 			}
 
 			@Override

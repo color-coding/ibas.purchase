@@ -121,6 +121,13 @@ public class PurchaseOrderReservationCreateService
 
 	@Override
 	protected void impact(IPurchaseOrderReservationCreateContract contract) {
+		// 不支持非正数数量，避免静默失败
+		if (contract.getQuantity() == null
+				|| contract.getQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
+			Logger.log(MessageLevel.WARN, MSG_LOGICS_SKIP_LOGIC_EXECUTION, this.getClass().getName(), "Quantity",
+					contract.getQuantity());
+			return;
+		}
 		IMaterialOrderedReservationGroup reservationGroup = this.getBeAffected();
 		String causes = String.format("FROM:%s-%s-%s", contract.getBaseDocumentType(), contract.getBaseDocumentEntry(),
 				contract.getBaseDocumentLineId());
@@ -203,6 +210,13 @@ public class PurchaseOrderReservationCreateService
 
 	@Override
 	protected void revoke(IPurchaseOrderReservationCreateContract contract) {
+		// 不支持非正数数量，避免静默失败
+		if (contract.getQuantity() == null
+				|| contract.getQuantity().compareTo(Decimals.VALUE_ZERO) <= 0) {
+			Logger.log(MessageLevel.WARN, MSG_LOGICS_SKIP_LOGIC_EXECUTION, this.getClass().getName(), "Quantity",
+					contract.getQuantity());
+			return;
+		}
 		IMaterialOrderedReservation item;
 		BigDecimal remQuantity, avaQuantity = contract.getQuantity();
 		IMaterialOrderedReservationGroup reservationGroup = this.getBeAffected();

@@ -816,16 +816,33 @@ namespace purchase {
                                 }
                             }
                         }
-                        // 复制批次
+                        // 复制批次（按可处理数量，从头往下匹配，批次未清的补上）
+                        let openQty: number = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let batch of item.materialBatches) {
+                            if (openQty <= 0) {
+                                break;
+                            }
+                            let batchOpen: number = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
+                            if (batchOpen <= 0) {
+                                continue;
+                            }
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
                             myBatch.batchCode = batch.batchCode;
-                            myBatch.quantity = batch.quantity;
+                            myBatch.quantity = batchOpen > openQty ? openQty : batchOpen;
+                            openQty -= myBatch.quantity;
                         }
-                        // 复制序列
+                        // 复制序列（按可处理数量，从头往下匹配，序列未清的补上）
+                        openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
                         for (let serial of item.materialSerials) {
+                            if (openQty <= 0) {
+                                break;
+                            }
+                            if (serial.closed === ibas.emYesNo.YES) {
+                                continue;
+                            }
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
                             mySerial.serialCode = serial.serialCode;
+                            openQty -= 1;
                         }
                     }
                     // 复制地址

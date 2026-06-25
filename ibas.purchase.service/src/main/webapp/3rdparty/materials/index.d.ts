@@ -736,6 +736,10 @@ declare namespace materials {
             itemCode: string;
             /** 物料描述 */
             itemDescription: string;
+            /** 计量单位 */
+            uom: string;
+            /** 单位换算率 */
+            uomRate: number;
             /** 物料版本 */
             itemVersion?: string;
             /** 序号管理 */

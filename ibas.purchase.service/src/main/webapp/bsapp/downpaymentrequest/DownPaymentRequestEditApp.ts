@@ -1321,6 +1321,8 @@ namespace purchase {
                         itemCode: caller.itemCode,
                         itemDescription: caller.itemDescription,
                         itemVersion: caller.itemVersion,
+                        uom: caller.uom,
+                        uomRate: caller.uomRate,
                         serialManagement: caller.serialManagement,
                         batchManagement: caller.batchManagement,
                         applyQuantity: (quantity, uom, warehouse) => {

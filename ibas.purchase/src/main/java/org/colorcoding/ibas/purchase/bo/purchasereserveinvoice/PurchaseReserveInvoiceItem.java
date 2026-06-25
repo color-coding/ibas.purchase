@@ -2663,7 +2663,8 @@ public class PurchaseReserveInvoiceItem extends BusinessObject<PurchaseReserveIn
 
 					@Override
 					public BigDecimal getAmount() {
-						return PurchaseReserveInvoiceItem.this.getLineTotal();
+						// 一揽子协议金额按不含税口径
+						return PurchaseReserveInvoiceItem.this.getPreTaxLineTotal();
 					}
 
 					@Override
