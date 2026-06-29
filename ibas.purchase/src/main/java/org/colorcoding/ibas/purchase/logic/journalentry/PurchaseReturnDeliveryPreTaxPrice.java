@@ -25,7 +25,7 @@ public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 	}
 
 	@Override
-	protected boolean caculate(String itemCode, String warehouse) {
+	protected boolean caculateInventoryCost(String itemCode, String warehouse) throws Exception {
 		String docType, deliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
 		Integer docEntry, docLine;
 		if (this.getSourceData() instanceof IPurchaseReturnItem) {
@@ -50,7 +50,7 @@ public class PurchaseReturnDeliveryPreTaxPrice extends MaterialsInventoryCost {
 				condition.setAlias(PurchaseDeliveryItem.PROPERTY_LINEID.getName());
 				condition.setValue(docLine);
 				try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
-					boRepository.setTransaction(this.getService().getTransaction());
+					boRepository.setTransaction(this.getTransaction());
 					IOperationResult<IPurchaseDelivery> operationResult = boRepository.fetchPurchaseDelivery(criteria);
 					if (operationResult.getError() != null) {
 						throw new BusinessLogicException(operationResult.getError());

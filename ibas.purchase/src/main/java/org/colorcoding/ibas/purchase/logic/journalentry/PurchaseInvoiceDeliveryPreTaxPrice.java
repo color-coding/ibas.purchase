@@ -30,7 +30,7 @@ public class PurchaseInvoiceDeliveryPreTaxPrice extends MaterialsInventoryCost {
 	}
 
 	@Override
-	protected boolean caculate(String itemCode, String warehouse) {
+	protected boolean caculateInventoryCost(String itemCode, String warehouse) throws Exception {
 		if (this.getSourceData() instanceof IPurchaseInvoiceItem) {
 			IPurchaseInvoiceItem item = (IPurchaseInvoiceItem) this.getSourceData();
 			if (!Strings.isNullOrEmpty(item.getBaseDocumentType()) && item.getBaseDocumentEntry() > 0
@@ -46,7 +46,7 @@ public class PurchaseInvoiceDeliveryPreTaxPrice extends MaterialsInventoryCost {
 				condition.setAlias(PurchaseDeliveryItem.PROPERTY_LINEID.getName());
 				condition.setValue(item.getBaseDocumentLineId());
 				try (BORepositoryPurchase boRepository = new BORepositoryPurchase()) {
-					boRepository.setTransaction(this.getService().getTransaction());
+					boRepository.setTransaction(this.getTransaction());
 					IOperationResult<IPurchaseDelivery> operationResult = boRepository.fetchPurchaseDelivery(criteria);
 					if (operationResult.getError() != null) {
 						throw new BusinessLogicException(operationResult.getError());
