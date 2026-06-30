@@ -57,6 +57,8 @@ import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsCost;
+import org.colorcoding.ibas.materials.logic.journalentry.MaterialsLedgerContent;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCost;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsReceiptReverseCostDiff;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
@@ -2252,8 +2254,16 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						jeContents.add(jeContent);
 					} else {
 						/** 不基于单据 **/
-						// 库存科目
-						jeContent = new JournalEntrySmartContent(line);
+						// 正向入账：库存/费用科目金额 = 发票行税前总计（账面值）
+						// 会计政策：正向不区分"票面 vs 库存价"差异，直接信任票面；
+						//           反向（reverseContents）才引入价格差异科目，反映"反冲时实际库存价值"
+						//           与"原始票面"之间的差额。
+						// 非库存/服务物料自动改入费用科目（GL-MM-07）
+						jeContent = new MaterialsLedgerContent(line)
+								.setLedgerForNature(MaterialsCost.CostNature.NON_INVENTORY,
+										Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT)
+								.setLedgerForNature(MaterialsCost.CostNature.SERVICE,
+										Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
@@ -2381,16 +2391,28 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 						jeContents.add(jeContent);
 					} else {
 						/** 不基于单据 **/
-						// 库存科目
-						jeContent = new MaterialsReceiptReverseCost(line, line.getInventoryQuantity(), true);
+						// 库存科目（非库存/服务物料自动改入费用科目）
+						MaterialsReceiptReverseCost invJe = new MaterialsReceiptReverseCost(line,
+								line.getInventoryQuantity(), true);
+						invJe.setLedgerForNature(MaterialsCost.CostNature.NON_INVENTORY,
+								Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
+						invJe.setLedgerForNature(MaterialsCost.CostNature.SERVICE,
+								Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
+						jeContent = invJe;
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
 						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计
 						jeContent.setCurrency(line.getCurrency());
 						jeContent.setRate(line.getRate());
 						jeContents.add(jeContent);
-						// 价格差异科目
-						jeContent = new MaterialsReceiptReverseCostDiff(line, line.getInventoryQuantity(), true);
+						// 价格差异科目（非库存/服务物料的差异恒为 0）
+						MaterialsReceiptReverseCostDiff diffJe = new MaterialsReceiptReverseCostDiff(line,
+								line.getInventoryQuantity(), true);
+						diffJe.setLedgerForNature(MaterialsCost.CostNature.NON_INVENTORY,
+								Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
+						diffJe.setLedgerForNature(MaterialsCost.CostNature.SERVICE,
+								Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
+						jeContent = diffJe;
 						jeContent.setCategory(Category.Debit);
 						jeContent.setLedger(Ledgers.LEDGER_INVENTORY_PRICE_DIFFERENCE_ACCOUNT);
 						jeContent.setAmount(line.getPreTaxLineTotal());// 税前总计

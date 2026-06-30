@@ -119,7 +119,7 @@ public class BlanketAgreement extends BusinessObject<BlanketAgreement> implement
 	/**
 	 * 期间编号 属性
 	 */
-	@DbField(name = "DocNum", type = DbFieldType.NUMERIC, table = DB_TABLE_NAME)
+	@DbField(name = "DocNum", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<String> PROPERTY_DOCNUM = registerProperty(PROPERTY_DOCNUM_NAME, String.class,
 			MY_CLASS);
 
