@@ -448,7 +448,7 @@ namespace purchase {
                         }
                         quantity += 1;
                     }
-                } if (target.batchManagement === ibas.emYesNo.YES) {
+                } else if (target.batchManagement === ibas.emYesNo.YES) {
                     for (let item of target.materialBatches) {
                         if (item.isDeleted) {
                             continue;
@@ -457,7 +457,14 @@ namespace purchase {
                     }
                 }
             }
-            target.quantity = quantity > 0 ? quantity : 1;
+            if (quantity > 0) {
+                // materialBatches.quantity与materialSerials计数为库存数量，需转换为采购数量
+                let uomRate: number = target.uomRate > 0 ? target.uomRate : 1;
+                target.inventoryQuantity = quantity;
+                target.quantity = ibas.numbers.round(quantity / uomRate);
+            } else {
+                target.quantity = 1;
+            }
             target.uom = source.purchaseUOM;
             if (ibas.strings.isEmpty(target.uom)) {
                 target.uom = source.inventoryUOM;
