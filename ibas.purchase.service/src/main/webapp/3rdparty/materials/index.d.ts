@@ -108,7 +108,7 @@ declare namespace materials {
         /** 业务对象编码-仓库预估日记账 */
         const BO_CODE_MATERIALESTIMATEJOURNAL: string;
         /** 业务对象编码-拣配清单 */
-        const BO_CODE_PICKLISTS: string;
+        const BO_CODE_PICKINGLIST: string;
         /** 业务对象编码-库存转储请求 */
         const BO_CODE_INVENTORYTRANSFERREQUEST: string;
         /** 业务对象编码-物料扩展库存 */
@@ -230,7 +230,7 @@ declare namespace materials {
         /**
          * 拣配状态
          */
-        enum emPickStatus {
+        enum emPickingStatus {
             /**
              * 已审批
              */
@@ -242,11 +242,11 @@ declare namespace materials {
             /**
              * 已部分拣配
              */
-            PARTIALLYPICKED = 2,
+            PARTIALLY_PICKED = 2,
             /**
              * 已部分交货
              */
-            PARTIALLYDELIVERED = 3,
+            PARTIALLY_DELIVERED = 3,
             /**
              * 已结算
              */
@@ -474,7 +474,7 @@ declare namespace materials {
         class MaterialOrderedReservationSourceServiceProxy extends ibas.ServiceProxy<IMaterialOrderedReservationTarget> {
         }
         /** 拣配目标 */
-        interface IPickListsTarget {
+        interface IPickingListTarget {
             /** 基于类型 */
             baseDocumentType: string;
             /** 基于标识 */
@@ -522,11 +522,11 @@ declare namespace materials {
             /** 查询条件 */
             criteria?: ibas.ICriteria | ibas.ICondition[];
             /** 选中拣配内容后 */
-            onPicked?(targets: IPickListsTarget[]): void;
+            onPicked?(targets: IPickingListTarget[]): void;
             /** 交货内容 */
-            toDelivery?: bo.IPickListsLine[];
+            toDelivery?: bo.IPickingListLine[];
             /** 交货后 */
-            onDelivered?(targets: bo.IPickListsLine[] | Error): void;
+            onDelivered?(targets: bo.IPickingListLine[] | Error): void;
         }
         /** 物料拣配目标单据服务代理 */
         class MaterialPackingTargetServiceProxy extends ibas.ServiceProxy<IMaterialPackingTarget> {
@@ -4024,7 +4024,7 @@ declare namespace materials {
 declare namespace materials {
     namespace bo {
         /** 拣配清单 */
-        interface IPickLists extends ibas.IBOSimple {
+        interface IPickingList extends ibas.IBOSimple {
             /** 对象编号 */
             objectKey: number;
             /** 对象类型 */
@@ -4064,19 +4064,19 @@ declare namespace materials {
             /** 拣配员 */
             picker: string;
             /** 拣配日期 */
-            pickDate: Date;
+            pickingDate: Date;
             /** 拣配状态 */
-            pickStatus: emPickStatus;
+            pickingStatus: emPickingStatus;
             /** 拣配清单-行集合 */
-            pickListsLines: IPickListsLines;
+            pickingListLines: IPickingListLines;
         }
         /** 拣配清单-行 集合 */
-        interface IPickListsLines extends ibas.IBusinessObjects<IPickListsLine> {
+        interface IPickingListLines extends ibas.IBusinessObjects<IPickingListLine> {
             /** 创建并添加子项 */
-            create(): IPickListsLine;
+            create(): IPickingListLine;
         }
         /** 拣配清单-行 */
-        interface IPickListsLine extends ibas.IBOSimpleLine {
+        interface IPickingListLine extends ibas.IBOSimpleLine {
             /** 对象编号 */
             objectKey: number;
             /** 对象行号 */
@@ -4134,23 +4134,23 @@ declare namespace materials {
             /** 库存数量 */
             inventoryQuantity: number;
             /** 拣配状态 */
-            pickStatus: emPickStatus;
+            pickingStatus: emPickingStatus;
             /** 拣配数量 */
-            pickQuantity: number;
+            pickingQuantity: number;
             /** 已清数量 */
             closedQuantity: number;
             /** 仓库 */
             warehouse: string;
             /** 拣配清单-序号集合 */
-            pickListsNumbers: IPickListsNumbers;
+            pickingListNumbers: IPickingListNumbers;
         }
         /** 拣配清单-序号 集合 */
-        interface IPickListsNumbers extends ibas.IBusinessObjects<IPickListsNumber> {
+        interface IPickingListNumbers extends ibas.IBusinessObjects<IPickingListNumber> {
             /** 创建并添加子项 */
-            create(): IPickListsNumber;
+            create(): IPickingListNumber;
         }
         /** 拣配清单-序号 */
-        interface IPickListsNumber extends ibas.IBOSimpleLine {
+        interface IPickingListNumber extends ibas.IBOSimpleLine {
             /** 对象编号 */
             objectKey: number;
             /** 对象行号 */
@@ -4188,7 +4188,7 @@ declare namespace materials {
             /** 序列编码 */
             serialCode: string;
             /** 拣配数量 */
-            pickQuantity: number;
+            pickingQuantity: number;
         }
     }
 }
@@ -4932,12 +4932,12 @@ declare namespace materials {
              * 查询 拣配清单
              * @param fetcher 查询者
              */
-            fetchPickLists(fetcher: ibas.IFetchCaller<bo.IPickLists>): void;
+            fetchPickingList(fetcher: ibas.IFetchCaller<bo.IPickingList>): void;
             /**
              * 保存 拣配清单
              * @param saver 保存者
              */
-            savePickLists(saver: ibas.ISaveCaller<bo.IPickLists>): void;
+            savePickingList(saver: ibas.ISaveCaller<bo.IPickingList>): void;
             /**
              * 查询 库存转储请求
              * @param fetcher 查询者
@@ -12469,7 +12469,7 @@ declare namespace materials {
 declare namespace materials {
     namespace bo {
         /** 拣配清单 */
-        class PickLists extends ibas.BOSimple<PickLists> implements IPickLists {
+        class PickingList extends ibas.BOSimple<PickingList> implements IPickingList {
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string;
             /** 构造函数 */
@@ -12589,33 +12589,33 @@ declare namespace materials {
             /** 设置-拣配员 */
             set picker(value: string);
             /** 映射的属性名称-拣配日期 */
-            static PROPERTY_PICKDATE_NAME: string;
+            static PROPERTY_PICKINGDATE_NAME: string;
             /** 获取-拣配日期 */
-            get pickDate(): Date;
+            get pickingDate(): Date;
             /** 设置-拣配日期 */
-            set pickDate(value: Date);
+            set pickingDate(value: Date);
             /** 映射的属性名称-拣配状态 */
-            static PROPERTY_PICKSTATUS_NAME: string;
+            static PROPERTY_PICKINGSTATUS_NAME: string;
             /** 获取-拣配状态 */
-            get pickStatus(): emPickStatus;
+            get pickingStatus(): emPickingStatus;
             /** 设置-拣配状态 */
-            set pickStatus(value: emPickStatus);
+            set pickingStatus(value: emPickingStatus);
             /** 映射的属性名称-拣配清单-行集合 */
-            static PROPERTY_PICKLISTSLINES_NAME: string;
+            static PROPERTY_PICKINGLISTLINES_NAME: string;
             /** 获取-拣配清单-行集合 */
-            get pickListsLines(): PickListsLines;
+            get pickingListLines(): PickingListLines;
             /** 设置-拣配清单-行集合 */
-            set pickListsLines(value: PickListsLines);
+            set pickingListLines(value: PickingListLines);
             /** 初始化数据 */
             protected init(): void;
         }
         /** 拣配清单-行 集合 */
-        class PickListsLines extends ibas.BusinessObjects<PickListsLine, PickLists> implements IPickListsLines {
+        class PickingListLines extends ibas.BusinessObjects<PickingListLine, PickingList> implements IPickingListLines {
             /** 创建并添加子项 */
-            create(): PickListsLine;
-            afterAdd(item: PickListsLine): void;
-            afterRemove(item: PickListsLine): void;
-            protected onItemPropertyChanged(item: PickListsLine, name: string): void;
+            create(): PickingListLine;
+            afterAdd(item: PickingListLine): void;
+            afterRemove(item: PickingListLine): void;
+            protected onItemPropertyChanged(item: PickingListLine, name: string): void;
             protected updatePickStatus(): void;
             useInventoryReservationToPick(): Promise<void>;
             protected resetAll(): void;
@@ -12625,7 +12625,7 @@ declare namespace materials {
             private fetchMaterialInventoryReservationAsync;
         }
         /** 拣配清单-行 */
-        class PickListsLine extends ibas.BOSimpleLine<PickListsLine> implements IPickListsLine {
+        class PickingListLine extends ibas.BOSimpleLine<PickingListLine> implements IPickingListLine {
             /** 构造函数 */
             constructor();
             /** 映射的属性名称-对象编号 */
@@ -12797,17 +12797,17 @@ declare namespace materials {
             /** 设置-库存数量 */
             set inventoryQuantity(value: number);
             /** 映射的属性名称-拣配状态 */
-            static PROPERTY_PICKSTATUS_NAME: string;
+            static PROPERTY_PICKINGSTATUS_NAME: string;
             /** 获取-拣配状态 */
-            get pickStatus(): emPickStatus;
+            get pickingStatus(): emPickingStatus;
             /** 设置-拣配状态 */
-            set pickStatus(value: emPickStatus);
+            set pickingStatus(value: emPickingStatus);
             /** 映射的属性名称-拣配数量 */
-            static PROPERTY_PICKQUANTITY_NAME: string;
+            static PROPERTY_PICKINGQUANTITY_NAME: string;
             /** 获取-拣配数量 */
-            get pickQuantity(): number;
+            get pickingQuantity(): number;
             /** 设置-拣配数量 */
-            set pickQuantity(value: number);
+            set pickingQuantity(value: number);
             /** 映射的属性名称-已清数量 */
             static PROPERTY_CLOSEDQUANTITY_NAME: string;
             /** 获取-已清数量 */
@@ -12821,26 +12821,26 @@ declare namespace materials {
             /** 设置-仓库 */
             set warehouse(value: string);
             /** 映射的属性名称-拣配清单-序号集合 */
-            static PROPERTY_PICKLISTSNUMBERS_NAME: string;
+            static PROPERTY_PICKINGLISTNUMBERS_NAME: string;
             /** 获取-拣配清单-序号集合 */
-            get pickListsNumbers(): PickListsNumbers;
+            get pickingListNumbers(): PickingListNumbers;
             /** 设置-拣配清单-序号集合 */
-            set pickListsNumbers(value: PickListsNumbers);
+            set pickingListNumbers(value: PickingListNumbers);
             /** 初始化数据 */
             protected init(): void;
             protected registerRules(): ibas.IBusinessRule[];
             protected onPropertyChanged(name: string): void;
-            baseBusinessObject(data: app.IPickListsTarget | Material): void;
+            baseBusinessObject(data: app.IPickingListTarget | Material): void;
         }
         /** 拣配清单-序号 集合 */
-        class PickListsNumbers extends ibas.BusinessObjects<PickListsNumber, PickListsLine> implements IPickListsNumbers, IMaterialBatchItems, IMaterialSerialItems {
+        class PickingListNumbers extends ibas.BusinessObjects<PickingListNumber, PickingListLine> implements IPickingListNumbers, IMaterialBatchItems, IMaterialSerialItems {
             /** 创建并添加子项 */
-            create(): PickListsNumber;
-            protected afterAdd(item: PickListsNumber): void;
+            create(): PickingListNumber;
+            protected afterAdd(item: PickingListNumber): void;
             total(): number;
         }
         /** 拣配清单-序号 */
-        class PickListsNumber extends ibas.BOSimpleLine<PickListsNumber> implements IPickListsNumber, IMaterialBatchItem, IMaterialSerialItem {
+        class PickingListNumber extends ibas.BOSimpleLine<PickingListNumber> implements IPickingListNumber, IMaterialBatchItem, IMaterialSerialItem {
             /** 构造函数 */
             constructor();
             /** 映射的属性名称-对象编号 */
@@ -12952,11 +12952,11 @@ declare namespace materials {
             /** 设置-序列编码 */
             set serialCode(value: string);
             /** 映射的属性名称-拣配数量 */
-            static PROPERTY_PICKQUANTITY_NAME: string;
+            static PROPERTY_PICKINGQUANTITY_NAME: string;
             /** 获取-拣配数量 */
-            get pickQuantity(): number;
+            get pickingQuantity(): number;
             /** 设置-拣配数量 */
-            set pickQuantity(value: number);
+            set pickingQuantity(value: number);
             /** 映射的属性名称-已清数量 */
             static PROPERTY_CLOSEDQUANTITY_NAME: string;
             /** 获取-已清数量 */
@@ -14666,12 +14666,12 @@ declare namespace materials {
              * 查询 拣配清单
              * @param fetcher 查询者
              */
-            fetchPickLists(fetcher: ibas.IFetchCaller<bo.PickLists>): void;
+            fetchPickingList(fetcher: ibas.IFetchCaller<bo.PickingList>): void;
             /**
              * 保存 拣配清单
              * @param saver 保存者
              */
-            savePickLists(saver: ibas.ISaveCaller<bo.PickLists>): void;
+            savePickingList(saver: ibas.ISaveCaller<bo.PickingList>): void;
             /**
              * 改变物料批次/序列号
              * @param changer 改变者
@@ -20077,7 +20077,7 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace app {
-        class PickListsFunc extends ibas.ModuleFunction {
+        class PickingListFunc extends ibas.ModuleFunction {
             /** 功能标识 */
             static FUNCTION_ID: string;
             /** 功能名称 */
@@ -20099,7 +20099,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 列表应用-拣配清单 */
-        class PickListsListApp extends ibas.BOListApplication<IPickListsListView, bo.PickLists> {
+        class PickingListListApp extends ibas.BOListApplication<IPickingListListView, bo.PickingList> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20117,22 +20117,22 @@ declare namespace materials {
             /** 新建数据 */
             protected newData(): void;
             /** 查看数据，参数：目标数据 */
-            protected viewData(data: bo.PickLists): void;
+            protected viewData(data: bo.PickingList): void;
             /** 编辑数据，参数：目标数据 */
-            protected editData(data: bo.PickLists): void;
+            protected editData(data: bo.PickingList): void;
             /** 删除数据，参数：目标数据集合 */
-            protected deleteData(data: bo.PickLists | bo.PickLists[]): void;
+            protected deleteData(data: bo.PickingList | bo.PickingList[]): void;
             /** 拣配 */
             pick(): void;
         }
         /** 视图-拣配清单 */
-        interface IPickListsListView extends ibas.IBOListView {
+        interface IPickingListListView extends ibas.IBOListView {
             /** 编辑数据事件，参数：编辑对象 */
             editDataEvent: Function;
             /** 删除数据事件，参数：删除对象集合 */
             deleteDataEvent: Function;
             /** 显示数据 */
-            showData(datas: bo.PickLists[]): void;
+            showData(datas: bo.PickingList[]): void;
             /** 拣配事件 */
             pickEvent: Function;
         }
@@ -20148,7 +20148,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 选择应用-拣配清单 */
-        class PickListsChooseApp extends ibas.BOChooseService<IPickListsChooseView, bo.PickLists> {
+        class PickingListChooseApp extends ibas.BOChooseService<IPickingListChooseView, bo.PickingList> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20167,16 +20167,16 @@ declare namespace materials {
             protected newData(): void;
         }
         /** 视图-拣配清单 */
-        interface IPickListsChooseView extends ibas.IBOChooseView {
+        interface IPickingListChooseView extends ibas.IBOChooseView {
             /** 显示数据 */
-            showData(datas: bo.PickLists[]): void;
+            showData(datas: bo.PickingList[]): void;
         }
         /** 拣配清单选择服务映射 */
-        class PickListsChooseServiceMapping extends ibas.BOChooseServiceMapping {
+        class PickingListChooseServiceMapping extends ibas.BOChooseServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */
-            create(): ibas.IBOChooseService<bo.PickLists>;
+            create(): ibas.IBOChooseService<bo.PickingList>;
         }
     }
 }
@@ -20190,7 +20190,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 查看应用-拣配清单 */
-        class PickListsViewApp extends ibas.BOViewService<IPickListsViewView, bo.PickLists> {
+        class PickingListViewApp extends ibas.BOViewService<IPickingListViewView, bo.PickingList> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20206,19 +20206,19 @@ declare namespace materials {
             /** 编辑数据，参数：目标数据 */
             protected editData(): void;
             run(): void;
-            run(data: bo.PickLists): void;
+            run(data: bo.PickingList): void;
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria | string): void;
         }
         /** 视图-拣配清单 */
-        interface IPickListsViewView extends ibas.IBOViewView {
+        interface IPickingListViewView extends ibas.IBOViewView {
             /** 显示数据 */
-            showPickLists(data: bo.PickLists): void;
+            showPickingList(data: bo.PickingList): void;
             /** 显示数据-拣配清单-行 */
-            showPickListsLines(datas: bo.PickListsLine[]): void;
+            showPickingListLines(datas: bo.PickingListLine[]): void;
         }
         /** 拣配清单连接服务映射 */
-        class PickListsLinkServiceMapping extends ibas.BOLinkServiceMapping {
+        class PickingListLinkServiceMapping extends ibas.BOLinkServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */
@@ -20236,7 +20236,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-拣配清单 */
-        class PickListsEditApp extends ibas.BOEditService<IPickListsEditView, bo.PickLists> {
+        class PickingListEditApp extends ibas.BOEditService<IPickingListEditView, bo.PickingList> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20250,22 +20250,22 @@ declare namespace materials {
             /** 视图显示后 */
             protected viewShowed(): void;
             run(): void;
-            run(data: bo.PickLists): void;
+            run(data: bo.PickingList): void;
             /** 保存数据 */
             protected saveData(showProceeding?: boolean): void;
             /** 删除数据 */
             protected deleteData(): void;
             /** 新建数据，参数1：是否克隆 */
             protected createData(clone: boolean): void; /** 添加拣配清单-行事件 */
-            protected addPickListsLine(agent: ibas.IServiceAgent): void;
+            protected addPickingListLine(agent: ibas.IServiceAgent): void;
             /** 删除拣配清单-行事件 */
-            protected removePickListsLine(items: bo.PickListsLine[] | bo.PickListsNumber[]): void;
+            protected removePickingListLine(items: bo.PickingListLine[] | bo.PickingListNumber[]): void;
             /** 选择拣配清单行批次事件 */
-            private choosePickListsLineMaterialBatch;
+            private choosePickingListLineMaterialBatch;
             /** 选择拣配清单序列事件 */
-            private choosePickListsLineMaterialSerial;
+            private choosePickingListLineMaterialSerial;
             /** 转为交货 */
-            protected turnToDelivery(agent: ibas.IServiceAgent, selectItems?: bo.PickListsLine[]): void;
+            protected turnToDelivery(agent: ibas.IServiceAgent, selectItems?: bo.PickingListLine[]): void;
             /** 使用预留拣配 */
             protected useInventoryReservationToPick(): Promise<void>;
             /**
@@ -20276,9 +20276,9 @@ declare namespace materials {
             private fetchMaterialsAsync;
         }
         /** 视图-拣配清单 */
-        interface IPickListsEditView extends ibas.IBOEditView {
+        interface IPickingListEditView extends ibas.IBOEditView {
             /** 显示数据 */
-            showPickLists(data: bo.PickLists): void;
+            showPickingList(data: bo.PickingList): void;
             /** 显示拣配者 */
             showPickers(datas: ibas.IServiceAgent[]): void;
             /** 删除数据事件 */
@@ -20286,26 +20286,26 @@ declare namespace materials {
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
             /** 添加拣配清单-行事件 */
-            addPickListsLineEvent: Function;
+            addPickingListLineEvent: Function;
             /** 删除拣配清单-行事件 */
-            removePickListsLineEvent: Function;
+            removePickingListLineEvent: Function;
             /** 选择拣配清单行物料批次事件 */
-            choosePickListsLineMaterialBatchEvent: Function;
+            choosePickingListLineMaterialBatchEvent: Function;
             /** 选择拣配清单行物料序列事件 */
-            choosePickListsLineMaterialSerialEvent: Function;
+            choosePickingListLineMaterialSerialEvent: Function;
             /** 转为交货事件 */
             turnToDeliveryEvent: Function;
             /** 显示数据-拣配清单-行 */
-            showPickListsLines(datas: bo.PickListsLine[]): void;
+            showPickingListLines(datas: bo.PickingListLine[]): void;
             /** 使用预留拣配事件 */
             useInventoryReservationToPickEvent: Function;
         }
         /** 拣配清单编辑服务映射 */
-        class PickListsEditServiceMapping extends ibas.BOEditServiceMapping {
+        class PickingListEditServiceMapping extends ibas.BOEditServiceMapping {
             /** 构造函数 */
             constructor();
             /** 创建服务实例 */
-            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PickLists>>;
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PickingList>>;
         }
     }
 }
@@ -20318,7 +20318,7 @@ declare namespace materials {
  */
 declare namespace materials {
     namespace app {
-        enum emPickViewStatus {
+        enum emPickingViewStatus {
             /** 处理中 */
             PROCESSING = 0,
             /** 已审批 */
@@ -20326,39 +20326,39 @@ declare namespace materials {
             /** 已拣配 */
             PICKED = 2
         }
-        enum emPickViewDimension {
+        enum emPickingViewDimension {
             /** 明细 */
             DETAILS = 0,
             /** 汇总 */
             TOTAL = 1
         }
-        class PickListsWorking extends ibas.BusinessObject<PickListsWorking> {
+        class PickingListWorking extends ibas.BusinessObject<PickingListWorking> {
             constructor();
             /** 映射的属性名称-状态 */
             static PROPERTY_STATUS_NAME: string;
             /** 获取-状态 */
-            get status(): emPickViewStatus;
+            get status(): emPickingViewStatus;
             /** 设置-状态 */
-            set status(value: emPickViewStatus);
+            set status(value: emPickingViewStatus);
             /** 映射的属性名称-显示维度 */
             static PROPERTY_VIEWDIMENSION_NAME: string;
             /** 获取-显示维度 */
-            get viewDimension(): emPickViewDimension;
+            get viewDimension(): emPickingViewDimension;
             /** 设置-显示维度 */
-            set viewDimension(value: emPickViewDimension);
+            set viewDimension(value: emPickingViewDimension);
             /** 映射的属性名称-未选择的仓库 */
             static PROPERTY_UNSELECTEDWAREHOUSES_NAME: string;
             /** 获取-未选择的仓库 */
             get unSelectedWarehouses(): string;
             /** 设置-未选择的仓库 */
             set unSelectedWarehouses(value: string);
-            get items(): ibas.IList<PickListsWorkingItem>;
+            get items(): ibas.IList<PickingListWorkingItem>;
             criteria(): ibas.ICriteria;
             toString(): string;
             protected init(): void;
         }
-        class PickListsWorkingItem extends ibas.BusinessObject<PickListsWorkingItem> {
-            constructor(serviceAgent: ibas.IServiceAgent, parent: PickListsWorking);
+        class PickingListWorkingItem extends ibas.BusinessObject<PickingListWorkingItem> {
+            constructor(serviceAgent: ibas.IServiceAgent, parent: PickingListWorking);
             get id(): string;
             get name(): string;
             /** 映射的属性名称-是否启用 */
@@ -20368,43 +20368,43 @@ declare namespace materials {
             /** 设置-是否启用 */
             set enable(value: ibas.emYesNo);
             get serviceAgent(): ibas.IServiceAgent;
-            get parent(): PickListsWorking;
+            get parent(): PickingListWorking;
             criteria(): ibas.ICriteria;
             toString(): string;
             protected init(): void;
-            fetch(criteria?: ibas.ICriteria): Promise<IPickListsTarget[]>;
+            fetch(criteria?: ibas.ICriteria): Promise<IPickingListTarget[]>;
         }
         /** 应用-拣配清单 */
-        class PickListsApp extends ibas.Application<IPickListsView> {
+        class PickingListApp extends ibas.Application<IPickingListView> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
             static APPLICATION_NAME: string;
             /** 构造函数 */
             constructor();
-            protected workingData: PickListsWorking;
-            protected pickListsDatas: ibas.ArrayList<bo.PickLists>;
-            run(data?: PickListsWorking): void;
+            protected workingData: PickingListWorking;
+            protected pickingListDatas: ibas.ArrayList<bo.PickingList>;
+            run(data?: PickingListWorking): void;
             /** 注册视图 */
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
             /** 查询数据 */
-            protected fetchPickLists(criteria?: ibas.ICriteria): void;
+            protected fetchPickingList(criteria?: ibas.ICriteria): void;
             /** 查询处理中数据事件 */
             protected fetchProcessingData(): Promise<void>;
             /** 下达拣配清单事件 */
-            protected releasePickLists(pickLists: bo.PickLists, targets: IPickListsTarget[], callback: (error?: any) => void): Promise<void>;
+            protected releasePickingList(pickingList: bo.PickingList, targets: IPickingListTarget[], callback: (error?: any) => void): Promise<void>;
             /** 转为交货事件 */
-            protected processingTurnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<app.IPickListsTarget>, callback: (closedTargets: Array<IPickListsTarget>) => void): Promise<void>;
+            protected processingTurnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<app.IPickingListTarget>, callback: (closedTargets: Array<IPickingListTarget>) => void): Promise<void>;
             /** 转为交货事件 */
-            protected releasedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickListsLine | bo.PickLists>): Promise<void>;
+            protected releasedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickingListLine | bo.PickingList>): Promise<void>;
             /** 转为交货事件 */
-            protected pickedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickListsLine | bo.PickLists>): Promise<void>;
-            protected turnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<bo.PickListsLine>, autoSave?: boolean): Promise<Array<bo.IPickListsLine>>;
+            protected pickedTurnToDelivery(serviceAgent: ibas.IServiceAgent, selecteds: ibas.IList<bo.PickingListLine | bo.PickingList>): Promise<void>;
+            protected turnToDelivery(serviceAgent: ibas.IServiceAgent, datas: ibas.IList<bo.PickingListLine>, autoSave?: boolean): Promise<Array<bo.IPickingListLine>>;
             protected saveDatas(): Promise<void>;
             /** 保存数据 */
-            protected saveData(pickLists: bo.PickLists): Promise<bo.PickLists>;
+            protected saveData(pickingList: bo.PickingList): Promise<bo.PickingList>;
             /**
              * 获取物料主数据
              * @param itemCode 物料编码
@@ -20413,21 +20413,21 @@ declare namespace materials {
             private fetchMaterialsAsync;
         }
         /** 应用-拣配清单 */
-        interface IPickListsView extends ibas.IView {
+        interface IPickingListView extends ibas.IView {
             /** 保存数据事件 */
             saveDatasEvent: Function;
             /** 显示数据 */
-            showWorkingData(data: PickListsWorking): void;
+            showWorkingData(data: PickingListWorking): void;
             /** 显示拣配者 */
             showPickers(datas: ibas.IServiceAgent[]): void;
             /** 查询处理中数据事件 */
             fetchProcessingDataEvent: Function;
             /** 显示处理中数据 */
-            showProcessingData(datas: IPickListsTarget[]): void;
+            showProcessingData(datas: IPickingListTarget[]): void;
             /** 显示拣配清单 */
-            showPickListsData(data: bo.PickLists[]): void;
+            showPickingListData(data: bo.PickingList[]): void;
             /** 下达拣配清单事件 */
-            releasePickListsEvent: Function;
+            releasePickingListEvent: Function;
             /** 转为交货事件 */
             processingTurnToDeliveryEvent: Function;
             /** 转为交货事件 */
@@ -20436,7 +20436,7 @@ declare namespace materials {
             pickedTurnToDeliveryEvent: Function;
         }
         /** 应用-拣配清单 设置 */
-        class PickListsSettingApp extends ibas.Application<IPickListsSettingView> {
+        class PickingListSettingApp extends ibas.Application<IPickingListSettingView> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20445,7 +20445,7 @@ declare namespace materials {
             constructor();
             /** 注册视图 */
             protected registerView(): void;
-            protected workingData: PickListsWorking;
+            protected workingData: PickingListWorking;
             protected warehouses: ibas.IList<materials.bo.Warehouse>;
             /** 视图显示后 */
             protected viewShowed(): void;
@@ -20455,11 +20455,11 @@ declare namespace materials {
             protected fetchWarehouse(isNew?: boolean): void;
         }
         /** 应用-拣配清单 设置 */
-        interface IPickListsSettingView extends ibas.IView {
+        interface IPickingListSettingView extends ibas.IView {
             /** 确认事件 */
             confirmEvent: Function;
             /** 显示数据 */
-            showWorkingData(data: PickListsWorking): void;
+            showWorkingData(data: PickingListWorking): void;
             /** 显示仓库 */
             showWarehouse(datas: materials.bo.Warehouse[]): void;
         }

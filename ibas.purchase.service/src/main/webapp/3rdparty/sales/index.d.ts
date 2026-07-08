@@ -16603,8 +16603,8 @@ declare namespace sales {
             protected registerView(): void;
             protected runService(contract: materials.app.IMaterialPackingTarget): void;
             protected viewShowed(): void;
-            protected toDeliveryOrder(pickLines: materials.bo.IPickListsLine[], onDelivered?: (targets: materials.bo.IPickListsLine[] | Error) => void): void;
-            protected onPicked(selecteds: ibas.IList<bo.SalesOrder>, onPicked?: (targets: materials.app.IPickListsTarget[]) => void): void;
+            protected toDeliveryOrder(pickLines: materials.bo.IPickingListLine[], onDelivered?: (targets: materials.bo.IPickingListLine[] | Error) => void): void;
+            protected onPicked(selecteds: ibas.IList<bo.SalesOrder>, onPicked?: (targets: materials.app.IPickingListTarget[]) => void): void;
         }
         class SalesOrderPackingServiceMapping extends ibas.ServiceMapping {
             /** 构造函数 */
