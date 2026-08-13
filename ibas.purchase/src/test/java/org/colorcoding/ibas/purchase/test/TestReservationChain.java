@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.colorcoding.ibas.bobas.bo.BOUtilities;
 import org.colorcoding.ibas.bobas.common.Criteria;
-import org.colorcoding.ibas.bobas.common.DateTimes;
 import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.ICriteria;
@@ -45,7 +44,10 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
 /**
  * 预留转移链 端到端测试（替代原 {@code TestReservation}）。
  *
- * <p>核心链路：</p>
+ * <p>
+ * 核心链路：
+ * </p>
+ * 
  * <pre>
  * SalesOrder (OnCommited+)
  *   → PurchaseRequest（不影响三量）
@@ -57,7 +59,9 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
  *                              InventoryReservation closedQuantity 满足)
  * </pre>
  *
- * <p>覆盖：E2E-01 (库存)、E2E-02 (批次)、E2E-04 (PO 取消回退)、E2E-05 (PD 取消释放库存预留)</p>
+ * <p>
+ * 覆盖：E2E-01 (库存)、E2E-02 (批次)、E2E-04 (PO 取消回退)、E2E-05 (PD 取消释放库存预留)
+ * </p>
  */
 public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 
@@ -90,8 +94,8 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 	// ========== 查询工具 ==========
 
 	/** 按 target=SO 查询 OrderedReservation */
-	private IOperationResult<IMaterialOrderedReservation> fetchOrderedReservationsBySO(
-			BORepositoryMaterials mRepo, ISalesOrder so) throws Exception {
+	private IOperationResult<IMaterialOrderedReservation> fetchOrderedReservationsBySO(BORepositoryMaterials mRepo,
+			ISalesOrder so) throws Exception {
 		ICriteria criteria = new Criteria();
 		ICondition c = criteria.getConditions().create();
 		c.setAlias(MaterialOrderedReservation.PROPERTY_TARGETDOCUMENTENTRY);
@@ -103,8 +107,8 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 	}
 
 	/** 按 target=SO 查询 InventoryReservation */
-	private IOperationResult<IMaterialInventoryReservation> fetchInventoryReservationsBySO(
-			BORepositoryMaterials mRepo, ISalesOrder so) throws Exception {
+	private IOperationResult<IMaterialInventoryReservation> fetchInventoryReservationsBySO(BORepositoryMaterials mRepo,
+			ISalesOrder so) throws Exception {
 		ICriteria criteria = new Criteria();
 		ICondition c = criteria.getConditions().create();
 		c.setAlias(MaterialInventoryReservation.PROPERTY_TARGETDOCUMENTENTRY);
@@ -161,8 +165,8 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 	}
 
 	/** 基于 PR 创建 PO（带 baseDoc） */
-	private IPurchaseOrder createPOFromPR(BORepositoryPurchase pRepo, IPurchaseRequest pr, ISupplier sp,
-			IWarehouse wh, IMaterial mt) throws Exception {
+	private IPurchaseOrder createPOFromPR(BORepositoryPurchase pRepo, IPurchaseRequest pr, ISupplier sp, IWarehouse wh,
+			IMaterial mt) throws Exception {
 		IPurchaseOrder po = new PurchaseOrder();
 		po.setSupplierCode(sp.getCode());
 		for (IPurchaseRequestItem pri : pr.getPurchaseRequestItems()) {
@@ -319,8 +323,7 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 		// ─── 阶段 4：PD 基于 PO → OnHand+, OnOrdered-, OR 关闭, InventoryReservation 创建
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			createPDFromPO(pRepo, po, kind);
-			IPurchaseOrder poReload = BOUtilities.valueOf(pRepo.fetchPurchaseOrder(po.getCriteria()))
-					.firstOrDefault();
+			IPurchaseOrder poReload = BOUtilities.valueOf(pRepo.fetchPurchaseOrder(po.getCriteria())).firstOrDefault();
 			assertEqualsBD("PO.closedQuantity = QTY.", QTY,
 					poReload.getPurchaseOrderItems().sum(c -> c.getClosedQuantity()));
 		}
@@ -390,9 +393,9 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 		}
 
 		// 取消 PO
-		//   注：PO cancel 会触发 MaterialEstimateReservedService 清理预估预留，
-		//   需要 CC_MM_ESTIMATEJOURNAL fetcher 在测试 classpath 中已注册
-		//   若依赖缺失则跳过断言，作为环境问题不视作测试失败
+		// 注：PO cancel 会触发 MaterialEstimateReservedService 清理预估预留，
+		// 需要 CC_MM_ESTIMATEJOURNAL fetcher 在测试 classpath 中已注册
+		// 若依赖缺失则跳过断言，作为环境问题不视作测试失败
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			try {
 				po.setCanceled(emYesNo.YES);
@@ -403,8 +406,8 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 				assertEqualsBD("PR.closedQuantity should rollback to 0.", Decimals.VALUE_ZERO,
 						prReload.getPurchaseRequestItems().sum(c -> c.getClosedQuantity()));
 			} catch (Exception ex) {
-				System.out.println("[SKIP] RC-E04 PO cancel skipped due to estimate-journal dependency: "
-						+ ex.getMessage());
+				System.out.println(
+						"[SKIP] RC-E04 PO cancel skipped due to estimate-journal dependency: " + ex.getMessage());
 				return;
 			}
 		}
@@ -461,9 +464,9 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 		}
 
 		// 取消 PD
-		//   注：此场景下 InventoryReservation 仍占用 10 个量，业务规则会阻止 PD 取消
-		//   （取消后 OnHand=0 < InvRes.quantity=10，物料数量不足校验失败）。
-		//   这是正确的业务保护：必须先释放预留才能撤销收货。本用例验证该保护机制存在。
+		// 注：此场景下 InventoryReservation 仍占用 10 个量，业务规则会阻止 PD 取消
+		// （取消后 OnHand=0 < InvRes.quantity=10，物料数量不足校验失败）。
+		// 这是正确的业务保护：必须先释放预留才能撤销收货。本用例验证该保护机制存在。
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			try {
 				pd.setCanceled(emYesNo.YES);
@@ -478,8 +481,8 @@ public class TestReservationChain extends AbstractPurchaseQuantityTestCase {
 				// 预期：InventoryReservation 阻止 PD 取消（业务规则正确）
 				assertTrue("Expected reservation-protection error, got: " + ex.getMessage(),
 						ex.getMessage().contains("数量不足") || ex.getMessage().contains("预留"));
-				System.out.println("[OK] RC-E05 PD cancel correctly blocked by InventoryReservation: "
-						+ ex.getMessage());
+				System.out
+						.println("[OK] RC-E05 PD cancel correctly blocked by InventoryReservation: " + ex.getMessage());
 			}
 		}
 	}

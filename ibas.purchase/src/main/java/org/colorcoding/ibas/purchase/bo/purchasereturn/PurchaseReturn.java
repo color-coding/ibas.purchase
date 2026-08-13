@@ -4,13 +4,6 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
 import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
@@ -33,8 +26,8 @@ import org.colorcoding.ibas.bobas.data.emApprovalStatus;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.DataType;
+import org.colorcoding.ibas.bobas.db.DbField;
 import org.colorcoding.ibas.bobas.db.EditType;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicContract;
 import org.colorcoding.ibas.bobas.logic.IBusinessLogicsHost;
@@ -54,13 +47,12 @@ import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
-import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsCost;
-import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsLedgerContent;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -68,6 +60,13 @@ import org.colorcoding.ibas.purchase.logic.journalentry.PurchaseReturnDeliveryPr
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDiscountTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionDocumentTotal;
 import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * 获取-采购退货
@@ -2183,7 +2182,8 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 								if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
 										|| Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT.equals(item.getLedger())
 										|| Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT.equals(item.getLedger())) {
-									item.setAmount(Decimals.multiply(item.getAmount(), PurchaseReturn.this.getDiscount()));
+									item.setAmount(
+											Decimals.multiply(item.getAmount(), PurchaseReturn.this.getDiscount()));
 								}
 							}
 						}

@@ -433,14 +433,8 @@ namespace purchase {
                         continue;
                     }
                     if (merge === true) {
-                        // 采购行必须保留销售订单行来源，否则合并不同来源后无法正确回写/回滚 orderedQuantity。
-                        // 因此只合并同一销售订单行，跨行物料分别生成采购行。
-                        purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(
-                            c => ibas.strings.equals(c.itemCode, item.itemCode)
-                                && ibas.strings.equals(c.baseDocumentType, item.objectCode)
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId
-                        );
+                        // 合并模式：同一物料仍合并到同一采购行。
+                        purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(c => ibas.strings.equals(c.itemCode, item.itemCode));
                     } else {
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(
                             c => ibas.strings.equals(c.baseDocumentType, item.objectCode)
@@ -453,13 +447,14 @@ namespace purchase {
                         purchaseItem.itemCode = item.itemCode;
                         purchaseItem.itemDescription = item.itemDescription;
                         purchaseItem.tax = this.view.defaultTaxGroup;
-                        // 无论是否合并显示，都必须保留销售订单行来源，供回写和删除回滚使用。
-                        purchaseItem.baseDocumentType = item.objectCode;
-                        purchaseItem.baseDocumentEntry = item.docEntry;
-                        purchaseItem.baseDocumentLineId = item.lineId;
-                        purchaseItem.originalDocumentType = item.baseDocumentType;
-                        purchaseItem.originalDocumentEntry = item.baseDocumentEntry;
-                        purchaseItem.originalDocumentLineId = item.baseDocumentLineId;
+                        if (merge !== true) {
+                            purchaseItem.baseDocumentType = item.objectCode;
+                            purchaseItem.baseDocumentEntry = item.docEntry;
+                            purchaseItem.baseDocumentLineId = item.lineId;
+                            purchaseItem.originalDocumentType = item.baseDocumentType;
+                            purchaseItem.originalDocumentEntry = item.baseDocumentEntry;
+                            purchaseItem.originalDocumentLineId = item.baseDocumentLineId;
+                        }
                         purchaseItem.batchManagement = item.batchManagement;
                         purchaseItem.serialManagement = item.serialManagement;
                         purchaseItem.reference1 = item.reference1;

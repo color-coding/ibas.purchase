@@ -35,23 +35,29 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
 /**
  * PurchaseOrderReservationCreateService 隔离测试。
  *
- * <p>基于源码推导的测试点：</p>
+ * <p>
+ * 基于源码推导的测试点：
+ * </p>
  * <ul>
  * <li>checkDataStatus: baseDocumentType != PurchaseRequest → 跳过（不创建预留转移）</li>
  * <li>impact: qty ≤ 0 → 跳过</li>
- * <li>impact: 正常链路 PR→PO，causalDatas 上的 PR 预留 closedQuantity 推进，
- *     新建 PO 的 OrderedReservation（causes=FROM:PR-...）</li>
+ * <li>impact: 正常链路 PR→PO，causalDatas 上的 PR 预留 closedQuantity 推进， 新建 PO 的
+ * OrderedReservation（causes=FROM:PR-...）</li>
  * <li>impact: PO qty 不足以覆盖全部 PR 预留 → 部分转移</li>
  * <li>impact: PO qty 超过 PR 预留总量 → 仅转移 PR 预留量</li>
  * <li>revoke: PO 数量改小 → gItem.quantity 减少，causalData.closedQuantity 回退</li>
  * <li>revoke: PO 删除 → gItem 删除（qty 归零），causalData.closedQuantity 全部回退</li>
  * </ul>
  *
- * <p>同时覆盖 MaterialOrderedReservationStatusService（purchase 侧）：</p>
+ * <p>
+ * 同时覆盖 MaterialOrderedReservationStatusService（purchase 侧）：
+ * </p>
  * <ul>
  * <li>checkDataStatus: documentStatus=PLANNED 时放行（不跳过）</li>
- * <li>impact: sourceDocumentStatus=RELEASED → sourceDocumentClosed=NO, status=OPEN</li>
- * <li>impact: sourceDocumentStatus=CLOSED → sourceDocumentClosed=YES, status=CLOSED</li>
+ * <li>impact: sourceDocumentStatus=RELEASED → sourceDocumentClosed=NO,
+ * status=OPEN</li>
+ * <li>impact: sourceDocumentStatus=CLOSED → sourceDocumentClosed=YES,
+ * status=CLOSED</li>
  * <li>revoke: trigger=deleted → sourceDocumentClosed=YES</li>
  * </ul>
  */
@@ -70,8 +76,7 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 	}
 
 	private ICustomer prepareCustomer(BORepositoryBusinessPartner repo) throws Exception {
-		org.colorcoding.ibas.businesspartner.bo.customer.ICustomer cu =
-				new org.colorcoding.ibas.businesspartner.bo.customer.Customer();
+		org.colorcoding.ibas.businesspartner.bo.customer.ICustomer cu = new org.colorcoding.ibas.businesspartner.bo.customer.Customer();
 		cu.setCode("CUS-RC");
 		cu.setName("Reservation Chain Customer");
 		if (repo.fetchCustomer(cu.getCriteria()).getResultObjects().isEmpty()) {
@@ -83,8 +88,8 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 	}
 
 	/** 查询 source=PR 的 OrderedReservation */
-	private IOperationResult<IMaterialOrderedReservation> fetchReservationsBySource(
-			BORepositoryMaterials repo, String sourceDocType, int sourceDocEntry) throws Exception {
+	private IOperationResult<IMaterialOrderedReservation> fetchReservationsBySource(BORepositoryMaterials repo,
+			String sourceDocType, int sourceDocEntry) throws Exception {
 		ICriteria criteria = new Criteria();
 		ICondition c = criteria.getConditions().create();
 		c.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTTYPE);
@@ -95,29 +100,19 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		return repo.fetchMaterialOrderedReservation(criteria);
 	}
 
-	/** 查询 target=SO 的 OrderedReservation */
-	private IOperationResult<IMaterialOrderedReservation> fetchReservationsByTarget(
-			BORepositoryMaterials repo, String targetDocType, int targetDocEntry) throws Exception {
-		ICriteria criteria = new Criteria();
-		ICondition c = criteria.getConditions().create();
-		c.setAlias(MaterialOrderedReservation.PROPERTY_TARGETDOCUMENTTYPE);
-		c.setValue(targetDocType);
-		c = criteria.getConditions().create();
-		c.setAlias(MaterialOrderedReservation.PROPERTY_TARGETDOCUMENTENTRY);
-		c.setValue(targetDocEntry);
-		return repo.fetchMaterialOrderedReservation(criteria);
-	}
-
 	// ==================================================================
 	// RC-01：PR→PO 预留转移（全量覆盖）
-	//   推导依据：PurchaseOrderReservationCreateService.impact
-	//   PR 预留 qty=10, PO qty=10 → PR.closedQuantity=10, 新建 PO reservation qty=10
+	// 推导依据：PurchaseOrderReservationCreateService.impact
+	// PR 预留 qty=10, PO qty=10 → PR.closedQuantity=10, 新建 PO reservation qty=10
 	// ==================================================================
 
 	public void testRC_01_PRToPO_FullTransfer() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
 		// 准备基础数据
-		IWarehouse wh; ISupplier sp; ICustomer cu; IMaterial mt;
+		IWarehouse wh;
+		ISupplier sp;
+		ICustomer cu;
+		IMaterial mt;
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository()) {
 			wh = prepareWarehouse(mRepo);
@@ -170,8 +165,8 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 
 		// 验证初始：PR 预留 qty=10, closedQuantity=0
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IOperationResult<IMaterialOrderedReservation> rslt = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> rslt = fetchReservationsBySource(mRepo, pri.getObjectCode(),
+					pri.getDocEntry());
 			IMaterialOrderedReservation r = rslt.getResultObjects().firstOrDefault();
 			assertNotNull("PR reservation exists.", r);
 			assertEqualsBD("PR reservation.quantity = 10.", QTY, r.getQuantity());
@@ -199,16 +194,15 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		// 验证：PR 预留 closedQuantity=10（被 PO 消耗）；新建 PO 预留 qty=10
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
 			// PR 预留已关闭
-			IOperationResult<IMaterialOrderedReservation> prRslt = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> prRslt = fetchReservationsBySource(mRepo, pri.getObjectCode(),
+					pri.getDocEntry());
 			IMaterialOrderedReservation prRes = prRslt.getResultObjects().firstOrDefault();
-			assertEqualsBD("PR reservation.closedQuantity = 10 (consumed by PO).", QTY,
-					prRes.getClosedQuantity());
+			assertEqualsBD("PR reservation.closedQuantity = 10 (consumed by PO).", QTY, prRes.getClosedQuantity());
 
 			// 新建 PO 预留
 			IPurchaseOrderItem poi = po.getPurchaseOrderItems().firstOrDefault();
-			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo,
-					poi.getObjectCode(), poi.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo, poi.getObjectCode(),
+					poi.getDocEntry());
 			IMaterialOrderedReservation poRes = poRslt.getResultObjects().firstOrDefault();
 			assertNotNull("PO reservation created.", poRes);
 			assertEqualsBD("PO reservation.quantity = 10.", QTY, poRes.getQuantity());
@@ -218,13 +212,16 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 
 	// ==================================================================
 	// RC-02：PR→PO 部分转移（PO qty < PR 预留 qty）
-	//   PR 预留 qty=10, PO qty=6 → PR.closedQuantity=6, PO reservation qty=6
+	// PR 预留 qty=10, PO qty=6 → PR.closedQuantity=6, PO reservation qty=6
 	// ==================================================================
 
 	public void testRC_02_PRToPO_PartialTransfer() throws Exception {
 		BigDecimal PR_QTY = Decimals.valueOf(10);
 		BigDecimal PO_QTY = Decimals.valueOf(6);
-		IWarehouse wh; ISupplier sp; ICustomer cu; IMaterial mt;
+		IWarehouse wh;
+		ISupplier sp;
+		ICustomer cu;
+		IMaterial mt;
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository()) {
 			wh = prepareWarehouse(mRepo);
@@ -292,15 +289,15 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 
 		// 验证：PR.closedQuantity=6（部分消耗）；PO reservation qty=6
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IOperationResult<IMaterialOrderedReservation> prRslt = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> prRslt = fetchReservationsBySource(mRepo, pri.getObjectCode(),
+					pri.getDocEntry());
 			IMaterialOrderedReservation prRes = prRslt.getResultObjects().firstOrDefault();
 			assertEqualsBD("PR reservation.closedQuantity = 6 (partial).", PO_QTY, prRes.getClosedQuantity());
 			assertEquals("PR reservation.status = OPEN (still has remaining).", emBOStatus.OPEN, prRes.getStatus());
 
 			IPurchaseOrderItem poi = po.getPurchaseOrderItems().firstOrDefault();
-			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo,
-					poi.getObjectCode(), poi.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo, poi.getObjectCode(),
+					poi.getDocEntry());
 			IMaterialOrderedReservation poRes = poRslt.getResultObjects().firstOrDefault();
 			assertEqualsBD("PO reservation.quantity = 6.", PO_QTY, poRes.getQuantity());
 		}
@@ -308,12 +305,14 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 
 	// ==================================================================
 	// RC-03：PO 非 PR 来源 → checkDataStatus 跳过（不创建预留转移）
-	//   推导依据：checkDataStatus 中 baseDocumentType != PurchaseRequest → return false
+	// 推导依据：checkDataStatus 中 baseDocumentType != PurchaseRequest → return false
 	// ==================================================================
 
 	public void testRC_03_NonPRSource_NoTransfer() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
-		IWarehouse wh; ISupplier sp; IMaterial mt;
+		IWarehouse wh;
+		ISupplier sp;
+		IMaterial mt;
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository()) {
 			wh = prepareWarehouse(mRepo);
@@ -340,21 +339,24 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		// 验证：没有 OrderedReservation 被创建
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
 			IPurchaseOrderItem poi = po.getPurchaseOrderItems().firstOrDefault();
-			IOperationResult<IMaterialOrderedReservation> rslt = fetchReservationsBySource(mRepo,
-					poi.getObjectCode(), poi.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> rslt = fetchReservationsBySource(mRepo, poi.getObjectCode(),
+					poi.getDocEntry());
 			assertEquals("No reservation created for non-PR based PO.", 0, rslt.getResultObjects().size());
 		}
 	}
 
 	// ==================================================================
 	// RC-04：PO 删除 → revoke 回退（gItem 删除，PR.closedQuantity 回退）
-	//   推导依据：revoke 中 gItem.quantity 归零后 delete()，
-	//   causalData.closedQuantity 减去 remQuantity
+	// 推导依据：revoke 中 gItem.quantity 归零后 delete()，
+	// causalData.closedQuantity 减去 remQuantity
 	// ==================================================================
 
 	public void testRC_04_PODelete_RollbackReservation() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
-		IWarehouse wh; ISupplier sp; ICustomer cu; IMaterial mt;
+		IWarehouse wh;
+		ISupplier sp;
+		ICustomer cu;
+		IMaterial mt;
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository()) {
 			wh = prepareWarehouse(mRepo);
@@ -421,48 +423,50 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 
 		// 验证转移已发生
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry()).getResultObjects().firstOrDefault();
+			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo, pri.getObjectCode(), pri.getDocEntry())
+					.getResultObjects().firstOrDefault();
 			assertEqualsBD("PR.closedQuantity = 10 before PO delete.", QTY, prRes.getClosedQuantity());
 		}
 
 		// 删除 PO
-		//   注：PO delete 触发 ESTIMATEJOURNAL 清理链路，测试环境可能缺 fetcher
+		// 注：PO delete 触发 ESTIMATEJOURNAL 清理链路，测试环境可能缺 fetcher
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			try {
 				po.delete();
 				po = BOUtilities.valueOf(pRepo.savePurchaseOrder(po)).firstOrDefault();
 			} catch (Exception ex) {
-				System.out.println("[SKIP] RC-04 PO delete skipped due to estimate-journal dependency: "
-						+ ex.getMessage());
+				System.out.println(
+						"[SKIP] RC-04 PO delete skipped due to estimate-journal dependency: " + ex.getMessage());
 				return;
 			}
 		}
 
 		// 验证：PR.closedQuantity 回退到 0；PO reservation 应被删除
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry()).getResultObjects().firstOrDefault();
-			assertEqualsBD("PR.closedQuantity = 0 after PO delete.", Decimals.VALUE_ZERO,
-					prRes.getClosedQuantity());
+			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo, pri.getObjectCode(), pri.getDocEntry())
+					.getResultObjects().firstOrDefault();
+			assertEqualsBD("PR.closedQuantity = 0 after PO delete.", Decimals.VALUE_ZERO, prRes.getClosedQuantity());
 			assertEquals("PR reservation.status = OPEN.", emBOStatus.OPEN, prRes.getStatus());
 
 			IPurchaseOrderItem poi = po.getPurchaseOrderItems().firstOrDefault();
-			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo,
-					poi.getObjectCode(), poi.getDocEntry());
+			IOperationResult<IMaterialOrderedReservation> poRslt = fetchReservationsBySource(mRepo, poi.getObjectCode(),
+					poi.getDocEntry());
 			assertEquals("PO reservation deleted.", 0, poRslt.getResultObjects().size());
 		}
 	}
 
 	// ==================================================================
 	// RC-05：MaterialOrderedReservationStatusService - PO documentStatus=PLANNED
-	//   → sourceDocumentClosed=NO, status=OPEN（如果 qty > closedQty）
-	//   推导依据：impact 中 sourceDocumentStatus=PLANNED → sourceDocumentClosed=NO
+	// → sourceDocumentClosed=NO, status=OPEN（如果 qty > closedQty）
+	// 推导依据：impact 中 sourceDocumentStatus=PLANNED → sourceDocumentClosed=NO
 	// ==================================================================
 
 	public void testRC_05_POStatusPlanned_ReservationReopen() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
-		IWarehouse wh; ISupplier sp; ICustomer cu; IMaterial mt;
+		IWarehouse wh;
+		ISupplier sp;
+		ICustomer cu;
+		IMaterial mt;
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository()) {
 			wh = prepareWarehouse(mRepo);
@@ -528,24 +532,24 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		}
 
 		// PO documentStatus → PLANNED
-		//   注：PO 保存后修改 documentStatus 触发 ESTIMATEJOURNAL 链路，测试环境可能缺 fetcher
+		// 注：PO 保存后修改 documentStatus 触发 ESTIMATEJOURNAL 链路，测试环境可能缺 fetcher
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			try {
 				po.setDocumentStatus(emDocumentStatus.PLANNED);
 				po = BOUtilities.valueOf(pRepo.savePurchaseOrder(po)).firstOrDefault();
 			} catch (Exception ex) {
-				System.out.println("[SKIP] RC-05 PO documentStatus=PLANNED skipped due to estimate-journal: "
-						+ ex.getMessage());
+				System.out.println(
+						"[SKIP] RC-05 PO documentStatus=PLANNED skipped due to estimate-journal: " + ex.getMessage());
 				return;
 			}
 		}
 
 		// 验证：PR 预留 status 应该被重新设为 OPEN（sourceDocumentClosed=NO）
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo,
-					pri.getObjectCode(), pri.getDocEntry()).getResultObjects().firstOrDefault();
-			assertEquals("PR reservation.sourceDocumentClosed = NO after PO PLANNED.",
-					emYesNo.NO, prRes.getSourceDocumentClosed());
+			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo, pri.getObjectCode(), pri.getDocEntry())
+					.getResultObjects().firstOrDefault();
+			assertEquals("PR reservation.sourceDocumentClosed = NO after PO PLANNED.", emYesNo.NO,
+					prRes.getSourceDocumentClosed());
 		}
 	}
 }
