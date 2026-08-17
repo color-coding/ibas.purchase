@@ -948,7 +948,7 @@ namespace purchase {
                                                                                                 number: {
                                                                                                     parts: [
                                                                                                         {
-                                                                                                            path: "quantity",
+                                                                                                            path: "inventoryQuantity",
                                                                                                             type: new sap.extension.data.Quantity()
                                                                                                         },
                                                                                                         {
@@ -962,7 +962,7 @@ namespace purchase {
                                                                                                     }
                                                                                                 },
                                                                                                 unit: {
-                                                                                                    path: "uom",
+                                                                                                    path: "inventoryUOM",
                                                                                                     type: new sap.extension.data.Alphanumeric()
                                                                                                 }
                                                                                             }),

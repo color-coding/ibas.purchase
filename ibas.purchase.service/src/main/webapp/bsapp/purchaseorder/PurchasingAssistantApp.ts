@@ -237,7 +237,8 @@ namespace purchase {
                                         if (oItem.baseDocumentLineId !== sItem.lineId) {
                                             continue;
                                         }
-                                        sItem.orderedQuantity += oItem.quantity;
+                                        // orderedQuantity 统一使用库存单位；采购行的 inventoryQuantity 也是库存单位。
+                                        sItem.orderedQuantity = ibas.numbers.valueOf(sItem.orderedQuantity) + oItem.inventoryQuantity;
                                         break;
                                     }
                                     break;
@@ -456,10 +457,13 @@ namespace purchase {
                 let purchaseItems: ibas.IList<bo.PurchaseOrderItem> = new ibas.ArrayList<bo.PurchaseOrderItem>();
                 let purchaseItem: bo.PurchaseOrderItem = null;
                 for (let item of orderItems) {
-                    if (item.orderedQuantity >= item.quantity) {
+                    // 已订购数量统一按库存单位计算，不能与销售单位 quantity 比较。
+                    let orderedQuantity: number = ibas.numbers.valueOf(item.orderedQuantity);
+                    if (orderedQuantity >= item.inventoryQuantity) {
                         continue;
                     }
                     if (merge === true) {
+                        // 合并模式：同一物料仍合并到同一采购行。
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(c => ibas.strings.equals(c.itemCode, item.itemCode));
                     } else {
                         purchaseItem = this.purchaseOrder.purchaseOrderItems.firstOrDefault(
@@ -492,8 +496,9 @@ namespace purchase {
                         purchaseItems.add(purchaseItem);
                     }
                     // 统一到库存单位
-                    purchaseItem.quantity = purchaseItem.quantity > 0 ?
-                        purchaseItem.quantity + (item.inventoryQuantity - item.orderedQuantity) : (item.inventoryQuantity - item.orderedQuantity);
+                    // 统一到库存单位，并且只增加本次销售订单行的剩余数量。
+                    let addedQuantity: number = item.inventoryQuantity - orderedQuantity;
+                    purchaseItem.quantity = purchaseItem.quantity > 0 ? purchaseItem.quantity + addedQuantity : addedQuantity;
                     purchaseItem.uom = item.inventoryUOM;
                     purchaseItem.inventoryUOM = item.inventoryUOM;
                     purchaseItem.uomRate = 1;
@@ -501,7 +506,8 @@ namespace purchase {
                     if (ibas.strings.isEmpty(purchaseItem.warehouse)) {
                         purchaseItem.warehouse = this.view.defaultWarehouse;
                     }
-                    item.orderedQuantity += purchaseItem.quantity;
+                    // 仅回写本次新增数量，不能回写采购行累计数量（合并时会重复累计）。
+                    item.orderedQuantity = orderedQuantity + addedQuantity;
                 }
                 let criteria: ibas.ICriteria = new ibas.Criteria();
                 for (let item of orderItems) {
@@ -577,7 +583,8 @@ namespace purchase {
                                     if (item.baseDocumentLineId !== sItem.lineId) {
                                         continue;
                                     }
-                                    sItem.orderedQuantity -= item.quantity;
+                                    // 采购行 quantity 可能是采购单位，回滚必须使用库存数量。
+                                    sItem.orderedQuantity = ibas.numbers.valueOf(sItem.orderedQuantity) - item.inventoryQuantity;
                                     break;
                                 }
                                 break;
