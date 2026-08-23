@@ -1988,6 +1988,8 @@ declare namespace materials {
             set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
+            /** 重置 */
+            reset(): void;
         }
         /** 物料批次记录集合 */
         class MaterialBatchItems extends ibas.BusinessObjects<IMaterialBatchItem, IMaterialBatchItemParent> implements IMaterialBatchItems {
@@ -2653,6 +2655,8 @@ declare namespace materials {
             set remarks(value: string);
             /** 初始化数据 */
             protected init(): void;
+            /** 重置 */
+            reset(): void;
         }
         /** 物料序列记录集合 */
         class MaterialSerialItems extends ibas.BusinessObjects<IMaterialSerialItem, IMaterialSerialItemParent> implements IMaterialSerialItems {
@@ -15014,7 +15018,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.GoodsIssue): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-库存发货 */
         interface IGoodsIssueViewView extends ibas.IBOViewView {
@@ -15274,7 +15278,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.GoodsReceipt): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-库存收货 */
         interface IGoodsReceiptViewView extends ibas.IBOViewView {
@@ -15539,7 +15543,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.InventoryTransfer): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-库存转储 */
         interface IInventoryTransferViewView extends ibas.IBOViewView {
@@ -15616,7 +15620,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-物料 */
-        class MaterialEditApp extends ibas.BOEditApplication<IMaterialEditView, bo.Material> {
+        class MaterialEditApp extends ibas.BOEditService<IMaterialEditView, bo.Material> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -15699,6 +15703,13 @@ declare namespace materials {
             closeExtendedViewEvent: Function;
             /** 显示扩展设置 */
             showExtendedSettings(datas: bo.MaterialsExtendedSetting[]): void;
+        }
+        /** Material编辑服务映射 */
+        class MaterialEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Material>>;
         }
     }
 }
@@ -16006,7 +16017,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.Material): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
             protected overview(): void;
         }
         /** 视图-物料 */
@@ -17311,7 +17322,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.MaterialBatch): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-物料批次 */
         interface IMaterialBatchViewView extends ibas.IBOViewView {
@@ -17386,7 +17397,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-物料组 */
-        class MaterialGroupEditApp extends ibas.BOEditApplication<IMaterialGroupEditView, bo.MaterialGroup> {
+        class MaterialGroupEditApp extends ibas.BOEditService<IMaterialGroupEditView, bo.MaterialGroup> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -17430,6 +17441,13 @@ declare namespace materials {
             chooseLedgerAccountEvent: Function;
             /** 显示扩展设置 */
             showExtendedSettings(datas: bo.MaterialsExtendedSetting[]): void;
+        }
+        /** MaterialGroup编辑服务映射 */
+        class MaterialGroupEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.MaterialGroup>>;
         }
     }
 }
@@ -17617,7 +17635,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-计划组 */
-        class SchedulingGroupEditApp extends ibas.BOEditApplication<ISchedulingGroupEditView, bo.SchedulingGroup> {
+        class SchedulingGroupEditApp extends ibas.BOEditService<ISchedulingGroupEditView, bo.SchedulingGroup> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -17647,6 +17665,13 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** SchedulingGroup编辑服务映射 */
+        class SchedulingGroupEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.SchedulingGroup>>;
         }
     }
 }
@@ -17879,7 +17904,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.MaterialPriceList): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-物料价格清单 */
         interface IMaterialPriceListViewView extends ibas.IBOViewView {
@@ -18455,7 +18480,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.MaterialSerial): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-物料序列 */
         interface IMaterialSerialViewView extends ibas.IBOViewView {
@@ -18530,7 +18555,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-仓库 */
-        class WarehouseEditApp extends ibas.BOEditApplication<IWarehouseEditView, bo.Warehouse> {
+        class WarehouseEditApp extends ibas.BOEditService<IWarehouseEditView, bo.Warehouse> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -18568,6 +18593,13 @@ declare namespace materials {
         }
         /** 权限元素-单据仓库 */
         const ELEMENT_DOCUMENT_WAREHOUSE: ibas.IElement;
+        /** Warehouse编辑服务映射 */
+        class WarehouseEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Warehouse>>;
+        }
     }
 }
 /**
@@ -18665,7 +18697,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.Warehouse): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-仓库 */
         interface IWarehouseViewView extends ibas.IBOViewView {
@@ -18805,7 +18837,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-库存盘点 */
-        class InventoryCountingEditApp extends ibas.BOEditApplication<IInventoryCountingEditView, bo.InventoryCounting> {
+        class InventoryCountingEditApp extends ibas.BOEditService<IInventoryCountingEditView, bo.InventoryCounting> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -18873,6 +18905,13 @@ declare namespace materials {
             /** 刷新库存 */
             refreshMaterialInventoryEvent: Function;
         }
+        /** InventoryCounting编辑服务映射 */
+        class InventoryCountingEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.InventoryCounting>>;
+        }
     }
 }
 /**
@@ -18903,7 +18942,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.InventoryCounting): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-库存盘点 */
         interface IInventoryCountingViewView extends ibas.IBOViewView {
@@ -19067,7 +19106,7 @@ declare namespace materials {
             run(data: bo.MaterialSpecification): void;
             run(criteria: ibas.Criteria | string): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
             private save;
         }
         /** 视图-物料规格 */
@@ -19140,7 +19179,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-物料规格 */
-        class MaterialSpecificationEditApp extends ibas.BOEditApplication<IMaterialSpecificationEditView, bo.MaterialSpecification> {
+        class MaterialSpecificationEditApp extends ibas.BOEditService<IMaterialSpecificationEditView, bo.MaterialSpecification> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -19184,6 +19223,13 @@ declare namespace materials {
             chooseBusinessPartnerEvent: Function;
             /** 显示数据 */
             showMaterialSpecificationItems(datas: bo.MaterialSpecificationItem[]): void;
+        }
+        /** MaterialSpecification编辑服务映射 */
+        class MaterialSpecificationEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.MaterialSpecification>>;
         }
     }
 }
@@ -19312,7 +19358,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-规格模板 */
-        class SpecificationEditApp extends ibas.BOEditApplication<ISpecificationEditView, bo.Specification> {
+        class SpecificationEditApp extends ibas.BOEditService<ISpecificationEditView, bo.Specification> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -19373,6 +19419,13 @@ declare namespace materials {
             removeSpecificationItemValueEvent: Function;
             /** 显示数据 */
             showSpecificationItemValues(datas: bo.SpecificationItemValue[]): void;
+        }
+        /** Specification编辑服务映射 */
+        class SpecificationEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Specification>>;
         }
     }
 }
@@ -19554,7 +19607,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-计量单位 */
-        class UnitEditApp extends ibas.BOEditApplication<IUnitEditView, bo.Unit> {
+        class UnitEditApp extends ibas.BOEditService<IUnitEditView, bo.Unit> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -19584,6 +19637,13 @@ declare namespace materials {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** Unit编辑服务映射 */
+        class UnitEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Unit>>;
         }
     }
 }
@@ -19780,7 +19840,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.MaterialScrap): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-物料废品率 */
         interface IMaterialScrapViewView extends ibas.IBOViewView {
@@ -19808,7 +19868,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-物料废品率 */
-        class MaterialScrapEditApp extends ibas.BOEditApplication<IMaterialScrapEditView, bo.MaterialScrap> {
+        class MaterialScrapEditApp extends ibas.BOEditService<IMaterialScrapEditView, bo.MaterialScrap> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -19848,6 +19908,13 @@ declare namespace materials {
             removeMaterialScrapSectionEvent: Function;
             /** 显示数据-物料废品率 - 阶梯 */
             showMaterialScrapSections(datas: bo.MaterialScrapSection[]): void;
+        }
+        /** MaterialScrap编辑服务映射 */
+        class MaterialScrapEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.MaterialScrap>>;
         }
     }
 }
@@ -19998,7 +20065,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.MaterialVersion): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-物料版本 */
         interface IMaterialVersionViewView extends ibas.IBOViewView {
@@ -20024,7 +20091,7 @@ declare namespace materials {
 declare namespace materials {
     namespace app {
         /** 编辑应用-物料版本 */
-        class MaterialVersionEditApp extends ibas.BOEditApplication<IMaterialVersionEditView, bo.MaterialVersion> {
+        class MaterialVersionEditApp extends ibas.BOEditService<IMaterialVersionEditView, bo.MaterialVersion> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -20058,6 +20125,13 @@ declare namespace materials {
             createDataEvent: Function;
             /** 选择物料事件 */
             chooseMaterialEvent: Function;
+        }
+        /** MaterialVersion编辑服务映射 */
+        class MaterialVersionEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.MaterialVersion>>;
         }
     }
 }
@@ -20208,7 +20282,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.PickingList): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-拣配清单 */
         interface IPickingListViewView extends ibas.IBOViewView {
@@ -20710,7 +20784,7 @@ declare namespace materials {
             run(): void;
             run(data: bo.InventoryTransferRequest): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-库存转储申请 */
         interface IInventoryTransferRequestViewView extends ibas.IBOViewView {

@@ -2619,7 +2619,7 @@ declare namespace receiptpayment {
             run(): void;
             run(data: bo.Payment): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-付款 */
         interface IPaymentViewView extends ibas.IBOViewView {
@@ -2880,7 +2880,7 @@ declare namespace receiptpayment {
             run(): void;
             run(data: bo.Receipt): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-收款 */
         interface IReceiptViewView extends ibas.IBOViewView {
@@ -3041,7 +3041,7 @@ declare namespace receiptpayment {
             run(): void;
             run(data: bo.AssetRecharge): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-资产充值 */
         interface IAssetRechargeViewView extends ibas.IBOViewView {
@@ -3274,7 +3274,7 @@ declare namespace receiptpayment {
             run(): void;
             run(data: businesspartner.bo.InternalReconciliation): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
             /** 删除数据 */
             protected deleteData(): void;
         }
@@ -3306,7 +3306,7 @@ declare namespace receiptpayment {
 declare namespace receiptpayment {
     namespace app {
         /** 编辑应用-内部对账 */
-        class InternalReconciliationEditApp extends ibas.BOEditApplication<IInternalReconciliationEditView, businesspartner.bo.InternalReconciliation> {
+        class InternalReconciliationEditApp extends ibas.BOEditService<IInternalReconciliationEditView, businesspartner.bo.InternalReconciliation> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -3346,6 +3346,13 @@ declare namespace receiptpayment {
             removeInternalReconciliationLineEvent: Function;
             /** 显示数据-内部对账-行 */
             showInternalReconciliationLines(datas: businesspartner.bo.InternalReconciliationLine[]): void;
+        }
+        /** InternalReconciliation编辑服务映射 */
+        class InternalReconciliationEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<businesspartner.bo.InternalReconciliation>>;
         }
     }
 }

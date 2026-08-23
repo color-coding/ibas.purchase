@@ -173,7 +173,7 @@ namespace purchase {
         }
 
         /** 采购报价-行 */
-        export interface IPurchaseQuoteItem extends ibas.IBODocumentLine, ibas.IBOUserFields {
+        export interface IPurchaseQuoteItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
 
             /** 编码 */
             docEntry: number;
@@ -430,5 +430,4 @@ namespace purchase {
         }
     }
 }
-
 

@@ -1597,6 +1597,15 @@ namespace purchase {
             }
 
 
+            /** 映射的属性名称-物料批次集合 */
+            static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
+            get materialBatches(): materials.bo.MaterialBatchItems { return this.getProperty<materials.bo.MaterialBatchItems>(PurchaseQuoteItem.PROPERTY_MATERIALBATCHES_NAME); }
+            set materialBatches(value: materials.bo.MaterialBatchItems) { this.setProperty(PurchaseQuoteItem.PROPERTY_MATERIALBATCHES_NAME, value); }
+            /** 映射的属性名称-物料序列集合 */
+            static PROPERTY_MATERIALSERIALS_NAME: string = "MaterialSerials";
+            get materialSerials(): materials.bo.MaterialSerialItems { return this.getProperty<materials.bo.MaterialSerialItems>(PurchaseQuoteItem.PROPERTY_MATERIALSERIALS_NAME); }
+            set materialSerials(value: materials.bo.MaterialSerialItems) { this.setProperty(PurchaseQuoteItem.PROPERTY_MATERIALSERIALS_NAME, value); }
+
             /** 映射的属性名称-采购报价-行-额外信息集合 */
             static PROPERTY_PURCHASEQUOTEITEMEXTRAS_NAME: string = "PurchaseQuoteItemExtras";
             /** 获取-采购报价-行-额外信息集合 */
@@ -1611,6 +1620,8 @@ namespace purchase {
             /** 初始化数据 */
             protected init(): void {
                 this.purchaseQuoteItemExtras = new PurchaseQuoteItemExtras(this);
+                this.materialBatches = new materials.bo.MaterialBatchItems(this);
+                this.materialSerials = new materials.bo.MaterialSerialItems(this);
                 this.currency = accounting.config.currency("LOCAL");
                 this.discount = 1;
                 this.inverseDiscount = 0;

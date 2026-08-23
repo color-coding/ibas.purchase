@@ -2321,7 +2321,7 @@ declare namespace importexport {
 declare namespace importexport {
     namespace app {
         /** 编辑应用-导出模板 */
-        class ExportTemplateEditApp extends ibas.BOEditApplication<IExportTemplateEditView, bo.ExportTemplate> {
+        class ExportTemplateEditApp extends ibas.BOEditService<IExportTemplateEditView, bo.ExportTemplate> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -2435,6 +2435,13 @@ declare namespace importexport {
             removeAppendixEvent: Function;
             /** 显示数据-附录 */
             showAppendixes(datas: bo.ExportTemplateAppendix[]): void;
+        }
+        /** ExportTemplate编辑服务映射 */
+        class ExportTemplateEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.ExportTemplate>>;
         }
     }
 }
