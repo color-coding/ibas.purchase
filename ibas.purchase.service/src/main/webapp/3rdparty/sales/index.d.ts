@@ -769,7 +769,7 @@ declare namespace sales {
             distributionRule5: string;
             /** 合同 */
             agreements: string;
-            /** 已订购数量 */
+            /** 已订购数量（库存单位；可来自采购或生产） */
             orderedQuantity: number;
             /** 毛利基础 */
             grossBase: number;
@@ -1250,7 +1250,7 @@ declare namespace sales {
             create(): ISalesQuoteItem;
         }
         /** 销售报价-行 */
-        interface ISalesQuoteItem extends ibas.IBODocumentLine, ibas.IBOUserFields {
+        interface ISalesQuoteItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
             /** 编码 */
             docEntry: number;
             /** 行号 */
@@ -6347,6 +6347,14 @@ declare namespace sales {
             get preTaxPriceLC(): number;
             /** 设置-税前价格（本币） */
             set preTaxPriceLC(value: number);
+            /** 映射的属性名称-物料批次集合 */
+            static PROPERTY_MATERIALBATCHES_NAME: string;
+            get materialBatches(): materials.bo.MaterialBatchItems;
+            set materialBatches(value: materials.bo.MaterialBatchItems);
+            /** 映射的属性名称-物料序列集合 */
+            static PROPERTY_MATERIALSERIALS_NAME: string;
+            get materialSerials(): materials.bo.MaterialSerialItems;
+            set materialSerials(value: materials.bo.MaterialSerialItems);
             /** 映射的属性名称-销售报价-行-额外信息集合 */
             static PROPERTY_SALESQUOTEITEMEXTRAS_NAME: string;
             /** 获取-销售报价-行-额外信息集合 */
@@ -13031,7 +13039,7 @@ declare namespace sales {
 declare namespace sales {
     namespace app {
         /** 编辑应用-产品套装 */
-        class ProductSuitEditApp extends ibas.BOEditApplication<IProductSuitEditView, bo.ProductSuit> {
+        class ProductSuitEditApp extends ibas.BOEditService<IProductSuitEditView, bo.ProductSuit> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -13078,6 +13086,13 @@ declare namespace sales {
             chooseProductSuitMaterialEvent: Function;
             /** 选择物料主数据事件 */
             chooseProductSuitItemMaterialEvent: Function;
+        }
+        /** ProductSuit编辑服务映射 */
+        class ProductSuitEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.ProductSuit>>;
         }
     }
 }
@@ -13176,7 +13191,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.ProductSuit): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-产品套装 */
         interface IProductSuitViewView extends ibas.IBOViewView {
@@ -13486,7 +13501,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesDelivery): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售交货 */
         interface ISalesDeliveryViewView extends ibas.IBOViewView {
@@ -13840,7 +13855,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesOrder): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售订单 */
         interface ISalesOrderViewView extends ibas.IBOViewView {
@@ -14192,7 +14207,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesReturn): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售退货 */
         interface ISalesReturnViewView extends ibas.IBOViewView {
@@ -14322,6 +14337,10 @@ declare namespace sales {
             protected chooseSalesQuoteItemMaterialCatalog(caller: bo.SalesQuoteItem, filterConditions?: ibas.ICondition[]): void;
             protected calculateGrossProfit(): void;
             protected viewHistoricalPrices(caller: bo.SalesQuoteItem): void;
+            private batches;
+            private chooseSalesQuoteItemMaterialBatch;
+            private serials;
+            private chooseSalesQuoteItemMaterialSerial;
             protected calculateQuantity(caller: bo.SalesQuoteItem): void;
             protected choosePaymentTerm(criteria?: ibas.ICriteria): void;
             /** 转为预付款申请 */
@@ -14361,6 +14380,10 @@ declare namespace sales {
             chooseSalesQuoteItemMaterialCatalogEvent: Function;
             /** 选择销售报价单位事件 */
             chooseSalesQuoteItemUnitEvent: Function;
+            /** 选择销售报价-行物料批次事件 */
+            chooseSalesQuoteItemMaterialBatchEvent: Function;
+            /** 选择销售报价-行物料序列事件 */
+            chooseSalesQuoteItemMaterialSerialEvent: Function;
             /** 选择客户合同 */
             chooseCustomerAgreementsEvent: Function;
             /** 显示销售报价额外信息事件 */
@@ -14495,7 +14518,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesQuote): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售报价 */
         interface ISalesQuoteViewView extends ibas.IBOViewView {
@@ -14865,7 +14888,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesInvoice): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售发票 */
         interface ISalesInvoiceViewView extends ibas.IBOViewView {
@@ -15161,7 +15184,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesCreditNote): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售贷项 */
         interface ISalesCreditNoteViewView extends ibas.IBOViewView {
@@ -15385,7 +15408,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.BlanketAgreement): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-一揽子协议 */
         interface IBlanketAgreementViewView extends ibas.IBOViewView {
@@ -15634,7 +15657,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.DownPaymentRequest): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-预收款申请 */
         interface IDownPaymentRequestViewView extends ibas.IBOViewView {
@@ -16068,7 +16091,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesReserveInvoice): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售预留发票 */
         interface ISalesReserveInvoiceViewView extends ibas.IBOViewView {
@@ -16369,7 +16392,7 @@ declare namespace sales {
             run(): void;
             run(data: bo.SalesReturnRequest): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-销售退货请求 */
         interface ISalesReturnRequestViewView extends ibas.IBOViewView {

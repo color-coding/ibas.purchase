@@ -621,6 +621,16 @@ namespace purchase {
                         }
                         let myItem: PurchaseOrderItem = this.purchaseOrderItems.create();
                         bo.baseDocumentItem(myItem, item);
+                        // 复制报价中的批次和序列
+                        for (let batch of item.materialBatches) {
+                            let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
+                            myBatch.batchCode = batch.batchCode;
+                            myBatch.quantity = batch.quantity;
+                        }
+                        for (let serial of item.materialSerials) {
+                            let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
+                            mySerial.serialCode = serial.serialCode;
+                        }
                         // 交货日期带报价的
                         myItem.deliveryDate = item.deliveryDate;
                         // 复制额外信息
@@ -685,38 +695,9 @@ namespace purchase {
                             continue;
                         }
                         let myItem: IPurchaseOrderItem = this.purchaseOrderItems.create();
-                        myItem.baseDocumentType = item.objectCode;
-                        myItem.baseDocumentEntry = item.docEntry;
-                        myItem.baseDocumentLineId = item.lineId;
-                        myItem.originalDocumentType = item.baseDocumentType;
-                        myItem.originalDocumentEntry = item.baseDocumentEntry;
-                        myItem.originalDocumentLineId = item.baseDocumentLineId;
-                        myItem.distributionRule1 = item.distributionRule1;
-                        myItem.distributionRule2 = item.distributionRule2;
-                        myItem.distributionRule3 = item.distributionRule3;
-                        myItem.distributionRule4 = item.distributionRule4;
-                        myItem.distributionRule5 = item.distributionRule5;
-                        myItem.agreements = item.agreements;
-                        myItem.itemCode = item.itemCode;
-                        myItem.itemDescription = item.itemDescription;
-                        myItem.itemSign = item.itemSign;
-                        myItem.itemVersion = item.itemVersion;
-                        myItem.batchManagement = item.batchManagement;
-                        myItem.serialManagement = item.serialManagement;
-                        myItem.tax = item.tax;
-                        myItem.taxRate = item.taxRate;
-                        myItem.price = item.price;
-                        myItem.currency = item.currency;
+                        bo.baseDocumentItem(myItem, item);
                         myItem.quantity = openQty;
-                        myItem.uom = item.uom;
                         myItem.deliveryDate = item.requestDate;
-                        if (!(item.closedQuantity > 0)) {
-                            myItem.preTaxLineTotal = item.preTaxLineTotal;
-                            myItem.taxTotal = item.taxTotal;
-                            myItem.lineTotal = item.lineTotal;
-                        }
-                        myItem.reference1 = item.reference1;
-                        myItem.reference2 = item.reference2;
 
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
                         // 复制批次（行未清数量，从头往下匹配，批次未清的补上）

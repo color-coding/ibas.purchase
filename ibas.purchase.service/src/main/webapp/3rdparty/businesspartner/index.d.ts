@@ -4640,7 +4640,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.Address): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-业务伙伴地址 */
         interface IAddressViewView extends ibas.IBOViewView {
@@ -4715,7 +4715,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-业务伙伴组 */
-        class BusinessPartnerGroupEditApp extends ibas.BOEditApplication<IBusinessPartnerGroupEditView, bo.BusinessPartnerGroup> {
+        class BusinessPartnerGroupEditApp extends ibas.BOEditService<IBusinessPartnerGroupEditView, bo.BusinessPartnerGroup> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -4750,6 +4750,13 @@ declare namespace businesspartner {
             createDataEvent: Function;
             /** 选择父项 */
             chooseParentsEvent: Function;
+        }
+        /** BusinessPartnerGroup编辑服务映射 */
+        class BusinessPartnerGroupEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.BusinessPartnerGroup>>;
         }
     }
 }
@@ -5016,7 +5023,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.ContactPerson): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-业务伙伴联系人 */
         interface IContactPersonViewView extends ibas.IBOViewView {
@@ -5272,7 +5279,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.Customer): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-客户 */
         interface ICustomerViewView extends ibas.IBOViewView {
@@ -5525,7 +5532,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.Supplier): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-供应商 */
         interface ISupplierViewView extends ibas.IBOViewView {
@@ -5683,7 +5690,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.AssetItem): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-资产项目 */
         interface IAssetItemViewView extends ibas.IBOViewView {
@@ -5708,7 +5715,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-资产项目 */
-        class AssetItemEditApp extends ibas.BOEditApplication<IAssetItemEditView, bo.AssetItem> {
+        class AssetItemEditApp extends ibas.BOEditService<IAssetItemEditView, bo.AssetItem> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -5738,6 +5745,13 @@ declare namespace businesspartner {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** AssetItem编辑服务映射 */
+        class AssetItemEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.AssetItem>>;
         }
     }
 }
@@ -5943,7 +5957,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.BusinessPartnerAsset): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-业务伙伴资产 */
         interface IBusinessPartnerAssetViewView extends ibas.IBOViewView {
@@ -5969,7 +5983,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-业务伙伴资产 */
-        class BusinessPartnerAssetEditApp extends ibas.BOEditApplication<IBusinessPartnerAssetEditView, bo.BusinessPartnerAsset> {
+        class BusinessPartnerAssetEditApp extends ibas.BOEditService<IBusinessPartnerAssetEditView, bo.BusinessPartnerAsset> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6005,6 +6019,13 @@ declare namespace businesspartner {
             chooseBusinessPartnerEvent: Function;
             /*** 选择资产项目事件 */
             chooseAssetItemEvent: Function;
+        }
+        /** BusinessPartnerAsset编辑服务映射 */
+        class BusinessPartnerAssetEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.BusinessPartnerAsset>>;
         }
     }
 }
@@ -6323,7 +6344,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.Lead): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-潜在客户 */
         interface ILeadViewView extends ibas.IBOViewView {
@@ -6482,7 +6503,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.PaymentTerm): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-付款条款 */
         interface IPaymentTermViewView extends ibas.IBOViewView {
@@ -6508,7 +6529,7 @@ declare namespace businesspartner {
 declare namespace businesspartner {
     namespace app {
         /** 编辑应用-付款条款 */
-        class PaymentTermEditApp extends ibas.BOEditApplication<IPaymentTermEditView, bo.PaymentTerm> {
+        class PaymentTermEditApp extends ibas.BOEditService<IPaymentTermEditView, bo.PaymentTerm> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6538,6 +6559,13 @@ declare namespace businesspartner {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** PaymentTerm编辑服务映射 */
+        class PaymentTermEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PaymentTerm>>;
         }
     }
 }
@@ -6684,7 +6712,7 @@ declare namespace businesspartner {
             run(): void;
             run(data: bo.Agreement): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-协议/合同 */
         interface IAgreementViewView extends ibas.IBOViewView {

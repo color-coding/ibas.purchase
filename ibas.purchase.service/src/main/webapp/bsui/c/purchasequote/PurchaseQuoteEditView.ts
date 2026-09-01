@@ -36,6 +36,10 @@ namespace purchase {
                 choosePurchaseQuoteItemMaterialCatalogEvent: Function;
                 /** 选择采购报价-行 单位 */
                 choosePurchaseQuoteItemUnitEvent: Function;
+                /** 选择采购报价-行物料序列 */
+                choosePurchaseQuoteItemMaterialSerialEvent: Function;
+                /** 选择采购报价-行物料批次 */
+                choosePurchaseQuoteItemMaterialBatchEvent: Function;
                 /** 显示采购报价额外信息事件 */
                 showPurchaseQuoteItemExtraEvent: Function;
                 /** 选择采购报价-采购申请事件 */
@@ -420,6 +424,15 @@ namespace purchase {
                                             press: function (): void {
                                                 that.fireViewEvents(that.removePurchaseQuoteItemEvent, that.tablePurchaseQuoteItem.getSelecteds());
                                             }
+                                        }),
+                                        new sap.m.ToolbarSeparator(""),
+                                        new sap.extension.m.MenuButton("", {
+                                            autoHide: true, icon: "sap-icon://tags",
+                                            text: ibas.strings.format("{0}/{1}", ibas.i18n.prop("purchase_material_batch"), ibas.i18n.prop("purchase_material_serial")),
+                                            menu: new sap.m.Menu("", { items: [
+                                                new sap.m.MenuItem("", { text: ibas.i18n.prop("purchase_material_batch"), press: function (): void { that.fireViewEvents(that.choosePurchaseQuoteItemMaterialBatchEvent); } }),
+                                                new sap.m.MenuItem("", { text: ibas.i18n.prop("purchase_material_serial"), press: function (): void { that.fireViewEvents(that.choosePurchaseQuoteItemMaterialSerialEvent); } })
+                                            ] })
                                         }),
                                         new sap.m.ToolbarSeparator(""),
                                         new sap.m.Button("", {

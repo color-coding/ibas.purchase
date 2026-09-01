@@ -6261,7 +6261,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-期间类型 */
-        class PeriodCategoryEditApp extends ibas.BOEditApplication<IPeriodCategoryEditView, bo.PeriodCategory> {
+        class PeriodCategoryEditApp extends ibas.BOEditService<IPeriodCategoryEditView, bo.PeriodCategory> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6309,6 +6309,13 @@ declare namespace accounting {
             removePostingPeriodItemEvent: Function;
             /** 显示过账期间项目 */
             showPostingPeriodItems(data: bo.PostingPeriod): void;
+        }
+        /** PeriodCategory编辑服务映射 */
+        class PeriodCategoryEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.PeriodCategory>>;
         }
     }
 }
@@ -6521,7 +6528,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-项目 */
-        class ProjectEditApp extends ibas.BOEditApplication<IProjectEditView, bo.Project> {
+        class ProjectEditApp extends ibas.BOEditService<IProjectEditView, bo.Project> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6560,6 +6567,13 @@ declare namespace accounting {
             /** 选择项目经理 */
             chooseManagerEvent: Function;
         }
+        /** Project编辑服务映射 */
+        class ProjectEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Project>>;
+        }
     }
 }
 /**
@@ -6590,7 +6604,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Project): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-项目 */
         interface IProjectViewView extends ibas.IBOViewView {
@@ -6731,7 +6745,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-维度 */
-        class DimensionEditApp extends ibas.BOEditApplication<IDimensionEditView, bo.Dimension> {
+        class DimensionEditApp extends ibas.BOEditService<IDimensionEditView, bo.Dimension> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6761,6 +6775,13 @@ declare namespace accounting {
             testSourceEvent: Function;
             /** 编辑源事件 */
             editSourceEvent: Function;
+        }
+        /** Dimension编辑服务映射 */
+        class DimensionEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Dimension>>;
         }
     }
 }
@@ -6924,7 +6945,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-税收组 */
-        class TaxGroupEditApp extends ibas.BOEditApplication<ITaxGroupEditView, bo.TaxGroup> {
+        class TaxGroupEditApp extends ibas.BOEditService<ITaxGroupEditView, bo.TaxGroup> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -6958,6 +6979,13 @@ declare namespace accounting {
             createDataEvent: Function;
             /** 选择总账科目事件 */
             chooseLedgerAccountEvent: Function;
+        }
+        /** TaxGroup编辑服务映射 */
+        class TaxGroupEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.TaxGroup>>;
         }
     }
 }
@@ -7176,7 +7204,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-费用结构 */
-        class CostStructureEditApp extends ibas.BOEditApplication<ICostStructureEditView, bo.CostStructure> {
+        class CostStructureEditApp extends ibas.BOEditService<ICostStructureEditView, bo.CostStructure> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -7189,8 +7217,8 @@ declare namespace accounting {
             protected registerView(): void;
             /** 视图显示后 */
             protected viewShowed(): void;
-            run(data?: bo.CostStructure, onCompleted?: (data: bo.CostStructure) => void): void;
-            private onCompleted;
+            run(): void;
+            run(data: bo.CostStructure): void;
             /** 保存数据 */
             protected saveData(): void;
             /** 删除数据 */
@@ -7198,7 +7226,6 @@ declare namespace accounting {
             /** 选择产品资源事件 */
             private chooseEntity;
             private closeCostStructure;
-            close(): void;
         }
         /** 视图-费用结构 */
         interface ICostStructureEditView extends ibas.IBOEditView {
@@ -7210,6 +7237,11 @@ declare namespace accounting {
             chooseEntityEvent: Function;
             /** 结算费用 */
             closeCostStructureEvent: Function;
+        }
+        /** 费用结构编辑服务映射 */
+        class CostStructureEditServiceMapping extends ibas.BOEditServiceMapping {
+            constructor();
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.CostStructure>>;
         }
     }
 }
@@ -7356,7 +7388,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Currency): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-货币 */
         interface ICurrencyViewView extends ibas.IBOViewView {
@@ -7382,7 +7414,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-货币 */
-        class CurrencyEditApp extends ibas.BOEditApplication<ICurrencyEditView, bo.Currency> {
+        class CurrencyEditApp extends ibas.BOEditService<ICurrencyEditView, bo.Currency> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -7412,6 +7444,13 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** Currency编辑服务映射 */
+        class CurrencyEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Currency>>;
         }
     }
 }
@@ -7597,7 +7636,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-费用项目 */
-        class CostItemEditApp extends ibas.BOEditApplication<ICostItemEditView, bo.CostItem> {
+        class CostItemEditApp extends ibas.BOEditService<ICostItemEditView, bo.CostItem> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -7627,6 +7666,13 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** CostItem编辑服务映射 */
+        class CostItemEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.CostItem>>;
         }
     }
 }
@@ -7773,7 +7819,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Account): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-科目 */
         interface IAccountViewView extends ibas.IBOViewView {
@@ -7799,7 +7845,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-科目 */
-        class AccountEditApp extends ibas.BOEditApplication<IAccountEditView, bo.Account> {
+        class AccountEditApp extends ibas.BOEditService<IAccountEditView, bo.Account> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -7829,6 +7875,13 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** Account编辑服务映射 */
+        class AccountEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Account>>;
         }
     }
 }
@@ -8039,7 +8092,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Branch): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-分支 */
         interface IBranchViewView extends ibas.IBOViewView {
@@ -8065,7 +8118,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-分支 */
-        class BranchEditApp extends ibas.BOEditApplication<IBranchEditView, bo.Branch> {
+        class BranchEditApp extends ibas.BOEditService<IBranchEditView, bo.Branch> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -8101,6 +8154,13 @@ declare namespace accounting {
             chooseBankEvent: Function;
             /** 选择银行账号事件 */
             chooseBankAccountEvent: Function;
+        }
+        /** Branch编辑服务映射 */
+        class BranchEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Branch>>;
         }
     }
 }
@@ -8284,7 +8344,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.JournalEntry): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-日记账分录 */
         interface IJournalEntryViewView extends ibas.IBOViewView {
@@ -8312,7 +8372,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-日记账分录 */
-        class JournalEntryEditApp extends ibas.BOEditApplication<IJournalEntryEditView, bo.JournalEntry> {
+        class JournalEntryEditApp extends ibas.BOEditService<IJournalEntryEditView, bo.JournalEntry> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -8367,6 +8427,13 @@ declare namespace accounting {
             chooseJournalEntryLineDistributionRuleEvent: Function;
             /** 冲销分录事件 */
             reverseJournalEntryEvent: Function;
+        }
+        /** JournalEntry编辑服务映射 */
+        class JournalEntryEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.JournalEntry>>;
         }
     }
 }
@@ -8648,7 +8715,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.Bank): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-银行 */
         interface IBankViewView extends ibas.IBOViewView {
@@ -8674,7 +8741,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-银行 */
-        class BankEditApp extends ibas.BOEditApplication<IBankEditView, bo.Bank> {
+        class BankEditApp extends ibas.BOEditService<IBankEditView, bo.Bank> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -8704,6 +8771,13 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** Bank编辑服务映射 */
+        class BankEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.Bank>>;
         }
     }
 }
@@ -8853,7 +8927,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.BankAccount): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-银行账户 */
         interface IBankAccountViewView extends ibas.IBOViewView {
@@ -8879,7 +8953,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-银行账户 */
-        class BankAccountEditApp extends ibas.BOEditApplication<IBankAccountEditView, bo.BankAccount> {
+        class BankAccountEditApp extends ibas.BOEditService<IBankAccountEditView, bo.BankAccount> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -8909,6 +8983,13 @@ declare namespace accounting {
             deleteDataEvent: Function;
             /** 新建数据事件，参数1：是否克隆 */
             createDataEvent: Function;
+        }
+        /** BankAccount编辑服务映射 */
+        class BankAccountEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.BankAccount>>;
         }
     }
 }
@@ -9055,7 +9136,7 @@ declare namespace accounting {
             run(): void;
             run(data: bo.CashFlow): void;
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void;
+            protected fetchData(criteria: ibas.ICriteria | string | number): void;
         }
         /** 视图-现金流项目 */
         interface ICashFlowViewView extends ibas.IBOViewView {
@@ -9081,7 +9162,7 @@ declare namespace accounting {
 declare namespace accounting {
     namespace app {
         /** 编辑应用-现金流项目 */
-        class CashFlowEditApp extends ibas.BOEditApplication<ICashFlowEditView, bo.CashFlow> {
+        class CashFlowEditApp extends ibas.BOEditService<ICashFlowEditView, bo.CashFlow> {
             /** 应用标识 */
             static APPLICATION_ID: string;
             /** 应用名称 */
@@ -9114,6 +9195,13 @@ declare namespace accounting {
             createDataEvent: Function;
             /** 选择父项事件 */
             chooseParentEvent: Function;
+        }
+        /** CashFlow编辑服务映射 */
+        class CashFlowEditServiceMapping extends ibas.BOEditServiceMapping {
+            /** 构造函数 */
+            constructor();
+            /** 创建服务实例 */
+            create(): ibas.IService<ibas.IBOEditServiceCaller<bo.CashFlow>>;
         }
     }
 }
