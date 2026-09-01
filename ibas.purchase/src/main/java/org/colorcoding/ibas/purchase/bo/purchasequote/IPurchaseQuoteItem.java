@@ -8,12 +8,15 @@ import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
 import org.colorcoding.ibas.document.IDocumentClosingQuantityItem;
+import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItemParent;
+import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItemParent;
 
 /**
  * 采购报价-行 接口
  * 
  */
-public interface IPurchaseQuoteItem extends IBODocumentLine, IDocumentClosingQuantityItem {
+public interface IPurchaseQuoteItem extends IBODocumentLine, IMaterialBatchItemParent, IMaterialSerialItemParent,
+		IDocumentClosingQuantityItem {
 
 	/**
 	 * 获取-编码

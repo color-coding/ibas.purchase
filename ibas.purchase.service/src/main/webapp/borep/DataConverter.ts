@@ -326,9 +326,13 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocumentItem(
-            target: PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem | DownPaymentRequestItem | PurchaseReserveInvoiceItem | PurchaseInvoiceItem | PurchaseReturnRequestItem | PurchaseCreditNoteItem,
-            source: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem
+            target: IPurchaseOrderItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem | DownPaymentRequestItem | PurchaseReserveInvoiceItem | PurchaseInvoiceItem | PurchaseReturnRequestItem | PurchaseCreditNoteItem,
+            source: IPurchaseQuoteItem | IPurchaseRequestItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem
         ): void {
+            let documentItem: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem;
+            if (!(source instanceof PurchaseRequestItem)) {
+                documentItem = source as IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem;
+            }
             target.baseDocumentType = source.objectCode;
             target.baseDocumentEntry = source.docEntry;
             target.baseDocumentLineId = source.lineId;
@@ -348,6 +352,7 @@ namespace purchase {
             target.itemVersion = source.itemVersion;
             target.batchManagement = source.batchManagement;
             target.serialManagement = source.serialManagement;
+
             target.uom = source.uom;
             target.inventoryUOM = source.inventoryUOM;
             target.uomRate = source.uomRate;
@@ -356,17 +361,23 @@ namespace purchase {
             target.taxRate = source.taxRate;
             target.currency = source.currency;
             target.warehouse = source.warehouse;
-            target.deliveryDate = source.deliveryDate;
+            if (source instanceof PurchaseRequestItem) {
+                target.deliveryDate = source.requestDate;
+            } else {
+                target.deliveryDate = documentItem.deliveryDate;
+            }
             target.reference1 = source.reference1;
             target.reference2 = source.reference2;
             // 赋值价格
-            if (source.closedQuantity > 0 || source.discount !== 1) {
-                target.unitPrice = source.unitPrice;
-                target.discount = source.discount;
-                if (!(target instanceof DownPaymentRequestItem)) {
-                    target.inverseDiscount = source.inverseDiscount;
-                }
+            if (source instanceof PurchaseRequestItem) {
                 target.price = source.price;
+            } else if (source.closedQuantity > 0 || documentItem.discount !== 1) {
+                target.unitPrice = documentItem.unitPrice;
+                target.discount = documentItem.discount;
+                if (!(target instanceof DownPaymentRequestItem)) {
+                    target.inverseDiscount = documentItem.inverseDiscount;
+                }
+                target.price = documentItem.price;
             }
             // 赋值数量
             target.quantity = source.quantity;
@@ -382,11 +393,15 @@ namespace purchase {
                 target.preTaxLineTotal = source.preTaxLineTotal;
                 // 总计小数位小于价格时，价格赋值
                 if (DECIMAL_PLACES_SUM < DECIMAL_PLACES_PRICE) {
-                    if (Math.abs(target.unitPrice - source.unitPrice) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
-                        target.unitPrice = source.unitPrice;
+                    if (!(source instanceof PurchaseRequestItem) && Math.abs(target.unitPrice - documentItem.unitPrice) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
+                        target.unitPrice = documentItem.unitPrice;
                     }
-                    if (Math.abs(target.price - source.price) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
-                        target.price = source.price;
+                    if (source instanceof PurchaseRequestItem) {
+                        if (Math.abs(target.price - source.price) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
+                            target.price = source.price;
+                        }
+                    } else if (Math.abs(target.price - documentItem.price) < Math.pow(0.1, DECIMAL_PLACES_SUM)) {
+                        target.price = documentItem.price;
                     }
                 }
             }

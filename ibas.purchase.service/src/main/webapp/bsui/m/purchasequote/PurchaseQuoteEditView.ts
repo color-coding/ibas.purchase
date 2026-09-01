@@ -30,6 +30,8 @@ namespace purchase {
                 choosePurchaseQuoteItemWarehouseEvent: Function;
                 /** 选择采购报价-行 单位 */
                 choosePurchaseQuoteItemUnitEvent: Function;
+                choosePurchaseQuoteItemMaterialSerialEvent: Function;
+                choosePurchaseQuoteItemMaterialBatchEvent: Function;
                 /** 选择采购报价-一揽子协议事件 */
                 choosePurchaseQuoteBlanketAgreementEvent: Function;
                 /** 选择采购报价-行 物料版本 */
@@ -587,6 +589,20 @@ namespace purchase {
                                                                         id: app.ELEMENT_PURCHASE_QUOTE_EXTRA.id,
                                                                         name: app.ELEMENT_PURCHASE_QUOTE_EXTRA.name,
                                                                     })
+                                                                }),
+                                                                new sap.m.SegmentedButtonItem("", {
+                                                                    width: "3rem",
+                                                                    icon: "sap-icon://tags",
+                                                                    press(oEvent: any): void {
+                                                                        that.fireViewEvents(that.choosePurchaseQuoteItemMaterialBatchEvent);
+                                                                    }
+                                                                }),
+                                                                new sap.m.SegmentedButtonItem("", {
+                                                                    width: "3rem",
+                                                                    icon: "sap-icon://barcode",
+                                                                    press(oEvent: any): void {
+                                                                        that.fireViewEvents(that.choosePurchaseQuoteItemMaterialSerialEvent);
+                                                                    }
                                                                 }),
                                                                 new sap.m.SegmentedButtonItem("", {
                                                                     width: "3rem",

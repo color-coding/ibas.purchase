@@ -28,6 +28,12 @@ import org.colorcoding.ibas.bobas.rule.common.BusinessRuleMinValue;
 import org.colorcoding.ibas.bobas.rule.common.BusinessRuleRequired;
 import org.colorcoding.ibas.businesspartner.data.emBusinessPartnerType;
 import org.colorcoding.ibas.materials.logic.IDocumentQuantityClosingContract;
+import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItems;
+import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItem;
+import org.colorcoding.ibas.materials.bo.materialbatch.MaterialBatchItems;
+import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItems;
+import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItem;
+import org.colorcoding.ibas.materials.bo.materialserial.MaterialSerialItems;
 import org.colorcoding.ibas.materials.logic.IMaterialCatalogCheckContract;
 import org.colorcoding.ibas.materials.logic.IMaterialWarehouseCheckContract;
 import org.colorcoding.ibas.materials.rules.BusinessRuleCalculateInventoryQuantity;
@@ -2412,6 +2418,30 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 	/**
 	 * 属性名称-采购报价-行-额外信息
 	 */
+	private static final String PROPERTY_MATERIALBATCHES_NAME = "MaterialBatches";
+	public static final IPropertyInfo<IMaterialBatchItems> PROPERTY_MATERIALBATCHES = registerProperty(
+			PROPERTY_MATERIALBATCHES_NAME, IMaterialBatchItems.class, MY_CLASS);
+	@XmlElementWrapper(name = PROPERTY_MATERIALBATCHES_NAME)
+	@XmlElement(name = MaterialBatchItem.BUSINESS_OBJECT_NAME, type = MaterialBatchItem.class)
+	public final IMaterialBatchItems getMaterialBatches() {
+		return this.getProperty(PROPERTY_MATERIALBATCHES);
+	}
+	public final void setMaterialBatches(IMaterialBatchItems value) {
+		this.setProperty(PROPERTY_MATERIALBATCHES, value);
+	}
+
+	private static final String PROPERTY_MATERIALSERIALS_NAME = "MaterialSerials";
+	public static final IPropertyInfo<IMaterialSerialItems> PROPERTY_MATERIALSERIALS = registerProperty(
+			PROPERTY_MATERIALSERIALS_NAME, IMaterialSerialItems.class, MY_CLASS);
+	@XmlElementWrapper(name = PROPERTY_MATERIALSERIALS_NAME)
+	@XmlElement(name = MaterialSerialItem.BUSINESS_OBJECT_NAME, type = MaterialSerialItem.class)
+	public final IMaterialSerialItems getMaterialSerials() {
+		return this.getProperty(PROPERTY_MATERIALSERIALS);
+	}
+	public final void setMaterialSerials(IMaterialSerialItems value) {
+		this.setProperty(PROPERTY_MATERIALSERIALS, value);
+	}
+
 	private static final String PROPERTY_PURCHASEQUOTEITEMEXTRAS_NAME = "PurchaseQuoteItemExtras";
 
 	/**
@@ -2448,6 +2478,8 @@ public class PurchaseQuoteItem extends BusinessObject<PurchaseQuoteItem>
 	protected void initialize() {
 		super.initialize();// 基类初始化，不可去除
 		this.setPurchaseQuoteItemExtras(new PurchaseQuoteItemExtras(this));
+		this.setMaterialBatches(new MaterialBatchItems(this));
+		this.setMaterialSerials(new MaterialSerialItems(this));
 		this.setObjectCode(MyConfiguration.applyVariables(BUSINESS_OBJECT_CODE));
 		this.setDiscount(Decimals.VALUE_ONE);
 		this.setTaxRate(Decimals.VALUE_ZERO);

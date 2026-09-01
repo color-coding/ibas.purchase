@@ -37,6 +37,8 @@ namespace purchase {
                 this.view.choosePurchaseQuoteItemMaterialEvent = this.choosePurchaseQuoteItemMaterial;
                 this.view.choosePurchaseQuoteItemWarehouseEvent = this.choosePurchaseQuoteItemWarehouse;
                 this.view.choosePurchaseQuoteItemUnitEvent = this.choosePurchaseQuoteItemUnit;
+                this.view.choosePurchaseQuoteItemMaterialBatchEvent = this.choosePurchaseQuoteItemMaterialBatch;
+                this.view.choosePurchaseQuoteItemMaterialSerialEvent = this.choosePurchaseQuoteItemMaterialSerial;
                 this.view.choosePurchaseQuotePurchaseRequestEvent = this.choosePurchaseQuotePurchaseRequest;
                 this.view.choosePurchaseQuoteBlanketAgreementEvent = this.choosePurchaseQuoteBlanketAgreement;
                 this.view.choosePurchaseQuoteItemDistributionRuleEvent = this.choosePurchaseQuoteItemDistributionRule;
@@ -150,6 +152,10 @@ namespace purchase {
                                 that.editData = opRslt.resultObjects.firstOrDefault();
                                 that.messages(ibas.emMessageType.SUCCESS,
                                     ibas.i18n.prop("shell_data_save") + ibas.i18n.prop("shell_successful"));
+                                if (!that.editData.isDeleted && that.editData.canceled !== ibas.emYesNo.YES) {
+                                    if (!ibas.objects.isNull(that.serials) && that.serials.save instanceof Function) { that.serials.save((error) => { if (error instanceof Error) that.messages(error); }); }
+                                    if (!ibas.objects.isNull(that.batches) && that.batches.save instanceof Function) { that.batches.save((error) => { if (error instanceof Error) that.messages(error); }); }
+                                }
                             }
                             // 刷新当前视图
                             that.viewShowed();
@@ -485,6 +491,8 @@ namespace purchase {
                                 created = true;
                             }
                             item.baseProduct(selected);
+                            item.materialBatches.clear();
+                            item.materialSerials.clear();
                             if (!ibas.strings.isEmpty(that.view.defaultTaxGroup)) {
                                 item.tax = that.view.defaultTaxGroup;
                                 if (!ibas.strings.isEmpty(item.tax)) {
@@ -1321,6 +1329,30 @@ namespace purchase {
                     })
                 });
             }
+            private batches: materials.app.IServiceExtraBatches;
+            private choosePurchaseQuoteItemMaterialBatch(): void {
+                let contracts: ibas.ArrayList<materials.app.IMaterialBatchContract> = new ibas.ArrayList<materials.app.IMaterialBatchContract>();
+                for (let item of this.editData.purchaseQuoteItems) {
+                    contracts.add({ batchManagement: item.batchManagement, itemCode: item.itemCode, itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion, warehouse: item.warehouse, quantity: item.inventoryQuantity, uom: item.inventoryUOM,
+                        materialBatches: item.materialBatches, agreements: item.agreements });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialBatchContract[], materials.app.IServiceExtraBatches>({
+                    proxy: new materials.app.MaterialBatchReceiptServiceProxy(contracts), onCompleted: (results) => { this.batches = results; }
+                });
+            }
+            private serials: materials.app.IServiceExtraSerials;
+            private choosePurchaseQuoteItemMaterialSerial(): void {
+                let contracts: ibas.ArrayList<materials.app.IMaterialSerialContract> = new ibas.ArrayList<materials.app.IMaterialSerialContract>();
+                for (let item of this.editData.purchaseQuoteItems) {
+                    contracts.add({ serialManagement: item.serialManagement, itemCode: item.itemCode, itemDescription: item.itemDescription,
+                        itemVersion: item.itemVersion, warehouse: item.warehouse, quantity: item.inventoryQuantity, uom: item.inventoryUOM,
+                        materialSerials: item.materialSerials });
+                }
+                ibas.servicesManager.runApplicationService<materials.app.IMaterialSerialContract[], materials.app.IServiceExtraSerials>({
+                    proxy: new materials.app.MaterialSerialReceiptServiceProxy(contracts), onCompleted: (results) => { this.serials = results; }
+                });
+            }
             protected calculateQuantity(caller: bo.PurchaseQuoteItem): void {
                 if (ibas.objects.isNull(caller)) {
                     this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
@@ -1479,6 +1511,10 @@ namespace purchase {
             choosePurchaseQuoteItemWarehouseEvent: Function;
             /** 选择采购报价-行 单位 */
             choosePurchaseQuoteItemUnitEvent: Function;
+            /** 选择采购报价-行物料批次事件 */
+            choosePurchaseQuoteItemMaterialBatchEvent: Function;
+            /** 选择采购报价-行物料序列事件 */
+            choosePurchaseQuoteItemMaterialSerialEvent: Function;
             /** 选择采购报价-一揽子协议事件 */
             choosePurchaseQuoteBlanketAgreementEvent: Function;
             /** 选择采购订单-行 成本中心事件 */
