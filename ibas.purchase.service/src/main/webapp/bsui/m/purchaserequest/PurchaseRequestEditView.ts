@@ -48,6 +48,8 @@ namespace purchase {
                 viewHistoricalPricesEvent: Function;
                 /** 计算数量 */
                 calculateQuantityEvent: Function;
+                /** 默认仓库 */
+                defaultWarehouse: string;
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;

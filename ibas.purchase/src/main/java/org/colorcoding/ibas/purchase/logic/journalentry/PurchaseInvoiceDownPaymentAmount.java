@@ -5,6 +5,7 @@ import org.colorcoding.ibas.accounting.bo.journalentry.IJournalEntryLine;
 import org.colorcoding.ibas.accounting.bo.journalentry.JournalEntry;
 import org.colorcoding.ibas.accounting.logic.JournalEntryService;
 import org.colorcoding.ibas.accounting.repository.BORepositoryAccounting;
+import org.colorcoding.ibas.bobas.bo.BOIdentifierBuilder;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICondition;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
@@ -52,9 +53,8 @@ public class PurchaseInvoiceDownPaymentAmount extends JournalEntrySmartContent {
 					}
 				}
 			}
-			throw new Exception(I18N.prop("msg_ac_not_found_document_journalentry", String.format(
-					"{[%s].[DocEntry = %s]%s}", item.getPaymentType(), item.getPaymentEntry(),
-					item.getPaymentLineId() > 0 ? String.format("&&[LineId = %s]", item.getPaymentLineId()) : "")));
+			throw new Exception(I18N.prop("msg_ac_not_found_document_journalentry",
+					BOIdentifierBuilder.document(item.getPaymentType(), item.getPaymentEntry(), item.getPaymentLineId()).build()));
 		}
 		throw new Exception(I18N.prop("msg_bobas_not_support_the_compute"));
 	}

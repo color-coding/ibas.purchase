@@ -437,6 +437,22 @@ namespace purchase {
                         conditions.add(condition);
                     }
                 }
+                // 添加仓库条件
+                if (!ibas.objects.isNull(caller) && !ibas.strings.isEmpty(caller.warehouse)) {
+                    condition = new ibas.Condition();
+                    condition.alias = materials.app.conditions.product.CONDITION_ALIAS_WAREHOUSE;
+                    condition.value = caller.warehouse;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.relationship = ibas.emConditionRelationship.AND;
+                    conditions.add(condition);
+                } else if (!ibas.strings.isEmpty(this.view.defaultWarehouse)) {
+                    condition = new ibas.Condition();
+                    condition.alias = materials.app.conditions.product.CONDITION_ALIAS_WAREHOUSE;
+                    condition.value = this.view.defaultWarehouse;
+                    condition.operation = ibas.emConditionOperation.EQUAL;
+                    condition.relationship = ibas.emConditionRelationship.AND;
+                    conditions.add(condition);
+                }
                 // 采购物料
                 condition = new ibas.Condition();
                 condition.alias = materials.app.conditions.product.CONDITION_ALIAS_PURCHASE_ITEM;
@@ -461,6 +477,9 @@ namespace purchase {
                             }
                             item.baseProduct(selected);
                             item.supplier = selected.preferredVendor;
+                            if (!ibas.strings.isEmpty(that.view.defaultWarehouse)) {
+                                item.warehouse = that.view.defaultWarehouse;
+                            }
                             if (!ibas.strings.isEmpty(item.tax)) {
                                 accounting.taxrate.assign(item.tax, (rate) => {
                                     if (rate >= 0) {
@@ -871,6 +890,7 @@ namespace purchase {
                                 created = true;
                             }
                             item.warehouse = selected.code;
+                            that.view.defaultWarehouse = item.warehouse;
                             item = null;
                         }
                         if (created) {
@@ -1057,6 +1077,8 @@ namespace purchase {
             viewHistoricalPricesEvent: Function;
             /** 计算数量 */
             calculateQuantityEvent: Function;
+            /** 默认仓库 */
+            defaultWarehouse: string;
         }
         /** 采购申请编辑服务映射 */
         export class PurchaseRequestEditServiceMapping extends ibas.BOEditServiceMapping {
