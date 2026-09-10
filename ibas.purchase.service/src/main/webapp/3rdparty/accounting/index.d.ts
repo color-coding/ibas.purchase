@@ -8140,6 +8140,8 @@ declare namespace accounting {
             /** 新建数据，参数1：是否克隆 */
             protected createData(clone: boolean): void;
             private chooseBank;
+            private chooseCustomer;
+            private chooseSupplier;
             private chooseBankAccount;
         }
         /** 视图-分支 */
@@ -8154,6 +8156,10 @@ declare namespace accounting {
             chooseBankEvent: Function;
             /** 选择银行账号事件 */
             chooseBankAccountEvent: Function;
+            /** 选择客户事件 */
+            chooseCustomerEvent: Function;
+            /** 选择供应商事件 */
+            chooseSupplierEvent: Function;
         }
         /** Branch编辑服务映射 */
         class BranchEditServiceMapping extends ibas.BOEditServiceMapping {
