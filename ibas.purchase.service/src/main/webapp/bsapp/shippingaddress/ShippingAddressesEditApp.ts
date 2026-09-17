@@ -87,18 +87,58 @@ namespace purchase {
                     this.editData(data);
                 }
                 let that: this = this;
-                ibas.servicesManager.runChooseService<businesspartner.bo.IAddress>({
-                    boCode: businesspartner.bo.BO_CODE_ADDRESS,
-                    chooseType: ibas.emChooseType.SINGLE,
-                    criteria: [
-                        new ibas.Condition("businessPartner", ibas.emConditionOperation.EQUAL, this.editAddresses.parent.supplierCode),
-                        new ibas.Condition("ownerType", ibas.emConditionOperation.EQUAL, businesspartner.bo.emBusinessPartnerType.SUPPLIER),
-                        new ibas.Condition("activated", ibas.emConditionOperation.EQUAL, ibas.emYesNo.YES)
-                    ],
-                    onCompleted(selecteds: ibas.IList<businesspartner.bo.IAddress>): void {
-                        let selected: businesspartner.bo.IAddress = selecteds.firstOrDefault();
-                        data.baseAddress(selected);
-                        that.editData(data);
+                let supplierCodes: string[] = [this.editAddresses.parent.supplierCode];
+                let chooseAddress: (supplierCodes: string[]) => void = (supplierCodes) => {
+                    let criteria: ibas.ICriteria = new ibas.Criteria();
+                    let condition: ibas.ICondition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.Address.PROPERTY_OWNERTYPE_NAME;
+                    condition.value = businesspartner.bo.emBusinessPartnerType.SUPPLIER.toString();
+                    condition = criteria.conditions.create();
+                    condition.alias = businesspartner.bo.Address.PROPERTY_ACTIVATED_NAME;
+                    condition.value = ibas.emYesNo.YES.toString();
+                    if (supplierCodes.length > 0) {
+                        condition = criteria.conditions.create();
+                        condition.alias = businesspartner.bo.Address.PROPERTY_BUSINESSPARTNER_NAME;
+                        condition.value = supplierCodes[0];
+                        condition.bracketOpen = 1;
+                        for (let i: number = 1; i < supplierCodes.length; i++) {
+                            condition = criteria.conditions.create();
+                            condition.alias = businesspartner.bo.Address.PROPERTY_BUSINESSPARTNER_NAME;
+                            condition.value = supplierCodes[i];
+                            condition.relationship = ibas.emConditionRelationship.OR;
+                        }
+                        criteria.conditions.lastOrDefault().bracketClose = 1;
+                    }
+                    ibas.servicesManager.runChooseService<businesspartner.bo.IAddress>({
+                        boCode: businesspartner.bo.BO_CODE_ADDRESS,
+                        chooseType: ibas.emChooseType.SINGLE,
+                        criteria: criteria,
+                        onCompleted(selecteds: ibas.IList<businesspartner.bo.IAddress>): void {
+                            data.baseAddress(selecteds.firstOrDefault());
+                            that.editData(data);
+                        }
+                    });
+                };
+                let branchRepository: accounting.bo.BORepositoryAccounting = new accounting.bo.BORepositoryAccounting();
+                let branchCriteria: ibas.ICriteria = new ibas.Criteria();
+                let branchCondition: ibas.ICondition = branchCriteria.conditions.create();
+                if (!ibas.strings.isEmpty(this.editAddresses.parent.branch)) {
+                    branchCondition.alias = accounting.bo.Branch.PROPERTY_CODE_NAME;
+                    branchCondition.value = this.editAddresses.parent.branch;
+                } else {
+                    branchCondition.alias = accounting.bo.Branch.PROPERTY_MAIN_NAME;
+                    branchCondition.value = ibas.emYesNo.YES.toString();
+                }
+                branchCondition = branchCriteria.conditions.create();
+                branchCondition.alias = accounting.bo.Branch.PROPERTY_ACTIVATED_NAME;
+                branchCondition.value = ibas.emYesNo.YES.toString();
+                branchRepository.fetchBranch({
+                    criteria: branchCriteria,
+                    onCompleted: (opRslt) => {
+                        for (let branch of opRslt.resultObjects) {
+                            supplierCodes.push(branch.supplier);
+                        }
+                        chooseAddress(supplierCodes);
                     }
                 });
             }
