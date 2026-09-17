@@ -379,6 +379,64 @@ namespace purchase {
                                             }
                                             */
                                         }),
+                                        new sap.m.ToolbarSeparator(""),
+                                        new sap.m.Label("", {
+                                            wrapping: false,
+                                            showColon: true,
+                                            text: ibas.i18n.prop("bo_warehouse"),
+                                            visible: shell.app.privileges.canRun({
+                                                id: materials.app.ELEMENT_DOCUMENT_WAREHOUSE.id,
+                                                name: materials.app.ELEMENT_DOCUMENT_WAREHOUSE.name,
+                                            })
+                                        }),
+                                        this.selectWarehouse = new component.WarehouseSelect("", {
+                                            width: "auto",
+                                            branch: {
+                                                path: "/branch",
+                                                type: new sap.extension.data.Alphanumeric()
+                                            },
+                                            change(this: sap.m.Select, event: sap.ui.base.Event): void {
+                                                let sItem: any = this.getSelectedItem();
+                                                if (sItem instanceof sap.ui.core.Item && !ibas.strings.isEmpty(sItem.getKey())) {
+                                                    let model: any = that.tablePurchaseRequestItem.getModel();
+                                                    if (model instanceof sap.extension.model.JSONModel) {
+                                                        let data: any[] = model.getData("rows");
+                                                        if (data instanceof Array) {
+                                                            let items: ibas.IList<bo.PurchaseRequestItem> = new ibas.ArrayList<bo.PurchaseRequestItem>();
+                                                            for (let item of data) {
+                                                                if (item instanceof bo.PurchaseRequestItem) {
+                                                                    if (item.warehouse !== sItem.getKey()) {
+                                                                        items.add(item);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (items.length > 0) {
+                                                                that.application.viewShower.messages({
+                                                                    title: that.title,
+                                                                    type: ibas.emMessageType.QUESTION,
+                                                                    message: ibas.i18n.prop("purchase_change_item_warehouse_continue", sItem.getText()),
+                                                                    actions: [
+                                                                        ibas.emMessageAction.YES,
+                                                                        ibas.emMessageAction.NO,
+                                                                    ],
+                                                                    onCompleted: (reslut) => {
+                                                                        if (reslut === ibas.emMessageAction.YES) {
+                                                                            for (let item of items) {
+                                                                                item.warehouse = sItem.getKey();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            visible: shell.app.privileges.canRun({
+                                                id: materials.app.ELEMENT_DOCUMENT_WAREHOUSE.id,
+                                                name: materials.app.ELEMENT_DOCUMENT_WAREHOUSE.name,
+                                            })
+                                        }),
                                     ]
                                 }),
                                 rows: "{/rows}",
@@ -1100,6 +1158,13 @@ namespace purchase {
                 private page: sap.extension.m.Page;
                 private tablePurchaseRequestItem: sap.extension.table.Table;
                 private quickToMenu: sap.m.Menu;
+                private selectWarehouse: component.WarehouseSelect;
+                get defaultWarehouse(): string {
+                    return this.selectWarehouse.getSelectedKey();
+                }
+                set defaultWarehouse(value: string) {
+                    this.selectWarehouse.setSelectedKey(value);
+                }
                 /** 默认税组 */
                 defaultTaxGroup: string;
                 /** 显示数据 */

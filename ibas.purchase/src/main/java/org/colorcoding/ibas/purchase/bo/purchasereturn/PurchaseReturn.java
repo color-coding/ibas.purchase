@@ -52,7 +52,6 @@ import org.colorcoding.ibas.materials.logic.journalentry.MaterialsLedgerContent;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
-import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -2175,54 +2174,6 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 								jeContents.add(jeContent);
 							}
 						}
-						// 单据折扣不是1
-						if (!Decimals.VALUE_ONE.equals(PurchaseReturn.this.getDiscount())) {
-							for (JournalEntryContent item : jeContents) {
-								// 行税前总计 × 折扣
-								if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
-										|| Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT.equals(item.getLedger())
-										|| Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT.equals(item.getLedger())) {
-									item.setAmount(
-											Decimals.multiply(item.getAmount(), PurchaseReturn.this.getDiscount()));
-								}
-							}
-						}
-						// 送货地址-运费
-						for (IShippingAddress line : PurchaseReturn.this.getShippingAddresss()) {
-							// 运费科目
-							jeContent = new JournalEntrySmartContent(line);
-							jeContent.setCategory(Category.Debit);
-							jeContent.setLedger(Ledgers.LEDGER_PURCHASE_FREIGHT_COST_ACCOUNT);
-							jeContent.setAmount(line.getPreTaxExpense());
-							jeContent.setCurrency(line.getCurrency());
-							jeContent.setRate(line.getRate());
-							jeContents.add(jeContent);
-							// 税科目
-							jeContent = new JournalEntrySmartContent(line);
-							jeContent.setCategory(Category.Debit);
-							jeContent.setLedger(Ledgers.LEDGER_COMMON_INPUT_TAX_ACCOUNT);
-							jeContent.setAmount(line.getTaxTotal());
-							jeContent.setCurrency(line.getCurrency());
-							jeContent.setRate(line.getRate());
-							jeContents.add(jeContent);
-						}
-						// 舍入
-						jeContent = new JournalEntrySmartContent(PurchaseReturn.this);
-						jeContent.setCategory(Category.Debit);
-						jeContent.setLedger(Ledgers.LEDGER_COMMON_ROUNDING_ACCOUNT);
-						jeContent.setAmount(PurchaseReturn.this.getDiffAmount());
-						jeContent.setCurrency(PurchaseReturn.this.getDocumentCurrency());
-						jeContent.setRate(PurchaseReturn.this.getDocumentRate());
-						jeContents.add(jeContent);
-						// 应付账款
-						jeContent = new JournalEntrySmartContent(PurchaseReturn.this);
-						jeContent.setCategory(Category.Credit);
-						jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
-						jeContent.setShortName(PurchaseReturn.this.getSupplierCode());
-						jeContent.setAmount(PurchaseReturn.this.getDocumentTotal());
-						jeContent.setCurrency(PurchaseReturn.this.getDocumentCurrency());
-						jeContent.setRate(PurchaseReturn.this.getDocumentRate());
-						jeContents.add(jeContent);
 						return jeContents.toArray(new JournalEntryContent[] {});
 					}
 
