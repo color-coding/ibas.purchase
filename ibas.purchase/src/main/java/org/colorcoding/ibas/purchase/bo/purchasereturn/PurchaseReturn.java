@@ -1,6 +1,7 @@
 package org.colorcoding.ibas.purchase.bo.purchasereturn;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.accounting.data.IProjectData;
 import org.colorcoding.ibas.accounting.logic.IBranchCheckContract;
+import org.colorcoding.ibas.accounting.logic.IJECPropertyValueGetter;
 import org.colorcoding.ibas.accounting.logic.IJournalEntryCreationContract;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent;
 import org.colorcoding.ibas.accounting.logic.JournalEntryContent.Category;
@@ -52,13 +54,12 @@ import org.colorcoding.ibas.document.IDocumentPaidTotalOperator;
 import org.colorcoding.ibas.document.IDocumentPrintedOperator;
 import org.colorcoding.ibas.materials.data.Ledgers;
 import org.colorcoding.ibas.materials.logic.journalentry.JournalEntrySmartContent;
-import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsCost;
-import org.colorcoding.ibas.materials.logic.journalentry.MaterialsInventoryCost;
 import org.colorcoding.ibas.materials.logic.journalentry.MaterialsLedgerContent;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -75,9 +76,10 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionInverseDiscount;
 @XmlType(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlRootElement(name = PurchaseReturn.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BusinessObjectUnit(code = PurchaseReturn.BUSINESS_OBJECT_CODE)
-public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IPurchaseReturn, IDataOwnership,
-		IApprovalData, IPeriodData, IProjectData, IBOTagDeleted, IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey,
-		IBOUserFields, IDocumentPaidTotalOperator, IDocumentCloseQuantityOperator, IDocumentPrintedOperator {
+public class PurchaseReturn extends BusinessObject<PurchaseReturn>
+		implements IPurchaseReturn, IDataOwnership, IApprovalData, IPeriodData, IProjectData, IBOTagDeleted,
+		IBOTagCanceled, IBusinessLogicsHost, IBOSeriesKey, IBOUserFields, IDocumentPaidTotalOperator,
+		IJECPropertyValueGetter, IDocumentCloseQuantityOperator, IDocumentPrintedOperator {
 
 	/**
 	 * 序列化版本标记
@@ -1004,32 +1006,32 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 	}
 
 	/**
-	* 属性名称-已打印
-	*/
+	 * 属性名称-已打印
+	 */
 	private static final String PROPERTY_PRINTED_NAME = "Printed";
 
 	/**
-	* 已打印 属性
-	*/
+	 * 已打印 属性
+	 */
 	@DbField(name = "Printed", type = DbFieldType.ALPHANUMERIC, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<emYesNo> PROPERTY_PRINTED = registerProperty(PROPERTY_PRINTED_NAME, emYesNo.class,
 			MY_CLASS);
 
 	/**
-	* 获取-已打印
-	* 
-	* @return 值
-	*/
+	 * 获取-已打印
+	 * 
+	 * @return 值
+	 */
 	@XmlElement(name = PROPERTY_PRINTED_NAME)
 	public final emYesNo getPrinted() {
 		return this.getProperty(PROPERTY_PRINTED);
 	}
 
 	/**
-	* 设置-已打印
-	* 
-	* @param value 值
-	*/
+	 * 设置-已打印
+	 * 
+	 * @param value 值
+	 */
 	public final void setPrinted(emYesNo value) {
 		this.setProperty(PROPERTY_PRINTED, value);
 	}
@@ -2171,7 +2173,8 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 								if (Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT.equals(item.getLedger())
 										|| Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT.equals(item.getLedger())
 										|| Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT.equals(item.getLedger())) {
-									item.setAmount(Decimal.multiply(item.getAmount(), PurchaseReturn.this.getDiscount()));
+									item.setAmount(
+											Decimal.multiply(item.getAmount(), PurchaseReturn.this.getDiscount()));
 								}
 							}
 						}
@@ -2223,6 +2226,38 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 	public void check() throws BusinessRuleException {
 		IDocumentPaidTotalOperator.super.check();
 		IDocumentCloseQuantityOperator.super.check();
+	}
+
+	@Override
+	public Object getValue(String property) {
+		switch (property) {
+		case Ledgers.CONDITION_PROPERTY_OBJECTCODE:
+			return this.getObjectCode();
+		case Ledgers.CONDITION_PROPERTY_DATAOWNER:
+			return this.getDataOwner();
+		case Ledgers.CONDITION_PROPERTY_ORGANIZATION:
+			return this.getOrganization();
+		case Ledgers.CONDITION_PROPERTY_ORDERTYPE:
+			return this.getOrderType();
+		case Ledgers.CONDITION_PROPERTY_PROJECT:
+			return this.getProject();
+		case Ledgers.CONDITION_PROPERTY_BRANCH:
+			return this.getBranch();
+		case Ledgers.CONDITION_PROPERTY_SUPPLIER:
+			return this.getSupplierCode();
+		case Ledgers.CONDITION_PROPERTY_REFERENCE_1:
+			return this.getReference1();
+		case Ledgers.CONDITION_PROPERTY_REFERENCE_2:
+			return this.getReference2();
+		case Ledgers.CONDITION_PROPERTY_MATERIAL:
+			String[] items = new String[this.getPurchaseReturnItems().size()];
+			for (int i = 0; i < items.length; i++) {
+				items[i] = this.getPurchaseReturnItems().get(i).getItemCode();
+			}
+			return Arrays.toString(items);
+		default:
+			return null;
+		}
 	}
 
 	@Override
