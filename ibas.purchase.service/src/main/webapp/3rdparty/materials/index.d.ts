@@ -16019,6 +16019,11 @@ declare namespace materials {
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria | string | number): void;
             protected overview(): void;
+            private extendedContracts;
+            private extendedSettings;
+            /** 加载物料扩展视图 */
+            protected showMaterialsExtendedViews(): void;
+            private closeExtendedView;
         }
         /** 视图-物料 */
         interface IMaterialViewView extends ibas.IBOViewView {
@@ -16026,6 +16031,10 @@ declare namespace materials {
             showMaterial(data: bo.Material): void;
             /** 更多信息 */
             overviewEvent: Function;
+            /** 显示扩展视图 */
+            showExtendedView(view: ibas.View): void;
+            /** 关闭扩展视图 */
+            closeExtendedViewEvent?: Function;
         }
         /** 物料连接服务映射 */
         class MaterialLinkServiceMapping extends ibas.BOLinkServiceMapping {
