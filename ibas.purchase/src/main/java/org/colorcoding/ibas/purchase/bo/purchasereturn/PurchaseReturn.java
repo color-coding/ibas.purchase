@@ -52,6 +52,7 @@ import org.colorcoding.ibas.materials.logic.journalentry.MaterialsLedgerContent;
 import org.colorcoding.ibas.materials.rules.BusinessRulePreventCancelDocument;
 import org.colorcoding.ibas.purchase.MyConfiguration;
 import org.colorcoding.ibas.purchase.bo.purchasedelivery.PurchaseDelivery;
+import org.colorcoding.ibas.purchase.bo.purchasereserveinvoice.PurchaseReserveInvoice;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.IShippingAddresss;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddress;
 import org.colorcoding.ibas.purchase.bo.shippingaddress.ShippingAddresss;
@@ -2115,6 +2116,8 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 						List<JournalEntryContent> jeContents = new ArrayList<>();
 						String PurchaseDeliveryCode = MyConfiguration
 								.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
+						String PurchaseReserveInvoiceCode = MyConfiguration
+								.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
 						for (IPurchaseReturnItem line : PurchaseReturn.this.getPurchaseReturnItems()) {
 							if (line.getDeleted() == emYesNo.YES) {
 								continue;
@@ -2127,28 +2130,45 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 							}
 							if (PurchaseDeliveryCode.equals(line.getBaseDocumentType())
 									|| PurchaseDeliveryCode.equals(line.getOriginalDocumentType())) {
-								/** 基于交货 **/
-								// 库存科目（非库存/服务物料自动改入费用科目）
-								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line, line.getInventoryQuantity());
-								((MaterialsCost) jeContent)
-										.setLedgerForNature(MaterialsCost.CostNature.NON_INVENTORY,
-												Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT)
-										.setLedgerForNature(MaterialsCost.CostNature.SERVICE,
-												Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
-								jeContent.setCategory(Category.Debit);
-								jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
-								// 分配科目
-								jeContent = new PurchaseReturnDeliveryPreTaxPrice(line, line.getInventoryQuantity());
-								jeContent.setCategory(Category.Credit);
-								jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
-								jeContent.setAmount(line.getPreTaxLineTotal());
-								jeContent.setCurrency(line.getCurrency());
-								jeContent.setRate(line.getRate());
-								jeContents.add(jeContent);
+								if (PurchaseReserveInvoiceCode.equalsIgnoreCase(line.getOriginalDocumentType())) {
+									/** 收货基于预留发票：反向冲回应付账款和在途库存 **/
+									jeContent = new JournalEntrySmartContent(line);
+									jeContent.setCategory(Category.Debit);
+									jeContent.setLedger(Ledgers.LEDGER_PURCHASE_DOMESTIC_ACCOUNTS_PAYABLE);
+									jeContent.setShortName(PurchaseReturn.this.getSupplierCode());
+									jeContent.setAmount(line.getPreTaxLineTotal());
+									jeContent.setCurrency(line.getCurrency());
+									jeContent.setRate(line.getRate());
+									jeContents.add(jeContent);
+									jeContent = new JournalEntrySmartContent(line);
+									jeContent.setCategory(Category.Credit);
+									jeContent.setLedger(Ledgers.LEDGER_PURCHASE_STOCK_IN_TRANSIT_ACCOUNT);
+									jeContent.setAmount(line.getPreTaxLineTotal());
+									jeContent.setCurrency(line.getCurrency());
+									jeContent.setRate(line.getRate());
+									jeContents.add(jeContent);
+								} else {
+									/** 普通收货：冲回采购分配和库存 **/
+									jeContent = new PurchaseReturnDeliveryPreTaxPrice(line, line.getInventoryQuantity());
+									((MaterialsCost) jeContent)
+											.setLedgerForNature(MaterialsCost.CostNature.NON_INVENTORY,
+													Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT)
+											.setLedgerForNature(MaterialsCost.CostNature.SERVICE,
+													Ledgers.LEDGER_INVENTORY_EXPENSE_ACCOUNT);
+									jeContent.setCategory(Category.Credit);
+									jeContent.setLedger(Ledgers.LEDGER_INVENTORY_INVENTORY_ACCOUNT);
+									jeContent.setAmount(line.getPreTaxLineTotal());
+									jeContent.setCurrency(line.getCurrency());
+									jeContent.setRate(line.getRate());
+									jeContents.add(jeContent);
+									jeContent = new PurchaseReturnDeliveryPreTaxPrice(line, line.getInventoryQuantity());
+									jeContent.setCategory(Category.Debit);
+									jeContent.setLedger(Ledgers.LEDGER_PURCHASE_ALLOCATION_ACCOUNT);
+									jeContent.setAmount(line.getPreTaxLineTotal());
+									jeContent.setCurrency(line.getCurrency());
+									jeContent.setRate(line.getRate());
+									jeContents.add(jeContent);
+								}
 							} else {
 								/** 不基于单据 **/
 								// 库存科目（非库存/服务物料自动改入费用科目）
