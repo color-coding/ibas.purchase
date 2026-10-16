@@ -2107,6 +2107,9 @@ public class PurchaseReturn extends BusinessObject<PurchaseReturn> implements IP
 						String PurchaseReserveInvoiceCode = MyConfiguration
 								.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
 						for (IPurchaseReturnItem line : PurchaseReturn.this.getPurchaseReturnItems()) {
+							if (line.isDeleted()) {
+								continue;
+							}
 							if (line.getDeleted() == emYesNo.YES) {
 								continue;
 							}

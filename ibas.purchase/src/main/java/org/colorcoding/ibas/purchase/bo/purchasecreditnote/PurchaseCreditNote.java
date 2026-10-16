@@ -2147,6 +2147,9 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 										.applyVariables(PurchaseReserveInvoice.BUSINESS_OBJECT_CODE);
 						;
 						for (IPurchaseCreditNoteItem line : PurchaseCreditNote.this.getPurchaseCreditNoteItems()) {
+							if (line.isDeleted()) {
+								continue;
+							}
 							if (line.getDeleted() == emYesNo.YES) {
 								continue;
 							}
@@ -2244,6 +2247,9 @@ public class PurchaseCreditNote extends BusinessObject<PurchaseCreditNote>
 						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseCreditNote.this.getShippingAddresss()) {
+							if (line.isDeleted()) {
+								continue;
+							}
 							// 运费科目
 							jeContent = new JournalEntrySmartContent(line);
 							jeContent.setCategory(Category.Debit);
