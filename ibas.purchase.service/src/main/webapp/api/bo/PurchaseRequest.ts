@@ -102,7 +102,6 @@ namespace purchase {
 
             /** 采购申请-行集合 */
             purchaseRequestItems: IPurchaseRequestItems;
-
         }
 
         /** 采购申请-行 集合 */
@@ -195,7 +194,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
@@ -242,7 +241,6 @@ namespace purchase {
 
             /** 采购申请-行-额外信息集合 */
             purchaseRequestItemExtras: IPurchaseRequestItemExtras;
-
         }
 
         /** 采购申请-行-额外信息 集合 */
@@ -301,9 +299,6 @@ namespace purchase {
             quantity: number;
             /** 备注 */
             note: string;
-
         }
-
-
     }
 }

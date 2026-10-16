@@ -1295,19 +1295,19 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 	}
 
 	/**
-	 * 属性名称-库存数量
+	 * 属性名称-库存单位数量
 	 */
 	private static final String PROPERTY_INVENTORYQUANTITY_NAME = "InventoryQuantity";
 
 	/**
-	 * 库存数量 属性
+	 * 库存单位数量 属性
 	 */
 	@DbField(name = "InvQty", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_INVENTORYQUANTITY = registerProperty(
 			PROPERTY_INVENTORYQUANTITY_NAME, BigDecimal.class, MY_CLASS);
 
 	/**
-	 * 获取-库存数量
+	 * 获取-库存单位数量
 	 * 
 	 * @return 值
 	 */
@@ -1317,7 +1317,7 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 	}
 
 	/**
-	 * 设置-库存数量
+	 * 设置-库存单位数量
 	 * 
 	 * @param value 值
 	 */
@@ -2560,7 +2560,7 @@ public class PurchaseOrderItem extends BusinessObject<PurchaseOrderItem>
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_UNITPRICELC, PROPERTY_UNITPRICE, PROPERTY_RATE),
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRETAXPRICELC, PROPERTY_PRETAXPRICE, PROPERTY_RATE),
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRICELC, PROPERTY_PRICE, PROPERTY_RATE),
-				// 库存数量 = 数量 * 单位换算率
+				// 库存单位数量 = 数量 * 单位换算率
 				new BusinessRuleCalculateInventoryQuantity(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY,
 						PROPERTY_UOMRATE),
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率

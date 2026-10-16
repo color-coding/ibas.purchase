@@ -545,7 +545,6 @@ namespace purchase {
                 this.setProperty(DownPaymentRequest.PROPERTY_BRANCH_NAME, value);
             }
 
-
             /** 映射的属性名称-预付款申请-行集合 */
             static PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME: string = "DownPaymentRequestItems";
             /** 获取-预付款申请-行集合 */
@@ -602,14 +601,15 @@ namespace purchase {
                 this.setProperty(DownPaymentRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, value);
             }
 
-
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算-舍入差异
                     new BusinessRuleRoundingAmount(DownPaymentRequest.PROPERTY_ROUNDING_NAME, DownPaymentRequest.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME,
+                        DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME,
                         (data: DownPaymentRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -620,7 +620,9 @@ namespace purchase {
                     ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSTAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_ITEMSTAXTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME,
+                        DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME,
                         (data: DownPaymentRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -631,7 +633,9 @@ namespace purchase {
                     ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        DownPaymentRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DOWNPAYMNETREQUESTITEMS_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: DownPaymentRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -642,12 +646,17 @@ namespace purchase {
                     ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
-                        DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME, DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME, DownPaymentRequest.PROPERTY_DISCOUNT_NAME
+                        DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_ITEMSLINETOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DISCOUNT_NAME
                     ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
-                    new BusinessRuleDeductionDocumentTotal(DownPaymentRequest.PROPERTY_DOCUMENTTOTAL_NAME,
-                        DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME, undefined, DownPaymentRequest.PROPERTY_DIFFAMOUNT_NAME
-                    ),
+                    new BusinessRuleDeductionDocumentTotal(
+                        DownPaymentRequest.PROPERTY_DOCUMENTTOTAL_NAME,
+                        DownPaymentRequest.PROPERTY_DISCOUNTTOTAL_NAME,
+                        undefined,
+                        DownPaymentRequest.PROPERTY_DIFFAMOUNT_NAME
+                    )
                 ];
             }
             /** 重置 */
@@ -655,10 +664,10 @@ namespace purchase {
                 super.reset();
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.downPaymentRequestItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.downPaymentRequestItems.forEach((c) => (c.lineStatus = ibas.emDocumentStatus.RELEASED));
             }
             /** 转换之前 */
-            beforeConvert(): void { }
+            beforeConvert(): void {}
             /** 数据解析后 */
             afterParsing(): void {
                 // 计算部分业务逻辑
@@ -697,10 +706,11 @@ namespace purchase {
                         if (item.lineStatus === ibas.emDocumentStatus.CLOSED) {
                             continue;
                         }
-                        if (this.downPaymentRequestItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.downPaymentRequestItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未清金额
@@ -715,9 +725,10 @@ namespace purchase {
                             if (config.isInventoryUnitLinePrice()) {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.inventoryQuantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.inventoryQuantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.inventoryQuantity
+                                    ) {
                                         myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -732,9 +743,10 @@ namespace purchase {
                             } else {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.quantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.quantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.quantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.quantity
+                                    ) {
                                         myItem.quantity = item.quantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -771,10 +783,11 @@ namespace purchase {
                         if (item.lineStatus === ibas.emDocumentStatus.CLOSED) {
                             continue;
                         }
-                        if (this.downPaymentRequestItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.downPaymentRequestItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未清金额
@@ -789,9 +802,10 @@ namespace purchase {
                             if (config.isInventoryUnitLinePrice()) {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.inventoryQuantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.inventoryQuantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.inventoryQuantity
+                                    ) {
                                         myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -806,9 +820,10 @@ namespace purchase {
                             } else {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.quantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.quantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.quantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.quantity
+                                    ) {
                                         myItem.quantity = item.quantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -845,10 +860,11 @@ namespace purchase {
                         if (item.lineStatus === ibas.emDocumentStatus.CLOSED) {
                             continue;
                         }
-                        if (this.downPaymentRequestItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.downPaymentRequestItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未清金额
@@ -863,9 +879,10 @@ namespace purchase {
                             if (config.isInventoryUnitLinePrice()) {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.inventoryQuantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.inventoryQuantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.inventoryQuantity
+                                    ) {
                                         myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -880,9 +897,10 @@ namespace purchase {
                             } else {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.quantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.quantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.quantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.quantity
+                                    ) {
                                         myItem.quantity = item.quantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -920,8 +938,7 @@ namespace purchase {
                     if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
                         item.deliveryDate = this.parent.deliveryDate;
                     }
-                    if (ibas.strings.isEmpty(this.parent.documentCurrency)
-                        && !ibas.strings.isEmpty(item.currency)) {
+                    if (ibas.strings.isEmpty(this.parent.documentCurrency) && !ibas.strings.isEmpty(item.currency)) {
                         this.parent.documentCurrency = item.currency;
                     }
                 }
@@ -969,8 +986,10 @@ namespace purchase {
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: DownPaymentRequestItem, name: string): void {
                 // 标记删除触发集合行变化
-                if (ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_DELETED_NAME)
-                    || ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_CANCELED_NAME)) {
+                if (
+                    ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_DELETED_NAME) ||
+                    ibas.strings.equalsIgnoreCase(name, DownPaymentRequestItem.PROPERTY_CANCELED_NAME)
+                ) {
                     this.firePropertyChanged("length");
                 }
             }
@@ -1400,13 +1419,13 @@ namespace purchase {
                 this.setProperty(DownPaymentRequestItem.PROPERTY_UOMRATE_NAME, value);
             }
 
-            /** 映射的属性名称-库存数量 */
+            /** 映射的属性名称-库存单位数量 */
             static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
-            /** 获取-库存数量 */
+            /** 获取-库存单位数量 */
             get inventoryQuantity(): number {
                 return this.getProperty<number>(DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME);
             }
-            /** 设置-库存数量 */
+            /** 设置-库存单位数量 */
             set inventoryQuantity(value: number) {
                 this.setProperty(DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
@@ -1685,7 +1704,6 @@ namespace purchase {
                 this.setProperty(DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME, value);
             }
 
-
             /** 初始化数据 */
             protected init(): void {
                 this.currency = accounting.config.currency("LOCAL");
@@ -1705,36 +1723,53 @@ namespace purchase {
                 return [
                     // 计算本币价格
                     new BusinessRuleDeductionCurrencyAmount(
-                        DownPaymentRequestItem.PROPERTY_UNITPRICELC_NAME, DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                        DownPaymentRequestItem.PROPERTY_UNITPRICELC_NAME,
+                        DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME,
+                        DownPaymentRequestItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME, DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                        DownPaymentRequestItem.PROPERTY_PRETAXPRICELC_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME,
+                        DownPaymentRequestItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        DownPaymentRequestItem.PROPERTY_PRICELC_NAME, DownPaymentRequestItem.PROPERTY_PRICE_NAME, DownPaymentRequestItem.PROPERTY_RATE_NAME
+                        DownPaymentRequestItem.PROPERTY_PRICELC_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRICE_NAME,
+                        DownPaymentRequestItem.PROPERTY_RATE_NAME
                     ),
-                    // 计算库存数量 = 数量 * 换算率
+                    // 计算库存单位数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
-                        DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, DownPaymentRequestItem.PROPERTY_QUANTITY_NAME, DownPaymentRequestItem.PROPERTY_UOMRATE_NAME),
+                        DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME,
+                        DownPaymentRequestItem.PROPERTY_QUANTITY_NAME,
+                        DownPaymentRequestItem.PROPERTY_UOMRATE_NAME
+                    ),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME,
+                        DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME,
+                        DownPaymentRequestItem.PROPERTY_UNITPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : DownPaymentRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRICE_NAME,
+                    new BusinessRuleDeductionPriceTaxTotal(
+                        DownPaymentRequestItem.PROPERTY_LINETOTAL_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRICE_NAME,
                         config.isInventoryUnitLinePrice() ? DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : DownPaymentRequestItem.PROPERTY_QUANTITY_NAME,
-                        DownPaymentRequestItem.PROPERTY_TAXRATE_NAME, DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        DownPaymentRequestItem.PROPERTY_TAXRATE_NAME,
+                        DownPaymentRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME,
-                        config.isInventoryUnitLinePrice() ? DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : DownPaymentRequestItem.PROPERTY_QUANTITY_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXPRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? DownPaymentRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : DownPaymentRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
-                        DownPaymentRequestItem.PROPERTY_DISCOUNT_NAME, DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME, DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
-                    ),
+                        DownPaymentRequestItem.PROPERTY_DISCOUNT_NAME,
+                        DownPaymentRequestItem.PROPERTY_UNITLINETOTAL_NAME,
+                        DownPaymentRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    )
                 ];
             }
             /** 重置 */
@@ -1744,6 +1779,5 @@ namespace purchase {
                 this.closedQuantity = 0;
             }
         }
-
     }
 }

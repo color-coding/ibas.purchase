@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
+import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
@@ -49,7 +51,8 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
-		implements IPurchaseRequestItem, IBOUserFields, IBusinessLogicsHost, ICheckRules {
+		implements IPurchaseRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost,
+		ICheckRules {
 
 	/**
 	 * 序列化版本标记
@@ -1375,19 +1378,19 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	/**
-	 * 属性名称-库存数量
+	 * 属性名称-库存单位数量
 	 */
 	private static final String PROPERTY_INVENTORYQUANTITY_NAME = "InventoryQuantity";
 
 	/**
-	 * 库存数量 属性
+	 * 库存单位数量 属性
 	 */
 	@DbField(name = "InvQty", type = DataType.DECIMAL, editType = EditType.QUANTITY, table = DB_TABLE_NAME)
 	public static final IPropertyInfo<BigDecimal> PROPERTY_INVENTORYQUANTITY = registerProperty(
 			PROPERTY_INVENTORYQUANTITY_NAME, BigDecimal.class, MY_CLASS);
 
 	/**
-	 * 获取-库存数量
+	 * 获取-库存单位数量
 	 * 
 	 * @return 值
 	 */
@@ -1397,7 +1400,7 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 	}
 
 	/**
-	 * 设置-库存数量
+	 * 设置-库存单位数量
 	 * 
 	 * @param value 值
 	 */
@@ -2398,7 +2401,7 @@ public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
 				// 计算本币价格
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRETAXPRICELC, PROPERTY_PRETAXPRICE, PROPERTY_RATE),
 				new BusinessRuleDeductionCurrencyAmount(PROPERTY_PRICELC, PROPERTY_PRICE, PROPERTY_RATE),
-				// 库存数量 = 数量 * 单位换算率
+				// 库存单位数量 = 数量 * 单位换算率
 				new BusinessRuleCalculateInventoryQuantity(PROPERTY_INVENTORYQUANTITY, PROPERTY_QUANTITY,
 						PROPERTY_UOMRATE),
 				// 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率

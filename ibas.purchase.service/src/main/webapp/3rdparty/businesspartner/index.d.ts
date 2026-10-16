@@ -67,13 +67,6 @@ declare namespace businesspartner {
             /** 潜在客户 */
             LEAD = 2
         }
-        /** 性别 */
-        enum emGender {
-            /** 男 */
-            MALE = 0,
-            /** 女 */
-            FEMALE = 1
-        }
         enum emDueDateBaseOn {
             /** 单据日期 */
             DOCUMENT_DATE = 0,
@@ -348,7 +341,7 @@ declare namespace businesspartner {
             /** 组 */
             group: string;
             /** 性别 */
-            gender: emGender;
+            gender: string;
             /** 职位 */
             position: string;
             /** 地址 */
@@ -1803,9 +1796,9 @@ declare namespace businesspartner {
             /** 映射的属性名称-性别 */
             static PROPERTY_GENDER_NAME: string;
             /** 获取-性别 */
-            get gender(): emGender;
+            get gender(): string;
             /** 设置-性别 */
-            set gender(value: emGender);
+            set gender(value: string);
             /** 映射的属性名称-职位 */
             static PROPERTY_POSITION_NAME: string;
             /** 获取-职位 */

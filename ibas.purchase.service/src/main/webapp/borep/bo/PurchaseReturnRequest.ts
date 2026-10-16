@@ -7,10 +7,8 @@
  */
 namespace purchase {
     export namespace bo {
-
         /** 采购退货请求 */
         export class PurchaseReturnRequest extends ibas.BODocument<PurchaseReturnRequest> implements IPurchaseReturnRequest, ibas.IConvertedData {
-
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string = BO_CODE_PURCHASERETURNREQUEST;
             /** 构造函数 */
@@ -589,7 +587,6 @@ namespace purchase {
                 this.setProperty(PurchaseReturnRequest.PROPERTY_SHIPPINGADDRESSS_NAME, value);
             }
 
-
             /** 初始化数据 */
             protected init(): void {
                 this.purchaseReturnRequestItems = new PurchaseReturnRequestItems(this);
@@ -665,7 +662,9 @@ namespace purchase {
                     new BusinessRuleRoundingAmount(PurchaseReturnRequest.PROPERTY_ROUNDING_NAME, PurchaseReturnRequest.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturnRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME, PurchaseReturnRequestItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_LINETOTAL_NAME,
                         (data: PurchaseReturnRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -676,7 +675,9 @@ namespace purchase {
                     ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturnRequest.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME, PurchaseReturnRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_ITEMSTAXTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_TAXTOTAL_NAME,
                         (data: PurchaseReturnRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -687,7 +688,9 @@ namespace purchase {
                     ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturnRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_ITEMSPRETAXTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_PURCHASERETURNREQUESTITEMS_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: PurchaseReturnRequestItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -698,22 +701,31 @@ namespace purchase {
                     ),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturnRequest.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReturnRequest.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),
+                        PurchaseReturnRequest.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_EXPENSE_NAME
+                    ),
                     // 计算运输-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReturnRequest.PROPERTY_SHIPPINGSTAXTOTAL_NAME, PurchaseReturnRequest.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseReturnRequest.PROPERTY_SHIPPINGSTAXTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_TAXTOTAL_NAME
+                    ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
-                        PurchaseReturnRequest.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseReturnRequest.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReturnRequest.PROPERTY_DISCOUNT_NAME
+                        PurchaseReturnRequest.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_DISCOUNT_NAME
                     ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
-                    new BusinessRuleDeductionDocumentTotal(PurchaseReturnRequest.PROPERTY_DOCUMENTTOTAL_NAME,
-                        PurchaseReturnRequest.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseReturnRequest.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReturnRequest.PROPERTY_DIFFAMOUNT_NAME
+                    new BusinessRuleDeductionDocumentTotal(
+                        PurchaseReturnRequest.PROPERTY_DOCUMENTTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseReturnRequest.PROPERTY_DIFFAMOUNT_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseReturnRequest.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequest.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseReturnRequest.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequest.PROPERTY_INVERSEDISCOUNT_NAME)
                 ];
             }
             /** 重置 */
@@ -721,10 +733,10 @@ namespace purchase {
                 super.reset();
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.purchaseReturnRequestItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.purchaseReturnRequestItems.forEach((c) => (c.lineStatus = ibas.emDocumentStatus.RELEASED));
             }
             /** 转换之前 */
-            beforeConvert(): void { }
+            beforeConvert(): void {}
             /** 数据解析后 */
             afterParsing(): void {
                 // 计算部分业务逻辑
@@ -759,10 +771,11 @@ namespace purchase {
                         if (item.lineStatus === ibas.emDocumentStatus.PLANNED) {
                             continue;
                         }
-                        if (this.purchaseReturnRequestItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseReturnRequestItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         if (!(item.closedQuantity > 0)) {
@@ -804,7 +817,7 @@ namespace purchase {
                     for (let address of document.shippingAddresss) {
                         if (!ibas.strings.isEmpty(address.createActionId)) {
                             // 不复制同事务的
-                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                            if (this.shippingAddresss.firstOrDefault((c) => c.createActionId === address.createActionId) !== null) {
                                 continue;
                             }
                         }
@@ -814,7 +827,7 @@ namespace purchase {
                             myAddress.sourceKey = address.objectKey;
                         }
                         // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                        if (this.shippingAddresss.firstOrDefault((c) => c.name === address.name) !== null) {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
@@ -839,10 +852,11 @@ namespace purchase {
                         if (item.lineStatus === ibas.emDocumentStatus.PLANNED) {
                             continue;
                         }
-                        if (this.purchaseReturnRequestItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseReturnRequestItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未发票数量
@@ -853,9 +867,7 @@ namespace purchase {
                         let myItem: PurchaseReturnRequestItem = this.purchaseReturnRequestItems.create();
                         bo.baseDocumentItem(myItem, item);
                         if (item.closedQuantity > 0) {
-
                             myItem.quantity = openQty;
-
                         }
 
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
@@ -863,19 +875,14 @@ namespace purchase {
                         // 复制批次（行未清数量，从头往下匹配，批次未清的补上）
 
                         for (let batch of item.materialBatches) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             let batchOpen: number = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
 
                             if (batchOpen <= 0) {
-
                                 continue;
-
                             }
 
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
@@ -885,7 +892,6 @@ namespace purchase {
                             myBatch.quantity = batchOpen > openQty ? openQty : batchOpen;
 
                             openQty -= myBatch.quantity;
-
                         }
 
                         // 复制序列（行未清数量，从头往下匹配，序列未清的补上）
@@ -893,17 +899,12 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
 
                         for (let serial of item.materialSerials) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             if (serial.closed === ibas.emYesNo.YES) {
-
                                 continue;
-
                             }
 
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
@@ -911,14 +912,13 @@ namespace purchase {
                             mySerial.serialCode = serial.serialCode;
 
                             openQty -= 1;
-
                         }
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
                         if (!ibas.strings.isEmpty(address.createActionId)) {
                             // 不复制同事务的
-                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                            if (this.shippingAddresss.firstOrDefault((c) => c.createActionId === address.createActionId) !== null) {
                                 continue;
                             }
                         }
@@ -928,7 +928,7 @@ namespace purchase {
                             myAddress.sourceKey = address.objectKey;
                         }
                         // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                        if (this.shippingAddresss.firstOrDefault((c) => c.name === address.name) !== null) {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
@@ -939,7 +939,6 @@ namespace purchase {
 
         /** 采购退货请求-行 集合 */
         export class PurchaseReturnRequestItems extends ibas.BusinessObjects<PurchaseReturnRequestItem, PurchaseReturnRequest> implements IPurchaseReturnRequestItems {
-
             /** 创建并添加子项 */
             create(): PurchaseReturnRequestItem {
                 let item: PurchaseReturnRequestItem = new PurchaseReturnRequestItem();
@@ -957,8 +956,7 @@ namespace purchase {
                     if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
                         item.deliveryDate = this.parent.deliveryDate;
                     }
-                    if (ibas.strings.isEmpty(this.parent.documentCurrency)
-                        && !ibas.strings.isEmpty(item.currency)) {
+                    if (ibas.strings.isEmpty(this.parent.documentCurrency) && !ibas.strings.isEmpty(item.currency)) {
                         this.parent.documentCurrency = item.currency;
                     }
                 }
@@ -1006,8 +1004,10 @@ namespace purchase {
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: PurchaseReturnRequestItem, name: string): void {
                 // 标记删除触发集合行变化
-                if (ibas.strings.equalsIgnoreCase(name, PurchaseReturnRequestItem.PROPERTY_DELETED_NAME)
-                    || ibas.strings.equalsIgnoreCase(name, PurchaseReturnRequestItem.PROPERTY_CANCELED_NAME)) {
+                if (
+                    ibas.strings.equalsIgnoreCase(name, PurchaseReturnRequestItem.PROPERTY_DELETED_NAME) ||
+                    ibas.strings.equalsIgnoreCase(name, PurchaseReturnRequestItem.PROPERTY_CANCELED_NAME)
+                ) {
                     this.firePropertyChanged("length");
                 }
             }
@@ -1015,7 +1015,6 @@ namespace purchase {
 
         /** 采购退货请求-行 */
         export class PurchaseReturnRequestItem extends ibas.BODocumentLine<PurchaseReturnRequestItem> implements IPurchaseReturnRequestItem {
-
             /** 构造函数 */
             constructor() {
                 super();
@@ -1438,13 +1437,13 @@ namespace purchase {
                 this.setProperty(PurchaseReturnRequestItem.PROPERTY_UOMRATE_NAME, value);
             }
 
-            /** 映射的属性名称-库存数量 */
+            /** 映射的属性名称-库存单位数量 */
             static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
-            /** 获取-库存数量 */
+            /** 获取-库存单位数量 */
             get inventoryQuantity(): number {
                 return this.getProperty<number>(PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME);
             }
-            /** 设置-库存数量 */
+            /** 设置-库存单位数量 */
             set inventoryQuantity(value: number) {
                 this.setProperty(PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
@@ -1778,40 +1777,55 @@ namespace purchase {
                 return [
                     // 计算本币价格
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReturnRequestItem.PROPERTY_UNITPRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_UNITPRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                        PurchaseReturnRequestItem.PROPERTY_UNITPRICELC_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReturnRequestItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXPRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXPRICELC_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReturnRequestItem.PROPERTY_PRICELC_NAME, PurchaseReturnRequestItem.PROPERTY_PRICE_NAME, PurchaseReturnRequestItem.PROPERTY_RATE_NAME
+                        PurchaseReturnRequestItem.PROPERTY_PRICELC_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRICE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_RATE_NAME
                     ),
-                    // 计算库存数量 = 数量 * 换算率
+                    // 计算库存单位数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
-                        PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME, PurchaseReturnRequestItem.PROPERTY_UOMRATE_NAME),
+                        PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_UOMRATE_NAME
+                    ),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseReturnRequestItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_UNITPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseReturnRequestItem.PROPERTY_LINETOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_PRICE_NAME,
+                    new BusinessRuleDeductionPriceTaxTotal(
+                        PurchaseReturnRequestItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME,
-                        PurchaseReturnRequestItem.PROPERTY_TAXRATE_NAME, PurchaseReturnRequestItem.PROPERTY_TAXTOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseReturnRequestItem.PROPERTY_TAXRATE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReturnRequestItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReturnRequestItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
-                        PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequestItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseReturnRequestItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseReturnRequestItem.PROPERTY_DISCOUNT_NAME, PurchaseReturnRequestItem.PROPERTY_INVERSEDISCOUNT_NAME)
                 ];
             }
             /** 重置 */

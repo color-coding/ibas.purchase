@@ -112,7 +112,6 @@ namespace purchase {
             baseDocument(document: IPurchaseOrder): void;
             /** 基于采购收货 */
             baseDocument(document: IPurchaseDelivery): void;
-
         }
 
         /** 预付款申请-行 集合 */
@@ -199,7 +198,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
@@ -253,9 +252,6 @@ namespace purchase {
             preTaxPriceLC: number;
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
-
         }
-
-
     }
 }

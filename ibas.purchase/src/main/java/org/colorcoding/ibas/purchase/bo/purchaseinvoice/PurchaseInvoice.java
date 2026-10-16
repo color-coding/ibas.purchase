@@ -2229,6 +2229,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				List<JournalEntryContent> jeContents = new ArrayList<>();
 				String PurchaseDeliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
 				for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+					if (line.isDeleted()) {
+						continue;
+					}
 					if (line.getDeleted() == emYesNo.YES) {
 						continue;
 					}
@@ -2309,6 +2312,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				}
 				// 送货地址-运费
 				for (IShippingAddress line : PurchaseInvoice.this.getShippingAddresss()) {
+					if (line.isDeleted()) {
+						continue;
+					}
 					// 运费科目
 					jeContent = new JournalEntrySmartContent(line);
 					jeContent.setCategory(Category.Debit);
@@ -2328,6 +2334,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				}
 				// 预付款
 				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+					if (item.isDeleted()) {
+						continue;
+					}
 					// 应付账款
 					jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
 					jeContent.setCategory(Category.Debit);
@@ -2372,6 +2381,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				List<JournalEntryContent> jeContents = new ArrayList<>();
 				String PurchaseDeliveryCode = MyConfiguration.applyVariables(PurchaseDelivery.BUSINESS_OBJECT_CODE);
 				for (IPurchaseInvoiceItem line : PurchaseInvoice.this.getPurchaseInvoiceItems()) {
+					if (line.isDeleted()) {
+						continue;
+					}
 					if (line.getCanceled() == emYesNo.NO) {
 						continue;
 					}
@@ -2460,6 +2472,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				}
 				// 送货地址-运费
 				for (IShippingAddress line : PurchaseInvoice.this.getShippingAddresss()) {
+					if (line.isDeleted()) {
+						continue;
+					}
 					// 运费科目
 					jeContent = new JournalEntrySmartContent(line);
 					jeContent.setCategory(Category.Debit);
@@ -2479,6 +2494,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 				}
 				// 预付款
 				for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+					if (item.isDeleted()) {
+						continue;
+					}
 					// 应付账款
 					jeContent = new JournalEntrySmartContent(PurchaseInvoice.this);
 					jeContent.setCategory(Category.Debit);
@@ -2569,6 +2587,9 @@ public class PurchaseInvoice extends BusinessObject<PurchaseInvoice>
 
 					});
 					for (IPurchaseInvoiceDownPayment item : PurchaseInvoice.this.getPurchaseInvoiceDownPayments()) {
+						if (item.isDeleted()) {
+							continue;
+						}
 						contents.add(new IDocumentReconciliationContent() {
 
 							@Override

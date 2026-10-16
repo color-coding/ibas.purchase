@@ -9,7 +9,6 @@ namespace purchase {
     export namespace bo {
         /** 采购预留发票 */
         export class PurchaseReserveInvoice extends ibas.BODocument<PurchaseReserveInvoice> implements IPurchaseReserveInvoice, ibas.IConvertedData {
-
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string = BO_CODE_PURCHASERESERVEINVOICE;
             /** 构造函数 */
@@ -576,7 +575,6 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME, value);
             }
 
-
             /** 映射的属性名称-采购预留发票-行集合 */
             static PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME: string = "PurchaseReserveInvoiceItems";
             /** 获取-采购预留发票-行集合 */
@@ -674,7 +672,9 @@ namespace purchase {
                     new BusinessRuleRoundingAmount(PurchaseReserveInvoice.PROPERTY_ROUNDING_NAME, PurchaseReserveInvoice.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -685,7 +685,9 @@ namespace purchase {
                     ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_ITEMSTAXTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -696,7 +698,9 @@ namespace purchase {
                     ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_ITEMSPRETAXTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_PURCHASERESERVEINVOICEITEMS_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: PurchaseReserveInvoiceItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -707,26 +711,33 @@ namespace purchase {
                     ),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),
+                        PurchaseReserveInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_EXPENSE_NAME
+                    ),
                     // 计算运输-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseReserveInvoice.PROPERTY_SHIPPINGSTAXTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseReserveInvoice.PROPERTY_SHIPPINGSTAXTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_TAXTOTAL_NAME
+                    ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
-                        PurchaseReserveInvoice.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_DISCOUNT_NAME
+                        PurchaseReserveInvoice.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_DISCOUNT_NAME
                     ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
-                    new BusinessRuleDeductionDocumentTotal(PurchaseReserveInvoice.PROPERTY_DOCUMENTTOTAL_NAME,
-                        PurchaseReserveInvoice.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseReserveInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseReserveInvoice.PROPERTY_DIFFAMOUNT_NAME
+                    new BusinessRuleDeductionDocumentTotal(
+                        PurchaseReserveInvoice.PROPERTY_DOCUMENTTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseReserveInvoice.PROPERTY_DIFFAMOUNT_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseReserveInvoice.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoice.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseReserveInvoice.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoice.PROPERTY_INVERSEDISCOUNT_NAME),
                     // 计算单据取消日期
-                    new sales.bo.BusinessRuleCancellationDate(
-                        PurchaseReserveInvoice.PROPERTY_CANCELED_NAME, PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME
-                    ),
+                    new sales.bo.BusinessRuleCancellationDate(PurchaseReserveInvoice.PROPERTY_CANCELED_NAME, PurchaseReserveInvoice.PROPERTY_CANCELLATIONDATE_NAME)
                 ];
             }
             /** 重置 */
@@ -734,11 +745,11 @@ namespace purchase {
                 super.reset();
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.purchaseReserveInvoiceItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.purchaseReserveInvoiceItems.forEach((c) => (c.lineStatus = ibas.emDocumentStatus.RELEASED));
                 this.cancellationDate = undefined;
             }
             /** 转换之前 */
-            beforeConvert(): void { }
+            beforeConvert(): void {}
             /** 数据解析后 */
             afterParsing(): void {
                 // 计算部分业务逻辑
@@ -769,10 +780,11 @@ namespace purchase {
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
-                        if (this.purchaseReserveInvoiceItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseReserveInvoiceItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未清金额
@@ -787,9 +799,10 @@ namespace purchase {
                             if (config.isInventoryUnitLinePrice()) {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.inventoryQuantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.inventoryQuantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.inventoryQuantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.inventoryQuantity
+                                    ) {
                                         myItem.inventoryQuantity = item.inventoryQuantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -804,9 +817,10 @@ namespace purchase {
                             } else {
                                 if (myItem.price > 0) {
                                     let result: number = ibas.numbers.round(openAmount / myItem.price);
-                                    if (ibas.numbers.isApproximated(result, item.quantity,
-                                        ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0)
-                                        || result > item.quantity) {
+                                    if (
+                                        ibas.numbers.isApproximated(result, item.quantity, ibas.config.get(ibas.CONFIG_ITEM_DECIMAL_PLACES_QUANTITY), 0) ||
+                                        result > item.quantity
+                                    ) {
                                         myItem.quantity = item.quantity;
                                     } else {
                                         if (ibas.config.get(ibas.CONFIG_ITEM_TRUNCATE_DECIMALS, false)) {
@@ -825,7 +839,7 @@ namespace purchase {
                     for (let address of document.shippingAddresss) {
                         if (!ibas.strings.isEmpty(address.createActionId)) {
                             // 不复制同事务的
-                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                            if (this.shippingAddresss.firstOrDefault((c) => c.createActionId === address.createActionId) !== null) {
                                 continue;
                             }
                         }
@@ -835,7 +849,7 @@ namespace purchase {
                             myAddress.sourceKey = address.objectKey;
                         }
                         // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                        if (this.shippingAddresss.firstOrDefault((c) => c.name === address.name) !== null) {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
@@ -865,8 +879,7 @@ namespace purchase {
                     if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
                         item.deliveryDate = this.parent.deliveryDate;
                     }
-                    if (ibas.strings.isEmpty(this.parent.documentCurrency)
-                        && !ibas.strings.isEmpty(item.currency)) {
+                    if (ibas.strings.isEmpty(this.parent.documentCurrency) && !ibas.strings.isEmpty(item.currency)) {
                         this.parent.documentCurrency = item.currency;
                     }
                 }
@@ -918,17 +931,17 @@ namespace purchase {
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: PurchaseReserveInvoiceItem, name: string): void {
                 // 标记删除触发集合行变化
-                if (ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_DELETED_NAME)
-                    || ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_CANCELED_NAME)) {
+                if (
+                    ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_DELETED_NAME) ||
+                    ibas.strings.equalsIgnoreCase(name, PurchaseReserveInvoiceItem.PROPERTY_CANCELED_NAME)
+                ) {
                     this.firePropertyChanged("length");
                 }
             }
         }
 
-
         /** 采购预留发票-行 */
         export class PurchaseReserveInvoiceItem extends ibas.BODocumentLine<PurchaseReserveInvoiceItem> implements IPurchaseReserveInvoiceItem {
-
             /** 构造函数 */
             constructor() {
                 super();
@@ -1286,7 +1299,6 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoiceItem.PROPERTY_ITEMVERSION_NAME, value);
             }
 
-
             /** 映射的属性名称-序号管理 */
             static PROPERTY_SERIALMANAGEMENT_NAME: string = "SerialManagement";
             /** 获取-序号管理 */
@@ -1353,13 +1365,13 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoiceItem.PROPERTY_UOMRATE_NAME, value);
             }
 
-            /** 映射的属性名称-库存数量 */
+            /** 映射的属性名称-库存单位数量 */
             static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
-            /** 获取-库存数量 */
+            /** 获取-库存单位数量 */
             get inventoryQuantity(): number {
                 return this.getProperty<number>(PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME);
             }
-            /** 设置-库存数量 */
+            /** 设置-库存单位数量 */
             set inventoryQuantity(value: number) {
                 this.setProperty(PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
@@ -1518,7 +1530,6 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME, value);
             }
 
-
             /** 映射的属性名称-税前价格 */
             static PROPERTY_PRETAXPRICE_NAME: string = "PreTaxPrice";
             /** 获取-税前价格 */
@@ -1648,7 +1659,6 @@ namespace purchase {
                 this.setProperty(PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICELC_NAME, value);
             }
 
-
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
             /** 获取-物料批次集合 */
@@ -1693,40 +1703,55 @@ namespace purchase {
                 return [
                     // 计算本币价格
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReserveInvoiceItem.PROPERTY_UNITPRICELC_NAME, PurchaseReserveInvoiceItem.PROPERTY_UNITPRICE_NAME, PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
+                        PurchaseReserveInvoiceItem.PROPERTY_UNITPRICELC_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICE_NAME, PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICELC_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseReserveInvoiceItem.PROPERTY_PRICELC_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRICE_NAME, PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
+                        PurchaseReserveInvoiceItem.PROPERTY_PRICELC_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRICE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_RATE_NAME
                     ),
-                    // 计算库存数量 = 数量 * 换算率
+                    // 计算库存单位数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
-                        PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME, PurchaseReserveInvoiceItem.PROPERTY_UOMRATE_NAME),
+                        PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_UOMRATE_NAME
+                    ),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseReserveInvoiceItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReserveInvoiceItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_UNITPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRICE_NAME,
+                    new BusinessRuleDeductionPriceTaxTotal(
+                        PurchaseReserveInvoiceItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME,
-                        PurchaseReserveInvoiceItem.PROPERTY_TAXRATE_NAME, PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseReserveInvoiceItem.PROPERTY_TAXRATE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseReserveInvoiceItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseReserveInvoiceItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
-                        PurchaseReserveInvoiceItem.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoiceItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseReserveInvoiceItem.PROPERTY_DISCOUNT_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseReserveInvoiceItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseReserveInvoiceItem.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoiceItem.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseReserveInvoiceItem.PROPERTY_DISCOUNT_NAME, PurchaseReserveInvoiceItem.PROPERTY_INVERSEDISCOUNT_NAME)
                 ];
             }
             /** 重置 */
@@ -1735,7 +1760,6 @@ namespace purchase {
                 this.closedAmount = 0;
                 this.closedQuantity = 0;
             }
-
         }
     }
 }

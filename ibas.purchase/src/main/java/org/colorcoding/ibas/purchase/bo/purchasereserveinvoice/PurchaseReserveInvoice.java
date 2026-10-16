@@ -2151,6 +2151,9 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						List<JournalEntryContent> jeContents = new ArrayList<>();
 						for (IPurchaseReserveInvoiceItem line : PurchaseReserveInvoice.this
 								.getPurchaseReserveInvoiceItems()) {
+							if (line.isDeleted()) {
+								continue;
+							}
 							if (line.getDeleted() == emYesNo.YES) {
 								continue;
 							}
@@ -2190,6 +2193,9 @@ public class PurchaseReserveInvoice extends BusinessObject<PurchaseReserveInvoic
 						}
 						// 送货地址-运费
 						for (IShippingAddress line : PurchaseReserveInvoice.this.getShippingAddresss()) {
+							if (line.isDeleted()) {
+								continue;
+							}
 							// 运费科目
 							jeContent = new JournalEntrySmartContent(line);
 							jeContent.setCategory(Category.Debit);

@@ -557,7 +557,7 @@ namespace purchase {
             reset(): void {
                 super.reset();
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.blanketAgreementItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.blanketAgreementItems.forEach((c) => (c.lineStatus = ibas.emDocumentStatus.RELEASED));
             }
         }
 
@@ -572,8 +572,10 @@ namespace purchase {
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: BlanketAgreementItem, name: string): void {
                 // 标记删除触发集合行变化
-                if (ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_DELETED_NAME)
-                    || ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_CANCELED_NAME)) {
+                if (
+                    ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_DELETED_NAME) ||
+                    ibas.strings.equalsIgnoreCase(name, BlanketAgreementItem.PROPERTY_CANCELED_NAME)
+                ) {
                     this.firePropertyChanged("length");
                 }
             }
@@ -881,13 +883,13 @@ namespace purchase {
                 this.setProperty(BlanketAgreementItem.PROPERTY_UOMRATE_NAME, value);
             }
 
-            /** 映射的属性名称-库存数量 */
+            /** 映射的属性名称-库存单位数量 */
             static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
-            /** 获取-库存数量 */
+            /** 获取-库存单位数量 */
             get inventoryQuantity(): number {
                 return this.getProperty<number>(BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME);
             }
-            /** 设置-库存数量 */
+            /** 设置-库存单位数量 */
             set inventoryQuantity(value: number) {
                 this.setProperty(BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
@@ -1035,7 +1037,6 @@ namespace purchase {
                 this.setProperty(BlanketAgreementItem.PROPERTY_REFERENCE2_NAME, value);
             }
 
-
             /** 初始化数据 */
             protected init(): void {
                 this.price = 0;
@@ -1047,23 +1048,29 @@ namespace purchase {
             }
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
-                    // 计算库存数量 = 数量 * 换算率
+                    // 计算库存单位数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
-                        BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME, BlanketAgreementItem.PROPERTY_QUANTITY_NAME, BlanketAgreementItem.PROPERTY_UOMRATE_NAME
+                        BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME,
+                        BlanketAgreementItem.PROPERTY_QUANTITY_NAME,
+                        BlanketAgreementItem.PROPERTY_UOMRATE_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(BlanketAgreementItem.PROPERTY_LINETOTAL_NAME, BlanketAgreementItem.PROPERTY_PRICE_NAME,
-                        config.isInventoryUnitLinePrice() ? BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME : BlanketAgreementItem.PROPERTY_QUANTITY_NAME
-                        , BlanketAgreementItem.PROPERTY_TAXRATE_NAME, BlanketAgreementItem.PROPERTY_TAXTOTAL_NAME, BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME
+                    new BusinessRuleDeductionPriceTaxTotal(
+                        BlanketAgreementItem.PROPERTY_LINETOTAL_NAME,
+                        BlanketAgreementItem.PROPERTY_PRICE_NAME,
+                        config.isInventoryUnitLinePrice() ? BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME : BlanketAgreementItem.PROPERTY_QUANTITY_NAME,
+                        BlanketAgreementItem.PROPERTY_TAXRATE_NAME,
+                        BlanketAgreementItem.PROPERTY_TAXTOTAL_NAME,
+                        BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算税前总计 = 数量 * 税前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME, BlanketAgreementItem.PROPERTY_PRETAXPRICE_NAME,
+                        BlanketAgreementItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        BlanketAgreementItem.PROPERTY_PRETAXPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? BlanketAgreementItem.PROPERTY_INVENTORYQUANTITY_NAME : BlanketAgreementItem.PROPERTY_QUANTITY_NAME
-                    ),
+                    )
                 ];
             }
         }
-
     }
 }
