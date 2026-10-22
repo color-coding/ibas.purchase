@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.IBOTagCanceled;
+import org.colorcoding.ibas.bobas.bo.IBOTagDeleted;
 import org.colorcoding.ibas.bobas.bo.IBOUserFields;
 import org.colorcoding.ibas.bobas.core.IPropertyInfo;
 import org.colorcoding.ibas.bobas.data.DateTime;
@@ -37,7 +39,7 @@ import org.colorcoding.ibas.sales.rules.BusinessRuleDeductionPriceTaxTotal;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = PurchaseRequestItem.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 public class PurchaseRequestItem extends BusinessObject<PurchaseRequestItem>
-		implements IPurchaseRequestItem, IBOUserFields, IBusinessLogicsHost {
+		implements IPurchaseRequestItem, IBOTagDeleted, IBOTagCanceled, IBOUserFields, IBusinessLogicsHost {
 
 	/**
 	 * 序列化版本标记
