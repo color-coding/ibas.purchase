@@ -11,7 +11,6 @@ import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.businesspartner.bo.customer.Customer;
 import org.colorcoding.ibas.businesspartner.bo.customer.ICustomer;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
@@ -45,7 +44,7 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
 
 /**
  * MaterialInventoryReservationStatusService +
- * MaterialOrderedReservationStatusService 隔离测试。
+ * MaterialOrderedReservationStatusService 真实单据链路回归。
  *
  * <p>
  * 这两个服务由 SalesOrderItem 触发（sales 侧），按 targetDocumentStatus 操作预留状态。
@@ -96,39 +95,19 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
  * </p>
  * <ul>
  * <li>RS-01：SO 创建后预留 status=OPEN（lineStatus=RELEASED）</li>
- * <li>RS-02：SO canceled → OrderedReservation targetClosed=YES +
- * InventoryReservation status=CLOSED</li>
+ * <li>RS-02：SO canceled → 采购来源 OrderedReservation 的 targetClosed=YES 且 status=CLOSED</li>
  * <li>RS-03：SO 行 lineStatus PLANNED → 预留 status=OPEN（qty>closedQty=0）</li>
  * <li>RS-04：PD 收货后 → InventoryReservation 存在且 status=OPEN</li>
  * <li>RS-05：SD 交货后 → InventoryReservation closedQuantity 满足 →
  * status=CLOSED</li>
- * <li>RS-06：SO 恢复 canceled=NO → 预留重新 OPEN（restore 配置或新建状态）</li>
+ * <li>RS-06：关闭恢复策略时，SO 恢复后既有预留保持 CLOSED</li>
+ * <li>RS-07：开启恢复策略时，SO 恢复后未履行预留重新 OPEN</li>
  * </ul>
  */
 public class TestReservationStatusService extends AbstractPurchaseQuantityTestCase {
 
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private BORepositorySales createSalesRepository() throws Exception {
-		BORepositorySales repo = new BORepositorySales();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private ICustomer prepareCustomer(BORepositoryBusinessPartner repo) throws Exception {
-		ICustomer cu = new Customer();
-		cu.setCode("CUS-RS");
-		cu.setName("Reservation Status Test Customer");
-		if (repo.fetchCustomer(cu.getCriteria()).getResultObjects().isEmpty()) {
-			cu = BOUtilities.valueOf(repo.saveCustomer(cu)).firstOrDefault();
-		} else {
-			cu = BOUtilities.valueOf(repo.fetchCustomer(cu.getCriteria())).firstOrDefault();
-		}
-		return cu;
+	private ICustomer prepareCustomer(BORepositoryBusinessPartner repository) throws Exception {
+		return prepareCustomer(repository, "CUS-RS", "Reservation Status Test Customer");
 	}
 
 	/** 查询 target=SO 的 OrderedReservation */
@@ -141,7 +120,17 @@ public class TestReservationStatusService extends AbstractPurchaseQuantityTestCa
 		c = criteria.getConditions().create();
 		c.setAlias(MaterialOrderedReservation.PROPERTY_TARGETDOCUMENTENTRY);
 		c.setValue(so.getDocEntry());
-		return repo.fetchMaterialOrderedReservation(criteria);
+		IOperationResult<IMaterialOrderedReservation> result = repo.fetchMaterialOrderedReservation(criteria);
+		BOUtilities.valueOf(result);
+		int matched = 0;
+		for (IMaterialOrderedReservation reservation : result.getResultObjects()) {
+			if (MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE)
+					.equals(reservation.getSourceDocumentType())) {
+				matched++;
+			}
+		}
+		assertEquals("Expected exactly one PO-source reservation for this single-line chain.", 1, matched);
+		return result;
 	}
 
 	/** 查询 target=SO 的 InventoryReservation */
@@ -154,7 +143,10 @@ public class TestReservationStatusService extends AbstractPurchaseQuantityTestCa
 		c = criteria.getConditions().create();
 		c.setAlias(MaterialInventoryReservation.PROPERTY_TARGETDOCUMENTENTRY);
 		c.setValue(so.getDocEntry());
-		return repo.fetchMaterialInventoryReservation(criteria);
+		IOperationResult<IMaterialInventoryReservation> result = repo.fetchMaterialInventoryReservation(criteria);
+		BOUtilities.valueOf(result);
+		assertFalse("Expected inventory reservation for the sales order.", result.getResultObjects().isEmpty());
+		return result;
 	}
 
 	// ---------------- 链路构造工具（每阶段独立 repo） ----------------
@@ -329,6 +321,7 @@ public class TestReservationStatusService extends AbstractPurchaseQuantityTestCa
 	// revoke 触发时 targetClosed=YES + status=CLOSED
 	// ==================================================================
 
+	/** RS-02：销售订单关联一笔采购来源预留；取消订单；必须找到该目标预留并验证关闭状态及目标关闭标记。 */
 	public void testRS_02_SOCancel_ReservationClosed() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
 		IWarehouse wh;
@@ -385,6 +378,7 @@ public class TestReservationStatusService extends AbstractPurchaseQuantityTestCa
 	// impact: PLANNED + qty(10)>closedQty(0) → status=OPEN
 	// ==================================================================
 
+	/** RS-03：有效采购来源预留；销售订单行改为计划；必须找到该预留，未消耗数量保留且目标关闭标记为 NO。 */
 	public void testRS_03_SOLinePlanned_ReservationOpen() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
 		IWarehouse wh;
@@ -541,69 +535,81 @@ public class TestReservationStatusService extends AbstractPurchaseQuantityTestCa
 		}
 	}
 
-	// ==================================================================
-	// RS-06：SO canceled 后恢复 canceled=NO → 预留重新 OPEN
-	// 推导依据：canceled=YES → CLOSED → canceled=NO → targetDocStatus=RELEASED
-	// impact: RELEASED + qty>closedQty → status=OPEN
-	// 但 restore=false 时已 CLOSED 的非新建项跳过；
-	// 此处 SO 保存会触发重新执行（因 trigger 变化）
-	// ==================================================================
+	/** RS-06：已有采购来源预留；取消再恢复销售订单；关闭恢复策略时预留保持关闭。 */
+	public void testRS_06_SOCancelThenRestore_ReservationRemainsClosed() throws Exception {
+		runSalesOrderReservationRestore(false);
+	}
 
-	public void testRS_06_SOCancelThenRestore_ReservationReopen() throws Exception {
-		BigDecimal QTY = Decimals.valueOf(10);
-		IWarehouse wh;
-		ISupplier sp;
-		ICustomer cu;
-		IMaterial mt;
-		try (BORepositoryMaterials mRepo = createMaterialsRepository();
-				BORepositoryBusinessPartner bRepo = createBPRepository()) {
-			wh = prepareWarehouse(mRepo);
-			sp = prepareSupplier(bRepo);
-			cu = prepareCustomer(bRepo);
-			mt = prepareMaterial(mRepo, MaterialKind.INVENTORY, "RS06I");
-		}
+	/** RS-07：与 RS-06 相同链路；开启恢复策略；仅未履行的预留重新打开，数量不重复累计。 */
+	public void testRS_07_SOCancelThenRestore_ReservationReopensWhenEnabled() throws Exception {
+		runSalesOrderReservationRestore(true);
+	}
 
-		ISalesOrder so;
-		try (BORepositorySales sRepo = createSalesRepository()) {
-			so = createSO(sRepo, cu, mt, wh, QTY);
-		}
-		IPurchaseRequest pr;
-		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
-			pr = createPR(pRepo, mt, QTY);
-		}
-		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			linkOrderedReservation(mRepo, so, pr);
-		}
-		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
-			createPOFromPR(pRepo, pr, sp, wh, mt);
-		}
+	private void runSalesOrderReservationRestore(boolean restore) throws Exception {
+		String previous = org.colorcoding.ibas.sales.MyConfiguration.getConfigValue(
+				org.colorcoding.ibas.sales.MyConfiguration.CONFIG_ITEM_ENABLE_RESTORE_RESERVATION_STATUS);
+		org.colorcoding.ibas.sales.MyConfiguration.create().addConfigValue(
+				org.colorcoding.ibas.sales.MyConfiguration.CONFIG_ITEM_ENABLE_RESTORE_RESERVATION_STATUS, String.valueOf(restore));
+		try {
+			BigDecimal QTY = Decimals.valueOf(10);
+			IWarehouse wh;
+			ISupplier sp;
+			ICustomer cu;
+			IMaterial mt;
+			try (BORepositoryMaterials mRepo = createMaterialsRepository();
+					BORepositoryBusinessPartner bRepo = createBPRepository()) {
+				wh = prepareWarehouse(mRepo);
+				sp = prepareSupplier(bRepo);
+				cu = prepareCustomer(bRepo);
+				mt = prepareMaterial(mRepo, MaterialKind.INVENTORY, restore ? "RS07I" : "RS06I");
+			}
 
-		// 取消 SO
-		try (BORepositorySales sRepo = createSalesRepository()) {
-			so.setCanceled(emYesNo.YES);
-			so = BOUtilities.valueOf(sRepo.saveSalesOrder(so)).firstOrDefault();
-		}
+			ISalesOrder so;
+			try (BORepositorySales sRepo = createSalesRepository()) {
+				so = createSO(sRepo, cu, mt, wh, QTY);
+			}
+			IPurchaseRequest pr;
+			try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
+				pr = createPR(pRepo, mt, QTY);
+			}
+			try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
+				linkOrderedReservation(mRepo, so, pr);
+			}
+			try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
+				createPOFromPR(pRepo, pr, sp, wh, mt);
+			}
 
-		// 恢复 SO
-		try (BORepositorySales sRepo = createSalesRepository()) {
-			so.setCanceled(emYesNo.NO);
-			so = BOUtilities.valueOf(sRepo.saveSalesOrder(so)).firstOrDefault();
-		}
+			// 取消 SO
+			try (BORepositorySales sRepo = createSalesRepository()) {
+				so.setCanceled(emYesNo.YES);
+				so = BOUtilities.valueOf(sRepo.saveSalesOrder(so)).firstOrDefault();
+			}
 
-		// 验证：OrderedReservation 是否重新 OPEN
-		// 推导依据：restore=false（默认）时，已 CLOSED 的非新建项跳过（不重开）
-		// SO canceled=YES → status=CLOSED → canceled=NO → impact 执行但跳过 CLOSED 项
-		// 因此预留保持 CLOSED（除非配置 ENABLE_RESTORE_RESERVATION_STATUS=true）
-		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IOperationResult<IMaterialOrderedReservation> rslt = fetchOrderedBySO(mRepo, so);
-			for (IMaterialOrderedReservation r : rslt.getResultObjects()) {
-				if (r.getSourceDocumentType()
-						.equals(MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE))) {
-					// restore=false 时已 CLOSED 项跳过，保持 CLOSED
-					assertEquals("OrderedReservation.status stays CLOSED (restore=false skips closed items).",
-							emBOStatus.CLOSED, r.getStatus());
+			// 恢复 SO
+			try (BORepositorySales sRepo = createSalesRepository()) {
+				so.setCanceled(emYesNo.NO);
+				so = BOUtilities.valueOf(sRepo.saveSalesOrder(so)).firstOrDefault();
+			}
+
+			// 恢复策略只决定既有关闭预留是否重开，不能依赖外部配置的默认值。
+			try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
+				IOperationResult<IMaterialOrderedReservation> rslt = fetchOrderedBySO(mRepo, so);
+				for (IMaterialOrderedReservation r : rslt.getResultObjects()) {
+					if (r.getSourceDocumentType()
+							.equals(MyConfiguration.applyVariables(PurchaseOrder.BUSINESS_OBJECT_CODE))) {
+						assertEquals("Reservation state must follow the configured restore policy.",
+								restore ? emBOStatus.OPEN : emBOStatus.CLOSED, r.getStatus());
+						assertEquals("Source purchase order remains active.", emYesNo.NO, r.getSourceDocumentClosed());
+						assertEquals("Target close flag must follow the same restore policy.",
+								restore ? emYesNo.NO : emYesNo.YES, r.getTargetDocumentClosed());
+						assertEqualsBD("Restoring must not consume any reservation quantity.", BigDecimal.ZERO, r.getClosedQuantity());
+					}
 				}
 			}
+		} finally {
+			org.colorcoding.ibas.sales.MyConfiguration.create().addConfigValue(
+					org.colorcoding.ibas.sales.MyConfiguration.CONFIG_ITEM_ENABLE_RESTORE_RESERVATION_STATUS,
+					previous == null ? "" : previous);
 		}
 	}
 }

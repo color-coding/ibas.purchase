@@ -11,7 +11,6 @@ import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.data.emBOStatus;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.businesspartner.bo.customer.ICustomer;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
 import org.colorcoding.ibas.businesspartner.repository.BORepositoryBusinessPartner;
@@ -63,28 +62,8 @@ import org.colorcoding.ibas.sales.repository.BORepositorySales;
  */
 public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantityTestCase {
 
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private BORepositorySales createSalesRepository() throws Exception {
-		BORepositorySales repo = new BORepositorySales();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private ICustomer prepareCustomer(BORepositoryBusinessPartner repo) throws Exception {
-		org.colorcoding.ibas.businesspartner.bo.customer.ICustomer cu = new org.colorcoding.ibas.businesspartner.bo.customer.Customer();
-		cu.setCode("CUS-RC");
-		cu.setName("Reservation Chain Customer");
-		if (repo.fetchCustomer(cu.getCriteria()).getResultObjects().isEmpty()) {
-			cu = BOUtilities.valueOf(repo.saveCustomer(cu)).firstOrDefault();
-		} else {
-			cu = BOUtilities.valueOf(repo.fetchCustomer(cu.getCriteria())).firstOrDefault();
-		}
-		return cu;
+	private ICustomer prepareCustomer(BORepositoryBusinessPartner repository) throws Exception {
+		return prepareCustomer(repository, "CUS-RC", "Reservation Chain Customer");
 	}
 
 	/** 查询 source=PR 的 OrderedReservation */
@@ -97,7 +76,9 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		c = criteria.getConditions().create();
 		c.setAlias(MaterialOrderedReservation.PROPERTY_SOURCEDOCUMENTENTRY);
 		c.setValue(sourceDocEntry);
-		return repo.fetchMaterialOrderedReservation(criteria);
+		IOperationResult<IMaterialOrderedReservation> result = repo.fetchMaterialOrderedReservation(criteria);
+		BOUtilities.valueOf(result);
+		return result;
 	}
 
 	// ==================================================================
@@ -429,16 +410,11 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		}
 
 		// 删除 PO
-		// 注：PO delete 触发 ESTIMATEJOURNAL 清理链路，测试环境可能缺 fetcher
+		// 删除必须完成预留回退，依赖链路异常不得作为通过。
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
-			try {
-				po.delete();
-				po = BOUtilities.valueOf(pRepo.savePurchaseOrder(po)).firstOrDefault();
-			} catch (Exception ex) {
-				System.out.println(
-						"[SKIP] RC-04 PO delete skipped due to estimate-journal dependency: " + ex.getMessage());
-				return;
-			}
+			po.delete();
+			BOUtilities.valueOf(pRepo.savePurchaseOrder(po));
+			assertTrue("Deleted order must not persist.", BOUtilities.valueOf(pRepo.fetchPurchaseOrder(po.getCriteria())).isEmpty());
 		}
 
 		// 验证：PR.closedQuantity 回退到 0；PO reservation 应被删除
@@ -461,6 +437,7 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 	// 推导依据：impact 中 sourceDocumentStatus=PLANNED → sourceDocumentClosed=NO
 	// ==================================================================
 
+	/** RC-05：PR 预留已被采购订单转移；订单退回计划；原预留应 OPEN、关闭量为 0、来源关闭标记为 NO。 */
 	public void testRC_05_POStatusPlanned_ReservationReopen() throws Exception {
 		BigDecimal QTY = Decimals.valueOf(10);
 		IWarehouse wh;
@@ -532,22 +509,21 @@ public class TestPurchaseOrderReservationCreate extends AbstractPurchaseQuantity
 		}
 
 		// PO documentStatus → PLANNED
-		// 注：PO 保存后修改 documentStatus 触发 ESTIMATEJOURNAL 链路，测试环境可能缺 fetcher
+		// 状态回退必须完成预留重开；同时验证状态、已消耗数量及来源关闭标记，不能只检查标记。
 		try (BORepositoryPurchase pRepo = createPurchaseRepository()) {
-			try {
-				po.setDocumentStatus(emDocumentStatus.PLANNED);
-				po = BOUtilities.valueOf(pRepo.savePurchaseOrder(po)).firstOrDefault();
-			} catch (Exception ex) {
-				System.out.println(
-						"[SKIP] RC-05 PO documentStatus=PLANNED skipped due to estimate-journal: " + ex.getMessage());
-				return;
-			}
+			po.setDocumentStatus(emDocumentStatus.PLANNED);
+			po = BOUtilities.valueOf(pRepo.savePurchaseOrder(po)).firstOrDefault();
 		}
 
 		// 验证：PR 预留 status 应该被重新设为 OPEN（sourceDocumentClosed=NO）
 		try (BORepositoryMaterials mRepo = createMaterialsRepository()) {
-			IMaterialOrderedReservation prRes = fetchReservationsBySource(mRepo, pri.getObjectCode(), pri.getDocEntry())
-					.getResultObjects().firstOrDefault();
+			IOperationResult<IMaterialOrderedReservation> reservations = fetchReservationsBySource(mRepo,
+					pri.getObjectCode(), pri.getDocEntry());
+			BOUtilities.valueOf(reservations);
+			assertEquals("Expected the original PR-source reservation.", 1, reservations.getResultObjects().size());
+			IMaterialOrderedReservation prRes = reservations.getResultObjects().firstOrDefault();
+			assertEquals("PR reservation must really reopen after PO returns to PLANNED.", emBOStatus.OPEN, prRes.getStatus());
+			assertEqualsBD("Reopened PR reservation must have no consumed quantity.", BigDecimal.ZERO, prRes.getClosedQuantity());
 			assertEquals("PR reservation.sourceDocumentClosed = NO after PO PLANNED.", emYesNo.NO,
 					prRes.getSourceDocumentClosed());
 		}

@@ -7,10 +7,8 @@
  */
 namespace purchase {
     export namespace bo {
-
         /** 采购订单 */
         export interface IPurchaseOrder extends ibas.IBODocument, ibas.IBOUserFields {
-
             /** 凭证编号 */
             docEntry: number;
 
@@ -165,20 +163,16 @@ namespace purchase {
 
             /** 送货地址集合 */
             shippingAddresss: IShippingAddresss;
-
-
         }
 
         /** 采购订单-行 集合 */
         export interface IPurchaseOrderItems extends ibas.IBusinessObjects<IPurchaseOrderItem> {
-
             /** 创建并添加子项 */
             create(): IPurchaseOrderItem;
         }
 
         /** 采购订单-行 */
         export interface IPurchaseOrderItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
-
             /** 编码 */
             docEntry: number;
 
@@ -290,7 +284,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
 
             /** 仓库 */
@@ -370,7 +364,6 @@ namespace purchase {
 
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
-
         }
 
         /** 采购订单-行-额外信息 集合 */
@@ -432,5 +425,3 @@ namespace purchase {
         }
     }
 }
-
-

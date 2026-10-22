@@ -7,10 +7,8 @@
  */
 namespace purchase {
     export namespace bo {
-
         /** 采购收货 */
         export class PurchaseDelivery extends ibas.BODocument<PurchaseDelivery> implements IPurchaseDelivery, ibas.IConvertedData {
-
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string = BO_CODE_PURCHASEDELIVERY;
             /** 构造函数 */
@@ -657,14 +655,15 @@ namespace purchase {
                 this.setProperty(PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, value);
             }
 
-
             protected registerRules(): ibas.IBusinessRule[] {
                 return [
                     // 计算-舍入差异
                     new BusinessRuleRoundingAmount(PurchaseDelivery.PROPERTY_ROUNDING_NAME, PurchaseDelivery.PROPERTY_DIFFAMOUNT_NAME),
                     // 计算行-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseDelivery.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME, PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME,
+                        PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME,
                         (data: PurchaseDeliveryItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -675,7 +674,9 @@ namespace purchase {
                     ),
                     // 计算行-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseDelivery.PROPERTY_ITEMSTAXTOTAL_NAME, PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME, PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_ITEMSTAXTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME,
+                        PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME,
                         (data: PurchaseDeliveryItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -686,7 +687,9 @@ namespace purchase {
                     ),
                     // 计算行-税前总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseDelivery.PROPERTY_ITEMSPRETAXTOTAL_NAME, PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_ITEMSPRETAXTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_PURCHASEDELIVERYITEMS_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME,
                         (data: PurchaseDeliveryItem): boolean => {
                             // 不计标记删除项
                             if (config.isStatisticsTagDeleted() === false && data.deleted === ibas.emYesNo.YES) {
@@ -697,22 +700,31 @@ namespace purchase {
                     ),
                     // 计算运输-总计（含税）
                     new ibas.BusinessRuleSumElements(
-                        PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseDelivery.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_EXPENSE_NAME),
+                        PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_EXPENSE_NAME
+                    ),
                     // 计算运输-税总计
                     new ibas.BusinessRuleSumElements(
-                        PurchaseDelivery.PROPERTY_SHIPPINGSTAXTOTAL_NAME, PurchaseDelivery.PROPERTY_SHIPPINGADDRESSS_NAME, ShippingAddress.PROPERTY_TAXTOTAL_NAME),
+                        PurchaseDelivery.PROPERTY_SHIPPINGSTAXTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_SHIPPINGADDRESSS_NAME,
+                        ShippingAddress.PROPERTY_TAXTOTAL_NAME
+                    ),
                     // 折扣后总计（含税） = 行-总计（含税）* 折扣
                     new BusinessRuleDeductionDiscountTotal(
-                        PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseDelivery.PROPERTY_ITEMSLINETOTAL_NAME, PurchaseDelivery.PROPERTY_DISCOUNT_NAME
+                        PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_ITEMSLINETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_DISCOUNT_NAME
                     ),
                     // 单据总计 = 折扣后总计（含税）+ 运输-总计（含税） +  舍入
-                    new BusinessRuleDeductionDocumentTotal(PurchaseDelivery.PROPERTY_DOCUMENTTOTAL_NAME,
-                        PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME, PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME, PurchaseDelivery.PROPERTY_DIFFAMOUNT_NAME
+                    new BusinessRuleDeductionDocumentTotal(
+                        PurchaseDelivery.PROPERTY_DOCUMENTTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_DISCOUNTTOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_SHIPPINGSEXPENSETOTAL_NAME,
+                        PurchaseDelivery.PROPERTY_DIFFAMOUNT_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseDelivery.PROPERTY_DISCOUNT_NAME, PurchaseDelivery.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseDelivery.PROPERTY_DISCOUNT_NAME, PurchaseDelivery.PROPERTY_INVERSEDISCOUNT_NAME)
                 ];
             }
             /** 重置 */
@@ -720,10 +732,10 @@ namespace purchase {
                 super.reset();
                 this.paidTotal = 0;
                 this.documentStatus = ibas.emDocumentStatus.RELEASED;
-                this.purchaseDeliveryItems.forEach(c => c.lineStatus = ibas.emDocumentStatus.RELEASED);
+                this.purchaseDeliveryItems.forEach((c) => (c.lineStatus = ibas.emDocumentStatus.RELEASED));
             }
             /** 转换之前 */
-            beforeConvert(): void { }
+            beforeConvert(): void {}
             /** 数据解析后 */
             afterParsing(): void {
                 // 计算部分业务逻辑
@@ -760,10 +772,11 @@ namespace purchase {
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
-                        if (this.purchaseDeliveryItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseDeliveryItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未交货数量
@@ -774,9 +787,7 @@ namespace purchase {
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
                         if (item.closedQuantity > 0) {
-
                             myItem.quantity = openQty;
-
                         }
 
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
@@ -784,19 +795,14 @@ namespace purchase {
                         // 复制批次（行未清数量，从头往下匹配，批次未清的补上）
 
                         for (let batch of item.materialBatches) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             let batchOpen: number = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
 
                             if (batchOpen <= 0) {
-
                                 continue;
-
                             }
 
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
@@ -806,7 +812,6 @@ namespace purchase {
                             myBatch.quantity = batchOpen > openQty ? openQty : batchOpen;
 
                             openQty -= myBatch.quantity;
-
                         }
 
                         // 复制序列（行未清数量，从头往下匹配，序列未清的补上）
@@ -814,17 +819,12 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
 
                         for (let serial of item.materialSerials) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             if (serial.closed === ibas.emYesNo.YES) {
-
                                 continue;
-
                             }
 
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
@@ -832,14 +832,13 @@ namespace purchase {
                             mySerial.serialCode = serial.serialCode;
 
                             openQty -= 1;
-
                         }
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
                         if (!ibas.strings.isEmpty(address.createActionId)) {
                             // 不复制同事务的
-                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                            if (this.shippingAddresss.firstOrDefault((c) => c.createActionId === address.createActionId) !== null) {
                                 continue;
                             }
                         }
@@ -849,7 +848,7 @@ namespace purchase {
                             myAddress.sourceKey = address.objectKey;
                         }
                         // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                        if (this.shippingAddresss.firstOrDefault((c) => c.name === address.name) !== null) {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
@@ -873,10 +872,11 @@ namespace purchase {
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
-                        if (this.purchaseDeliveryItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseDeliveryItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未交货数量
@@ -887,9 +887,7 @@ namespace purchase {
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
                         if (item.closedQuantity > 0) {
-
                             myItem.quantity = openQty;
-
                         }
 
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
@@ -897,19 +895,14 @@ namespace purchase {
                         // 复制批次（行未清数量，从头往下匹配，批次未清的补上）
 
                         for (let batch of item.materialBatches) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             let batchOpen: number = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
 
                             if (batchOpen <= 0) {
-
                                 continue;
-
                             }
 
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
@@ -919,7 +912,6 @@ namespace purchase {
                             myBatch.quantity = batchOpen > openQty ? openQty : batchOpen;
 
                             openQty -= myBatch.quantity;
-
                         }
 
                         // 复制序列（行未清数量，从头往下匹配，序列未清的补上）
@@ -927,17 +919,12 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
 
                         for (let serial of item.materialSerials) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             if (serial.closed === ibas.emYesNo.YES) {
-
                                 continue;
-
                             }
 
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
@@ -945,14 +932,13 @@ namespace purchase {
                             mySerial.serialCode = serial.serialCode;
 
                             openQty -= 1;
-
                         }
                     }
                     // 复制地址
                     for (let address of document.shippingAddresss) {
                         if (!ibas.strings.isEmpty(address.createActionId)) {
                             // 不复制同事务的
-                            if (this.shippingAddresss.firstOrDefault(c => c.createActionId === address.createActionId) !== null) {
+                            if (this.shippingAddresss.firstOrDefault((c) => c.createActionId === address.createActionId) !== null) {
                                 continue;
                             }
                         }
@@ -962,7 +948,7 @@ namespace purchase {
                             myAddress.sourceKey = address.objectKey;
                         }
                         // 不复制重名的
-                        if (this.shippingAddresss.firstOrDefault(c => c.name === address.name) !== null) {
+                        if (this.shippingAddresss.firstOrDefault((c) => c.name === address.name) !== null) {
                             myAddress.name = ibas.strings.format("{0}_{1}", myAddress.name, this.shippingAddresss.length);
                         }
                         this.shippingAddresss.add(<ShippingAddress>myAddress);
@@ -986,10 +972,11 @@ namespace purchase {
                         if (item.lineStatus !== ibas.emDocumentStatus.RELEASED) {
                             continue;
                         }
-                        if (this.purchaseDeliveryItems.firstOrDefault(
-                            c => c.baseDocumentType === item.objectCode
-                                && c.baseDocumentEntry === item.docEntry
-                                && c.baseDocumentLineId === item.lineId) !== null) {
+                        if (
+                            this.purchaseDeliveryItems.firstOrDefault(
+                                (c) => c.baseDocumentType === item.objectCode && c.baseDocumentEntry === item.docEntry && c.baseDocumentLineId === item.lineId
+                            ) !== null
+                        ) {
                             continue;
                         }
                         // 计算未交货数量
@@ -1000,9 +987,7 @@ namespace purchase {
                         let myItem: PurchaseDeliveryItem = this.purchaseDeliveryItems.create();
                         bo.baseDocumentItem(myItem, item);
                         if (item.closedQuantity > 0) {
-
                             myItem.quantity = openQty;
-
                         }
 
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
@@ -1010,19 +995,14 @@ namespace purchase {
                         // 复制批次（行未清数量，从头往下匹配，批次未清的补上）
 
                         for (let batch of item.materialBatches) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             let batchOpen: number = ibas.numbers.valueOf(batch.quantity) - ibas.numbers.valueOf(batch.closedQuantity);
 
                             if (batchOpen <= 0) {
-
                                 continue;
-
                             }
 
                             let myBatch: materials.bo.IMaterialBatchItem = myItem.materialBatches.create();
@@ -1032,7 +1012,6 @@ namespace purchase {
                             myBatch.quantity = batchOpen > openQty ? openQty : batchOpen;
 
                             openQty -= myBatch.quantity;
-
                         }
 
                         // 复制序列（行未清数量，从头往下匹配，序列未清的补上）
@@ -1040,17 +1019,12 @@ namespace purchase {
                         openQty = myItem.quantity * (item.uomRate > 0 ? item.uomRate : 1);
 
                         for (let serial of item.materialSerials) {
-
                             if (openQty <= 0) {
-
                                 break;
-
                             }
 
                             if (serial.closed === ibas.emYesNo.YES) {
-
                                 continue;
-
                             }
 
                             let mySerial: materials.bo.IMaterialSerialItem = myItem.materialSerials.create();
@@ -1058,7 +1032,6 @@ namespace purchase {
                             mySerial.serialCode = serial.serialCode;
 
                             openQty -= 1;
-
                         }
                     }
                 }
@@ -1067,7 +1040,6 @@ namespace purchase {
 
         /** 采购收货-行 集合 */
         export class PurchaseDeliveryItems extends ibas.BusinessObjects<PurchaseDeliveryItem, PurchaseDelivery> implements IPurchaseDeliveryItems {
-
             /** 创建并添加子项 */
             create(): PurchaseDeliveryItem {
                 let item: PurchaseDeliveryItem = new PurchaseDeliveryItem();
@@ -1086,8 +1058,7 @@ namespace purchase {
                     if (item.isNew && ibas.objects.isNull(item.deliveryDate)) {
                         item.deliveryDate = this.parent.deliveryDate;
                     }
-                    if (ibas.strings.isEmpty(this.parent.documentCurrency)
-                        && !ibas.strings.isEmpty(item.currency)) {
+                    if (ibas.strings.isEmpty(this.parent.documentCurrency) && !ibas.strings.isEmpty(item.currency)) {
                         this.parent.documentCurrency = item.currency;
                     }
                 }
@@ -1135,8 +1106,10 @@ namespace purchase {
             /** 子项属性改变时 */
             protected onItemPropertyChanged(item: PurchaseDeliveryItem, name: string): void {
                 // 标记删除触发集合行变化
-                if (ibas.strings.equalsIgnoreCase(name, PurchaseDeliveryItem.PROPERTY_DELETED_NAME)
-                    || ibas.strings.equalsIgnoreCase(name, PurchaseDeliveryItem.PROPERTY_CANCELED_NAME)) {
+                if (
+                    ibas.strings.equalsIgnoreCase(name, PurchaseDeliveryItem.PROPERTY_DELETED_NAME) ||
+                    ibas.strings.equalsIgnoreCase(name, PurchaseDeliveryItem.PROPERTY_CANCELED_NAME)
+                ) {
                     this.firePropertyChanged("length");
                 }
             }
@@ -1144,7 +1117,6 @@ namespace purchase {
 
         /** 采购收货-行 */
         export class PurchaseDeliveryItem extends ibas.BODocumentLine<PurchaseDeliveryItem> implements IPurchaseDeliveryItem {
-
             /** 构造函数 */
             constructor() {
                 super();
@@ -1567,13 +1539,13 @@ namespace purchase {
                 this.setProperty(PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME, value);
             }
 
-            /** 映射的属性名称-库存数量 */
+            /** 映射的属性名称-库存单位数量 */
             static PROPERTY_INVENTORYQUANTITY_NAME: string = "InventoryQuantity";
-            /** 获取-库存数量 */
+            /** 获取-库存单位数量 */
             get inventoryQuantity(): number {
                 return this.getProperty<number>(PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME);
             }
-            /** 设置-库存数量 */
+            /** 设置-库存单位数量 */
             set inventoryQuantity(value: number) {
                 this.setProperty(PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME, value);
             }
@@ -1862,7 +1834,6 @@ namespace purchase {
                 this.setProperty(PurchaseDeliveryItem.PROPERTY_PRETAXPRICELC_NAME, value);
             }
 
-
             /** 映射的属性名称-物料批次集合 */
             static PROPERTY_MATERIALBATCHES_NAME: string = "MaterialBatches";
             /** 获取-物料批次集合 */
@@ -1907,40 +1878,55 @@ namespace purchase {
                 return [
                     // 计算本币价格
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseDeliveryItem.PROPERTY_UNITPRICELC_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME, PurchaseDeliveryItem.PROPERTY_RATE_NAME
+                        PurchaseDeliveryItem.PROPERTY_UNITPRICELC_NAME,
+                        PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseDeliveryItem.PROPERTY_PRETAXPRICELC_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME, PurchaseDeliveryItem.PROPERTY_RATE_NAME
+                        PurchaseDeliveryItem.PROPERTY_PRETAXPRICELC_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_RATE_NAME
                     ),
                     new BusinessRuleDeductionCurrencyAmount(
-                        PurchaseDeliveryItem.PROPERTY_PRICELC_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME, PurchaseDeliveryItem.PROPERTY_RATE_NAME
+                        PurchaseDeliveryItem.PROPERTY_PRICELC_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRICE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_RATE_NAME
                     ),
-                    // 计算库存数量 = 数量 * 换算率
+                    // 计算库存单位数量 = 数量 * 换算率
                     new BusinessRuleCalculateInventoryQuantity(
-                        PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME, PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME),
+                        PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME,
+                        PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME,
+                        PurchaseDeliveryItem.PROPERTY_UOMRATE_NAME
+                    ),
                     // 计算折扣前总计 = 数量 * 折扣前价格
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseDeliveryItem.PROPERTY_UNITPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算 行总计 = 税前总计（折扣后） + 税总计；行总计 = 价格（税后） * 数量；税总计 = 税前总计（折扣后） * 税率
-                    new BusinessRuleDeductionPriceTaxTotal(PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRICE_NAME,
+                    new BusinessRuleDeductionPriceTaxTotal(
+                        PurchaseDeliveryItem.PROPERTY_LINETOTAL_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME,
-                        PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME, PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseDeliveryItem.PROPERTY_TAXRATE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_TAXTOTAL_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算折扣后总计（税前） = 数量 * 折扣后价格（税前）
                     new BusinessRuleDeductionPriceQtyTotal(
-                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXPRICE_NAME,
                         config.isInventoryUnitLinePrice() ? PurchaseDeliveryItem.PROPERTY_INVENTORYQUANTITY_NAME : PurchaseDeliveryItem.PROPERTY_QUANTITY_NAME
                     ),
                     // 计算折扣后总计 = 折扣前总计 * 折扣
                     new BusinessRuleDeductionDiscount(
-                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME, PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
+                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME,
+                        PurchaseDeliveryItem.PROPERTY_UNITLINETOTAL_NAME,
+                        PurchaseDeliveryItem.PROPERTY_PRETAXLINETOTAL_NAME
                     ),
                     // 计算正反折扣
-                    new BusinessRuleNegativeDiscount(
-                        PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_INVERSEDISCOUNT_NAME
-                    ),
+                    new BusinessRuleNegativeDiscount(PurchaseDeliveryItem.PROPERTY_DISCOUNT_NAME, PurchaseDeliveryItem.PROPERTY_INVERSEDISCOUNT_NAME)
                 ];
             }
             /** 重置 */
