@@ -9,7 +9,6 @@ namespace purchase {
     export namespace bo {
         /** 采购退货 */
         export interface IPurchaseReturn extends ibas.IBODocument, ibas.IBOUserFields {
-
             /** 凭证编号 */
             docEntry: number;
 
@@ -174,14 +173,12 @@ namespace purchase {
 
         /** 采购退货-行 集合 */
         export interface IPurchaseReturnItems extends ibas.IBusinessObjects<IPurchaseReturnItem> {
-
             /** 创建并添加子项 */
             create(): IPurchaseReturnItem;
         }
 
         /** 采购退货-行 */
         export interface IPurchaseReturnItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
-
             /** 编码 */
             docEntry: number;
 
@@ -293,7 +290,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
 
             /** 仓库 */
@@ -371,9 +368,6 @@ namespace purchase {
 
             /** 赋值产品 */
             baseProduct(source: materials.bo.IProduct): void;
-
         }
     }
 }
-
-

@@ -7,13 +7,11 @@
  */
 namespace purchase {
     export namespace bo {
-
         /** 数据转换者 */
         export class DataConverter extends ibas.DataConverter4j {
-
             /** 创建业务对象转换者 */
             protected createConverter(): ibas.BOConverter {
-                return new BOConverter;
+                return new BOConverter();
             }
         }
 
@@ -294,7 +292,7 @@ namespace purchase {
             target.documentDate = ibas.dates.today();
             target.postingDate = ibas.dates.today();
             target.deliveryDate = ibas.dates.today();
-            if ((source instanceof PurchaseQuote && target instanceof PurchaseOrder)) {
+            if (source instanceof PurchaseQuote && target instanceof PurchaseOrder) {
                 target.deliveryDate = source.deliveryDate;
             }
             target.reference1 = source.reference1;
@@ -326,12 +324,29 @@ namespace purchase {
          * @param source 源
          */
         export function baseDocumentItem(
-            target: IPurchaseOrderItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem | DownPaymentRequestItem | PurchaseReserveInvoiceItem | PurchaseInvoiceItem | PurchaseReturnRequestItem | PurchaseCreditNoteItem,
-            source: IPurchaseQuoteItem | IPurchaseRequestItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem
+            target:
+                | IPurchaseOrderItem
+                | PurchaseOrderItem
+                | PurchaseDeliveryItem
+                | PurchaseReturnItem
+                | DownPaymentRequestItem
+                | PurchaseReserveInvoiceItem
+                | PurchaseInvoiceItem
+                | PurchaseReturnRequestItem
+                | PurchaseCreditNoteItem,
+            source:
+                | IPurchaseQuoteItem
+                | IPurchaseRequestItem
+                | IPurchaseOrderItem
+                | IPurchaseDeliveryItem
+                | IPurchaseReserveInvoiceItem
+                | IPurchaseInvoiceItem
+                | IPurchaseReturnRequestItem
         ): void {
             let documentItem: IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem;
             if (!(source instanceof PurchaseRequestItem)) {
-                documentItem = source as IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem;
+                documentItem = source as
+                    IPurchaseQuoteItem | IPurchaseOrderItem | IPurchaseDeliveryItem | IPurchaseReserveInvoiceItem | IPurchaseInvoiceItem | IPurchaseReturnRequestItem;
             }
             target.baseDocumentType = source.objectCode;
             target.baseDocumentEntry = source.docEntry;
@@ -421,15 +436,22 @@ namespace purchase {
             }
         }
         export function baseProduct(
-            target: PurchaseQuoteItem | PurchaseOrderItem | PurchaseDeliveryItem | PurchaseReturnItem
-                | PurchaseRequestItem | PurchaseCreditNoteItem | PurchaseInvoiceItem | DownPaymentRequestItem
-                | PurchaseReserveInvoiceItem | PurchaseReturnRequestItem,
+            target:
+                | PurchaseQuoteItem
+                | PurchaseOrderItem
+                | PurchaseDeliveryItem
+                | PurchaseReturnItem
+                | PurchaseRequestItem
+                | PurchaseCreditNoteItem
+                | PurchaseInvoiceItem
+                | DownPaymentRequestItem
+                | PurchaseReserveInvoiceItem
+                | PurchaseReturnRequestItem,
             source: materials.bo.IProduct
         ): void {
             // 改变物料，清除无效数据
             if (!ibas.strings.equals(target.itemCode, source.code)) {
-                if (!(target instanceof DownPaymentRequestItem)
-                    && !(target instanceof PurchaseQuoteItem)) {
+                if (!(target instanceof DownPaymentRequestItem) && !(target instanceof PurchaseQuoteItem)) {
                     for (let item of target.materialSerials) {
                         target.materialSerials.remove(item);
                     }
@@ -454,8 +476,7 @@ namespace purchase {
             }
             target.itemVersion = undefined;
             let quantity: number = 0;
-            if (!(target instanceof DownPaymentRequestItem)
-                && !(target instanceof PurchaseQuoteItem)) {
+            if (!(target instanceof DownPaymentRequestItem) && !(target instanceof PurchaseQuoteItem)) {
                 if (target.serialManagement === ibas.emYesNo.YES) {
                     for (let item of target.materialSerials) {
                         if (item.isDeleted) {
@@ -612,8 +633,10 @@ namespace purchase {
                     context.outputValues.set(this.afterTax, preTax);
                     return;
                 }
-                if (ibas.strings.equalsIgnoreCase(this.preTax, context.trigger)
-                    || (!config.isPriceAnchoringAfterTax() && ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger))) {
+                if (
+                    ibas.strings.equalsIgnoreCase(this.preTax, context.trigger) ||
+                    (!config.isPriceAnchoringAfterTax() && ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger))
+                ) {
                     if (taxRate === 0) {
                         context.outputValues.set(this.afterTax, preTax);
                     } else {
@@ -674,9 +697,7 @@ namespace purchase {
                     context.outputValues.set(this.tax, 0);
                     return;
                 }
-                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger)
-                    || ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)
-                    || tax < 0) {
+                if (ibas.strings.equalsIgnoreCase(this.total, context.trigger) || ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger) || tax < 0) {
                     if (taxRate === 0 || isNaN(taxRate)) {
                         context.outputValues.set(this.tax, 0);
                     } else {
@@ -848,16 +869,21 @@ namespace purchase {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                     } else {
                         // 差异小于近似位，则忽略
-                        if (!ibas.numbers.isApproximated(rPrice, price,
-                            // 总计小数位小于价格小数位，会有舍入问题，估降低精度
-                            (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE), 0)
+                        if (
+                            !ibas.numbers.isApproximated(
+                                rPrice,
+                                price,
+                                // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                                DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE,
+                                0
+                            )
                         ) {
                             if (TRUNCATE_DECIMALS && price !== 0 && Math.abs(rPrice - price) < DIFF_THRESHOLD_PRICE) {
                                 // 需要截取小数，且价格小数位大于总计的
                                 let pValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_PRICE);
                                 let sValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_SUM);
                                 if (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM) {
-                                    if ((pValue - sValue) < (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE))) {
+                                    if (pValue - sValue < 4 * Math.pow(0.1, DECIMAL_PLACES_PRICE)) {
                                         // 按价格截取的小数与总计的差异，小于精度阈值则使用总计的
                                         context.outputValues.set(this.price, sValue);
                                     } else {
@@ -917,13 +943,11 @@ namespace purchase {
                 let preDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.preDiscount));
                 let afterDiscount: number = ibas.numbers.valueOf(context.inputValues.get(this.afterDiscount));
 
-                if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger)
-                    || ibas.strings.equalsIgnoreCase(this.preDiscount, context.trigger)) {
+                if (ibas.strings.equalsIgnoreCase(this.discount, context.trigger) || ibas.strings.equalsIgnoreCase(this.preDiscount, context.trigger)) {
                     // 折扣触发，算成交价
                     let result: number = preDiscount * discount;
                     // 差异小于近似位，则忽略
-                    if (!ibas.numbers.isApproximated(afterDiscount, result, DECIMAL_PLACES_SUM, 0)
-                        || discount === 1) {
+                    if (!ibas.numbers.isApproximated(afterDiscount, result, DECIMAL_PLACES_SUM, 0) || discount === 1) {
                         context.outputValues.set(this.afterDiscount, ibas.numbers.round(result));
                     }
                 } else if (afterDiscount === 0 && ibas.strings.equalsIgnoreCase(this.afterDiscount, context.trigger)) {
@@ -1017,16 +1041,21 @@ namespace purchase {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : 9));
                     } else {
                         // 差异小于近似位，则忽略
-                        if (!ibas.numbers.isApproximated(rPrice, price,
-                            // 总计小数位小于价格小数位，会有舍入问题，估降低精度
-                            (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE), 0)
+                        if (
+                            !ibas.numbers.isApproximated(
+                                rPrice,
+                                price,
+                                // 总计小数位小于价格小数位，会有舍入问题，估降低精度
+                                DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM ? DECIMAL_PLACES_SUM : DECIMAL_PLACES_PRICE,
+                                0
+                            )
                         ) {
                             if (TRUNCATE_DECIMALS && price !== 0 && Math.abs(rPrice - price) < DIFF_THRESHOLD_PRICE) {
                                 // 需要截取小数，且价格小数位大于总计的
                                 let pValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_PRICE);
                                 let sValue: number = ibas.numbers.round(rPrice, DECIMAL_PLACES_SUM);
                                 if (DECIMAL_PLACES_PRICE > DECIMAL_PLACES_SUM) {
-                                    if ((pValue - sValue) < (4 * Math.pow(0.1, DECIMAL_PLACES_PRICE))) {
+                                    if (pValue - sValue < 4 * Math.pow(0.1, DECIMAL_PLACES_PRICE)) {
                                         // 按价格截取的小数与总计的差异，小于精度阈值则使用总计的
                                         context.outputValues.set(this.price, sValue);
                                     } else {
@@ -1043,8 +1072,7 @@ namespace purchase {
 
                     // 总计 = 税前 + 税，等式不成立时才调整（手动调整税前和税）
                     if (total !== ibas.numbers.round(preTotal + taxTotal)) {
-                        if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0)
-                            || quantity === 1) {
+                        if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0) || quantity === 1) {
                             if (TRUNCATE_DECIMALS) {
                                 // 截取小数时，先计算税再通过减法保证等式：preTotal + taxTotal = total
                                 let newTaxTotal: number = ibas.numbers.round(rTaxTotal, DECIMAL_PLACES_SUM);
@@ -1054,8 +1082,7 @@ namespace purchase {
                                 context.outputValues.set(this.preTotal, ibas.numbers.round(rPreTotal));
                                 context.outputValues.set(this.taxTotal, ibas.numbers.round(rTaxTotal));
                             }
-                        } else if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)
-                            || quantity === 1) {
+                        } else if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0) || quantity === 1) {
                             if (TRUNCATE_DECIMALS) {
                                 // 截取小数时，通过减法保证等式
                                 let newTaxTotal: number = ibas.numbers.round(rTaxTotal, DECIMAL_PLACES_SUM);
@@ -1069,14 +1096,14 @@ namespace purchase {
                 } else if (ibas.strings.equalsIgnoreCase(this.taxTotal, context.trigger)) {
                     let rTotal: number = preTotal + taxTotal;
                     // 差异小于近似位，则忽略。且差异金额大于精度阈值
-                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
-                        && Math.abs(rTotal - total) > DIFF_THRESHOLD_SUM) {
+                    if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0) && Math.abs(rTotal - total) > DIFF_THRESHOLD_SUM) {
                         context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                     }
-                } else if (ibas.strings.equalsIgnoreCase(this.price, context.trigger)
-                    || ibas.strings.equalsIgnoreCase(this.quantity, context.trigger)
+                } else if (
+                    ibas.strings.equalsIgnoreCase(this.price, context.trigger) ||
+                    ibas.strings.equalsIgnoreCase(this.quantity, context.trigger) ||
                     // 锚定税后价格时，改变税率
-                    || (config.isPriceAnchoringAfterTax() && ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger))
+                    (config.isPriceAnchoringAfterTax() && ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger))
                 ) {
                     let rTotal: number = price * quantity;
                     let rPreTotal: number = rTotal / (1 + taxRate);
@@ -1099,9 +1126,8 @@ namespace purchase {
                         if (!ibas.numbers.isApproximated(rPreTotal, preTotal, DECIMAL_PLACES_SUM, 0)) {
                             if (TRUNCATE_DECIMALS) {
                                 // 截取小数时，先计算税再通过减法保证等式
-                                let effectiveTotal: number = quantity === 1
-                                    ? ibas.numbers.round(rTotal)
-                                    : (context.outputValues.has(this.total) ? <number>context.outputValues.get(this.total) : total);
+                                let effectiveTotal: number =
+                                    quantity === 1 ? ibas.numbers.round(rTotal) : context.outputValues.has(this.total) ? <number>context.outputValues.get(this.total) : total;
                                 let newTaxTotal: number = ibas.numbers.round(rTaxTotal, DECIMAL_PLACES_SUM);
                                 context.outputValues.set(this.taxTotal, newTaxTotal);
                                 context.outputValues.set(this.preTotal, ibas.numbers.round(effectiveTotal - newTaxTotal, DECIMAL_PLACES_SUM));
@@ -1111,9 +1137,8 @@ namespace purchase {
                             }
                         } else if (!ibas.numbers.isApproximated(rTaxTotal, taxTotal, DECIMAL_PLACES_SUM, 0)) {
                             if (TRUNCATE_DECIMALS) {
-                                let effectiveTotal: number = quantity === 1
-                                    ? ibas.numbers.round(rTotal)
-                                    : (context.outputValues.has(this.total) ? <number>context.outputValues.get(this.total) : total);
+                                let effectiveTotal: number =
+                                    quantity === 1 ? ibas.numbers.round(rTotal) : context.outputValues.has(this.total) ? <number>context.outputValues.get(this.total) : total;
                                 let newTaxTotal: number = ibas.numbers.round(rTaxTotal, DECIMAL_PLACES_SUM);
                                 context.outputValues.set(this.taxTotal, newTaxTotal);
                                 context.outputValues.set(this.preTotal, ibas.numbers.round(effectiveTotal - newTaxTotal, DECIMAL_PLACES_SUM));
@@ -1123,7 +1148,7 @@ namespace purchase {
                         }
                     }
                 } else if (ibas.strings.equalsIgnoreCase(this.taxRate, context.trigger)) {
-                    let rPrice: number = quantity === 0 ? 0 : ((preTotal * (1 + taxRate)) / quantity);
+                    let rPrice: number = quantity === 0 ? 0 : (preTotal * (1 + taxRate)) / quantity;
                     if (!ibas.numbers.isApproximated(rPrice, price)) {
                         context.outputValues.set(this.price, ibas.numbers.round(rPrice, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                     }
@@ -1132,7 +1157,7 @@ namespace purchase {
                     let rTotal: number = preTotal + rTaxTotal;
                     // 税前 + 税 与 价格 * 数量，差异小时，使用明显值
                     if (rTaxTotal !== 0) {
-                        if (ibas.numbers.round(Math.abs(rTotal - (price * quantity)), DECIMAL_PLACES_SUM) <= (Math.pow(0.1, DECIMAL_PLACES_SUM))) {
+                        if (ibas.numbers.round(Math.abs(rTotal - price * quantity), DECIMAL_PLACES_SUM) <= Math.pow(0.1, DECIMAL_PLACES_SUM)) {
                             rTotal = price * quantity;
                         }
                     }
@@ -1148,8 +1173,7 @@ namespace purchase {
                             context.outputValues.set(this.total, ibas.numbers.round(rTotal));
                         } else {
                             // 差异小于近似位，则忽略。且差异金额大于精度阈值
-                            if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0)
-                                && Math.abs(rTotal - total) > DIFF_THRESHOLD_SUM) {
+                            if (!ibas.numbers.isApproximated(rTotal, total, DECIMAL_PLACES_SUM, 0) && Math.abs(rTotal - total) > DIFF_THRESHOLD_SUM) {
                                 context.outputValues.set(this.total, ibas.numbers.round(rTotal, TRUNCATE_DECIMALS ? DECIMAL_PLACES_SUM : undefined));
                             }
                         }
@@ -1164,10 +1188,8 @@ namespace purchase {
                 }
             }
         }
-        /** 业务规则-计算库存数量 */
-        export class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {
-
-        }
+        /** 业务规则-计算库存单位数量 */
+        export class BusinessRuleCalculateInventoryQuantity extends materials.bo.BusinessRuleCalculateInventoryQuantity {}
         /** 业务规则-反向折扣（1 - %） */
         export class BusinessRuleNegativeDiscount extends ibas.BusinessRuleCommon {
             /**
@@ -1236,12 +1258,10 @@ namespace purchase {
                 if (rate === 0) {
                     rate = 1;
                 }
-                if (ibas.strings.equalsIgnoreCase(this.amountLC, context.trigger)
-                    || ibas.strings.equalsIgnoreCase(this.rate, context.trigger)) {
+                if (ibas.strings.equalsIgnoreCase(this.amountLC, context.trigger) || ibas.strings.equalsIgnoreCase(this.rate, context.trigger)) {
                     if (rate !== 1) {
                         let result: number = amountLC * rate;
-                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0)
-                            && (Math.abs(result - amount) > Math.pow(0.1, DECIMAL_PLACES_PRICE - 1))) {
+                        if (!ibas.numbers.isApproximated(result, amount, DECIMAL_PLACES_PRICE, 0) && Math.abs(result - amount) > Math.pow(0.1, DECIMAL_PLACES_PRICE - 1)) {
                             context.outputValues.set(this.amount, ibas.numbers.round(result, TRUNCATE_DECIMALS ? DECIMAL_PLACES_PRICE : undefined));
                         }
                     } else {

@@ -572,14 +572,14 @@ public interface IPurchaseQuoteItem extends IBODocumentLine, IMaterialBatchItemP
 	void setUOMRate(BigDecimal value);
 
 	/**
-	 * 获取-库存数量
+	 * 获取-库存单位数量
 	 * 
 	 * @return 值
 	 */
 	BigDecimal getInventoryQuantity();
 
 	/**
-	 * 设置-库存数量
+	 * 设置-库存单位数量
 	 * 
 	 * @param value 值
 	 */

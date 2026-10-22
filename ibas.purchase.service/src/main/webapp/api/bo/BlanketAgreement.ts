@@ -106,7 +106,6 @@ namespace purchase {
 
             /** 一揽子协议-项目集合 */
             blanketAgreementItems: IBlanketAgreementItems;
-
         }
 
         /** 一揽子协议-项目 集合 */
@@ -171,7 +170,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
             /** 价格 */
             price: number;
@@ -199,9 +198,6 @@ namespace purchase {
             reference1: string;
             /** 参考2 */
             reference2: string;
-
         }
-
-
     }
 }

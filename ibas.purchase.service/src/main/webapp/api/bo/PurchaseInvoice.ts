@@ -132,7 +132,6 @@ namespace purchase {
             create(): IPurchaseInvoiceDownPayment;
         }
 
-
         /** 采购发票-行 */
         export interface IPurchaseInvoiceItem extends ibas.IBODocumentLine, materials.bo.IMaterialBatchItemParent, materials.bo.IMaterialSerialItemParent, ibas.IBOUserFields {
             /** 编码 */
@@ -211,7 +210,7 @@ namespace purchase {
             inventoryUOM: string;
             /** 单位换算率 */
             uomRate: number;
-            /** 库存数量 */
+            /** 库存单位数量 */
             inventoryQuantity: number;
             /** 仓库 */
             warehouse: string;
@@ -335,6 +334,5 @@ namespace purchase {
             /** 基于付款 */
             baseDocument(document: receiptpayment.bo.IPaymentItem): void;
         }
-
     }
 }
