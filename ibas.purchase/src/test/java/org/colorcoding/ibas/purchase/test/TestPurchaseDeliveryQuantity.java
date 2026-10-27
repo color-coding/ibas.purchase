@@ -7,9 +7,11 @@ import org.colorcoding.ibas.bobas.common.DateTimes;
 import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
+import org.colorcoding.ibas.bobas.i18n.I18N;
+import org.colorcoding.ibas.bobas.logic.BusinessLogicException;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
 import org.colorcoding.ibas.businesspartner.repository.BORepositoryBusinessPartner;
+import org.colorcoding.ibas.materials.MyConfiguration;
 import org.colorcoding.ibas.materials.bo.material.IMaterial;
 import org.colorcoding.ibas.materials.bo.materialbatch.IMaterialBatchItem;
 import org.colorcoding.ibas.materials.bo.materialserial.IMaterialSerialItem;
@@ -33,12 +35,6 @@ import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 public class TestPurchaseDeliveryQuantity extends AbstractPurchaseQuantityTestCase {
 
 	private static final BigDecimal QTY = Decimals.valueOf(10);
-
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
 
 	private IPurchaseOrder createOrder(BORepositoryPurchase pRepo, ISupplier sp, IMaterial mt, IWarehouse wh,
 			BigDecimal qty) throws Exception {
@@ -158,28 +154,65 @@ public class TestPurchaseDeliveryQuantity extends AbstractPurchaseQuantityTestCa
 	}
 
 	// ==================================================================
-	// PU-D32: PD 头删除 -> 同 D31
+	// PU-D32: PD 头删除 -> 未启用成本时回滚，已计算成本时拒绝并保持原数量
 	// ==================================================================
 
 	public void testPU_D32_DeliveryDelete_Inventory() throws Exception {
+		runPU_D32_DeliveryDelete(false);
+	}
+
+	public void testPU_D32_DeliveryDelete_WithMaterialCosts() throws Exception {
+		runPU_D32_DeliveryDelete(true);
+	}
+
+	private void runPU_D32_DeliveryDelete(boolean materialCostsEnabled) throws Exception {
+		// 删除回滚测试独立验证成本限制，关闭会计分录对单据状态的限制。
+		boolean previousJournalEntry = org.colorcoding.ibas.accounting.MyConfiguration.getConfigValue(
+				org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_ENABLE_JOURNAL_ENTRY_SERVICE, false);
+		org.colorcoding.ibas.accounting.MyConfiguration.create().addConfigValue(
+				org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_ENABLE_JOURNAL_ENTRY_SERVICE, "false");
+		boolean previous = MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_ENABLE_MATERIAL_COSTS, false);
+		MyConfiguration.create().addConfigValue(MyConfiguration.CONFIG_ITEM_ENABLE_MATERIAL_COSTS,
+				String.valueOf(materialCostsEnabled));
 		try (BORepositoryMaterials mRepo = createMaterialsRepository();
 				BORepositoryBusinessPartner bRepo = createBPRepository();
 				BORepositoryPurchase pRepo = createPurchaseRepository()) {
 			IWarehouse wh = prepareWarehouse(mRepo);
 			ISupplier sp = prepareSupplier(bRepo);
-			IMaterial mt = prepareMaterial(mRepo, MaterialKind.INVENTORY, "D32I");
+			IMaterial mt = prepareMaterial(mRepo, MaterialKind.INVENTORY, materialCostsEnabled ? "D32IC" : "D32I");
 
 			IPurchaseOrder po = createOrder(pRepo, sp, mt, wh, QTY);
 			IPurchaseDelivery pd = buildDeliveryFromOrder(po, MaterialKind.INVENTORY, QTY);
 			pd = BOUtilities.valueOf(pRepo.savePurchaseDelivery(pd)).firstOrDefault();
 
 			pd.delete();
+			if (materialCostsEnabled) {
+				try {
+					BOUtilities.valueOf(pRepo.savePurchaseDelivery(pd));
+					fail("Costed document must reject deletion.");
+				} catch (BusinessLogicException e) {
+					assertEquals(I18N.prop("msg_mm_document_completed_material_cost_calculation_not_support_operation",
+							pd.getPurchaseDeliveryItems().firstOrDefault().toString()), e.getMessage());
+				}
+				assertNotNull(BOUtilities.valueOf(pRepo.fetchPurchaseDelivery(pd.getCriteria())).firstOrDefault());
+				assertQuantities(mRepo, mt, wh.getCode(), QTY, Decimals.VALUE_ZERO, Decimals.VALUE_ZERO);
+				IPurchaseOrder orderReload = BOUtilities.valueOf(pRepo.fetchPurchaseOrder(po.getCriteria())).firstOrDefault();
+				assertEqualsBD("Order.closedQuantity must remain unchanged.", QTY,
+						orderReload.getPurchaseOrderItems().sum(c -> c.getClosedQuantity()));
+				return;
+			}
 			pd = BOUtilities.valueOf(pRepo.savePurchaseDelivery(pd)).firstOrDefault();
 
 			assertQuantities(mRepo, mt, wh.getCode(), Decimals.VALUE_ZERO, Decimals.VALUE_ZERO, QTY);
 			IPurchaseOrder poReload = reloadPO(pRepo, po);
 			IPurchaseOrderItem poiReload = poReload.getPurchaseOrderItems().firstOrDefault();
 			assertEqualsBD("PO.closedQuantity should rollback.", Decimals.VALUE_ZERO, poiReload.getClosedQuantity());
+		} finally {
+			org.colorcoding.ibas.accounting.MyConfiguration.create().addConfigValue(
+					org.colorcoding.ibas.accounting.MyConfiguration.CONFIG_ITEM_ENABLE_JOURNAL_ENTRY_SERVICE,
+					String.valueOf(previousJournalEntry));
+			MyConfiguration.create().addConfigValue(MyConfiguration.CONFIG_ITEM_ENABLE_MATERIAL_COSTS,
+					String.valueOf(previous));
 		}
 	}
 

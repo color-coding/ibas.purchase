@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 import org.colorcoding.ibas.bobas.bo.BOUtilities;
 import org.colorcoding.ibas.bobas.common.Decimals;
+import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
 import org.colorcoding.ibas.businesspartner.repository.BORepositoryBusinessPartner;
 import org.colorcoding.ibas.materials.bo.material.IMaterial;
@@ -30,12 +30,6 @@ import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 public class TestPurchaseInvoiceQuantity extends AbstractPurchaseQuantityTestCase {
 
 	private static final BigDecimal QTY = Decimals.valueOf(10);
-
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
 
 	private IPurchaseOrder createPO(BORepositoryPurchase pRepo, ISupplier sp, IMaterial mt, IWarehouse wh,
 			BigDecimal qty) throws Exception {
@@ -145,6 +139,12 @@ public class TestPurchaseInvoiceQuantity extends AbstractPurchaseQuantityTestCas
 
 			// OnHand+Q, OnOrdered-Q
 			assertQuantities(mRepo, mt, wh.getCode(), QTY, Decimals.VALUE_ZERO, Decimals.VALUE_ZERO);
+			po = BOUtilities.valueOf(pRepo.fetchPurchaseOrder(po.getCriteria())).firstOrDefault();
+			assertEqualsBD("Direct invoice must close the source order quantity.", QTY,
+					po.getPurchaseOrderItems().firstOrDefault().getClosedQuantity());
+			assertEquals("Direct invoice must finish the source order.", emDocumentStatus.FINISHED, po.getDocumentStatus());
+			assertEquals("Direct invoice must mark the source line as referenced.", emYesNo.YES,
+					po.getPurchaseOrderItems().firstOrDefault().getReferenced());
 		}
 	}
 
@@ -184,19 +184,16 @@ public class TestPurchaseInvoiceQuantity extends AbstractPurchaseQuantityTestCas
 			assertEqualsBD("PD.closedQuantity = QTY after PI created.", QTY,
 					pdAfterPI.getPurchaseDeliveryItems().sum(c -> c.getClosedQuantity()));
 
-			// 尝试取消 PI；若对账链路不可用则跳过断言
-			try {
-				pi.setCanceled(emYesNo.YES);
-				pi = BOUtilities.valueOf(pRepo.savePurchaseInvoice(pi)).firstOrDefault();
-				IPurchaseDelivery pdReload = BOUtilities.valueOf(pRepo.fetchPurchaseDelivery(pd.getCriteria()))
-						.firstOrDefault();
-				assertEqualsBD("PD.closedQuantity rollback.", Decimals.VALUE_ZERO,
-						pdReload.getPurchaseDeliveryItems().sum(c -> c.getClosedQuantity()));
-			} catch (Exception ex) {
-				// 对账数据缺失，PI cancel 触发 InternalReconciliation 链路失败，环境问题非测试问题
-				System.out.println("[SKIP] PU-D42 PI cancel skipped due to reconciliation dependency: "
-						+ ex.getMessage());
-			}
+			pi.setCanceled(emYesNo.YES);
+			pi = BOUtilities.valueOf(pRepo.savePurchaseInvoice(pi)).firstOrDefault();
+			IPurchaseDelivery pdReload = BOUtilities.valueOf(pRepo.fetchPurchaseDelivery(pd.getCriteria()))
+					.firstOrDefault();
+			assertEqualsBD("PD.closedQuantity rollback.", Decimals.VALUE_ZERO,
+					pdReload.getPurchaseDeliveryItems().sum(c -> c.getClosedQuantity()));
+			assertEquals("Invoice cancellation must persist.", emYesNo.YES,
+					BOUtilities.valueOf(pRepo.fetchPurchaseInvoice(pi.getCriteria())).firstOrDefault().getCanceled());
+			assertQuantities(mRepo, mt, wh.getCode(), QTY, Decimals.VALUE_ZERO, Decimals.VALUE_ZERO);
+
 		}
 	}
 }

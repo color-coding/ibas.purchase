@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.colorcoding.ibas.bobas.bo.BOUtilities;
 import org.colorcoding.ibas.bobas.common.Decimals;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.businesspartner.bo.customer.Customer;
 import org.colorcoding.ibas.businesspartner.bo.customer.ICustomer;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
@@ -32,28 +31,8 @@ public class TestSalesOrderOrderedQuantity extends AbstractPurchaseQuantityTestC
 
 	private static final BigDecimal QTY = Decimals.valueOf(10);
 
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private BORepositorySales createSalesRepository() throws Exception {
-		BORepositorySales repo = new BORepositorySales();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
-
-	private ICustomer prepareCustomer(BORepositoryBusinessPartner repo) throws Exception {
-		ICustomer cu = new Customer();
-		cu.setCode("CUS-PUQ");
-		cu.setName("PU Test Customer");
-		if (repo.fetchCustomer(cu.getCriteria()).getResultObjects().isEmpty()) {
-			cu = BOUtilities.valueOf(repo.saveCustomer(cu)).firstOrDefault();
-		} else {
-			cu = BOUtilities.valueOf(repo.fetchCustomer(cu.getCriteria())).firstOrDefault();
-		}
-		return cu;
+	private ICustomer prepareCustomer(BORepositoryBusinessPartner repository) throws Exception {
+		return prepareCustomer(repository, "CUS-PUQ", "PU Test Customer");
 	}
 
 	// ==================================================================

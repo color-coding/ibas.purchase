@@ -7,7 +7,6 @@ import org.colorcoding.ibas.bobas.common.DateTimes;
 import org.colorcoding.ibas.bobas.common.Decimals;
 import org.colorcoding.ibas.bobas.data.emDocumentStatus;
 import org.colorcoding.ibas.bobas.data.emYesNo;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.businesspartner.bo.supplier.ISupplier;
 import org.colorcoding.ibas.businesspartner.repository.BORepositoryBusinessPartner;
 import org.colorcoding.ibas.materials.bo.material.IMaterial;
@@ -35,12 +34,6 @@ import org.colorcoding.ibas.purchase.repository.BORepositoryPurchase;
 public class TestPurchaseReturnQuantity extends AbstractPurchaseQuantityTestCase {
 
 	private static final BigDecimal QTY = Decimals.valueOf(10);
-
-	private BORepositoryPurchase createPurchaseRepository() throws Exception {
-		BORepositoryPurchase repo = new BORepositoryPurchase();
-		repo.setUserToken(OrganizationFactory.SYSTEM_USER);
-		return repo;
-	}
 
 	private IPurchaseOrder createOrder(BORepositoryPurchase pRepo, ISupplier sp, IMaterial mt, IWarehouse wh,
 			BigDecimal qty) throws Exception {
